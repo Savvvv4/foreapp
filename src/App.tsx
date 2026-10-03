@@ -332,18 +332,36 @@ const qutubCourse: BookingCourse = { name: "Qutub Golf Course", image: photos.gr
 function FlowHeader({
   title,
   back,
-  showMenu = true,
+  action,
 }: {
   title: string
   back: () => void
-  showMenu?: boolean
+  action?: { label: string; icon: IconName; onClick: () => void }
 }) {
   return (
-    <div className="flow-page-header">
-      <button onClick={back}><Icon name="chevron" /></button>
-      <strong>{title}</strong>
-      {showMenu ? <button><Icon name="more" /></button> : <span />}
-    </div>
+    <header className="flow-page-header">
+      <button
+        type="button"
+        className="flow-page-header-back"
+        onClick={back}
+        aria-label="Go back"
+      >
+        <Icon name="chevron" size={20} />
+      </button>
+      <h1>{title}</h1>
+      {action ? (
+        <button
+          type="button"
+          className="flow-page-header-action"
+          onClick={action.onClick}
+          aria-label={action.label}
+        >
+          <Icon name={action.icon} size={19} />
+        </button>
+      ) : (
+        <span className="flow-page-header-spacer" aria-hidden="true" />
+      )}
+    </header>
   )
 }
 
@@ -2390,7 +2408,6 @@ function BottomNav<T extends string>({
   compact?: boolean
 }) {
   const [expanded, setExpanded] = useState(false)
-  const activeItem = items.find((item) => item.id === active) ?? items[0]
 
   useEffect(() => {
     setExpanded(false)
@@ -2398,64 +2415,90 @@ function BottomNav<T extends string>({
 
   useEffect(() => {
     if (!compact || !expanded) return
-
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setExpanded(false)
-      }
+      if (event.key === "Escape") setExpanded(false)
     }
-
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [compact, expanded])
 
-  const toggleExpanded = () => {
-    if (!compact) return
-    setExpanded((value) => !value)
-  }
+  const activeItem = items.find((item) => item.id === active) ?? items[0]
 
   return (
     <nav
-      className="bottom-nav bottom-nav-primary bottom-nav-morph"
-      data-compact={compact ? "true" : "false"}
-      data-expanded={compact && expanded ? "true" : "false"}
+      className={`bottom-nav ${compact ? "bottom-nav-compact" : "bottom-nav-expanded"} ${expanded ? "bottom-nav-open" : ""}`}
       aria-label="Primary navigation"
     >
-      {items.map((item) => {
-        const isActive = active === item.id
-        const isHidden = compact && !expanded && !isActive
-
-        return (
-          <button
-            type="button"
-            key={item.id}
-            className={isActive ? "active" : ""}
-            onClick={() => {
-              if (compact && isActive) {
-                toggleExpanded()
-                return
+      <div className="bottom-nav-track">
+        {items.map((item) => {
+          const isActive = item.id === active
+          const hidden = compact && !expanded && !isActive
+          return (
+            <button
+              type="button"
+              key={item.id}
+              className={isActive ? "active" : ""}
+              data-hidden={hidden ? "true" : "false"}
+              onClick={() => {
+                if (compact && isActive) {
+                  setExpanded((value) => !value)
+                } else {
+                  onChange(item.id)
+                }
+              }}
+              aria-current={isActive ? "page" : undefined}
+              aria-expanded={compact && isActive ? expanded : undefined}
+              aria-label={
+                compact && isActive && !expanded
+                  ? `Open navigation, currently in ${activeItem.label}`
+                  : item.label
               }
-              onChange(item.id)
-            }}
-            aria-current={isActive ? "page" : undefined}
-            aria-expanded={compact && isActive ? expanded : undefined}
-            aria-label={
-              compact && isActive
-                ? expanded
-                  ? `Collapse navigation, currently in ${item.label}`
-                  : `Open navigation, currently in ${item.label}`
-                : item.label
-            }
-            tabIndex={isHidden ? -1 : 0}
-          >
-            <Icon name={item.icon} size={21} />
-            <span>{item.label}</span>
-          </button>
-        )
-      })}
+              tabIndex={hidden ? -1 : 0}
+            >
+              <Icon name={item.icon} size={21} />
+              <span>{item.label}</span>
+            </button>
+          )
+        })}
+      </div>
     </nav>
   )
 }
+
+function AppTopBar({
+  title,
+  initials,
+  onHome,
+  onProfile,
+}: {
+  title: string
+  initials: string
+  onHome: () => void
+  onProfile: () => void
+}) {
+  return (
+    <header className="app-topbar">
+      <button
+        type="button"
+        className="app-topbar-brand"
+        onClick={onHome}
+        aria-label="Go to Fore home"
+      >
+        <span>FORE</span>
+      </button>
+      <h1>{title}</h1>
+      <button
+        type="button"
+        className="app-topbar-profile"
+        onClick={onProfile}
+        aria-label="Open profile"
+      >
+        <Avatar initials={initials} />
+      </button>
+    </header>
+  )
+}
+
 function StudentDetail({
   close,
   assign,
@@ -2655,6 +2698,18 @@ export default function App() {
   return (
     <div className="app-stage">
       <div className="phone-shell">
+        {!moduleNavigation && !overlay && (
+          <AppTopBar
+            title={
+              role === "golfer"
+                ? golferItems.find((item) => item.id === golferTab)?.label ?? "Fore"
+                : coachItems.find((item) => item.id === coachTab)?.label ?? "Fore"
+            }
+            initials={role === "golfer" ? "AK" : "SM"}
+            onHome={() => role === "golfer" ? goGolferTab("home") : goCoachTab("today")}
+            onProfile={() => role === "golfer" ? goGolferTab("profile") : goCoachTab("profile")}
+          />
+        )}
         <div className="scroll-area">
           {role === "golfer" && (
             <>
