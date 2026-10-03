@@ -2006,7 +2006,17 @@ function Business() {
   )
 }
 
-function BottomNav<T extends string>({ items, active, onChange, compact = false, }: { items: { id: T; label: string; icon: IconName }[]; active: T; onChange: (id: T) => void; compact?: boolean }) {
+function BottomNav<T extends string>({
+  items,
+  active,
+  onChange,
+  compact = false,
+}: {
+  items: { id: T; label: string; icon: IconName }[]
+  active: T
+  onChange: (id: T) => void
+  compact?: boolean
+}) {
   const [expanded, setExpanded] = useState(false)
   const activeItem = items.find((item) => item.id === active) ?? items[0]
 
@@ -2014,52 +2024,63 @@ function BottomNav<T extends string>({ items, active, onChange, compact = false,
     setExpanded(false)
   }, [compact, active])
 
-  if (compact) {
-    const navStyle = {
-      left: expanded ? "12px" : "auto",
-      right: "14px",
-      bottom: "14px",
-      width: expanded ? "calc(100% - 24px)" : "72px",
-      height: "72px",
-      padding: "7px 8px",
-      gridTemplateColumns: expanded ? "repeat(5, minmax(0, 1fr))" : "56px",
-      transition: "width 220ms ease, left 220ms ease, right 220ms ease, border-radius 220ms ease",
-      borderRadius: expanded ? "24px" : "14px",
-    } as React.CSSProperties
+  useEffect(() => {
+    if (!compact || !expanded) return
 
-    return (
-      <nav className="bottom-nav bottom-nav-primary" style={navStyle} aria-label="Primary navigation">
-        {items.map((item) => (
-          <button
-            type="button"
-            key={item.id}
-            className={active === item.id ? "active" : ""}
-            onClick={() => active === item.id ? setExpanded((value) => !value) : onChange(item.id)}
-            aria-current={active === item.id ? "page" : undefined}
-            aria-expanded={active === item.id ? expanded : undefined}
-            aria-label={active === item.id && !expanded ? `Open navigation, currently in ${item.label}` : item.label}
-            style={{
-              opacity: expanded || active === item.id ? 1 : 0,
-              pointerEvents: expanded || active === item.id ? "auto" : "none",
-              transition: "opacity 120ms ease",
-            }}
-          >
-            <Icon name={item.icon} size={21} />
-            <span style={{ display: expanded ? "inline" : "none" }}>{item.label}</span>
-          </button>
-        ))}
-      </nav>
-    )
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setExpanded(false)
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [compact, expanded])
+
+  const toggleExpanded = () => {
+    if (!compact) return
+    setExpanded((value) => !value)
   }
 
   return (
-    <nav className="bottom-nav bottom-nav-primary" aria-label="Primary navigation">
-      {items.map((item) => (
-        <button type="button" key={item.id} className={active === item.id ? "active" : ""} onClick={() => onChange(item.id)} aria-current={active === item.id ? "page" : undefined}>
-          <Icon name={item.icon} size={21} />
-          <span>{item.label}</span>
-        </button>
-      ))}
+    <nav
+      className="bottom-nav bottom-nav-primary bottom-nav-morph"
+      data-compact={compact ? "true" : "false"}
+      data-expanded={compact && expanded ? "true" : "false"}
+      aria-label="Primary navigation"
+    >
+      {items.map((item) => {
+        const isActive = active === item.id
+        const isHidden = compact && !expanded && !isActive
+
+        return (
+          <button
+            type="button"
+            key={item.id}
+            className={isActive ? "active" : ""}
+            onClick={() => {
+              if (compact && isActive) {
+                toggleExpanded()
+                return
+              }
+              onChange(item.id)
+            }}
+            aria-current={isActive ? "page" : undefined}
+            aria-expanded={compact && isActive ? expanded : undefined}
+            aria-label={
+              compact && isActive
+                ? expanded
+                  ? `Collapse navigation, currently in ${item.label}`
+                  : `Open navigation, currently in ${item.label}`
+                : item.label
+            }
+            tabIndex={isHidden ? -1 : 0}
+          >
+            <Icon name={item.icon} size={21} />
+            <span>{item.label}</span>
+          </button>
+        )
+      })}
     </nav>
   )
 }

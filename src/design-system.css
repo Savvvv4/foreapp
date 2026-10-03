@@ -1103,3 +1103,122 @@ select:focus-visible {
 .booking-review-summary strong { color:var(--color-ink); font-size:var(--text-sm); }
 .booking-review-total { display:flex; align-items:center; justify-content:space-between; padding:16px; border-radius:var(--radius-lg); background:var(--color-brand-soft); color:var(--color-brand-dark); }
 .booking-review-total strong { font-size:20px; }
+
+
+/* Navigation morph v3
+   One component, one surface, two presentation states.
+   The compact state keeps the active destination anchored to the right edge.
+*/
+.bottom-nav-morph {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+  overflow: hidden;
+  box-sizing: border-box;
+  width: calc(100% - 24px);
+  left: 12px;
+  right: auto;
+  bottom: 14px;
+  height: 72px;
+  padding: 7px 8px;
+  gap: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 24px;
+  background: rgba(255,255,255,.98);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(20px);
+  transition:
+    width 220ms cubic-bezier(.4,0,.2,1),
+    left 220ms cubic-bezier(.4,0,.2,1),
+    right 220ms cubic-bezier(.4,0,.2,1),
+    border-radius 180ms cubic-bezier(.4,0,.2,1);
+}
+
+.bottom-nav-morph > button {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 56px;
+  width: auto;
+  overflow: hidden;
+  padding: 0 4px;
+  gap: 5px;
+  white-space: nowrap;
+  opacity: 1;
+  transform: translateX(0);
+  transition:
+    flex-basis 220ms cubic-bezier(.4,0,.2,1),
+    flex-grow 220ms cubic-bezier(.4,0,.2,1),
+    opacity 120ms ease,
+    padding 180ms ease,
+    transform 180ms ease;
+}
+
+.bottom-nav-morph > button > span {
+  max-width: 100%;
+  overflow: hidden;
+  opacity: 1;
+  transition: max-width 160ms ease, opacity 100ms ease;
+}
+
+.bottom-nav-morph[data-compact="true"]:not([data-expanded="true"]) {
+  width: 72px;
+  left: auto;
+  right: 14px;
+  border-radius: 14px;
+}
+
+.bottom-nav-morph[data-compact="true"]:not([data-expanded="true"]) > button:not(.active) {
+  flex: 0 0 0;
+  flex-grow: 0;
+  padding-left: 0;
+  padding-right: 0;
+  opacity: 0;
+  transform: translateX(8px);
+  pointer-events: none;
+}
+
+.bottom-nav-morph[data-compact="true"]:not([data-expanded="true"]) > button.active {
+  flex: 0 0 56px;
+  flex-grow: 0;
+}
+
+.bottom-nav-morph[data-compact="true"]:not([data-expanded="true"]) > button:not(.active) > span {
+  max-width: 0;
+  opacity: 0;
+}
+
+.bottom-nav-morph[data-compact="true"]:not([data-expanded="true"]) > button.active > span {
+  max-width: 0;
+  opacity: 0;
+}
+
+.bottom-nav-morph[data-expanded="true"] > button {
+  flex: 1 1 0;
+  flex-grow: 1;
+}
+
+.bottom-nav-morph > button:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: -3px;
+}
+
+@media (max-width: 360px) {
+  .bottom-nav-morph {
+    width: calc(100% - 20px);
+    left: 10px;
+  }
+
+  .bottom-nav-morph[data-compact="true"]:not([data-expanded="true"]) {
+    width: 72px;
+    left: auto;
+    right: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bottom-nav-morph,
+  .bottom-nav-morph > button,
+  .bottom-nav-morph > button > span {
+    transition: none;
+  }
+}
