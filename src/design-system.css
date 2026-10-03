@@ -889,3 +889,171 @@ select:focus-visible {
     animation-iteration-count: 1 !important;
   }
 }
+
+
+/* ─── Cross-screen navigation ───────────────────────────────────────────────
+   State 1: primary navigation on top-level screens.
+   State 2: compact module navigation while inside a focused flow.
+   The compact state expands in-place when the golfer taps it.
+*/
+.bottom-nav {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+}
+
+.bottom-nav-primary {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.bottom-nav-compact {
+  height: 64px;
+  padding: 8px 14px 10px;
+  overflow: visible;
+}
+
+.bottom-nav-compact-toggle {
+  width: 100%;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: rgba(255,255,255,.98);
+  color: var(--color-ink);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(20px);
+  text-align: left;
+}
+
+.bottom-nav-compact-toggle > .icon {
+  flex: 0 0 auto;
+  transform: rotate(-90deg);
+  transition: transform 180ms ease;
+}
+
+.bottom-nav-compact-toggle[aria-expanded="true"] > .icon {
+  transform: rotate(90deg);
+}
+
+.bottom-nav-compact-current {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bottom-nav-compact-icon {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-brand-soft);
+  color: var(--color-brand-dark);
+}
+
+.bottom-nav-compact-current > span:last-child {
+  min-width: 0;
+  display: grid;
+  gap: 1px;
+}
+
+.bottom-nav-compact-current small {
+  color: var(--color-muted-light);
+  font-size: 9px;
+  line-height: 1.1;
+  font-weight: var(--weight-bold);
+  letter-spacing: .09em;
+}
+
+.bottom-nav-compact-current strong {
+  color: var(--color-ink);
+  font-size: 13px;
+  line-height: 1.15;
+  font-weight: var(--weight-bold);
+}
+
+.bottom-nav-compact-menu {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 70px;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 4px;
+  padding: 7px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: rgba(255,255,255,.98);
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(24px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(8px) scale(.98);
+  transform-origin: bottom center;
+  transition: opacity 160ms ease, transform 160ms ease, visibility 160ms ease;
+}
+
+.bottom-nav-compact-menu.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.bottom-nav-compact-menu button {
+  min-width: 0;
+  min-height: 62px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 4px;
+  padding: 6px 3px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-muted);
+  font-size: 9px;
+  font-weight: var(--weight-semibold);
+}
+
+.bottom-nav-compact-menu button .icon {
+  width: 20px;
+  height: 20px;
+}
+
+.bottom-nav-compact-menu button.active {
+  color: var(--color-brand-dark);
+  background: var(--color-brand-soft);
+}
+
+@media (max-width: 360px) {
+  .bottom-nav-compact {
+    padding-inline: 10px;
+  }
+
+  .bottom-nav-compact-menu {
+    left: 10px;
+    right: 10px;
+  }
+
+  .bottom-nav-compact-menu button {
+    font-size: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bottom-nav-compact-toggle > .icon,
+  .bottom-nav-compact-menu {
+    transition: none;
+  }
+}

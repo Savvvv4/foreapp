@@ -291,8 +291,12 @@ function GolferHome({ go }: { go: (tab: GolferTab) => void }) {
   )
 }
 
-function Discover() {
-  return <CourseBookingPrototype />
+function Discover({
+  onModuleStateChange,
+}: {
+  onModuleStateChange: (active: boolean) => void
+}) {
+  return <CourseBookingPrototype onModuleStateChange={onModuleStateChange} />
 }
 
 type CourseFlowScreen =
@@ -1400,7 +1404,11 @@ function SignInSheet({
   )
 }
 
-function CourseBookingPrototype() {
+function CourseBookingPrototype({
+  onModuleStateChange,
+}: {
+  onModuleStateChange: (active: boolean) => void
+}) {
   const [screen, setScreen] = useState<CourseFlowScreen>("discover")
   const [mode, setMode] = useState<"courses" | "ranges" | "coaches">("courses")
   const [filtersOpen, setFiltersOpen] = useState(false)
@@ -1453,6 +1461,10 @@ function CourseBookingPrototype() {
     document.querySelector(".scroll-area")?.scrollTo({ top: 0, behavior: "smooth" })
   }, [screen])
 
+  useEffect(() => {
+    onModuleStateChange(screen !== "discover")
+  }, [screen, onModuleStateChange])
+
   const go = (next: CourseFlowScreen) => {
     setScreen(next)
     if (next === "discover") setMode("courses")
@@ -1503,8 +1515,16 @@ function CourseBookingPrototype() {
   )
 }
 
-function Play() {
+function Play({
+  onModuleStateChange,
+}: {
+  onModuleStateChange: (active: boolean) => void
+}) {
   const [tracking, setTracking] = useState(false)
+
+  useEffect(() => {
+    onModuleStateChange(tracking)
+  }, [tracking, onModuleStateChange])
   const [hole, setHole] = useState(1)
   const [score, setScore] = useState(4)
   if (tracking) {
@@ -2085,18 +2105,66 @@ function BottomNav<T extends string>({
   items,
   active,
   onChange,
+  compact,
 }: {
   items: { id: T; label: string; icon: IconName }[]
   active: T
   onChange: (id: T) => void
+  compact?: boolean
 }) {
+  const [expanded, setExpanded] = useState(false)
+  const activeItem = items.find((item) => item.id === active) ?? items[0]
+
+  useEffect(() => {
+    setExpanded(false)
+  }, [compact, active])
+
+  if (compact) {
+    return (
+      <nav className="bottom-nav bottom-nav-compact" aria-label="Primary navigation">
+        <button
+          className="bottom-nav-compact-toggle"
+          onClick={() => setExpanded((value) => !value)}
+          aria-expanded={expanded}
+          aria-label={expanded ? "Collapse navigation" : "Expand navigation"}
+        >
+          <span className="bottom-nav-compact-current">
+            <span className="bottom-nav-compact-icon">
+              <Icon name={activeItem.icon} />
+            </span>
+            <span>
+              <small>IN {activeItem.label.toUpperCase()}</small>
+              <strong>{activeItem.label}</strong>
+            </span>
+          </span>
+          <Icon name="chevron" size={17} />
+        </button>
+
+        <div className={`bottom-nav-compact-menu ${expanded ? "is-open" : ""}`}>
+          {items.map((item) => (
+            <button
+              key={item.id}
+              className={active === item.id ? "active" : ""}
+              onClick={() => onChange(item.id)}
+              aria-current={active === item.id ? "page" : undefined}
+            >
+              <Icon name={item.icon} />
+              <span>{item.label}</span>
+            </button>
+          ))}
+        </div>
+      </nav>
+    )
+  }
+
   return (
-    <nav className="bottom-nav">
+    <nav className="bottom-nav bottom-nav-primary" aria-label="Primary navigation">
       {items.map((item) => (
         <button
           key={item.id}
           className={active === item.id ? "active" : ""}
           onClick={() => onChange(item.id)}
+          aria-current={active === item.id ? "page" : undefined}
         >
           <Icon name={item.icon} />
           <span>{item.label}</span>
@@ -2264,13 +2332,25 @@ export default function App() {
   const [role, setRole] = useState<Role>("golfer")
   const [golferTab, setGolferTab] = useState<GolferTab>("home")
   const [coachTab, setCoachTab] = useState<CoachTab>("today")
+  const [moduleNavigation, setModuleNavigation] = useState(false)
   const [overlay, setOverlay] = useState<"student" | "assign" | null>(
     null,
   )
 
   const changeRole = (nextRole: Role) => {
     setRole(nextRole)
+    setModuleNavigation(false)
     setOverlay(null)
+  }
+
+  const goGolferTab = (tab: GolferTab) => {
+    setModuleNavigation(false)
+    setGolferTab(tab)
+  }
+
+  const goCoachTab = (tab: CoachTab) => {
+    setModuleNavigation(false)
+    setCoachTab(tab)
   }
 
   const golferItems: { id: GolferTab; label: string; icon: IconName }[] = [
@@ -2294,9 +2374,9 @@ export default function App() {
         <div className="scroll-area">
           {role === "golfer" && (
             <>
-              {golferTab === "home" && <GolferHome go={setGolferTab} />}
-              {golferTab === "discover" && <Discover />}
-              {golferTab === "play" && <Play />}
+              {golferTab === "home" && <GolferHome go={goGolferTab} />}
+              {golferTab === "discover" && <Discover onModuleStateChange={setModuleNavigation} />}
+              {golferTab === "play" && <Play onModuleStateChange={setModuleNavigation} />}
               {golferTab === "improve" && <Improve />}
               {golferTab === "profile" && (
                 <Profile role={role} onSwitch={() => changeRole("coach")} />
@@ -2305,7 +2385,7 @@ export default function App() {
           )}
           {role === "coach" && (
             <>
-              {coachTab === "today" && <CoachToday go={setCoachTab} />}
+              {coachTab === "today" && <CoachToday go={goCoachTab} />}
               {coachTab === "students" && (
                 <Students openStudent={() => setOverlay("student")} />
               )}
@@ -2323,13 +2403,15 @@ export default function App() {
           <BottomNav
             items={golferItems}
             active={golferTab}
-            onChange={setGolferTab}
+            onChange={goGolferTab}
+            compact={moduleNavigation}
           />
         ) : (
           <BottomNav
             items={coachItems}
             active={coachTab}
-            onChange={setCoachTab}
+            onChange={goCoachTab}
+            compact={moduleNavigation}
           />
         )}
         {overlay === "student" && (
