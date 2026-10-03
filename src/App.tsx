@@ -323,7 +323,7 @@ type CourseFlowScreen =
   | "coachBookingConfirmed"
   | "coachDeclined"
 type PaymentState = "methods" | "processing" | "failed" | "offline" | "expired"
-type BookingStep = "select" | "addons" | "review" | "payment"
+type BookingStep = "select" | "review" | "payment"
 type BookingCourse = { name: string; image: string; price: number }
 
 const delhiCourse: BookingCourse = { name: "Delhi Golf Club", image: photos.course, price: 2500 }
@@ -605,31 +605,382 @@ function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScree
   )
 }
 
-function BookingFlowModal({ course, step, setStep, date, setDate, time, setTime, caddyMode, setCaddyMode, cartCount, setCartCount, paymentMethod, setPaymentMethod, close, goHome, pay, }: {
-  course: BookingCourse; step: BookingStep; setStep: (step: BookingStep) => void; date: string; setDate: (date: string) => void; time: string; setTime: (time: string) => void
-  caddyMode: "auto" | "own" | "none"; setCaddyMode: (mode: "auto" | "own" | "none") => void; cartCount: number; setCartCount: (count: number) => void
-  paymentMethod: string; setPaymentMethod: (method: string) => void; close: () => void; goHome: () => void; pay: () => void
+function BookingFlowModal({
+  course,
+  step,
+  setStep,
+  date,
+  setDate,
+  time,
+  setTime,
+  caddyMode,
+  setCaddyMode,
+  cartCount,
+  setCartCount,
+  paymentMethod,
+  setPaymentMethod,
+  close,
+  goHome,
+  pay,
+}: {
+  course: BookingCourse
+  step: BookingStep
+  setStep: (step: BookingStep) => void
+  date: string
+  setDate: (date: string) => void
+  time: string
+  setTime: (time: string) => void
+  caddyMode: "auto" | "own" | "none"
+  setCaddyMode: (mode: "auto" | "own" | "none") => void
+  cartCount: number
+  setCartCount: (count: number) => void
+  paymentMethod: string
+  setPaymentMethod: (method: string) => void
+  close: () => void
+  goHome: () => void
+  pay: () => void
 }) {
-  const dates = [["Thu", "Thursday", "20"], ["Fri", "Friday", "21"], ["Sat", "Saturday", "22"], ["Sun", "Sunday", "23"], ["Mon", "Monday", "24"], ["Tue", "Tuesday", "25"], ["Wed", "Wednesday", "26"]] as const
-  const slots = ["6:00 AM", "6:10 AM", "6:20 AM", "6:30 AM", "6:40 AM", "6:50 AM", "7:00 AM", "7:10 AM", "7:20 AM", "7:30 AM"]
-  const caddyCost = caddyMode === "auto" ? 320 : 0; const cartCost = cartCount * 800; const total = course.price + caddyCost + cartCost
-  const stepOrder: BookingStep[] = ["select", "addons", "review", "payment"]
-  const stepTitles: Record<BookingStep, string> = { select: "Choose your day & tee time", addons: "Add extras", review: "Review & pay", payment: "Securing your tee time" }
+  const dates = [
+    ["Thu", "Thursday", "20"],
+    ["Fri", "Friday", "21"],
+    ["Sat", "Saturday", "22"],
+    ["Sun", "Sunday", "23"],
+    ["Mon", "Monday", "24"],
+    ["Tue", "Tuesday", "25"],
+    ["Wed", "Wednesday", "26"],
+  ] as const
+  const slots = [
+    "6:00 AM",
+    "6:10 AM",
+    "6:20 AM",
+    "6:30 AM",
+    "6:40 AM",
+    "6:50 AM",
+    "7:00 AM",
+    "7:10 AM",
+    "7:20 AM",
+    "7:30 AM",
+  ]
+  const caddyCost = caddyMode === "auto" ? 320 : 0
+  const cartCost = cartCount * 800
+  const total = course.price + caddyCost + cartCost
+  const stepOrder: BookingStep[] = ["select", "review", "payment"]
+  const stepTitles: Record<BookingStep, string> = {
+    select: "Choose your tee time",
+    review: "Review & pay",
+    payment: "Securing your tee time",
+  }
   const currentIndex = stepOrder.indexOf(step)
-  const selectedDate = dates.find(([day, , dayNumber]) => `${day} ${dayNumber}` === date)
-  const formattedDate = selectedDate ? `${selectedDate[1]}, ${selectedDate[2]} August` : ""
-  const bookingSummary = [formattedDate || "Choose day", time || "Choose tee time", caddyMode === "auto" ? "Caddy" : "No caddy", cartCount > 0 ? `${cartCount} cart${cartCount > 1 ? "s" : ""}` : "No cart"].join(" · ")
-  return <div className="booking-flow-backdrop" style={{ backgroundImage: `linear-gradient(180deg,rgba(22,29,24,.12),rgba(22,29,24,.34)),url("${course.image}")` }} onClick={close}>
-    <button className="booking-home-button" onClick={goHome} aria-label="Back to home"><Icon name="home" size={18} /></button><div className="booking-course-backdrop-copy"><strong>{course.name}</strong><div>{bookingSummary}</div></div>
-    <section className="booking-flow-modal" role="dialog" aria-modal="true" aria-label={`${course.name} tee-time booking`} onClick={(event) => event.stopPropagation()}>
-      <div className="booking-sheet-topbar" aria-hidden="true" /><div className="booking-flow-progress" aria-label="Booking progress">{stepOrder.map((item) => <i key={item} className={item === step || currentIndex > stepOrder.indexOf(item) ? "active" : ""} />)}</div>
-      <div className="booking-flow-content"><div className="booking-flow-heading"><h3>{stepTitles[step]}</h3></div>
-        {step === "select" && <div className="booking-selection-sections"><section className="booking-selection-section"><h4>Day</h4><div className="booking-date-grid" onWheel={(event) => { event.currentTarget.scrollLeft += event.deltaY }}>{dates.map(([day, , dayNumber]) => { const value = `${day} ${dayNumber}`; return <button aria-pressed={date === value} className={date === value ? "selected" : ""} onClick={() => { setDate(value); setTime("") }} key={dayNumber}><small>{day}</small><strong>{dayNumber}</strong><span>Aug</span></button> })}</div></section><section className="booking-selection-section"><h4>Tee time</h4><div className="booking-time-grid" onWheel={(event) => { event.currentTarget.scrollLeft += event.deltaY }}>{slots.map((slot, index) => <button aria-pressed={time === slot} className={time === slot ? "selected" : ""} onClick={() => setTime(slot)} key={slot}><strong>{slot}</strong><small>{index % 3 === 0 ? "Popular" : `${4 - (index % 3)} spots`}</small></button>)}</div></section></div>}
-        {step === "addons" && <div className="booking-selection-sections booking-addons-step"><section className="booking-optional-addons"><div className="booking-addon-caddy"><span><strong>Caddy</strong><small>Optional · ₹320</small></span><div className="booking-addon-duo"><button aria-pressed={caddyMode !== "none"} className={caddyMode !== "none" ? "selected" : ""} onClick={() => setCaddyMode(caddyMode === "auto" ? "none" : "auto")}>Add</button><button aria-pressed={caddyMode === "none"} className={caddyMode === "none" ? "selected" : ""} onClick={() => setCaddyMode("none")}>No</button></div></div><div className="booking-addon-cart"><span><strong>Golf cart</strong><small>Optional · ₹800</small></span><div className="booking-addon-duo"><button aria-pressed={cartCount > 0} className={cartCount > 0 ? "selected" : ""} onClick={() => setCartCount(1)}>Add</button><button aria-pressed={cartCount === 0} className={cartCount === 0 ? "selected" : ""} onClick={() => setCartCount(0)}>No</button></div></div></section></div>}
-        {step === "review" && <div className="booking-review-step"><div className="booking-review-summary"><div><small>Course</small><strong>{course.name}</strong></div><div><small>Date</small><strong>{formattedDate}</strong></div><div><small>Tee time</small><strong>{time}</strong></div><div><small>Extras</small><strong>{caddyMode === "auto" ? "Caddy · ₹320" : "No caddy"}{cartCount > 0 ? " · Cart · ₹800" : ""}</strong></div></div><div className="booking-review-total"><span>Total</span><strong>₹{total.toLocaleString("en-IN")}</strong></div><div className="booking-inline-payment-options" aria-label="Payment method">{["UPI", "Card", "Net banking"].map((method) => <button aria-pressed={paymentMethod === method} className={paymentMethod === method ? "selected" : ""} onClick={() => setPaymentMethod(method)} key={method}>{method}</button>)}</div></div>}
-        {step === "payment" && <div className="booking-payment-loading"><span className="booking-spinner" /><strong>Securing your tee time</strong><small>Confirming your booking at {course.name}…</small></div>}
-      </div>{step !== "payment" && <div className="booking-flow-footer booking-selection-footer"><button type="button" className="booking-flow-back" disabled={step === "select"} onClick={() => setStep(step === "review" ? "addons" : "select")}>{step === "select" ? "Choose a tee time" : "Back"}</button><button type="button" className="primary-button" disabled={!date || !time} onClick={() => step === "select" ? setStep("addons") : step === "addons" ? setStep("review") : pay()}>{step === "review" ? `Pay ₹${total.toLocaleString("en-IN")}` : "Continue"}</button></div>}</section>
-  </div>
+  const selectedDate = dates.find(
+    ([day, , dayNumber]) => `${day} ${dayNumber}` === date,
+  )
+  const formattedDate = selectedDate
+    ? `${selectedDate[1]}, ${selectedDate[2]} August`
+    : ""
+  const bookingSummary = [
+    formattedDate || "Choose day",
+    time || "Choose tee time",
+  ].join(" · ")
+
+  return (
+    <div
+      className="booking-flow-backdrop"
+      style={{
+        backgroundImage: `linear-gradient(180deg,rgba(22,29,24,.12),rgba(22,29,24,.34)),url("${course.image}")`,
+      }}
+      onClick={close}
+    >
+      <button
+        className="booking-home-button"
+        onClick={goHome}
+        aria-label="Back to home"
+      >
+        <Icon name="home" size={18} />
+      </button>
+      <div className="booking-course-backdrop-copy">
+        <strong>{course.name}</strong>
+        <div>{bookingSummary}</div>
+      </div>
+
+      <section
+        className="booking-flow-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${course.name} tee-time booking`}
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="booking-sheet-topbar" aria-hidden="true" />
+        <div className="booking-flow-progress" aria-label="Booking progress">
+          {stepOrder.map((item) => (
+            <i
+              key={item}
+              className={
+                item === step || currentIndex > stepOrder.indexOf(item)
+                  ? "active"
+                  : ""
+              }
+            />
+          ))}
+        </div>
+
+        <div className="booking-flow-content">
+          <div className="booking-flow-heading">
+            <span className="booking-flow-step-label">
+              {step === "payment"
+                ? "FINALISING"
+                : `STEP ${currentIndex + 1} OF 2`}
+            </span>
+            <h3>{stepTitles[step]}</h3>
+            {step === "select" && (
+              <p>Pick a day and time. Your slot will be held while you review.</p>
+            )}
+          </div>
+
+          {step === "select" && (
+            <div className="booking-selection-sections">
+              <section className="booking-selection-section">
+                <h4>Day</h4>
+                <div
+                  className="booking-date-grid"
+                  onWheel={(event) => {
+                    event.currentTarget.scrollLeft += event.deltaY
+                  }}
+                >
+                  {dates.map(([day, , dayNumber]) => {
+                    const value = `${day} ${dayNumber}`
+                    return (
+                      <button
+                        aria-pressed={date === value}
+                        className={date === value ? "selected" : ""}
+                        onClick={() => {
+                          setDate(value)
+                          setTime("")
+                        }}
+                        key={dayNumber}
+                      >
+                        <small>{day}</small>
+                        <strong>{dayNumber}</strong>
+                        <span>Aug</span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </section>
+
+              <section className="booking-selection-section">
+                <div className="booking-section-heading-row">
+                  <h4>Tee time</h4>
+                  <small>{time ? "Selected" : "Choose one"}</small>
+                </div>
+                <div
+                  className="booking-time-grid"
+                  onWheel={(event) => {
+                    event.currentTarget.scrollLeft += event.deltaY
+                  }}
+                >
+                  {slots.map((slotItem, index) => (
+                    <button
+                      aria-pressed={time === slotItem}
+                      className={time === slotItem ? "selected" : ""}
+                      onClick={() => setTime(slotItem)}
+                      key={slotItem}
+                    >
+                      <strong>{slotItem}</strong>
+                      <small>
+                        {index % 3 === 0
+                          ? "Popular"
+                          : `${4 - (index % 3)} spots`}
+                      </small>
+                    </button>
+                  ))}
+                </div>
+              </section>
+            </div>
+          )}
+
+          {step === "review" && (
+            <div className="booking-review-step booking-review-step-fast">
+              <div className="booking-selected-slot-card">
+                <div>
+                  <small>TEE TIME</small>
+                  <strong>{formattedDate}</strong>
+                  <span>{time}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setStep("select")}
+                  aria-label="Change tee time"
+                >
+                  Change
+                </button>
+              </div>
+
+              <section className="booking-review-section">
+                <div className="booking-review-section-heading">
+                  <span>
+                    <strong>Optional extras</strong>
+                    <small>Add only what you need</small>
+                  </span>
+                </div>
+
+                <div className="booking-quick-extra">
+                  <div>
+                    <span>
+                      <strong>Caddy</strong>
+                      <small>₹320</small>
+                    </span>
+                    <div className="booking-addon-duo">
+                      <button
+                        type="button"
+                        aria-pressed={caddyMode === "auto"}
+                        className={caddyMode === "auto" ? "selected" : ""}
+                        onClick={() => setCaddyMode("auto")}
+                      >
+                        Add
+                      </button>
+                      <button
+                        type="button"
+                        aria-pressed={caddyMode === "none"}
+                        className={caddyMode === "none" ? "selected" : ""}
+                        onClick={() => setCaddyMode("none")}
+                      >
+                        No
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <span>
+                      <strong>Golf cart</strong>
+                      <small>₹800</small>
+                    </span>
+                    <div className="booking-addon-duo">
+                      <button
+                        type="button"
+                        aria-pressed={cartCount > 0}
+                        className={cartCount > 0 ? "selected" : ""}
+                        onClick={() => setCartCount(1)}
+                      >
+                        Add
+                      </button>
+                      <button
+                        type="button"
+                        aria-pressed={cartCount === 0}
+                        className={cartCount === 0 ? "selected" : ""}
+                        onClick={() => setCartCount(0)}
+                      >
+                        No
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <div className="booking-price-summary">
+                <div>
+                  <span>Green fee</span>
+                  <strong>₹{course.price.toLocaleString("en-IN")}</strong>
+                </div>
+                {caddyCost > 0 && (
+                  <div>
+                    <span>Caddy</span>
+                    <strong>₹{caddyCost.toLocaleString("en-IN")}</strong>
+                  </div>
+                )}
+                {cartCost > 0 && (
+                  <div>
+                    <span>Golf cart</span>
+                    <strong>₹{cartCost.toLocaleString("en-IN")}</strong>
+                  </div>
+                )}
+                <div className="booking-price-total">
+                  <span>Total</span>
+                  <strong>₹{total.toLocaleString("en-IN")}</strong>
+                </div>
+              </div>
+
+              <section className="booking-payment-section">
+                <div className="booking-review-section-heading">
+                  <span>
+                    <strong>Payment method</strong>
+                    <small>You'll be charged after you confirm</small>
+                  </span>
+                </div>
+                <div
+                  className="booking-inline-payment-options"
+                  aria-label="Payment method"
+                >
+                  {["UPI", "Card", "Net banking"].map((method) => (
+                    <button
+                      type="button"
+                      aria-pressed={paymentMethod === method}
+                      className={
+                        paymentMethod === method ? "selected" : ""
+                      }
+                      onClick={() => setPaymentMethod(method)}
+                      key={method}
+                    >
+                      {method}
+                    </button>
+                  ))}
+                </div>
+              </section>
+
+              <p className="booking-trust-note">
+                <Icon name="shield" size={14} />
+                Free cancellation until 24h before your tee time.
+              </p>
+            </div>
+          )}
+
+          {step === "payment" && (
+            <div className="booking-payment-loading">
+              <span className="booking-spinner" />
+              <strong>Securing your tee time</strong>
+              <small>
+                Confirming your booking at {course.name}…
+              </small>
+            </div>
+          )}
+        </div>
+
+        {step !== "payment" && (
+          <div className="booking-flow-footer booking-selection-footer">
+            {step === "select" ? (
+              <button
+                type="button"
+                className="booking-flow-back booking-flow-secondary"
+                onClick={close}
+              >
+                Cancel
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="booking-flow-back booking-flow-secondary"
+                onClick={() => setStep("select")}
+              >
+                Change time
+              </button>
+            )}
+
+            <button
+              type="button"
+              className="primary-button"
+              disabled={!date || !time}
+              onClick={() =>
+                step === "select" ? setStep("review") : pay()
+              }
+            >
+              {step === "review"
+                ? `Pay ₹${total.toLocaleString("en-IN")}`
+                : "Review & pay"}
+            </button>
+          </div>
+        )}
+      </section>
+    </div>
+  )
 }
 function PaymentSheet({
   state,
@@ -1381,7 +1732,7 @@ function CourseBookingPrototype({
     setCourseCaddyMode("none")
     setCourseCartCount(0)
     setCoursePaymentMethod("UPI")
-    setBookingStep("select")
+    setBookingStep(slot ? "review" : "select")
     setBookingOpen(true)
     setHoldSeconds(600)
   }
