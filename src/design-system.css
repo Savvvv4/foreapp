@@ -1455,3 +1455,422 @@ select:focus-visible {
     padding-inline: 7px;
   }
 }
+
+
+/* Course booking visual refresh
+   The booking sheet is a focused transaction surface:
+   no decorative hero image, no competing navigation, clear hierarchy,
+   generous touch targets, and one primary action at a time.
+*/
+.booking-flow-backdrop {
+  z-index: 100;
+  align-items: flex-end;
+  padding: 0;
+  background: rgba(25,31,27,.42) !important;
+  backdrop-filter: blur(6px);
+}
+
+.booking-flow-backdrop:before,
+.booking-course-backdrop-copy,
+.booking-home-button {
+  display: none !important;
+}
+
+.booking-flow-modal {
+  position: relative;
+  inset: auto;
+  z-index: 2;
+  width: 100%;
+  max-width: 430px;
+  height: min(760px, 88%);
+  max-height: 88%;
+  min-height: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 28px 28px 0 0;
+  background: var(--color-bg);
+  box-shadow: 0 -18px 60px rgba(24, 20, 17, .18);
+  animation: sheet-up .22s ease-out;
+}
+
+.booking-sheet-topbar {
+  position: relative;
+  flex: 0 0 66px;
+  display: grid;
+  grid-template-columns: 42px 1fr 42px;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px 4px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.booking-sheet-close,
+.booking-sheet-home {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  color: var(--color-ink-soft);
+}
+
+.booking-sheet-course {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+  text-align: center;
+}
+
+.booking-sheet-course span {
+  color: var(--color-brand-dark);
+  font-size: 9px;
+  line-height: 1.1;
+  font-weight: var(--weight-bold);
+  letter-spacing: .1em;
+}
+
+.booking-sheet-course strong {
+  overflow: hidden;
+  color: var(--color-ink);
+  font-size: 14px;
+  line-height: 1.2;
+  font-weight: var(--weight-bold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.booking-flow-progress {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+  padding: 10px 16px 0;
+  background: var(--color-surface);
+}
+
+.booking-flow-progress i {
+  height: 3px;
+  background: var(--color-border);
+}
+
+.booking-flow-progress i.active {
+  background: var(--color-brand);
+}
+
+.booking-flow-content {
+  padding: 20px 16px 18px;
+  background: var(--color-bg);
+}
+
+.booking-flow-heading {
+  display: block;
+  margin: 0 0 20px;
+  text-align: left;
+}
+
+.booking-flow-heading .booking-flow-step-label {
+  margin-bottom: 6px;
+}
+
+.booking-flow-heading h3 {
+  font-size: 24px;
+  line-height: 1.12;
+  letter-spacing: -.035em;
+}
+
+.booking-flow-heading > p {
+  max-width: 320px;
+  margin-top: 7px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.booking-selection-sections {
+  gap: 24px;
+}
+
+.booking-selection-section > h4,
+.booking-section-heading-row h4 {
+  margin-bottom: 10px;
+  color: var(--color-ink);
+  font-size: 14px;
+  line-height: 1.2;
+  font-weight: var(--weight-bold);
+}
+
+.booking-section-heading-row > small {
+  color: var(--color-muted);
+  font-size: 11px;
+}
+
+.booking-date-grid {
+  gap: 8px !important;
+  padding: 2px 1px 5px !important;
+}
+
+.booking-selection-section .booking-date-grid button {
+  min-width: 58px;
+  min-height: 72px;
+  flex-basis: 58px;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background: var(--color-surface);
+}
+
+.booking-date-grid small,
+.booking-date-grid span {
+  font-size: 10px;
+}
+
+.booking-date-grid strong {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.booking-selection-section .booking-date-grid button.selected {
+  border-color: var(--color-brand);
+  background: var(--color-brand-soft);
+  box-shadow: inset 0 0 0 1px var(--color-brand);
+}
+
+.booking-selection-section .booking-date-grid button.selected small,
+.booking-selection-section .booking-date-grid button.selected span {
+  color: var(--color-brand-dark);
+}
+
+.booking-selection-section .booking-time-grid {
+  grid-auto-columns: 124px;
+  grid-template-rows: repeat(2, 58px);
+  gap: 8px;
+  padding: 2px 1px 5px;
+}
+
+.booking-selection-section .booking-time-grid button {
+  min-height: 58px;
+  padding: 8px 10px;
+  align-items: flex-start;
+  justify-content: center;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background: var(--color-surface);
+}
+
+.booking-time-grid strong {
+  font-size: 13px;
+}
+
+.booking-time-grid small {
+  margin-top: 2px;
+  color: var(--color-muted);
+  font-size: 10px;
+}
+
+.booking-selection-section .booking-time-grid button.selected {
+  border-color: var(--color-brand);
+  background: var(--color-brand-soft);
+  box-shadow: inset 0 0 0 1px var(--color-brand);
+}
+
+.booking-review-step-fast {
+  gap: 18px;
+}
+
+.booking-selected-slot-card {
+  padding: 16px;
+  border-color: var(--color-border);
+  border-radius: 16px;
+  background: var(--color-surface);
+}
+
+.booking-selected-slot-card small {
+  font-size: 9px;
+}
+
+.booking-selected-slot-card strong {
+  font-size: 15px;
+}
+
+.booking-selected-slot-card span {
+  font-size: 12px;
+}
+
+.booking-selected-slot-card > button {
+  min-height: 38px;
+  border-color: var(--color-border);
+  border-radius: 10px;
+  color: var(--color-brand-dark);
+  background: var(--color-brand-soft);
+}
+
+.booking-review-section {
+  gap: 10px;
+}
+
+.booking-review-section-heading strong {
+  font-size: 14px;
+}
+
+.booking-review-section-heading small {
+  font-size: 11px;
+}
+
+.booking-quick-extra {
+  gap: 8px;
+}
+
+.booking-quick-extra > div {
+  min-height: 64px;
+  padding: 12px 14px;
+  border-color: var(--color-border);
+  border-radius: 14px;
+}
+
+.booking-quick-extra > div > span strong {
+  font-size: 13px;
+}
+
+.booking-quick-extra > div > span small {
+  font-size: 11px;
+}
+
+.booking-addon-duo {
+  gap: 5px;
+}
+
+.booking-addon-duo button {
+  min-width: 50px;
+  min-height: 40px;
+  border-radius: 10px;
+  font-size: 11px;
+}
+
+.booking-price-summary {
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.booking-price-summary > div {
+  font-size: 12px;
+}
+
+.booking-price-total {
+  padding-top: 11px;
+  font-size: 15px !important;
+}
+
+.booking-price-total strong {
+  font-size: 19px;
+}
+
+.booking-payment-section {
+  gap: 10px;
+}
+
+.booking-inline-payment-options {
+  gap: 7px;
+}
+
+.booking-inline-payment-options button {
+  min-height: 44px;
+  border-color: var(--color-border);
+  border-radius: 11px;
+  color: var(--color-ink-soft);
+  font-size: 11px;
+}
+
+.booking-inline-payment-options button.selected {
+  border-color: var(--color-brand);
+  background: var(--color-brand-soft);
+  color: var(--color-brand-dark);
+}
+
+.booking-trust-note {
+  padding: 0 2px;
+  font-size: 11px;
+}
+
+.booking-flow-footer {
+  position: relative;
+  z-index: 3;
+  flex: 0 0 auto;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 10px;
+  min-height: 76px;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--color-border);
+  background: rgba(255,255,255,.98);
+}
+
+.booking-flow-footer .primary-button {
+  min-height: 52px;
+  border-radius: 14px;
+  font-size: 13px;
+}
+
+.booking-flow-secondary {
+  min-height: 52px;
+  border-radius: 14px;
+  background: var(--color-surface);
+  color: var(--color-ink-soft);
+  font-size: 12px;
+}
+
+.booking-payment-loading {
+  min-height: 320px;
+  padding: 20px;
+}
+
+.booking-payment-loading strong {
+  font-size: 17px;
+}
+
+.booking-payment-loading small {
+  max-width: 240px;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+@media (max-width: 520px) {
+  .booking-flow-modal {
+    height: min(760px, 91%);
+    max-height: 91%;
+    border-radius: 26px 26px 0 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .booking-sheet-topbar {
+    padding-inline: 12px;
+  }
+
+  .booking-flow-content {
+    padding-inline: 13px;
+  }
+
+  .booking-flow-heading h3 {
+    font-size: 22px;
+  }
+
+  .booking-selection-section .booking-date-grid button {
+    min-width: 54px;
+    flex-basis: 54px;
+  }
+
+  .booking-selection-section .booking-time-grid {
+    grid-auto-columns: 112px;
+  }
+
+  .booking-flow-footer {
+    grid-template-columns: 96px minmax(0, 1fr);
+    padding-inline: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .booking-flow-modal {
+    animation: none;
+  }
+}

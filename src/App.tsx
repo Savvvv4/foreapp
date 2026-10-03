@@ -709,7 +709,28 @@ function BookingFlowModal({
         aria-label={`${course.name} tee-time booking`}
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="booking-sheet-topbar" aria-hidden="true" />
+        <div className="booking-sheet-topbar">
+          <button
+            type="button"
+            className="booking-sheet-close"
+            onClick={close}
+            aria-label="Close booking"
+          >
+            <Icon name="close" size={18} />
+          </button>
+          <div className="booking-sheet-course">
+            <span>BOOK TEE TIME</span>
+            <strong>{course.name}</strong>
+          </div>
+          <button
+            type="button"
+            className="booking-sheet-home"
+            onClick={goHome}
+            aria-label="Return to home"
+          >
+            <Icon name="home" size={17} />
+          </button>
+        </div>
         <div className="booking-flow-progress" aria-label="Booking progress">
           {stepOrder.map((item) => (
             <i
