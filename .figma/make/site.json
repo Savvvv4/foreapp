@@ -1,0 +1,10 @@
+{
+  "description": "Easily import and manage design prototypes from Vercel to streamline your development workflow and enhance collaboration between designers and developers.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
