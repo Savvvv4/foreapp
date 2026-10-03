@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react"
-import foreLogo from "./assets/fore-logo-orange.png"
 
 type Role = "golfer" | "coach"
 type GolferTab = "home" | "discover" | "play" | "improve" | "profile"
@@ -183,35 +182,6 @@ function Avatar({ initials, image }: { initials: string; image?: string }) {
   )
 }
 
-function TopBar({
-  role,
-  onRoleChange,
-}: {
-  role: Role
-  onRoleChange: (role: Role) => void
-}) {
-  return (
-    <header className="topbar">
-      <button
-        className="wordmark"
-        onClick={() => document.querySelector(".scroll-area")?.scrollTo({ top: 0, behavior: "smooth" })}
-        aria-label="Fore home"
-      >
-        <img src={foreLogo} alt="Fore" />
-      </button>
-      <button
-        className="role-switch"
-        onClick={() => onRoleChange(role === "golfer" ? "coach" : "golfer")}
-        aria-label={`Switch to ${role === "golfer" ? "coach" : "golfer"} app`}
-      >
-        <Icon name="switch" size={14} />
-        {role === "golfer" ? "Golfer" : "Coach"}
-      </button>
-      <span />
-    </header>
-  )
-}
-
 function SectionHeading({
   title,
   action,
@@ -329,9 +299,6 @@ type CourseFlowScreen =
   | "discover"
   | "results"
   | "course"
-  | "tee"
-  | "checkout"
-  | "paymentMethod"
   | "confirmation"
   | "bookings"
   | "bookingDetail"
@@ -351,8 +318,12 @@ type CourseFlowScreen =
   | "coachBookingPending"
   | "coachBookingConfirmed"
   | "coachDeclined"
-type TeeState = "ready" | "loading" | "empty" | "taken"
 type PaymentState = "methods" | "processing" | "failed" | "offline" | "expired"
+type BookingStep = "date" | "time" | "caddy" | "cart" | "review" | "payment"
+type BookingCourse = { name: string; image: string; price: number }
+
+const delhiCourse: BookingCourse = { name: "Delhi Golf Club", image: photos.course, price: 2500 }
+const qutubCourse: BookingCourse = { name: "Qutub Golf Course", image: photos.green, price: 1800 }
 
 function FlowHeader({
   title,
@@ -464,12 +435,14 @@ function DiscoverCourses({
   go,
   openFilters,
   openSearch,
+  openBooking,
   mode,
   setMode,
 }: {
   go: (screen: CourseFlowScreen) => void
   openFilters: () => void
   openSearch: () => void
+  openBooking: (course: BookingCourse, slot?: string) => void
   mode: "courses" | "ranges" | "coaches"
   setMode: (mode: "courses" | "ranges" | "coaches") => void
 }) {
@@ -496,11 +469,11 @@ function DiscoverCourses({
         <span className="filter-button" onClick={(event) => { event.stopPropagation(); openFilters() }}>Filters</span>
       </button>
       <SectionHeading title="Book Again" />
-      <BookAgainCourseCard onOpen={() => go("course")} onBook={() => go("tee")} />
+      <BookAgainCourseCard onOpen={() => go("course")} onBook={() => openBooking(delhiCourse)} />
       <SectionHeading title="Near you" action="See all" onAction={() => go("results")} />
       <div className="compact-course-scroller">
-        <CourseCard compact onOpen={() => go("course")} onBook={() => go("tee")} />
-        <CourseCard compact qutub onOpen={() => go("course")} onBook={() => go("tee")} />
+        <CourseCard compact onOpen={() => go("course")} onBook={() => openBooking(delhiCourse)} />
+        <CourseCard compact qutub onOpen={() => go("course")} onBook={() => openBooking(qutubCourse)} />
       </div>
     </main>
   )
@@ -511,13 +484,13 @@ function ResultsScreen({
   openFilters,
   state,
   setState,
-  chooseSlot,
+  openBooking,
 }: {
   go: (screen: CourseFlowScreen) => void
   openFilters: () => void
   state: "ready" | "empty" | "offline"
   setState: (state: "ready" | "empty" | "offline") => void
-  chooseSlot: (slot: string) => void
+  openBooking: (course: BookingCourse, slot?: string) => void
 }) {
   const [view, setView] = useState<"list" | "map">("list")
   const [selectedCourse, setSelectedCourse] = useState<"delhi" | "qutub">("delhi")
@@ -551,9 +524,9 @@ function ResultsScreen({
         </div>
       ) : view === "list" ? (
         <div className="result-course-list">
-          <CourseCard onOpen={() => go("course")} onBook={() => go("tee")} onSlot={chooseSlot} />
+          <CourseCard onOpen={() => go("course")} onBook={() => openBooking(delhiCourse)} onSlot={(slot) => openBooking(delhiCourse, slot)} />
           <span className="cancellation-tag"><Icon name="shield" size={13} /> Free cancellation</span>
-          <CourseCard qutub onOpen={() => go("course")} onBook={() => go("tee")} onSlot={chooseSlot} />
+          <CourseCard qutub onOpen={() => go("course")} onBook={() => openBooking(qutubCourse)} onSlot={(slot) => openBooking(qutubCourse, slot)} />
         </div>
       ) : (
         <div className="booking-map-view">
@@ -568,7 +541,7 @@ function ResultsScreen({
           <article className="map-selected-card">
             <img src={selectedCourse === "delhi" ? photos.course : photos.green} alt={selectedCourse === "delhi" ? "Delhi Golf Club fairway" : "Qutub Golf Course fairway"} />
             <span><small>{selectedCourse === "delhi" ? "2.1 km away" : "5.4 km away"}</small><strong>{selectedCourse === "delhi" ? "Delhi Golf Club" : "Qutub Golf Course"}</strong><em><Icon name="star" size={12} /> {selectedCourse === "delhi" ? "4.7 · 18 holes" : "4.4 · 9 holes"}</em></span>
-            <button onClick={() => go("tee")}>Book</button>
+            <button onClick={() => openBooking(selectedCourse === "delhi" ? delhiCourse : qutubCourse)}>Book</button>
           </article>
         </div>
       )}
@@ -577,7 +550,7 @@ function ResultsScreen({
   )
 }
 
-function CourseProfileScreen({ go }: { go: (screen: CourseFlowScreen) => void }) {
+function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScreen) => void; openBooking: (course: BookingCourse, slot?: string) => void }) {
   return (
     <main className="course-profile-screen">
       <div className="course-profile-hero">
@@ -604,14 +577,14 @@ function CourseProfileScreen({ go }: { go: (screen: CourseFlowScreen) => void })
         </div>
         <h2>About the course</h2>
         <p className="body-copy">A historic championship course in the heart of Delhi, known for tree-lined fairways, strategic bunkering, and fast greens. <button>Read more</button></p>
-        <div className="profile-section-heading"><h2>Availability</h2><button onClick={() => go("tee")}>All tee times</button></div>
+        <div className="profile-section-heading"><h2>Availability</h2><button onClick={() => openBooking(delhiCourse)}>All tee times</button></div>
         <div className="profile-date-strip">
           {["Thu 20", "Fri 21", "Sat 22", "Sun 23", "Mon 24", "Tue 25", "Wed 26"].map((date, index) => (
             <button className={index === 2 ? "selected" : ""} key={date}><small>{date.split(" ")[0]}</small><strong>{date.split(" ")[1]}</strong></button>
           ))}
         </div>
         <div className="availability-slots">
-          {["6:30 AM", "7:30 AM", "8:30 AM"].map((slot) => <button key={slot} onClick={() => go("tee")}><strong>{slot}</strong><span>₹2,500</span></button>)}
+          {["6:30 AM", "7:30 AM", "8:30 AM"].map((slot) => <button key={slot} onClick={() => openBooking(delhiCourse, slot)}><strong>{slot}</strong><span>₹2,500</span></button>)}
         </div>
         <div className="profile-section-heading"><h2>Reviews</h2><button>See all 312</button></div>
         <div className="profile-review"><span>★★★★★</span><p>“Beautiful course, smooth check-in, and excellent caddies.”</p><small>Rohit S. · 2 weeks ago</small></div>
@@ -622,205 +595,157 @@ function CourseProfileScreen({ go }: { go: (screen: CourseFlowScreen) => void })
       </div>
       <div className="booking-sticky-bar">
         <span><small>From</small><strong>₹2,500</strong></span>
-        <button className="primary-button" onClick={() => go("tee")}>Select tee time</button>
+        <button className="primary-button" onClick={() => openBooking(delhiCourse)}>Select tee time</button>
       </div>
     </main>
   )
 }
 
-function TeeTimeScreen({
-  go,
-  players,
-  setPlayers,
-  selectedSlot,
-  chooseSlot,
-  state,
-  setState,
-  joinGame,
+function BookingFlowModal({
+  course,
+  step,
+  setStep,
+  date,
+  setDate,
+  time,
+  setTime,
   caddyMode,
   setCaddyMode,
-  selectedCaddies,
-  setSelectedCaddies,
-  caddyPayment,
-  setCaddyPayment,
   cartCount,
   setCartCount,
-  selectedDate,
-  setSelectedDate,
-}: {
-  go: (screen: CourseFlowScreen) => void
-  players: number
-  setPlayers: (players: number) => void
-  selectedSlot: string
-  chooseSlot: (slot: string) => void
-  state: TeeState
-  setState: (state: TeeState) => void
-  joinGame: () => void
-  caddyMode: "auto" | "choose"
-  setCaddyMode: (mode: "auto" | "choose") => void
-  selectedCaddies: string[]
-  setSelectedCaddies: (caddies: string[]) => void
-  caddyPayment: "prepay" | "course"
-  setCaddyPayment: (payment: "prepay" | "course") => void
-  cartCount: number
-  setCartCount: (count: number) => void
-  selectedDate: string
-  setSelectedDate: (date: string) => void
-}) {
-  const [tab, setTab] = useState<"tee" | "game">("tee")
-  const [pickerOpen, setPickerOpen] = useState(false)
-  const [pickerStep, setPickerStep] = useState<"date" | "time" | "players">("date")
-  const [draftDate, setDraftDate] = useState(selectedDate)
-  const [draftTime, setDraftTime] = useState(selectedSlot)
-  const [draftPlayers, setDraftPlayers] = useState(players)
-  const slots = ["6:00 AM", "6:10 AM", "6:20 AM", "6:30 AM", "6:40 AM", "6:50 AM", "7:00 AM", "7:10 AM", "7:20 AM", "7:30 AM"]
-  const caddyOptions = [
-    ["Ramesh Kumar", "RK", 350, "4.9 · Course strategy"],
-    ["Suresh Yadav", "SY", 300, "4.5 · Beginners welcome"],
-    ["Manoj Pandey", "MP", 330, "4.7 · Club selection"],
-    ["Deepak Kaur", "DK", 360, "4.8 · Wind reading"],
-  ] as const
-  const autoCaddyCost = 320 * Math.min(2, players)
-  const chosenCaddyCost = caddyOptions.filter(([name]) => selectedCaddies.includes(name)).reduce((sum, option) => sum + option[2], 0)
-  const caddyCost = caddyMode === "auto" ? autoCaddyCost : chosenCaddyCost
-  const payableCaddyCost = caddyPayment === "prepay" ? caddyCost : 0
-  const total = 2500 * players + payableCaddyCost + cartCount * 800
-  const toggleCaddy = (name: string) => {
-    if (selectedCaddies.includes(name)) setSelectedCaddies(selectedCaddies.filter((item) => item !== name))
-    else if (selectedCaddies.length < 2) setSelectedCaddies([...selectedCaddies, name])
-  }
-  const openPicker = () => {
-    setDraftDate(selectedDate)
-    setDraftTime(selectedSlot)
-    setDraftPlayers(players)
-    setPickerStep("date")
-    setPickerOpen(true)
-  }
-  const confirmPicker = () => {
-    setSelectedDate(draftDate)
-    chooseSlot(draftTime)
-    setPlayers(draftPlayers)
-    setPickerOpen(false)
-  }
-  return (
-    <main className="screen tee-time-screen">
-      <AirBookingHeader title="Delhi Golf Club" back={() => go("course")} close={() => go("course")} />
-      <div className="segment tee-mode-segment">
-        <button className={tab === "tee" ? "active" : ""} onClick={() => setTab("tee")}>Tee time</button>
-        <button className={tab === "game" ? "active" : ""} onClick={() => setTab("game")}>Join open game</button>
-      </div>
-      {tab === "tee" ? (
-        <div className="tee-selection-layout">
-          <button className={`tee-selection-summary ${selectedSlot ? "complete" : ""}`} onClick={openPicker}>
-            <span className="selection-summary-icon"><Icon name="calendar" /></span>
-            <span><small>TEE TIME</small><strong>{selectedSlot ? `${selectedDate} Aug · ${selectedSlot}` : "Choose date and time"}</strong><em>{selectedSlot ? `${players} players` : "Date, time and players"}</em></span>
-            <b>{selectedSlot ? "Change" : "Select"}</b>
-          </button>
-          <div className="tee-addons-heading"><h2>Complete your booking</h2><span>Optional add-ons</span></div>
-          <section className="tee-addon-card">
-            <div className="tee-addon-card-title"><span><strong>Caddy</strong><small>Up to 2 caddies</small></span><b>{caddyMode === "auto" ? `₹${autoCaddyCost}` : chosenCaddyCost ? `₹${chosenCaddyCost}` : "₹0"}</b></div>
-            <div className="tee-addon-options"><button className={caddyMode === "choose" && selectedCaddies.length === 0 ? "selected" : ""} onClick={() => { setCaddyMode("choose"); setSelectedCaddies([]) }}>None</button><button className={caddyMode === "auto" ? "selected" : ""} onClick={() => setCaddyMode("auto")}>Auto-assign</button><button className={caddyMode === "choose" && selectedCaddies.length > 0 ? "selected" : ""} onClick={() => setCaddyMode("choose")}>Choose</button></div>
-            {caddyMode === "choose" && <div className="tee-caddy-list">{caddyOptions.map(([name,initials,price]) => <button className={selectedCaddies.includes(name) ? "selected" : ""} onClick={() => toggleCaddy(name)} key={name}><Avatar initials={initials} /><span><strong>{name}</strong><small>₹{price}</small></span><i>{selectedCaddies.includes(name) && <Icon name="check" size={12} />}</i></button>)}</div>}
-            {(caddyMode === "auto" || selectedCaddies.length > 0) && <div className="tee-caddy-payment"><span>Pay caddy</span><button className={caddyPayment === "prepay" ? "selected" : ""} onClick={() => setCaddyPayment("prepay")}>Now</button><button className={caddyPayment === "course" ? "selected" : ""} onClick={() => setCaddyPayment("course")}>At course</button></div>}
-          </section>
-          <section className="tee-addon-card cart-addon-card">
-            <div className="tee-addon-card-title"><span><strong>Golf cart</strong><small>₹800 per cart</small></span><b>{cartCount ? `₹${(cartCount * 800).toLocaleString("en-IN")}` : "₹0"}</b></div>
-            <div className="tee-addon-options">{[0,1,2].map((count) => <button className={cartCount === count ? "selected" : ""} onClick={() => setCartCount(count)} key={count}>{count === 0 ? "No cart" : `${count} cart${count > 1 ? "s" : ""}`}</button>)}</div>
-          </section>
-        </div>
-      ) : (
-        <div className="open-game-list">
-          <article><span><small>OPEN GAME</small><h2>7:30 AM open game</h2><p>2 players already booked · 2 spots open</p></span><div className="game-players"><Avatar initials="R" /><Avatar initials="V" /><span>Rohit, Vikram</span></div><div><strong>₹2,500 <small>per player</small></strong><button className="primary-button" onClick={joinGame}>Join</button></div></article>
-          <article><span><small>OPEN GAME</small><h2>2:00 PM open game</h2><p>3 players already booked · 1 spot open</p></span><div className="game-players"><Avatar initials="A" /><Avatar initials="M" /><Avatar initials="K" /><span>Arjun, Meera, Karan</span></div><div><strong>₹2,250 <small>per player</small></strong><button className="primary-button" onClick={joinGame}>Join</button></div></article>
-        </div>
-      )}
-      {tab === "tee" && (
-        <div className="booking-sticky-bar tee-sticky air-select-footer">
-          <div className="air-step-bars">{[1,2,3,4].map((item) => <i className={item === 1 ? "active" : ""} key={item} />)}</div>
-          <span><small>{selectedSlot || "Select a tee time"}</small><strong>{selectedSlot ? `₹${total.toLocaleString("en-IN")}` : "—"}</strong></span>
-          <button className="primary-button" disabled={!selectedSlot} onClick={() => go("checkout")}>Next</button>
-        </div>
-      )}
-      {pickerOpen && (
-        <div className="sheet-backdrop tee-picker-backdrop" onClick={() => setPickerOpen(false)}>
-          <div className="sheet tee-picker-sheet" onClick={(event) => event.stopPropagation()}>
-            <div className="sheet-handle" />
-            <div className="tee-picker-header"><span><small>{pickerStep === "date" ? "1" : pickerStep === "time" ? "2" : "3"} OF 3</small><h2>{pickerStep === "date" ? "Choose a date" : pickerStep === "time" ? "Choose a tee time" : "How many players?"}</h2></span><button onClick={() => setPickerOpen(false)}><Icon name="close" /></button></div>
-            <div className="tee-picker-progress"><i className="active" /><i className={pickerStep !== "date" ? "active" : ""} /><i className={pickerStep === "players" ? "active" : ""} /></div>
-            {pickerStep === "date" && <div className="tee-picker-dates">{[["Thu","20"],["Fri","21"],["Sat","22"],["Sun","23"],["Mon","24"],["Tue","25"],["Wed","26"]].map(([day,date]) => <button className={draftDate === `${day} ${date}` ? "selected" : ""} onClick={() => setDraftDate(`${day} ${date}`)} key={date}><small>{day}</small><strong>{date}</strong><span>Aug</span></button>)}</div>}
-            {pickerStep === "time" && <>{state === "loading" ? <div className="picker-time-skeleton">{[1,2,3,4,5,6].map((item) => <i key={item} />)}</div> : state === "empty" ? <div className="picker-empty-state"><Icon name="clock" /><strong>No tee times on this date</strong><button onClick={() => { setState("ready"); setPickerStep("date") }}>Try another date</button></div> : <div className="tee-picker-times">{slots.map((time) => <button className={draftTime === time ? "selected" : ""} onClick={() => setDraftTime(time)} key={time}><strong>{time}</strong><small>₹2,500 / player</small></button>)}</div>}</>}
-            {pickerStep === "players" && <div className="tee-picker-players"><span><Icon name="users" size={26} /></span><p>One booking can include up to 4 players.</p><div><button onClick={() => setDraftPlayers(Math.max(1,draftPlayers-1))}>−</button><strong>{draftPlayers}</strong><button onClick={() => setDraftPlayers(Math.min(4,draftPlayers+1))}>+</button></div></div>}
-            <button className="primary-button tee-picker-primary" disabled={(pickerStep === "date" && !draftDate) || (pickerStep === "time" && !draftTime)} onClick={() => pickerStep === "date" ? setPickerStep("time") : pickerStep === "time" ? setPickerStep("players") : confirmPicker()}>{pickerStep === "players" ? "Confirm tee time" : "Continue"}</button>
-          </div>
-        </div>
-      )}
-    </main>
-  )
-}
-
-function CheckoutScreen({
-  go,
-  players,
-  selectedSlot,
-  selectedDate,
-  total,
-  caddySummary,
-  cartCount,
   paymentMethod,
+  setPaymentMethod,
+  close,
   pay,
 }: {
-  go: (screen: CourseFlowScreen) => void
-  players: number
-  selectedSlot: string
-  selectedDate: string
-  total: number
-  caddySummary: string
+  course: BookingCourse
+  step: BookingStep
+  setStep: (step: BookingStep) => void
+  date: string
+  setDate: (date: string) => void
+  time: string
+  setTime: (time: string) => void
+  caddyMode: "auto" | "own"
+  setCaddyMode: (mode: "auto" | "own") => void
   cartCount: number
+  setCartCount: (count: number) => void
   paymentMethod: string
+  setPaymentMethod: (method: string) => void
+  close: () => void
   pay: () => void
 }) {
+  const dates = [["Thu", "20"], ["Fri", "21"], ["Sat", "22"], ["Sun", "23"], ["Mon", "24"], ["Tue", "25"], ["Wed", "26"]] as const
+  const slots = ["6:00 AM", "6:10 AM", "6:20 AM", "6:30 AM", "6:40 AM", "6:50 AM", "7:00 AM", "7:10 AM", "7:20 AM", "7:30 AM"]
+  const caddyCost = caddyMode === "auto" ? 320 : 0
+  const greenFee = course.price
+  const cartCost = cartCount * 800
+  const total = greenFee + caddyCost + cartCost
+  const stepOrder: BookingStep[] = ["date", "time", "caddy", "cart", "review"]
+  const stepTitles: Record<BookingStep, string> = {
+    date: "Choose your day",
+    time: "Pick your tee time",
+    caddy: "Caddy preference",
+    cart: "Need a golf cart?",
+    review: "Your round, ready",
+    payment: "Securing your tee time",
+  }
+  const stepLabels: Record<BookingStep, string> = {
+    date: "DATE",
+    time: "TEE TIME",
+    caddy: "CADDY",
+    cart: "GOLF CART",
+    review: "PAYMENT",
+    payment: "SECURE CHECKOUT",
+  }
+  const currentIndex = stepOrder.indexOf(step)
+  const nextStep = () => setStep(stepOrder[Math.min(currentIndex + 1, stepOrder.length - 1)])
+  const previousStep = () => currentIndex > 0 ? setStep(stepOrder[currentIndex - 1]) : close()
+  const caddyLabel = caddyMode === "auto"
+    ? "Auto-assigned"
+    : "I have my own caddy"
+  const ticketDetails = [
+    date && { label: `${date} Aug`, step: "date" as const },
+    currentIndex >= 1 && time && { label: time, step: "time" as const },
+    currentIndex >= 2 && { label: caddyLabel, step: "caddy" as const },
+    currentIndex >= 3 && { label: cartCount > 0 ? `${cartCount} cart${cartCount > 1 ? "s" : ""}` : "No cart", step: "cart" as const },
+  ].filter((detail): detail is { label: string; step: BookingStep } => Boolean(detail))
+
   return (
-    <main className="air-booking-screen checkout-reference-screen">
-      <AirBookingHeader title="Checkout" back={() => go("tee")} close={() => go("course")} />
-      <ReservationReviewCard players={players} selectedSlot={selectedSlot} selectedDate={selectedDate} total={total} caddySummary={caddySummary} cartCount={cartCount} go={go} />
-      <div className="checkout-payment-footer">
-        <button className="checkout-method-select" onClick={() => go("paymentMethod")}><span className="payment-logo">UPI</span><span><small>PAY USING</small><strong>{paymentMethod}</strong></span><Icon name="chevron" size={16} /></button>
-        <button className="primary-button" onClick={pay}><span>Pay ₹{total.toLocaleString("en-IN")}</span><Icon name="chevron" /></button>
+    <div className="booking-flow-backdrop" style={{ backgroundImage: `linear-gradient(180deg,rgba(22,29,24,.12),rgba(22,29,24,.34)),url("${course.image}")` }} onClick={close}>
+      <div className="booking-course-backdrop-copy">
+        <span>TEE-TIME BOOKING</span>
+        <strong>{course.name}</strong>
       </div>
-    </main>
-  )
-}
-
-function AirBookingHeader({ title, back, close }: { title?: string; back?: () => void; close: () => void }) {
-  return <div className="air-booking-header">{back ? <button onClick={back}><Icon name="chevron" /></button> : <span />}<strong>{title}</strong><button onClick={close}><Icon name="close" /></button></div>
-}
-
-function ReservationReviewCard({ players, selectedSlot, selectedDate, total, caddySummary, cartCount, go }: { players: number; selectedSlot: string; selectedDate: string; total: number; caddySummary: string; cartCount: number; go: (screen: CourseFlowScreen) => void }) {
-  return (
-    <section className="air-review-card">
-      <div className="air-course-summary"><img src={photos.course} alt="Delhi Golf Club" /><span><strong>Delhi Golf Club</strong><small><Icon name="star" size={13} /> 4.7 (312)</small></span></div>
-      <div className="air-review-row"><span><strong>Date & time</strong><small>{selectedDate} Aug · {selectedSlot || "7:30 AM"}</small></span><button onClick={() => go("tee")}>Change</button></div>
-      <div className="air-review-row"><span><strong>Players</strong><small>{players} players</small></span><button onClick={() => go("tee")}>Change</button></div>
-      <div className="air-review-row"><span><strong>Caddy & cart</strong><small>{caddySummary} · {cartCount === 0 ? "No cart" : `${cartCount} cart${cartCount > 1 ? "s" : ""}`}</small></span><button onClick={() => go("tee")}>Change</button></div>
-      <div className="air-review-row"><span><strong>Total price</strong><small>₹{total.toLocaleString("en-IN")} including taxes</small></span><button>Details</button></div>
-    </section>
-  )
-}
-
-function AirBookingFooter({ step, label, onClick }: { step: number; label: string; onClick: () => void }) {
-  return <div className="air-booking-footer"><div>{[1,2,3,4].map((item) => <i className={item <= step ? "active" : ""} key={item} />)}</div><button className="primary-button" onClick={onClick}>{label}</button></div>
-}
-
-function PaymentMethodScreen({ method, setMethod, go }: { method: string; setMethod: (method: string) => void; go: (screen: CourseFlowScreen) => void }) {
-  const methods = [["UPI App","GPay, PhonePe or Paytm"],["Credit or debit card","Visa, Mastercard, Amex, RuPay"],["UPI ID","arjun@upi"],["Net Banking","All major Indian banks"]]
-  return (
-    <main className="air-booking-screen">
-      <AirBookingHeader back={() => go("checkout")} close={() => go("course")} />
-      <h1>Add a payment method</h1>
-      <p className="air-page-subtitle">Available payment methods for <b>INR</b>.</p>
-      <section className="air-payment-methods">{methods.map(([name,detail],index) => <button onClick={() => setMethod(name)} key={name}><span className="payment-logo">{index === 1 ? "▰" : index === 3 ? "₹" : "UPI"}</span><span><strong>{name}</strong><small>{detail}</small></span><i className={method === name ? "selected" : ""}>{method === name && <b />}</i></button>)}</section>
-      <AirBookingFooter step={2} label="Use this method" onClick={() => go("checkout")} />
-    </main>
+      <section className="booking-flow-modal" role="dialog" aria-modal="true" aria-label={`${course.name} tee-time booking`} onClick={(event) => event.stopPropagation()}>
+        {ticketDetails.length > 0 && <div className="booking-flow-ticket-pills">{ticketDetails.map(({ label, step: targetStep }) => <button onClick={() => setStep(targetStep)} key={targetStep}>{label}<span>Edit</span></button>)}</div>}
+        <div className="booking-sheet-topbar"><span /><button className="booking-sheet-close" onClick={close} aria-label="Close booking"><Icon name="close" /></button></div>
+        <div className={`booking-flow-content ${step === "review" ? "booking-review-content" : ""}`}>
+          <div className="booking-flow-heading">
+            <div><small>{stepLabels[step]}</small><h3>{stepTitles[step]}</h3></div>
+          </div>
+          {step === "date" && (
+            <>
+              <div className="booking-date-grid">
+                {dates.map(([day, dayNumber]) => {
+                  const value = `${day} ${dayNumber}`
+                  return <button aria-pressed={date === value} className={date === value ? "selected" : ""} onClick={() => { setDate(value); setTime("") }} key={dayNumber}><small>{day}</small><strong>{dayNumber}</strong><span>Aug</span></button>
+                })}
+              </div>
+            </>
+          )}
+          {step === "time" && (
+            <>
+              <div className="booking-time-grid">
+                {slots.map((slot, index) => <button aria-pressed={time === slot} className={time === slot ? "selected" : ""} onClick={() => setTime(slot)} key={slot}><strong>{slot}</strong><small>{index % 3 === 0 ? "Popular" : `${4 - (index % 3)} spots`}</small></button>)}
+              </div>
+            </>
+          )}
+          {step === "caddy" && (
+            <>
+              <div className="booking-choice-list">
+                <button aria-pressed={caddyMode === "auto"} className={caddyMode === "auto" ? "selected" : ""} onClick={() => setCaddyMode("auto")}><span className="booking-choice-icon"><Icon name="spark" /></span><span><strong>Auto-assigned</strong></span><b>₹320</b></button>
+                <button aria-pressed={caddyMode === "own"} className={`booking-choice-secondary ${caddyMode === "own" ? "selected" : ""}`} onClick={() => setCaddyMode("own")}><span className="booking-choice-icon"><Icon name="users" /></span><span><strong>I have my own caddy</strong></span></button>
+              </div>
+            </>
+          )}
+          {step === "cart" && (
+            <>
+              <div className="booking-cart-options">
+                {[0, 1, 2].map((count) => <button aria-pressed={cartCount === count} className={cartCount === count ? "selected" : ""} onClick={() => setCartCount(count)} key={count}><span>{count === 0 ? "🚶" : "🛺"}</span><strong>{count === 0 ? "No cart" : `${count} cart${count > 1 ? "s" : ""}`}</strong><small>{count === 0 ? "A lovely walk" : `₹${(count * 800).toLocaleString("en-IN")}`}</small></button>)}
+              </div>
+            </>
+          )}
+          {step === "review" && (
+            <>
+              <div className="booking-review-club">
+                <strong>{course.name}</strong>
+                <span><b>Date</b>{date} Aug</span>
+                <span><b>Tee time</b>{time}</span>
+                <span><b>Caddy</b>{caddyLabel}</span>
+                <span><b>Golf cart</b>{cartCount ? `${cartCount} cart${cartCount > 1 ? "s" : ""}` : "No cart"}</span>
+              </div>
+              <section className="booking-price-breakdown">
+                <h4>Payment details</h4>
+                <div><span>Green fee</span><span>₹{greenFee.toLocaleString("en-IN")}</span></div>
+                {caddyCost > 0 && <div><span>Caddy</span><span>₹{caddyCost.toLocaleString("en-IN")}</span></div>}
+                {cartCost > 0 && <div><span>Golf cart{cartCount > 1 ? "s" : ""}</span><span>₹{cartCost.toLocaleString("en-IN")}</span></div>}
+                <div className="booking-total-row"><strong>Amount due</strong><strong>₹{total.toLocaleString("en-IN")}</strong></div>
+              </section>
+              <div className="booking-payment-options"><strong>Pay securely with</strong><div>{["UPI", "Card", "Net banking"].map((method) => <button aria-pressed={paymentMethod === method} className={paymentMethod === method ? "selected" : ""} onClick={() => setPaymentMethod(method)} key={method}>{method}</button>)}</div></div>
+              <p className="booking-secure-note"><Icon name="shield" size={14} /> Secure payment · Cancel up to 24 hours before</p>
+            </>
+          )}
+          {step === "payment" && <div className="booking-payment-loading"><span className="booking-spinner" /><strong>Securing your tee time</strong><small>Confirming your booking at {course.name}…</small></div>}
+        </div>
+        {step !== "payment" && (
+          <div className={`booking-flow-footer ${step === "review" ? "booking-review-footer" : ""} ${currentIndex > 0 && step !== "review" ? "booking-flow-footer-has-back" : ""}`}>
+            {step === "review"
+              ? <button className="primary-button" onClick={pay}>Pay ₹{total.toLocaleString("en-IN")}</button>
+              : <>{currentIndex > 0 && <button className="booking-back-button" onClick={previousStep} aria-label="Back"><Icon name="chevron" /></button>}<button className="primary-button" disabled={(step === "date" && !date) || (step === "time" && !time)} onClick={nextStep}>{step === "cart" ? "Review booking" : "Continue"} <Icon name="arrow" size={16} /></button></>}
+          </div>
+        )}
+      </section>
+    </div>
   )
 }
 
@@ -869,25 +794,41 @@ function PaymentSheet({
   )
 }
 
-function ConfirmationScreen({ go }: { go: (screen: CourseFlowScreen) => void }) {
+function ConfirmationScreen({
+  go,
+  course,
+  date,
+  time,
+  caddy,
+  cartCount,
+  total,
+}: {
+  go: (screen: CourseFlowScreen) => void
+  course: BookingCourse
+  date: string
+  time: string
+  caddy: string
+  cartCount: number
+  total: number
+}) {
   const [reminders, setReminders] = useState<boolean | null>(null)
   return (
     <main className="screen confirmation-screen">
       <div className="success-animation"><span><Icon name="check" size={30} /></span><i /><i /></div>
       <ConfirmedBadge />
       <h1>You’re booked</h1>
-      <p>Delhi Golf Club is expecting you.</p>
+      <p>{course.name} is expecting you.</p>
       <span className="booking-reference">Booking reference · <b>DGC-48213</b></span>
-      <div className="confirmation-summary"><img src={photos.course} alt="Delhi Golf Club" /><div><strong>Delhi Golf Club</strong><span>Sat 22 Aug · 7:30 AM</span><span>4 players · ₹10,000</span></div></div>
+      <div className="confirmation-summary"><img src={course.image} alt={course.name} /><div><strong>{course.name}</strong><span>{date} Aug · {time}</span><span>{caddy} · {cartCount ? `${cartCount} cart${cartCount > 1 ? "s" : ""}` : "No cart"}</span><span>₹{total.toLocaleString("en-IN")} paid</span></div></div>
       <div className="confirmation-actions">
         <button><Icon name="calendar" /><span>Add to calendar</span><Icon name="chevron" /></button>
         <button><Icon name="directions" /><span>Get directions</span><Icon name="chevron" /></button>
         <button><Icon name="share" /><span>Invite players</span><Icon name="chevron" /></button>
       </div>
-      <p className="confirmation-note"><Icon name="shield" size={14} /> Free cancellation until Fri 21 Aug, 7:30 AM</p>
+      <p className="confirmation-note"><Icon name="shield" size={14} /> Free cancellation until 24 hours before your tee time</p>
       <div className="bring-card"><strong>What to bring</strong><span>Collared shirt · Golf shoes · Photo ID</span></div>
       <p className="points-earned">+240 points earned <span>· Loyalty program TBD</span></p>
-      <button className="confirmation-cross-sell" onClick={() => go("coachProfile")}><span><Avatar initials="SM" /><Avatar initials="AR" /></span><div><strong>Add a lesson at this course</strong><small>2 coaches teach at Delhi Golf Club</small></div><Icon name="chevron" /></button>
+      <button className="confirmation-cross-sell" onClick={() => go("coachProfile")}><span><Avatar initials="SM" /><Avatar initials="AR" /></span><div><strong>Add a lesson at this course</strong><small>2 coaches teach at {course.name}</small></div><Icon name="chevron" /></button>
       {reminders === null ? <div className="notification-primer"><Icon name="bell" /><div><strong>Get reminders before your tee time</strong><small>Allow Fore! to send booking updates.</small><span><button onClick={() => setReminders(true)}>Allow</button><button onClick={() => setReminders(false)}>Not now</button></span></div></div> : <p className="primer-response">{reminders ? "Reminders enabled" : "You can enable reminders later in Settings"}</p>}
       <button className="primary-button confirmation-primary" onClick={() => go("bookingDetail")}>View booking</button>
       <button className="confirmation-home-link" onClick={() => go("discover")}>Back to Home</button>
@@ -1494,13 +1435,12 @@ function CourseBookingPrototype() {
   const [locationDenied, setLocationDenied] = useState(false)
   const [locationPrimerSeen, setLocationPrimerSeen] = useState(false)
   const [resultsState, setResultsState] = useState<"ready" | "empty" | "offline">("ready")
-  const [teeState, setTeeState] = useState<TeeState>("ready")
-  const [players, setPlayers] = useState(4)
+  const [bookingOpen, setBookingOpen] = useState(false)
+  const [bookingStep, setBookingStep] = useState<BookingStep>("date")
+  const [bookingCourse, setBookingCourse] = useState<BookingCourse>(delhiCourse)
   const [selectedSlot, setSelectedSlot] = useState("")
-  const [courseDate, setCourseDate] = useState("Sat 22")
-  const [courseCaddyMode, setCourseCaddyMode] = useState<"auto" | "choose">("auto")
-  const [courseCaddies, setCourseCaddies] = useState<string[]>([])
-  const [courseCaddyPayment, setCourseCaddyPayment] = useState<"prepay" | "course">("prepay")
+  const [courseDate, setCourseDate] = useState("")
+  const [courseCaddyMode, setCourseCaddyMode] = useState<"auto" | "own">("auto")
   const [courseCartCount, setCourseCartCount] = useState(0)
   const [holdSeconds, setHoldSeconds] = useState(600)
   const [paymentOpen, setPaymentOpen] = useState(false)
@@ -1522,10 +1462,19 @@ function CourseBookingPrototype() {
   const [coachCredits, setCoachCredits] = useState(false)
 
   useEffect(() => {
-    if (!["checkout", "paymentMethod", "rangeCheckout"].includes(screen) || holdSeconds <= 0) return
+    if (screen !== "rangeCheckout" || holdSeconds <= 0) return
     const timer = window.setInterval(() => setHoldSeconds((value) => Math.max(0, value - 1)), 1000)
     return () => window.clearInterval(timer)
   }, [screen, holdSeconds])
+
+  useEffect(() => {
+    if (!bookingOpen || bookingStep !== "payment") return
+    const timer = window.setTimeout(() => {
+      setBookingOpen(false)
+      setScreen("confirmation")
+    }, 2000)
+    return () => window.clearTimeout(timer)
+  }, [bookingOpen, bookingStep])
 
   useEffect(() => {
     document.querySelector(".scroll-area")?.scrollTo({ top: 0, behavior: "smooth" })
@@ -1535,30 +1484,26 @@ function CourseBookingPrototype() {
     setScreen(next)
     if (next === "discover") setMode("courses")
   }
-  const chooseSlot = (slot: string) => {
-    setSelectedSlot(slot)
+  const openBooking = (course: BookingCourse, slot?: string) => {
+    setBookingCourse(course)
+    setCourseDate(slot ? "Sat 22" : "")
+    setSelectedSlot(slot ?? "")
+    setCourseCaddyMode("auto")
+    setCourseCartCount(0)
+    setCoursePaymentMethod("UPI")
+    setBookingStep(slot ? "caddy" : "date")
+    setBookingOpen(true)
     setHoldSeconds(600)
-    setScreen("checkout")
   }
-  const courseCaddyPrices: Record<string, number> = { "Ramesh Kumar": 350, "Suresh Yadav": 300, "Manoj Pandey": 330, "Deepak Kaur": 360 }
-  const courseCaddyCost = courseCaddyMode === "auto"
-    ? 320 * Math.min(2, players)
-    : courseCaddies.reduce((sum, name) => sum + (courseCaddyPrices[name] || 0), 0)
-  const prepaidCaddyCost = courseCaddyPayment === "prepay" ? courseCaddyCost : 0
-  const courseTotal = 2500 * players + prepaidCaddyCost + courseCartCount * 800
-  const courseCaddySummary = courseCaddyMode === "auto"
-    ? `${Math.min(2, players)} auto-assigned cadd${Math.min(2, players) === 1 ? "y" : "ies"}`
-    : courseCaddies.length > 0 ? `${courseCaddies.length} selected cadd${courseCaddies.length === 1 ? "y" : "ies"}` : "No caddy selected"
+  const courseCaddyCost = courseCaddyMode === "auto" ? 320 : 0
+  const courseCaddySummary = courseCaddyMode === "auto" ? "Auto-assigned caddy" : "I have my own caddy"
 
   return (
     <>
-      {screen === "discover" && <DiscoverCourses go={go} openFilters={() => setFiltersOpen(true)} openSearch={() => setSearchOpen(true)} mode={mode} setMode={setMode} />}
-      {screen === "results" && <ResultsScreen go={go} openFilters={() => setFiltersOpen(true)} state={resultsState} setState={setResultsState} chooseSlot={chooseSlot} />}
-      {screen === "course" && <CourseProfileScreen go={go} />}
-      {screen === "tee" && <TeeTimeScreen go={go} players={players} setPlayers={setPlayers} selectedSlot={selectedSlot} chooseSlot={(slot) => setSelectedSlot(slot)} state={teeState} setState={setTeeState} joinGame={() => { setPlayers(1); chooseSlot("7:30 AM") }} caddyMode={courseCaddyMode} setCaddyMode={setCourseCaddyMode} selectedCaddies={courseCaddies} setSelectedCaddies={setCourseCaddies} caddyPayment={courseCaddyPayment} setCaddyPayment={setCourseCaddyPayment} cartCount={courseCartCount} setCartCount={setCourseCartCount} selectedDate={courseDate} setSelectedDate={setCourseDate} />}
-      {screen === "checkout" && <CheckoutScreen go={go} players={players} selectedSlot={selectedSlot} selectedDate={courseDate} total={courseTotal} caddySummary={courseCaddySummary} cartCount={courseCartCount} paymentMethod={coursePaymentMethod} pay={() => { setPaymentTarget("course"); setPaymentState(holdSeconds === 0 ? "expired" : "processing"); setPaymentOpen(true) }} />}
-      {screen === "paymentMethod" && <PaymentMethodScreen method={coursePaymentMethod} setMethod={setCoursePaymentMethod} go={go} />}
-      {screen === "confirmation" && <ConfirmationScreen go={go} />}
+      {screen === "discover" && <DiscoverCourses go={go} openFilters={() => setFiltersOpen(true)} openSearch={() => setSearchOpen(true)} openBooking={openBooking} mode={mode} setMode={setMode} />}
+      {screen === "results" && <ResultsScreen go={go} openFilters={() => setFiltersOpen(true)} state={resultsState} setState={setResultsState} openBooking={openBooking} />}
+      {screen === "course" && <CourseProfileScreen go={go} openBooking={openBooking} />}
+      {screen === "confirmation" && <ConfirmationScreen go={go} course={bookingCourse} date={courseDate} time={selectedSlot} caddy={courseCaddySummary} cartCount={courseCartCount} total={bookingCourse.price + courseCaddyCost + courseCartCount * 800} />}
       {screen === "bookings" && <MyBookingsScreen go={go} />}
       {screen === "bookingDetail" && <BookingDetailScreen go={go} />}
       {screen === "rangeDiscover" && <RangeDiscoverScreen go={go} openSearch={() => setSearchOpen(true)} setMode={setMode} />}
@@ -1577,9 +1522,10 @@ function CourseBookingPrototype() {
       {screen === "coachBookingPending" && <CoachBookingDetailScreen go={go} status="Pending" />}
       {screen === "coachBookingConfirmed" && <CoachBookingDetailScreen go={go} status="Confirmed" />}
       {screen === "coachDeclined" && <CoachDeclinedScreen go={go} />}
+      {bookingOpen && <BookingFlowModal course={bookingCourse} step={bookingStep} setStep={setBookingStep} date={courseDate} setDate={setCourseDate} time={selectedSlot} setTime={setSelectedSlot} caddyMode={courseCaddyMode} setCaddyMode={setCourseCaddyMode} cartCount={courseCartCount} setCartCount={setCourseCartCount} paymentMethod={coursePaymentMethod} setPaymentMethod={setCoursePaymentMethod} close={() => setBookingOpen(false)} pay={() => setBookingStep("payment")} />}
       {filtersOpen && <FiltersSheet close={() => { setFiltersOpen(false); setResultsState("ready"); go("results") }} />}
       {searchOpen && <SearchExperience denied={locationDenied} setDenied={setLocationDenied} primerSeen={locationPrimerSeen} setPrimerSeen={setLocationPrimerSeen} close={() => setSearchOpen(false)} go={go} />}
-      {paymentOpen && <PaymentSheet state={paymentState} setState={setPaymentState} close={() => setPaymentOpen(false)} succeed={() => { setPaymentOpen(false); go(paymentTarget === "range" ? "rangeConfirmation" : "confirmation") }} recheck={() => { setPaymentOpen(false); if (paymentTarget === "range") { setRangeState("ready"); go("rangeSelect") } else { setTeeState("ready"); go("tee") } }} />}
+      {paymentOpen && <PaymentSheet state={paymentState} setState={setPaymentState} close={() => setPaymentOpen(false)} succeed={() => { setPaymentOpen(false); go(paymentTarget === "range" ? "rangeConfirmation" : "confirmation") }} recheck={() => { setPaymentOpen(false); setRangeState("ready"); go("rangeSelect") }} />}
     </>
   )
 }
@@ -2372,7 +2318,6 @@ export default function App() {
   return (
     <div className="app-stage">
       <div className="phone-shell">
-        <TopBar role={role} onRoleChange={changeRole} />
         <div className="scroll-area">
           {role === "golfer" && (
             <>
