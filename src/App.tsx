@@ -319,7 +319,7 @@ type CourseFlowScreen =
   | "coachBookingConfirmed"
   | "coachDeclined"
 type PaymentState = "methods" | "processing" | "failed" | "offline" | "expired"
-type BookingStep = "date" | "time" | "caddy" | "cart" | "review" | "payment"
+type BookingStep = "date" | "time" | "review" | "payment"
 type BookingCourse = { name: string; image: string; price: number }
 
 const delhiCourse: BookingCourse = { name: "Delhi Golf Club", image: photos.course, price: 2500 }
@@ -625,8 +625,8 @@ function BookingFlowModal({
   setDate: (date: string) => void
   time: string
   setTime: (time: string) => void
-  caddyMode: "auto" | "own"
-  setCaddyMode: (mode: "auto" | "own") => void
+  caddyMode: "auto" | "own" | "none"
+  setCaddyMode: (mode: "auto" | "own" | "none") => void
   cartCount: number
   setCartCount: (count: number) => void
   paymentMethod: string
@@ -634,50 +634,41 @@ function BookingFlowModal({
   close: () => void
   pay: () => void
 }) {
-  const dates = [["Thu", "20"], ["Fri", "21"], ["Sat", "22"], ["Sun", "23"], ["Mon", "24"], ["Tue", "25"], ["Wed", "26"]] as const
+  const dates = [["Thu", "Thursday", "20"], ["Fri", "Friday", "21"], ["Sat", "Saturday", "22"], ["Sun", "Sunday", "23"], ["Mon", "Monday", "24"], ["Tue", "Tuesday", "25"], ["Wed", "Wednesday", "26"]] as const
   const slots = ["6:00 AM", "6:10 AM", "6:20 AM", "6:30 AM", "6:40 AM", "6:50 AM", "7:00 AM", "7:10 AM", "7:20 AM", "7:30 AM"]
   const caddyCost = caddyMode === "auto" ? 320 : 0
   const greenFee = course.price
   const cartCost = cartCount * 800
   const total = greenFee + caddyCost + cartCost
-  const stepOrder: BookingStep[] = ["date", "time", "caddy", "cart", "review"]
+  const stepOrder: BookingStep[] = ["date", "time", "review"]
   const stepTitles: Record<BookingStep, string> = {
     date: "Choose your day",
     time: "Pick your tee time",
-    caddy: "Caddy preference",
-    cart: "Need a golf cart?",
     review: "Your round, ready",
     payment: "Securing your tee time",
   }
   const stepLabels: Record<BookingStep, string> = {
     date: "DATE",
     time: "TEE TIME",
-    caddy: "CADDY",
-    cart: "GOLF CART",
     review: "PAYMENT",
     payment: "SECURE CHECKOUT",
   }
   const currentIndex = stepOrder.indexOf(step)
   const nextStep = () => setStep(stepOrder[Math.min(currentIndex + 1, stepOrder.length - 1)])
   const previousStep = () => currentIndex > 0 ? setStep(stepOrder[currentIndex - 1]) : close()
-  const caddyLabel = caddyMode === "auto"
-    ? "Auto-assigned"
-    : "I have my own caddy"
-  const ticketDetails = [
-    date && { label: `${date} Aug`, step: "date" as const },
-    currentIndex >= 1 && time && { label: time, step: "time" as const },
-    currentIndex >= 2 && { label: caddyLabel, step: "caddy" as const },
-    currentIndex >= 3 && { label: cartCount > 0 ? `${cartCount} cart${cartCount > 1 ? "s" : ""}` : "No cart", step: "cart" as const },
-  ].filter((detail): detail is { label: string; step: BookingStep } => Boolean(detail))
+  const selectedDate = dates.find(([day, , dayNumber]) => `${day} ${dayNumber}` === date)
+  const formattedDate = selectedDate ? `${selectedDate[1]}, ${selectedDate[2]} August` : ""
+  const caddyLabel = caddyMode === "auto" ? "Auto-assigned caddy" : caddyMode === "own" ? "I have my own caddy" : "Caddy not added"
+  const toggleCaddyMode = (mode: "auto" | "own") => setCaddyMode(caddyMode === mode ? "none" : mode)
 
   return (
     <div className="booking-flow-backdrop" style={{ backgroundImage: `linear-gradient(180deg,rgba(22,29,24,.12),rgba(22,29,24,.34)),url("${course.image}")` }} onClick={close}>
       <div className="booking-course-backdrop-copy">
         <span>TEE-TIME BOOKING</span>
         <strong>{course.name}</strong>
+        {(formattedDate || time) && <div>{[formattedDate, time].filter(Boolean).join(" · ")}</div>}
       </div>
       <section className="booking-flow-modal" role="dialog" aria-modal="true" aria-label={`${course.name} tee-time booking`} onClick={(event) => event.stopPropagation()}>
-        {ticketDetails.length > 0 && <div className="booking-flow-ticket-pills">{ticketDetails.map(({ label, step: targetStep }) => <button onClick={() => setStep(targetStep)} key={targetStep}>{label}<span>Edit</span></button>)}</div>}
         <div className="booking-sheet-topbar"><span /><button className="booking-sheet-close" onClick={close} aria-label="Close booking"><Icon name="close" /></button></div>
         <div className={`booking-flow-content ${step === "review" ? "booking-review-content" : ""}`}>
           <div className="booking-flow-heading">
@@ -686,7 +677,7 @@ function BookingFlowModal({
           {step === "date" && (
             <>
               <div className="booking-date-grid">
-                {dates.map(([day, dayNumber]) => {
+                {dates.map(([day, , dayNumber]) => {
                   const value = `${day} ${dayNumber}`
                   return <button aria-pressed={date === value} className={date === value ? "selected" : ""} onClick={() => { setDate(value); setTime("") }} key={dayNumber}><small>{day}</small><strong>{dayNumber}</strong><span>Aug</span></button>
                 })}
@@ -700,30 +691,20 @@ function BookingFlowModal({
               </div>
             </>
           )}
-          {step === "caddy" && (
-            <>
-              <div className="booking-choice-list">
-                <button aria-pressed={caddyMode === "auto"} className={caddyMode === "auto" ? "selected" : ""} onClick={() => setCaddyMode("auto")}><span className="booking-choice-icon"><Icon name="spark" /></span><span><strong>Auto-assigned</strong></span><b>₹320</b></button>
-                <button aria-pressed={caddyMode === "own"} className={`booking-choice-secondary ${caddyMode === "own" ? "selected" : ""}`} onClick={() => setCaddyMode("own")}><span className="booking-choice-icon"><Icon name="users" /></span><span><strong>I have my own caddy</strong></span></button>
-              </div>
-            </>
-          )}
-          {step === "cart" && (
-            <>
-              <div className="booking-cart-options">
-                {[0, 1, 2].map((count) => <button aria-pressed={cartCount === count} className={cartCount === count ? "selected" : ""} onClick={() => setCartCount(count)} key={count}><span>{count === 0 ? "🚶" : "🛺"}</span><strong>{count === 0 ? "No cart" : `${count} cart${count > 1 ? "s" : ""}`}</strong><small>{count === 0 ? "A lovely walk" : `₹${(count * 800).toLocaleString("en-IN")}`}</small></button>)}
-              </div>
-            </>
-          )}
           {step === "review" && (
             <>
-              <div className="booking-review-club">
-                <strong>{course.name}</strong>
-                <span><b>Date</b>{date} Aug</span>
-                <span><b>Tee time</b>{time}</span>
-                <span><b>Caddy</b>{caddyLabel}</span>
-                <span><b>Golf cart</b>{cartCount ? `${cartCount} cart${cartCount > 1 ? "s" : ""}` : "No cart"}</span>
-              </div>
+              <section className="booking-optional-addons">
+                <h4>Optional add-ons</h4>
+                <div className="booking-addon-caddy">
+                  <strong>Caddy</strong>
+                  <button aria-pressed={caddyMode === "auto"} className={caddyMode === "auto" ? "selected" : ""} onClick={() => toggleCaddyMode("auto")}><span>Auto-assigned caddy</span><b>₹320</b></button>
+                  <button aria-pressed={caddyMode === "own"} className={caddyMode === "own" ? "selected" : ""} onClick={() => toggleCaddyMode("own")}>I have my own caddy</button>
+                </div>
+                <div className="booking-addon-cart">
+                  <strong>Golf cart</strong>
+                  <div>{[0, 1, 2].map((count) => <button aria-pressed={cartCount === count} className={cartCount === count ? "selected" : ""} onClick={() => setCartCount(count)} key={count}>{count === 0 ? "No cart" : `${count} cart${count > 1 ? "s" : ""}`}{count > 0 && <small>₹{(count * 800).toLocaleString("en-IN")}</small>}</button>)}</div>
+                </div>
+              </section>
               <section className="booking-price-breakdown">
                 <h4>Payment details</h4>
                 <div><span>Green fee</span><span>₹{greenFee.toLocaleString("en-IN")}</span></div>
@@ -741,7 +722,7 @@ function BookingFlowModal({
           <div className={`booking-flow-footer ${step === "review" ? "booking-review-footer" : ""} ${currentIndex > 0 && step !== "review" ? "booking-flow-footer-has-back" : ""}`}>
             {step === "review"
               ? <button className="primary-button" onClick={pay}>Pay ₹{total.toLocaleString("en-IN")}</button>
-              : <>{currentIndex > 0 && <button className="booking-back-button" onClick={previousStep} aria-label="Back"><Icon name="chevron" /></button>}<button className="primary-button" disabled={(step === "date" && !date) || (step === "time" && !time)} onClick={nextStep}>{step === "cart" ? "Review booking" : "Continue"} <Icon name="arrow" size={16} /></button></>}
+              : <>{currentIndex > 0 && <button className="booking-back-button" onClick={previousStep} aria-label="Back"><Icon name="chevron" /></button>}<button className="primary-button" disabled={(step === "date" && !date) || (step === "time" && !time)} onClick={nextStep}>Continue <Icon name="arrow" size={16} /></button></>}
           </div>
         )}
       </section>
@@ -1440,7 +1421,7 @@ function CourseBookingPrototype() {
   const [bookingCourse, setBookingCourse] = useState<BookingCourse>(delhiCourse)
   const [selectedSlot, setSelectedSlot] = useState("")
   const [courseDate, setCourseDate] = useState("")
-  const [courseCaddyMode, setCourseCaddyMode] = useState<"auto" | "own">("auto")
+  const [courseCaddyMode, setCourseCaddyMode] = useState<"auto" | "own" | "none">("none")
   const [courseCartCount, setCourseCartCount] = useState(0)
   const [holdSeconds, setHoldSeconds] = useState(600)
   const [paymentOpen, setPaymentOpen] = useState(false)
@@ -1488,15 +1469,15 @@ function CourseBookingPrototype() {
     setBookingCourse(course)
     setCourseDate(slot ? "Sat 22" : "")
     setSelectedSlot(slot ?? "")
-    setCourseCaddyMode("auto")
+    setCourseCaddyMode("none")
     setCourseCartCount(0)
     setCoursePaymentMethod("UPI")
-    setBookingStep(slot ? "caddy" : "date")
+    setBookingStep(slot ? "review" : "date")
     setBookingOpen(true)
     setHoldSeconds(600)
   }
   const courseCaddyCost = courseCaddyMode === "auto" ? 320 : 0
-  const courseCaddySummary = courseCaddyMode === "auto" ? "Auto-assigned caddy" : "I have my own caddy"
+  const courseCaddySummary = courseCaddyMode === "auto" ? "Auto-assigned caddy" : courseCaddyMode === "own" ? "I have my own caddy" : "Caddy not added"
 
   return (
     <>
