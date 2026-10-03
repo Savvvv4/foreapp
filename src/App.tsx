@@ -2007,9 +2007,61 @@ function Business() {
 }
 
 function BottomNav<T extends string>({ items, active, onChange, compact = false, }: { items: { id: T; label: string; icon: IconName }[]; active: T; onChange: (id: T) => void; compact?: boolean }) {
-  const [expanded, setExpanded] = useState(false); const activeItem = items.find((item) => item.id === active) ?? items[0]; useEffect(() => { setExpanded(false) }, [compact, active])
-  if (compact) return <nav className="bottom-nav bottom-nav-module" aria-label="Primary navigation"><div className="bottom-nav-module-bar"><button type="button" className="bottom-nav-module-toggle" onClick={() => setExpanded((value) => !value)} aria-expanded={expanded} aria-label={expanded ? "Collapse navigation" : "Expand navigation"}><span className="bottom-nav-module-icon"><Icon name={activeItem.icon} size={18} /></span><span className="bottom-nav-module-label">{activeItem.label}</span><span className="bottom-nav-module-chevron"><Icon name="chevron" size={15} /></span></button>{expanded && <div className="bottom-nav-module-menu">{items.map((item) => <button type="button" key={item.id} className={active === item.id ? "active" : ""} onClick={() => onChange(item.id)} aria-current={active === item.id ? "page" : undefined}><Icon name={item.icon} size={19} /><span>{item.label}</span></button>)}</div>}</div></nav>
-  return <nav className="bottom-nav bottom-nav-primary" aria-label="Primary navigation">{items.map((item) => <button type="button" key={item.id} className={active === item.id ? "active" : ""} onClick={() => onChange(item.id)} aria-current={active === item.id ? "page" : undefined}><Icon name={item.icon} size={21} /><span>{item.label}</span></button>)}</nav>
+  const [expanded, setExpanded] = useState(false)
+  const activeItem = items.find((item) => item.id === active) ?? items[0]
+
+  useEffect(() => {
+    setExpanded(false)
+  }, [compact, active])
+
+  if (compact) {
+    const navStyle = {
+      left: expanded ? "12px" : "auto",
+      right: "14px",
+      bottom: "14px",
+      width: expanded ? "calc(100% - 24px)" : "72px",
+      height: "72px",
+      padding: "7px 8px",
+      gridTemplateColumns: expanded ? "repeat(5, minmax(0, 1fr))" : "56px",
+      transition: "width 220ms ease, left 220ms ease, right 220ms ease, border-radius 220ms ease",
+      borderRadius: expanded ? "24px" : "14px",
+    } as React.CSSProperties
+
+    return (
+      <nav className="bottom-nav bottom-nav-primary" style={navStyle} aria-label="Primary navigation">
+        {items.map((item) => (
+          <button
+            type="button"
+            key={item.id}
+            className={active === item.id ? "active" : ""}
+            onClick={() => active === item.id ? setExpanded((value) => !value) : onChange(item.id)}
+            aria-current={active === item.id ? "page" : undefined}
+            aria-expanded={active === item.id ? expanded : undefined}
+            aria-label={active === item.id && !expanded ? `Open navigation, currently in ${item.label}` : item.label}
+            style={{
+              opacity: expanded || active === item.id ? 1 : 0,
+              pointerEvents: expanded || active === item.id ? "auto" : "none",
+              transition: "opacity 120ms ease",
+            }}
+          >
+            <Icon name={item.icon} size={21} />
+            <span style={{ display: expanded ? "inline" : "none" }}>{item.label}</span>
+          </button>
+        ))}
+      </nav>
+    )
+  }
+
+  return (
+    <nav className="bottom-nav bottom-nav-primary" aria-label="Primary navigation">
+      {items.map((item) => (
+        <button type="button" key={item.id} className={active === item.id ? "active" : ""} onClick={() => onChange(item.id)} aria-current={active === item.id ? "page" : undefined}>
+          <Icon name={item.icon} size={21} />
+          <span>{item.label}</span>
+        </button>
+      ))}
+    </nav>
+  )
 }
 function StudentDetail({
   close,
