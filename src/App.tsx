@@ -297,11 +297,13 @@ type DiscoverSection = "Courses" | "Ranges" | "Coaches"
 function Discover({
   onModuleStateChange,
   initialSection,
+  searchRequest,
 }: {
   onModuleStateChange: (active: boolean, section?: DiscoverSection) => void
   initialSection: DiscoverSection
+  searchRequest: number
 }) {
-  return <CourseBookingPrototype onModuleStateChange={onModuleStateChange} initialSection={initialSection} />
+  return <CourseBookingPrototype onModuleStateChange={onModuleStateChange} initialSection={initialSection} searchRequest={searchRequest} />
 }
 
 function DiscoverHome({
@@ -1493,9 +1495,11 @@ function SignInSheet({
 function CourseBookingPrototype({
   onModuleStateChange,
   initialSection,
+  searchRequest,
 }: {
   onModuleStateChange: (active: boolean, section?: DiscoverSection) => void
   initialSection: DiscoverSection
+  searchRequest: number
 }) {
   const initialScreen: CourseFlowScreen =
     initialSection === "Ranges" ? "rangeDiscover" :
@@ -1552,6 +1556,10 @@ function CourseBookingPrototype({
   useEffect(() => {
     document.querySelector(".scroll-area")?.scrollTo({ top: 0, behavior: "smooth" })
   }, [screen])
+
+  useEffect(() => {
+    if (searchRequest > 0) setSearchOpen(true)
+  }, [searchRequest])
 
   useEffect(() => {
     const active = screen !== "discover" || bookingOpen || filtersOpen || searchOpen || paymentOpen
@@ -2225,22 +2233,62 @@ function AppTopBar({
   onHome,
   onProfile,
   back,
+  discoverySection,
+  onDiscoverySectionChange,
+  onSearch,
 }: {
   title: string
   initials: string
   onHome: () => void
   onProfile: () => void
   back?: () => void
+  discoverySection?: DiscoverSection
+  onDiscoverySectionChange?: (section: DiscoverSection) => void
+  onSearch?: () => void
 }) {
+  const [selectorOpen, setSelectorOpen] = useState(false)
+  const isDiscoverySelector = Boolean(discoverySection && onDiscoverySectionChange)
+  const options: DiscoverSection[] = ["Courses", "Ranges", "Coaches"]
+
   return (
-    <header className={`app-topbar ${back ? "app-topbar-child" : ""}`}>
+    <header className={`app-topbar ${back ? "app-topbar-child" : ""} ${isDiscoverySelector ? "app-topbar-discovery" : ""}`}>
       {back ? (
         <button type="button" className="app-topbar-back" onClick={back} aria-label="Go back"><Icon name="chevron" size={21} /></button>
       ) : (
         <button type="button" className="app-topbar-brand" onClick={onHome} aria-label="Go to Discover"><span>FORE</span></button>
       )}
-      <h1>{title}</h1>
-      {back ? <span className="app-topbar-spacer" aria-hidden="true" /> : (
+      {isDiscoverySelector ? (
+        <div className="app-topbar-selector-wrap">
+          <button type="button" className="app-topbar-selector" onClick={() => setSelectorOpen((open) => !open)} aria-expanded={selectorOpen}>
+            <span>{discoverySection}</span>
+            <Icon name="chevron" size={14} />
+          </button>
+          {selectorOpen && (
+            <div className="app-topbar-selector-menu">
+              {options.map((option) => (
+                <button
+                  type="button"
+                  key={option}
+                  className={option === discoverySection ? "active" : ""}
+                  onClick={() => {
+                    onDiscoverySectionChange?.(option)
+                    setSelectorOpen(false)
+                  }}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      ) : (
+        <h1>{title}</h1>
+      )}
+      {back ? (
+        onSearch ? (
+          <button type="button" className="app-topbar-search" onClick={onSearch} aria-label="Search"><Icon name="search" size={20} /></button>
+        ) : <span className="app-topbar-spacer" aria-hidden="true" />
+      ) : (
         <button type="button" className="app-topbar-profile" onClick={onProfile} aria-label="Open profile"><Avatar initials={initials} /></button>
       )}
     </header>
@@ -2494,6 +2542,7 @@ function App() {
   const [discoverChildOpen, setDiscoverChildOpen] = useState(false)
   const [discoverSection, setDiscoverSection] = useState<DiscoverSection>("Courses")
   const [overlay, setOverlay] = useState<"student" | "assign" | null>(null)
+  const [discoverSearchRequest, setDiscoverSearchRequest] = useState(0)
 
   const goPrimaryTab = (tab: PrimaryTab) => {
     setPrimaryTab(tab)
@@ -2552,6 +2601,12 @@ function App() {
             onHome={() => goPrimaryTab("discover")}
             onProfile={() => setProfileOpen(true)}
             back={closeDiscover}
+            discoverySection={discoverSection}
+            onDiscoverySectionChange={(section) => {
+              setDiscoverSection(section)
+              setDiscoverChildOpen(true)
+            }}
+            onSearch={() => setDiscoverSearchRequest((value) => value + 1)}
           />
         )}
 
@@ -2569,7 +2624,9 @@ function App() {
               {primaryTab === "discover" && !discoverChildOpen && <DiscoverHome openDiscover={openDiscover} />}
               {primaryTab === "discover" && discoverChildOpen && (
                 <Discover
+                  key={discoverSection}
                   initialSection={discoverSection}
+                  searchRequest={discoverSearchRequest}
                   onModuleStateChange={(_active, section) => {
                     if (section) setDiscoverSection(section)
                     setDiscoverChildOpen(true)
