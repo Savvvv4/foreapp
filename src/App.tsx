@@ -650,19 +650,19 @@ function BookingFlowModal({
   const caddyCost = caddyMode === "auto" ? 320 : 0
   const cartCost = cartCount * 800
   const total = course.price + caddyCost + cartCost
-  const selectedDate = dates.find(([day,,dayNumber]) => \`\${day} \${dayNumber}\` === date)
-  const formattedDate = selectedDate ? \`\${selectedDate[1]}, \${selectedDate[2]} August\` : ""
+  const selectedDate = dates.find(([day,,dayNumber]) => `${day} ${dayNumber}` === date)
+  const formattedDate = selectedDate ? `${selectedDate[1]}, ${selectedDate[2]} August` : ""
   const stepIndex = step === "select" ? 0 : step === "review" ? 1 : 2
 
   return (
     <div className="booking-flow-backdrop" onClick={close}>
-      <section className="booking-flow-modal booking-clean-modal" role="dialog" aria-modal="true" aria-label={\`\${course.name} tee-time booking\`} onClick={(event) => event.stopPropagation()}>
+      <section className="booking-flow-modal booking-clean-modal" role="dialog" aria-modal="true" aria-label={`${course.name} tee-time booking`} onClick={(event) => event.stopPropagation()}>
         <header className="booking-clean-header">
           <button type="button" onClick={close} aria-label="Close booking"><Icon name="close" size={21} /></button>
           <div><span>BOOK TEE TIME</span><strong>{course.name}</strong></div>
           <button type="button" onClick={goHome} aria-label="Return to home"><Icon name="home" size={20} /></button>
         </header>
-        <div className="booking-clean-progress" aria-label={\`Booking step \${Math.min(stepIndex + 1, 2)} of 2\`}>
+        <div className="booking-clean-progress" aria-label={`Booking step ${Math.min(stepIndex + 1, 2)} of 2`}>
           <i className={stepIndex >= 0 ? "active" : ""} /><i className={stepIndex >= 1 ? "active" : ""} />
         </div>
 
@@ -675,7 +675,7 @@ function BookingFlowModal({
               <div className="booking-clean-section-title"><h3>Day</h3><span>August</span></div>
               <div className="booking-clean-dates">
                 {dates.map(([day,,dayNumber]) => {
-                  const value = \`\${day} \${dayNumber}\`
+                  const value = `${day} ${dayNumber}`
                   return <button key={dayNumber} type="button" className={date === value ? "selected" : ""} aria-pressed={date === value} onClick={() => { setDate(value); setTime("") }}>
                     <small>{day}</small><strong>{dayNumber}</strong>
                   </button>
@@ -686,7 +686,7 @@ function BookingFlowModal({
               <div className="booking-clean-section-title"><h3>Tee time</h3><span>{time || "Choose one"}</span></div>
               <div className="booking-clean-times">
                 {slots.map((slotItem,index) => <button key={slotItem} type="button" className={time === slotItem ? "selected" : ""} aria-pressed={time === slotItem} onClick={() => setTime(slotItem)}>
-                  <strong>{slotItem}</strong><small>{index % 3 === 0 ? "Popular" : \`\${4-(index%3)} spots\`}</small>
+                  <strong>{slotItem}</strong><small>{index % 3 === 0 ? "Popular" : `${4-(index%3)} spots`}</small>
                 </button>)}
               </div>
             </section>
@@ -731,7 +731,7 @@ function BookingFlowModal({
 
         {step !== "payment" && <footer className="booking-clean-footer">
           <button type="button" className="primary-button" disabled={step === "select" && (!date || !time)} onClick={() => step === "select" ? setStep("review") : pay()}>
-            {step === "select" ? "Continue to review" : \`Pay ₹\${total.toLocaleString("en-IN")}\`}
+            {step === "select" ? "Continue to review" : `Pay ₹${total.toLocaleString("en-IN")}`}
           </button>
         </footer>}
       </section>
@@ -2151,7 +2151,7 @@ function AppTopBar({
   back?: () => void
 }) {
   return (
-    <header className={\`app-topbar \${back ? "app-topbar-child" : ""}\`}>
+    <header className={`app-topbar ${back ? "app-topbar-child" : ""}`}>
       {back ? (
         <button type="button" className="app-topbar-back" onClick={back} aria-label="Go back"><Icon name="chevron" size={21} /></button>
       ) : (
