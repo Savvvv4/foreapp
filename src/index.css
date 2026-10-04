@@ -288,11 +288,61 @@ button:focus-visible, input:focus-visible { outline: 3px solid rgba(255, 110, 0,
 .discover-segment { grid-template-columns:repeat(3,1fr); }.booking-discover-screen .search-box { text-align:left; }.booking-discover-screen .search-box > span:nth-child(2) { overflow:hidden;color:var(--muted);font-weight:500;text-overflow:ellipsis;white-space:nowrap; }
 .search-context-chips,.quick-filter-row { display:flex;gap:7px;overflow-x:auto;scrollbar-width:none; }.search-context-chips::-webkit-scrollbar,.quick-filter-row::-webkit-scrollbar { display:none; }
 .search-context-chips { margin:10px 0 13px; }.search-context-chips button,.quick-filter-row button { min-height:44px;display:flex;align-items:center;gap:5px;flex:0 0 auto;padding:0 12px;border:1px solid var(--line);border-radius:999px;background:white;font-size:10px; }.quick-filter-row button.selected { color:var(--color-brand-text);border-color:#ffd4b5;background:var(--color-brand-tint);font-weight:700; }
-.course-card { position:relative;overflow:hidden;margin-bottom:14px;border:1px solid var(--line);border-radius:22px;background:white;box-shadow:0 7px 22px rgba(66,43,27,.055); }
-.course-card-main { width:100%;display:block;padding:0;border:0;background:white;text-align:left; }.course-card-image { position:relative;height:186px;overflow:hidden; }.course-card-image img { width:100%;height:100%;object-fit:cover; }.course-card-image > span { position:absolute;left:12px;top:12px;padding:7px 10px;border-radius:999px;background:white;font-size:9px;font-weight:700;box-shadow:0 3px 12px rgba(0,0,0,.1); }
-.save-course { position:absolute;right:12px;top:12px;width:44px;height:44px;display:grid;place-items:center;border:0;border-radius:50%;background:rgba(255,255,255,.94);box-shadow:0 3px 12px rgba(0,0,0,.1); }.save-course.saved { color:var(--color-brand-500); }.save-course.saved .icon { fill:currentColor; }
-.course-card-copy { padding:14px 15px 12px; }.course-card-copy > div { display:flex;align-items:center;justify-content:space-between;gap:8px; }.course-card-copy h3 { margin:0;font-size:16px; }.course-card-copy p { margin:5px 0;color:var(--muted);font-size:10px; }.course-card-copy .course-location { display:flex;align-items:center;gap:3px; }.course-card-copy > strong { display:block;margin-top:9px;font-size:13px; }.course-card-copy > strong small { color:var(--muted);font-size:9px;font-weight:500; }
-.course-card-footer { display:flex;gap:6px;padding:11px 14px 14px;border-top:1px solid var(--line); }.course-card-footer button { min-height:38px;display:flex;align-items:center;justify-content:center;gap:5px;flex:1;padding:0 8px;border:1px solid #ffd4b5;border-radius:10px;background:var(--color-brand-tint);color:var(--color-brand-text);font-size:9px;font-weight:700; }
+.course-card{
+  position:relative;
+  overflow:hidden;
+  margin-bottom:16px;
+  border:1px solid #e8ded6;
+  border-radius:24px;
+  background:var(--color-surface);
+  box-shadow:0 8px 24px rgba(66,43,27,.06);
+}
+.course-card-main{
+  width:100%;
+  display:block;
+  padding:0;
+  border:0;
+  background:var(--color-surface);
+  text-align:left;
+}
+.course-card-image{
+  position:relative;
+  height:190px;
+  overflow:hidden;
+}
+.course-card-image img{width:100%;height:100%;object-fit:cover;transition:transform .2s ease}
+.course-card-main:active .course-card-image img{transform:scale(1.02)}
+.course-status-pill,
+.course-rating-pill{
+  position:absolute;
+  top:13px;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  min-height:28px;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:9px;
+  font-weight:750;
+  box-shadow:0 3px 12px rgba(0,0,0,.1);
+}
+.course-status-pill{left:13px;color:var(--color-brand-text);background:white}
+.course-rating-pill{right:13px;color:var(--color-ink);background:rgba(255,255,255,.94)}
+.course-rating-pill .icon{color:var(--color-brand-500)}
+.course-card-copy{padding:16px}
+.course-card-title-row{display:grid;grid-template-columns:minmax(0,1fr) 38px;gap:10px;align-items:start}
+.course-card-title-row h3{margin:0;font-size:19px;line-height:1.15;letter-spacing:-.025em}
+.course-card-title-row .course-location{display:flex;align-items:center;gap:4px;margin:7px 0 0;color:var(--muted);font-size:11px}
+.course-save-button{width:38px;height:38px;display:grid;place-items:center;border:1px solid var(--line);border-radius:12px;background:var(--soft);color:var(--muted)}
+.course-save-button.saved{color:var(--color-brand-text);background:var(--color-brand-tint);border-color:var(--color-brand-500)}
+.course-card-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px}
+.course-card-meta>span{color:var(--muted);font-size:10px}
+.course-card-meta>strong{font-size:13px;white-space:nowrap}
+.course-card-meta>strong small{color:var(--muted);font-size:9px;font-weight:500}
+.course-card-actions{display:grid;grid-template-columns:1fr 1.35fr;gap:8px;padding:0 16px 16px}
+.course-details-button,.course-book-button{min-height:46px;border-radius:13px;font-size:12px;font-weight:750}
+.course-details-button{border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.course-book-button{display:flex;align-items:center;justify-content:center;gap:6px;border:0;background:var(--color-brand-500);color:white}
 .compact-course-scroller { display:flex;gap:10px;overflow-x:auto;margin:0 -22px;padding:0 22px;scrollbar-width:none; }.compact-course-scroller .course-card { flex:0 0 228px; }.compact-course-card .course-card-image { height:122px; }.compact-course-card .course-card-copy { padding:11px 12px; }.compact-course-card .course-card-copy h3 { font-size:13px; }.compact-course-card .save-course { width:38px;height:38px; }
 .book-again-row { width:100%;min-height:72px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:11px;padding:8px;border:1px solid var(--line);border-radius:16px;background:white;text-align:left; }.book-again-row img { width:56px;height:56px;object-fit:cover;border-radius:12px; }.book-again-row span { display:flex;flex-direction:column; }.book-again-row strong { font-size:11px; }.book-again-row small { margin-top:4px;color:var(--muted);font-size:9px; }
 .pinned-result-tools { position:sticky;z-index:9;top:0;margin:0 -22px;padding:8px 22px 10px;background:rgba(251,250,249,.97);backdrop-filter:blur(14px); }.pinned-result-tools .quick-filter-row { padding-right:2px; }.result-toggle { width:116px;display:grid;grid-template-columns:1fr 1fr;gap:3px;margin:8px 0 0 auto;padding:3px;border-radius:10px;background:var(--soft); }.result-toggle button { min-height:32px;display:flex;align-items:center;justify-content:center;gap:4px;border:0;border-radius:8px;background:none;font-size:9px; }.result-toggle button.active { background:white;color:var(--color-brand-text);box-shadow:0 2px 7px rgba(0,0,0,.06); }
@@ -2863,4 +2913,35 @@ small { line-height:1.45; }
   margin-top:8px;
   color:var(--color-muted);
   font-size:11px;
+}
+
+/* Match the booking back button to the standard app top bar. */
+.booking-page-topbar{
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  z-index:30;
+  height:58px;
+  display:grid;
+  grid-template-columns:48px 1fr;
+  align-items:center;
+  padding:0 14px;
+  background:transparent;
+}
+.booking-page-topbar .app-topbar-back{
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  padding:0;
+  border:1px solid rgba(255,255,255,.32);
+  border-radius:13px;
+  color:#fff;
+  background:rgba(0,0,0,.18);
+  backdrop-filter:blur(6px);
+}
+@media(max-width:520px){
+  .booking-page-topbar{height:58px;padding-inline:14px}
+  .booking-page-topbar .app-topbar-back{width:40px;height:40px}
 }

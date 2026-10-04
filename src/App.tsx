@@ -424,51 +424,49 @@ function CourseCard({
   compact = false,
   onOpen,
   onBook,
-  onSlot,
 }: {
   qutub?: boolean
   compact?: boolean
   onOpen: () => void
   onBook: () => void
-  onSlot?: (slot: string) => void
 }) {
   const [saved, setSaved] = useState(false)
   const name = qutub ? "Qutub Golf Course" : "Delhi Golf Club"
-  const price = qutub ? "₹1,800" : "₹2,500"
+  const image = qutub ? photos.green : photos.course
+  const rating = qutub ? "4.4" : "4.7"
+  const distance = qutub ? "Mehrauli · 5.4 km" : "Lodhi Road · 2.1 km"
   return (
-    <article className={`course-card ${compact ? "compact-course-card" : ""}`}>
+    <article className="course-card">
       <button className="course-card-main" onClick={onOpen}>
         <div className="course-card-image">
-          <img src={qutub ? photos.green : photos.course} alt={`${name} fairway`} />
+          <img src={image} alt={`${name} fairway`} />
+          <span className="course-status-pill">{qutub ? "Public · 9 holes" : "Championship · 18 holes"}</span>
+          <span className="course-rating-pill"><Icon name="star" size={13} /> {rating}</span>
         </div>
         <div className="course-card-copy">
-          <div>
-            <h3>{name}</h3>
-            <span className="rating"><Icon name="star" size={13} /> {qutub ? "4.4" : "4.7"}</span>
+          <div className="course-card-title-row">
+            <div>
+              <h3>{name}</h3>
+              <p className="course-location"><Icon name="pin" size={14} /> {distance}</p>
+            </div>
+            <button
+              type="button"
+              className={`course-save-button ${saved ? "saved" : ""}`}
+              onClick={(event) => { event.stopPropagation(); setSaved(!saved) }}
+              aria-label={saved ? "Remove saved course" : "Save course"}
+            >
+              <Icon name="heart" size={18} />
+            </button>
           </div>
-          <p>{qutub ? "9 holes · Public" : "18 holes · Championship"}</p>
-          <p className="course-location"><Icon name="pin" size={14} /> {qutub ? "Mehrauli · 5.4 km" : "Lodhi Road · 2.1 km"}</p>
-          <strong>from {price} <small>/ round</small></strong>
+          <div className="course-card-meta">
+            <span>{qutub ? "From ₹1,800" : "From ₹2,500"}</span>
+            <strong>{qutub ? "₹1,800" : "₹2,500"} <small>/ round</small></strong>
+          </div>
         </div>
       </button>
-      <button
-        className={`save-course ${saved ? "saved" : ""}`}
-        onClick={() => setSaved(!saved)}
-        aria-label={saved ? "Remove saved course" : "Save course"}
-      >
-        <Icon name="heart" size={18} />
-      </button>
-      <div className={`course-card-footer ${compact ? "compact-book-footer" : ""}`}>
-        {!compact && onSlot && (
-          <div className="course-slot-shortcuts">
-            {["6:30 AM", "7:30 AM", "8:30 AM"].map((slot) => (
-              <button key={slot} onClick={() => onSlot(slot)}>{slot}</button>
-            ))}
-          </div>
-        )}
-        <button className="course-book-cta" onClick={onBook}>
-          Book tee time <Icon name="arrow" size={15} />
-        </button>
+      <div className="course-card-actions">
+        <button type="button" className="course-details-button" onClick={onOpen}>View details</button>
+        <button type="button" className="course-book-button" onClick={onBook}>Book tee time <Icon name="arrow" size={15} /></button>
       </div>
     </article>
   )
