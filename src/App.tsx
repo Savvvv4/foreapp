@@ -2320,7 +2320,6 @@ function AssignSheet({ close }: { close: () => void }) {
   )
 }
 
-export default 
 function PerformanceHome({ openModule }: { openModule: (module: "sg" | "drills" | "video") => void }) {
   return (
     <main className="screen architecture-home performance-home">
