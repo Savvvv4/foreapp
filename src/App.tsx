@@ -1046,26 +1046,54 @@ type RangeAvailabilityState = "ready" | "loading" | "empty" | "offline"
 function RangeCard({
   qutub = false,
   onOpen,
+  onBook,
 }: {
   qutub?: boolean
   onOpen: () => void
+  onBook: () => void
 }) {
   const [saved, setSaved] = useState(false)
+  const name = qutub ? "Qutub Practice Centre" : "Delhi Golf Club Range"
+  const image = qutub ? photos.green : photos.golfer
+  const rating = qutub ? "4.4" : "4.6"
+  const distance = qutub ? "Mehrauli · 5.7 km" : "Lodhi Road · 2.8 km"
   return (
     <article className="range-card">
       <button className="range-card-main" onClick={onOpen}>
         <div className="range-card-image">
-          <img src={qutub ? photos.green : photos.golfer} alt={qutub ? "Qutub Practice Centre" : "Delhi Golf Club Range"} />
-          <span>{qutub ? "Launch monitors" : "Open now"}</span>
+          <img src={image} alt={name} />
+          <span className="range-status-pill">{qutub ? "Launch monitors" : "Open now"}</span>
+          <span className="range-rating-pill"><Icon name="star" size={13} /> {rating}</span>
         </div>
         <div className="range-card-copy">
-          <div><h3>{qutub ? "Qutub Practice Centre" : "Delhi Golf Club Range"}</h3><span className="rating"><Icon name="star" size={13} /> {qutub ? "4.4" : "4.6"}</span></div>
-          <p><Icon name="pin" size={14} /> {qutub ? "Mehrauli · 5.7 km" : "Lodhi Road · 2.8 km"}</p>
-          {qutub ? <span className="availability-copy">7 bays available</span> : <div className="occupancy"><span>42 of 60 bays occupied</span><i><b /></i></div>}
-          <strong>from ₹900 <small>/ 60 min</small></strong>
+          <div className="range-card-title-row">
+            <div>
+              <h3>{name}</h3>
+              <p><Icon name="pin" size={14} /> {distance}</p>
+            </div>
+            <button
+              type="button"
+              className={`range-save-button ${saved ? "saved" : ""}`}
+              onClick={(event) => { event.stopPropagation(); setSaved(!saved) }}
+              aria-label={saved ? "Remove saved range" : "Save range"}
+            >
+              <Icon name="heart" size={18} />
+            </button>
+          </div>
+          <div className="range-card-meta">
+            {qutub ? (
+              <span className="availability-copy">7 bays available</span>
+            ) : (
+              <span className="range-live-status"><i /> Open · 42 of 60 bays occupied</span>
+            )}
+            <strong>from ₹900 <small>/ 60 min</small></strong>
+          </div>
         </div>
       </button>
-      <button className={`save-course ${saved ? "saved" : ""}`} onClick={() => setSaved(!saved)} aria-label="Save range"><Icon name="heart" size={18} /></button>
+      <div className="range-card-actions">
+        <button type="button" className="range-details-button" onClick={onOpen}>View details</button>
+        <button type="button" className="range-book-button" onClick={onBook}>Book a bay <Icon name="arrow" size={15} /></button>
+      </div>
     </article>
   )
 }
@@ -1074,19 +1102,21 @@ function RangeDiscoverScreen({
   go,
   openSearch,
   setMode,
+  openRangeBooking,
 }: {
   go: (screen: CourseFlowScreen) => void
   openSearch: () => void
   setMode: (mode: "courses" | "ranges" | "coaches") => void
+  openRangeBooking: () => void
 }) {
   return (
     <main className="screen booking-discover-screen range-discover-screen">
       <SectionHeading title="Book Again" />
-      <RangeCard onOpen={() => go("rangeProfile")} />
+      <RangeCard onOpen={() => go("rangeProfile")} onBook={openRangeBooking} />
       <SectionHeading title="Near you" />
       <div className="near-you-range-list">
         <RangeCard onOpen={() => go("rangeProfile")} />
-        <RangeCard qutub onOpen={() => go("rangeProfile")} />
+        <RangeCard qutub onOpen={() => go("rangeProfile")} onBook={openRangeBooking} />
       </div>
     </main>
   )
@@ -1714,7 +1744,7 @@ function CourseBookingPrototype({
       {screen === "confirmation" && <ConfirmationScreen go={go} course={bookingCourse} date={courseDate} time={selectedSlot} caddy={courseCaddySummary} cartCount={courseCartCount} total={bookingCourse.price + courseCaddyCost + courseCartCount * 800} />}
       {screen === "bookings" && <MyBookingsScreen go={go} />}
       {screen === "bookingDetail" && <BookingDetailScreen go={go} />}
-      {screen === "rangeDiscover" && <RangeDiscoverScreen go={go} openSearch={() => setSearchOpen(true)} setMode={setMode} />}
+      {screen === "rangeDiscover" && <RangeDiscoverScreen go={go} openSearch={() => setSearchOpen(true)} setMode={setMode} openRangeBooking={openRangeBooking} />}
       {screen === "rangeProfile" && <RangeProfileScreen go={go} openRangeBooking={openRangeBooking} />}
       {screen === "rangeSelect" && <RangeSelectScreen go={go} time={rangeTime} setTime={setRangeTime} duration={rangeDuration} setDuration={setRangeDuration} bayType={rangeBayType} setBayType={setRangeBayType} bucket={rangeBucket} setBucket={setRangeBucket} state={rangeState} setState={setRangeState} />}
       {screen === "rangeCheckout" && <RangeCheckoutScreen go={go} time={rangeTime} duration={rangeDuration} bayType={rangeBayType} bucket={rangeBucket} setBucket={setRangeBucket} credits={rangeCredits} setCredits={setRangeCredits} holdSeconds={holdSeconds} openPayment={() => { setPaymentTarget("range"); setPaymentState(holdSeconds === 0 ? "expired" : "methods"); setPaymentOpen(true) }} />}

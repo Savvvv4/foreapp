@@ -356,12 +356,162 @@ button:focus-visible, input:focus-visible { outline: 3px solid rgba(255, 110, 0,
 }
 
 /* Range booking flow */
-.range-card { position:relative;overflow:hidden;margin-bottom:14px;border:1px solid var(--line);border-radius:22px;background:white;box-shadow:0 7px 22px rgba(66,43,27,.055); }
-.range-card-main { width:100%;display:block;padding:0;border:0;background:white;text-align:left; }
-.range-card-image { position:relative;height:184px;overflow:hidden; }.range-card-image img { width:100%;height:100%;object-fit:cover; }.range-card-image > span { position:absolute;left:12px;top:12px;padding:7px 10px;border-radius:999px;color:var(--color-brand-text);background:white;font-size:9px;font-weight:700;box-shadow:0 3px 12px rgba(0,0,0,.1); }
-.range-card-copy { padding:14px 15px 16px; }.range-card-copy > div:first-child { display:flex;align-items:center;justify-content:space-between;gap:8px; }.range-card-copy h3 { margin:0;font-size:16px; }.range-card-copy > p { display:flex;align-items:center;gap:3px;margin:6px 0;color:var(--muted);font-size:10px; }.range-card-copy > strong { display:block;margin-top:11px;font-size:13px; }.range-card-copy > strong small { color:var(--muted);font-size:9px;font-weight:500; }
-.availability-copy { display:inline-flex;margin-top:4px;padding:5px 8px;border-radius:999px;color:var(--color-brand-text);background:var(--color-brand-tint);font-size:8px;font-weight:700; }
-.occupancy { margin-top:9px; }.occupancy > span { display:block;margin-bottom:6px;color:var(--muted);font-size:8px; }.occupancy > i { display:block;height:6px;overflow:hidden;border-radius:99px;background:var(--soft); }.occupancy > i > b { display:block;width:70%;height:100%;border-radius:inherit;background:var(--color-brand-500); }
+.range-card{
+  position:relative;
+  overflow:hidden;
+  margin-bottom:16px;
+  border:1px solid #e8ded6;
+  border-radius:24px;
+  background:var(--color-surface);
+  box-shadow:0 8px 24px rgba(66,43,27,.06);
+}
+.range-card-main{
+  width:100%;
+  display:block;
+  padding:0;
+  border:0;
+  background:var(--color-surface);
+  text-align:left;
+}
+.range-card-image{
+  position:relative;
+  height:190px;
+  overflow:hidden;
+}
+.range-card-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:transform .2s ease;
+}
+.range-card-main:active .range-card-image img{transform:scale(1.02)}
+.range-status-pill,
+.range-rating-pill{
+  position:absolute;
+  top:13px;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  min-height:28px;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:9px;
+  font-weight:750;
+  box-shadow:0 3px 12px rgba(0,0,0,.1);
+}
+.range-status-pill{
+  left:13px;
+  color:var(--color-brand-text);
+  background:white;
+}
+.range-rating-pill{
+  right:13px;
+  color:var(--color-ink);
+  background:rgba(255,255,255,.94);
+}
+.range-rating-pill .icon{color:var(--color-brand-500)}
+.range-card-copy{padding:16px 16px 14px}
+.range-card-title-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 38px;
+  gap:10px;
+  align-items:start;
+}
+.range-card-title-row h3{
+  margin:0;
+  font-size:19px;
+  line-height:1.15;
+  letter-spacing:-.025em;
+}
+.range-card-title-row p{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  margin:7px 0 0;
+  color:var(--muted);
+  font-size:11px;
+}
+.range-save-button{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:var(--soft);
+  color:var(--muted);
+}
+.range-save-button.saved{
+  color:var(--color-brand-text);
+  background:var(--color-brand-tint);
+  border-color:var(--color-brand-500);
+}
+.range-card-meta{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:14px;
+}
+.range-card-meta > strong{
+  font-size:13px;
+  white-space:nowrap;
+}
+.range-card-meta > strong small{
+  color:var(--muted);
+  font-size:9px;
+  font-weight:500;
+}
+.range-live-status{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  color:var(--muted);
+  font-size:10px;
+}
+.range-live-status i{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--color-brand-500);
+}
+.availability-copy{
+  display:inline-flex;
+  margin:0;
+  padding:6px 9px;
+  border-radius:999px;
+  color:var(--color-brand-text);
+  background:var(--color-brand-tint);
+  font-size:9px;
+  font-weight:700;
+}
+.range-card-actions{
+  display:grid;
+  grid-template-columns:1fr 1.35fr;
+  gap:8px;
+  padding:0 16px 16px;
+}
+.range-details-button,
+.range-book-button{
+  min-height:46px;
+  border-radius:13px;
+  font-size:12px;
+  font-weight:750;
+}
+.range-details-button{
+  border:1px solid var(--line);
+  background:var(--surface);
+  color:var(--ink);
+}
+.range-book-button{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  border:0;
+  background:var(--color-brand-500);
+  color:white;
+}
 .range-profile-screen .course-profile-hero img { object-position:center 38%; }.range-facts strong { font-size:11px; }.range-facts span { max-width:65px; }
 .range-package-grid { display:grid;grid-template-columns:1fr 1fr;gap:8px; }.range-package-grid > button { position:relative;min-height:142px;display:flex;align-items:flex-start;flex-direction:column;padding:14px;border:1px solid var(--line);border-radius:16px;background:white;text-align:left; }.range-package-grid small { color:var(--color-brand-text);font-size:8px;font-weight:700;letter-spacing:.06em; }.range-package-grid strong { margin-top:8px;font-size:12px; }.range-package-grid span { margin-top:4px;color:var(--muted);font-size:8px; }.range-package-grid b { margin-top:auto;font-size:15px; }.range-package-grid em { position:absolute;right:9px;top:9px;padding:4px 6px;border-radius:999px;color:var(--color-brand-text);background:var(--color-brand-tint);font-size:7px;font-style:normal;font-weight:700; }
 .range-date-strip { margin-bottom:20px; }.range-section-title { margin:22px 0 10px;font-size:14px; }
