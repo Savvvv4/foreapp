@@ -2645,3 +2645,13 @@ small { line-height:1.45; }
     height:40px;
   }
 }
+
+
+/* Near You: full-width stacked course cards. */
+.near-you-course-list{
+  display:block;
+}
+.near-you-course-list .course-card{
+  width:100%;
+  margin-bottom:14px;
+}

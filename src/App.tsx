@@ -516,32 +516,12 @@ function DiscoverCourses({
 }) {
   return (
     <main className="screen booking-discover-screen">
-      <div className="segment discover-segment">
-        {(["courses", "ranges", "coaches"] as const).map((item) => (
-          <button
-            className={mode === item ? "active" : ""}
-            key={item}
-            onClick={() => {
-              setMode(item)
-              if (item === "ranges") go("rangeDiscover")
-              if (item === "coaches") go("coachDiscover")
-            }}
-          >
-            {item[0].toUpperCase() + item.slice(1)}
-          </button>
-        ))}
-      </div>
-      <button className="search-box" onClick={openSearch}>
-        <Icon name="search" size={19} />
-        <span>Search courses, ranges, coaches</span>
-        <span className="filter-button" onClick={(event) => { event.stopPropagation(); openFilters() }}>Filters</span>
-      </button>
       <SectionHeading title="Book Again" />
       <BookAgainCourseCard onOpen={() => go("course")} onBook={() => openBooking(delhiCourse)} />
       <SectionHeading title="Near you" action="See all" onAction={() => go("results")} />
-      <div className="compact-course-scroller">
-        <CourseCard compact onOpen={() => go("course")} onBook={() => openBooking(delhiCourse)} />
-        <CourseCard compact qutub onOpen={() => go("course")} onBook={() => openBooking(qutubCourse)} />
+      <div className="near-you-course-list">
+        <CourseCard onOpen={() => go("course")} onBook={() => openBooking(delhiCourse)} />
+        <CourseCard qutub onOpen={() => go("course")} onBook={() => openBooking(qutubCourse)} />
       </div>
     </main>
   )
