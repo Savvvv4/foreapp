@@ -480,19 +480,31 @@ function BookAgainCourseCard({
   onBook: () => void
 }) {
   return (
-    <article className="book-again-card">
-      <button className="book-again-main" onClick={onOpen}>
-        <img src={photos.course} alt="Delhi Golf Club fairway" />
-        <span>
-          <small>YOUR REGULAR COURSE</small>
-          <strong>Delhi Golf Club</strong>
-          <em>Last played 18 Aug · 4 players</em>
-        </span>
-        <Icon name="chevron" size={18} />
+    <article className="course-card book-again-card">
+      <button className="course-card-main" onClick={onOpen}>
+        <div className="course-card-image">
+          <img src={photos.course} alt="Delhi Golf Club fairway" />
+          <span className="course-status-pill">Championship · 18 holes</span>
+          <span className="course-rating-pill"><Icon name="star" size={13} /> 4.7</span>
+        </div>
+        <div className="course-card-copy">
+          <div className="course-card-title-row">
+            <div>
+              <h3>Delhi Golf Club</h3>
+              <p className="course-location"><Icon name="pin" size={14} /> Lodhi Road · 2.1 km</p>
+            </div>
+            <span className="course-save-button" aria-hidden="true"><Icon name="heart" size={18} /></span>
+          </div>
+          <div className="course-card-meta">
+            <span>Last played 18 Aug · 4 players</span>
+            <strong>₹2,500 <small>/ round</small></strong>
+          </div>
+        </div>
       </button>
-      <button className="course-book-cta" onClick={onBook}>
-        Book again <Icon name="arrow" size={15} />
-      </button>
+      <div className="course-card-actions">
+        <button type="button" className="course-details-button" onClick={onOpen}>View details</button>
+        <button type="button" className="course-book-button" onClick={onBook}>Book again <Icon name="arrow" size={15} /></button>
+      </div>
     </article>
   )
 }
@@ -1292,29 +1304,49 @@ function CoachCard({
   price,
   image,
   onOpen,
+  onBook,
 }: {
   name: string
   rating: string
   price: number
   image?: string
   onOpen: () => void
+  onBook: () => void
 }) {
   const [saved, setSaved] = useState(false)
   const savdeep = name === "Savdeep Mehta"
+  const specialties = savdeep ? ["Short game", "Swing", "Course play"] : name === "Neha Arora" ? ["Beginners", "Junior"] : ["Swing", "Driver"]
   return (
-    <article className="coach-booking-card">
-      <button className="coach-booking-main" onClick={onOpen}>
-        {image ? <img src={image} alt={`${name} coaching`} /> : <div className="coach-photo-fallback"><Avatar initials={name.split(" ").map((part) => part[0]).join("")} /></div>}
-        <div>
-          <span className="rating"><Icon name="star" size={13} /> {rating} {savdeep && "· 86 reviews"}</span>
-          <h3>{name}</h3>
-          <p>{savdeep ? "PGA Professional · 12 yrs" : name === "Neha Arora" ? "LPGA Associate · 8 yrs" : "PGA Professional · 10 yrs"}</p>
-          <div className="specialty-pills">{(savdeep ? ["Short game","Swing","Course play"] : name === "Neha Arora" ? ["Beginners","Junior"] : ["Swing","Driver"]).map((item) => <i key={item}>{item}</i>)}</div>
-          <strong>from ₹{price.toLocaleString("en-IN")} <small>/ lesson</small></strong>
-          <em>{savdeep ? "Next available: Tomorrow 7:00 AM" : "Available this week"}</em>
+    <article className="coach-card">
+      <button className="coach-card-main" onClick={onOpen}>
+        <div className="coach-card-image">
+          {image ? <img src={image} alt={name + " coaching"} /> : <div className="coach-photo-fallback"><Avatar initials={name.split(" ").map((part) => part[0]).join("")} /></div>}
+          <span className="coach-status-pill">{savdeep ? "PGA Professional" : "Available this week"}</span>
+          <span className="coach-rating-pill"><Icon name="star" size={13} /> {rating}</span>
+        </div>
+        <div className="coach-card-copy">
+          <div className="coach-card-title-row">
+            <div>
+              <h3>{name}</h3>
+              <p><Icon name="pin" size={14} /> Delhi · {savdeep ? "2.1 km" : "5.4 km"}</p>
+            </div>
+            <button type="button" className={"coach-save-button " + (saved ? "saved" : "")} onClick={(event) => { event.stopPropagation(); setSaved(!saved) }} aria-label={saved ? "Remove saved coach" : "Save coach"}>
+              <Icon name="heart" size={18} />
+            </button>
+          </div>
+          <div className="coach-specialties">
+            {specialties.map((item) => <span key={item}>{item}</span>)}
+          </div>
+          <div className="coach-card-meta">
+            <span>{savdeep ? "Next available tomorrow" : "Available this week"}</span>
+            <strong>₹{price.toLocaleString("en-IN")} <small>/ lesson</small></strong>
+          </div>
         </div>
       </button>
-      <button className={`save-course ${saved ? "saved" : ""}`} onClick={() => setSaved(!saved)} aria-label="Save coach"><Icon name="heart" size={18} /></button>
+      <div className="coach-card-actions">
+        <button type="button" className="coach-details-button" onClick={onOpen}>View details</button>
+        <button type="button" className="coach-book-button" onClick={onBook}>Book a lesson <Icon name="arrow" size={15} /></button>
+      </div>
     </article>
   )
 }
@@ -1333,14 +1365,21 @@ function CoachDiscoverScreen({
   openSearch: () => void
 }) {
   return (
-    <main className="screen coach-discover-screen">
-      <div className="segment discover-segment"><button onClick={() => { setMode("courses"); go("discover") }}>Courses</button><button onClick={() => { setMode("ranges"); go("rangeDiscover") }}>Ranges</button><button className="active">Coaches</button></div>
-      <button className="search-box" onClick={openSearch}><Icon name="search" size={19} /><span>Search coaches in Delhi</span><span className="filter-button">Filters</span></button>
+    <main className="screen booking-discover-screen coach-discover-screen">
       {state === "offline" && <div className="booking-banner offline-banner"><Icon name="shield" /><span><strong>You’re offline</strong><small>Showing coaches saved from your last search.</small></span></div>}
       {state === "loading" && <div className="coach-card-skeleton">{[1,2,3].map((item) => <div key={item}><i /><span><b /><b /><b /></span></div>)}<button onClick={() => setState("ready")}>Show coaches</button></div>}
       {state === "error" && <div className="booking-empty-state coach-error-state"><span><Icon name="close" /></span><h2>We couldn’t load coaches</h2><p>Check your connection and try again.</p><button className="primary-button" onClick={() => setState("ready")}>Try again</button></div>}
       {state === "empty" && <div className="booking-empty-state"><span><Icon name="search" /></span><h2>No coaches match</h2><p>Widen your filters or try another specialty.</p><button className="primary-button" onClick={() => setState("ready")}>Widen filters</button></div>}
-      {(state === "ready" || state === "offline") && <><SectionHeading title="Recommended coaches" action="Map" /><div className="coach-booking-list"><CoachCard name="Savdeep Mehta" rating="4.9" price={1800} image={photos.golfer} onOpen={() => go("coachProfile")} /><CoachCard name="Neha Arora" rating="4.8" price={1500} onOpen={() => go("coachProfile")} /><CoachCard name="Imran Qureshi" rating="4.7" price={2200} onOpen={() => go("coachProfile")} /></div></>}
+      {(state === "ready" || state === "offline") && <>
+        <SectionHeading title="Book Again" />
+        <CoachCard name="Savdeep Mehta" rating="4.9" price={1800} image={photos.golfer} onOpen={() => go("coachProfile")} onBook={() => go("coachLesson")} />
+        <SectionHeading title="Near you" />
+        <div className="near-you-coach-list">
+          <CoachCard name="Savdeep Mehta" rating="4.9" price={1800} image={photos.golfer} onOpen={() => go("coachProfile")} onBook={() => go("coachLesson")} />
+          <CoachCard name="Neha Arora" rating="4.8" price={1500} image={photos.golfer} onOpen={() => go("coachProfile")} onBook={() => go("coachLesson")} />
+          <CoachCard name="Imran Qureshi" rating="4.7" price={2200} image={photos.golfer} onOpen={() => go("coachProfile")} onBook={() => go("coachLesson")} />
+        </div>
+      </>}
     </main>
   )
 }

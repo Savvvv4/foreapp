@@ -2945,3 +2945,34 @@ small { line-height:1.45; }
   .booking-page-topbar{height:58px;padding-inline:14px}
   .booking-page-topbar .app-topbar-back{width:40px;height:40px}
 }
+
+/* Unified full-size coach discovery cards. */
+.coach-card{position:relative;overflow:hidden;margin-bottom:16px;border:1px solid #e8ded6;border-radius:24px;background:var(--color-surface);box-shadow:0 8px 24px rgba(66,43,27,.06)}
+.coach-card-main{width:100%;display:block;padding:0;border:0;background:var(--color-surface);text-align:left}
+.coach-card-image{position:relative;height:190px;overflow:hidden}
+.coach-card-image>img,.coach-card-image>.coach-photo-fallback{width:100%;height:100%;object-fit:cover}
+.coach-card-image>.coach-photo-fallback{border-radius:0}
+.coach-card-main:active .coach-card-image img{transform:scale(1.02)}
+.coach-status-pill,.coach-rating-pill{position:absolute;top:13px;display:inline-flex;align-items:center;gap:5px;min-height:28px;padding:6px 10px;border-radius:999px;font-size:9px;font-weight:750;box-shadow:0 3px 12px rgba(0,0,0,.1)}
+.coach-status-pill{left:13px;color:var(--color-brand-text);background:white}
+.coach-rating-pill{right:13px;color:var(--color-ink);background:rgba(255,255,255,.94)}
+.coach-rating-pill .icon{color:var(--color-brand-500)}
+.coach-card-copy{padding:16px}
+.coach-card-title-row{display:grid;grid-template-columns:minmax(0,1fr) 38px;gap:10px;align-items:start}
+.coach-card-title-row h3{margin:0;font-size:19px;line-height:1.15;letter-spacing:-.025em}
+.coach-card-title-row p{display:flex;align-items:center;gap:4px;margin:7px 0 0;color:var(--muted);font-size:11px}
+.coach-save-button{width:38px;height:38px;display:grid;place-items:center;border:1px solid var(--line);border-radius:12px;background:var(--soft);color:var(--muted)}
+.coach-save-button.saved{color:var(--color-brand-text);background:var(--color-brand-tint);border-color:var(--color-brand-500)}
+.coach-specialties{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.coach-specialties span{padding:6px 8px;border-radius:999px;color:var(--color-brand-text);background:var(--color-brand-tint);font-size:9px;font-weight:700}
+.coach-card-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px}
+.coach-card-meta>span{color:var(--muted);font-size:10px}
+.coach-card-meta>strong{font-size:13px;white-space:nowrap}
+.coach-card-meta>strong small{color:var(--muted);font-size:9px;font-weight:500}
+.coach-card-actions{display:grid;grid-template-columns:1fr 1.35fr;gap:8px;padding:0 16px 16px}
+.coach-details-button,.coach-book-button{min-height:46px;border-radius:13px;font-size:12px;font-weight:750}
+.coach-details-button{border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.coach-book-button{display:flex;align-items:center;justify-content:center;gap:6px;border:0;background:var(--color-brand-500);color:white}
+.near-you-coach-list{display:block}
+.near-you-coach-list .coach-card{width:100%;margin-bottom:14px}
+.book-again-card .course-save-button{pointer-events:none}
