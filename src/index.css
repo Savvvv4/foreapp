@@ -2250,7 +2250,7 @@ small { line-height:1.45; }
   bottom:calc(12px + env(safe-area-inset-bottom));
   z-index:20;
   display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(150px,.95fr);
+  grid-template-columns:max-content minmax(180px,1.25fr);
   gap:8px;
   align-items:center;
   padding:8px;
@@ -2259,12 +2259,12 @@ small { line-height:1.45; }
   background:rgba(255,255,255,.98);
   box-shadow:0 -8px 28px rgba(36,31,27,.07);
 }
-.booking-modern-payment-wrap{position:relative;min-width:0}
+.booking-modern-payment-wrap{position:relative;width:max-content;min-width:0}
 .booking-modern-payment-selector{
-  width:100%;
+  width:max-content;
   min-height:56px;
   display:grid;
-  grid-template-columns:36px minmax(0,1fr) 18px;
+  grid-template-columns:36px max-content 18px;
   align-items:center;
   gap:8px;
   padding:7px 10px;
@@ -2295,7 +2295,8 @@ small { line-height:1.45; }
 .booking-modern-payment-menu{
   position:absolute;
   left:0;
-  right:0;
+  right:auto;
+  min-width:100%;
   bottom:calc(100% + 8px);
   display:grid;
   gap:4px;
@@ -2321,6 +2322,8 @@ small { line-height:1.45; }
 }
 .booking-modern-payment-menu button.selected{background:var(--color-brand-soft);color:var(--color-brand-dark)}
 .booking-modern-pay-button{
+  width:100%;
+  min-width:180px;
   min-height:56px;
   display:flex;
   align-items:center;
@@ -2342,7 +2345,7 @@ small { line-height:1.45; }
   .booking-modern-hero{height:220px}
   .booking-modern-hero-copy strong{font-size:27px}
   .booking-modern-content{padding-inline:16px}
-  .booking-modern-footer{grid-template-columns:minmax(0,1fr) 150px;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom))}
+  .booking-modern-footer{grid-template-columns:max-content minmax(180px,1fr);left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom))}
 }
  .booking-page-topbar{
   position:absolute;
@@ -2365,10 +2368,10 @@ small { line-height:1.45; }
 }
 .booking-page-topbar .app-topbar-back:active{background:rgba(0,0,0,.28)}
 .booking-flow-page .booking-modern-scroll{padding-top:0}
-.booking-flow-page .booking-modern-hero{height:310px}
+.booking-flow-page .booking-modern-hero{height:300px}
 .booking-flow-page .booking-modern-hero-copy{bottom:24px}
 @media(max-width:520px){
   .booking-page-topbar{height:52px;padding-inline:10px}
-  .booking-flow-page .booking-modern-hero{height:300px}
+  .booking-flow-page .booking-modern-hero{height:290px}
   .booking-flow-page .booking-modern-hero-copy{left:0;right:0;bottom:0}
 }

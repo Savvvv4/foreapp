@@ -773,7 +773,6 @@ function BookingFlowModal({
                 </div>
               </section>
 
-              <div className="booking-modern-policy"><Icon name="shield" size={14} /> Free cancellation up to 24 hours before tee time.</div>
             </div>
           ) : (
             <div className="booking-modern-processing">
@@ -804,7 +803,7 @@ function BookingFlowModal({
               </button>
             </div>
             <button type="button" className="booking-modern-pay-button" disabled={!canPay} onClick={pay}>
-              <span>Pay</span>
+              <span>Confirm</span>
               <strong>₹{total.toLocaleString("en-IN")}</strong>
               <Icon name="arrow" size={17} />
             </button>
