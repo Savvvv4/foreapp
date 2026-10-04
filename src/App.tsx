@@ -2478,6 +2478,7 @@ function App() {
     setModule(null)
     setCoachDiscoveryOpen(false)
     setDiscoverChildOpen(false)
+    setDiscoverSection("Courses")
     setOverlay(null)
   }
 
@@ -2542,7 +2543,16 @@ function App() {
         <div className="scroll-area">
           {!profileOpen && !module && !coachDiscoveryOpen && (
             <>
-              {primaryTab === "discover" && <Discover onModuleStateChange={setDiscoverChildOpen} />}
+              {primaryTab === "discover" && !discoverChildOpen && <DiscoverHome openDiscover={openDiscover} />}
+              {primaryTab === "discover" && discoverChildOpen && (
+                <Discover
+                  initialSection={discoverSection}
+                  onModuleStateChange={(_active, section) => {
+                    if (section) setDiscoverSection(section)
+                    setDiscoverChildOpen(true)
+                  }}
+                />
+              )}
               {primaryTab === "performance" && <PerformanceHome openModule={openPerformanceModule} />}
               {primaryTab === "coach" && <CoachHome openDiscovery={() => setCoachDiscoveryOpen(true)} />}
             </>
@@ -2557,7 +2567,7 @@ function App() {
           {coachDiscoveryOpen && <CoachDiscoveryStandalone onClose={() => setCoachDiscoveryOpen(false)} />}
         </div>
 
-        {!module && !coachDiscoveryOpen && !profileOpen && !overlay && (
+        {!module && !coachDiscoveryOpen && !profileOpen && !discoverChildOpen && !overlay && (
           <BottomNav items={primaryItems} active={primaryTab} onChange={goPrimaryTab} />
         )}
 
