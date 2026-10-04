@@ -794,6 +794,136 @@ function BookingFlowModal({
     </main>
   )
 }
+function RangeBookingFlowModal({
+  step,
+  setStep,
+  date,
+  setDate,
+  bucketCount,
+  setBucketCount,
+  paymentMethod,
+  setPaymentMethod,
+  close,
+  complete,
+}: {
+  step: BookingStep
+  setStep: (step: BookingStep) => void
+  date: string
+  setDate: (date: string) => void
+  bucketCount: number
+  setBucketCount: (count: number) => void
+  paymentMethod: string
+  setPaymentMethod: (method: string) => void
+  close: () => void
+  complete: () => void
+}) {
+  const [paymentMenuOpen, setPaymentMenuOpen] = useState(false)
+  const dates = Array.from({ length: 5 }, (_, index) => {
+    const value = new Date()
+    value.setHours(0, 0, 0, 0)
+    value.setDate(value.getDate() + index)
+    return {
+      key: value.toISOString(),
+      day: value.toLocaleDateString("en-IN", { weekday: "short" }),
+      date: value.getDate().toString(),
+      month: value.toLocaleDateString("en-IN", { month: "short" }),
+      label: value.toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long" }),
+    }
+  })
+  const selectedDate = dates.find((item) => item.key === date)
+  const total = 900 + bucketCount * 350
+  const paymentLabel = paymentMethod === "Net banking" ? "Net banking" : paymentMethod
+
+  useEffect(() => {
+    if (step !== "payment") return
+    const timer = window.setTimeout(complete, 2000)
+    return () => window.clearTimeout(timer)
+  }, [step, complete])
+
+  return (
+    <main className="booking-flow-page" aria-label="Book Delhi Golf Club Range">
+      <header className="booking-page-topbar">
+        <button type="button" className="app-topbar-back" onClick={close} aria-label="Go back">
+          <Icon name="chevron" size={21} />
+        </button>
+        <span className="app-topbar-spacer" aria-hidden="true" />
+      </header>
+
+      <div className="booking-modern-scroll">
+        <section className="booking-modern-hero">
+          <img src={photos.golfer} alt="" />
+          <span className="booking-modern-hero-shade" />
+          <div className="booking-modern-hero-copy">
+            <span className="eyebrow light">{step === "payment" ? "CONFIRMING BOOKING" : "YOUR SESSION"}</span>
+            <strong>Delhi Golf Club Range</strong>
+            {selectedDate && <span>{selectedDate.label}{bucketCount ? ` · ${bucketCount} ${bucketCount === 1 ? "bucket" : "buckets"}` : ""}</span>}
+          </div>
+        </section>
+
+        {step !== "payment" ? (
+          <div className="booking-modern-content">
+            <section className="booking-modern-section">
+              <div className="booking-modern-section-heading"><h2>Day</h2><span>Select a day</span></div>
+              <div className="booking-modern-dates">
+                {dates.map((item, index) => (
+                  <button key={item.key} type="button" className={date === item.key ? "selected" : ""} aria-pressed={date === item.key} onClick={() => setDate(item.key)}>
+                    <small>{index === 0 ? "Today" : item.day}</small>
+                    <strong>{item.date}</strong>
+                    <span>{item.month}</span>
+                  </button>
+                ))}
+              </div>
+            </section>
+
+            <section className="booking-modern-section range-bucket-section">
+              <div className="booking-modern-section-heading"><h2>Ball buckets</h2><span>₹350 each</span></div>
+              <div className="range-bucket-input">
+                <button type="button" onClick={() => setBucketCount(Math.max(0, bucketCount - 1))} disabled={bucketCount === 0} aria-label="Remove bucket">−</button>
+                <label><strong>{bucketCount}</strong><span>{bucketCount === 1 ? "bucket" : "buckets"}</span></label>
+                <button type="button" onClick={() => setBucketCount(bucketCount + 1)} aria-label="Add bucket">+</button>
+              </div>
+              <small className="range-bucket-hint">Add as many practice ball buckets as you need.</small>
+            </section>
+          </div>
+        ) : (
+          <div className="booking-modern-processing">
+            <span><Icon name="loader" size={30} /></span>
+            <h2>Securing your range session</h2>
+            <p>Confirming your booking at Delhi Golf Club Range.</p>
+          </div>
+        )}
+      </div>
+
+      {step !== "payment" && (
+        <footer className="booking-modern-footer">
+          <div className="booking-modern-payment-wrap">
+            {paymentMenuOpen && (
+              <div className="booking-modern-payment-menu" role="menu">
+                {["UPI","Card","Net banking"].map((method) => (
+                  <button key={method} type="button" className={paymentMethod === method ? "selected" : ""} onClick={() => { setPaymentMethod(method); setPaymentMenuOpen(false) }}>
+                    <span>{method}</span>
+                    {paymentMethod === method && <Icon name="check" size={15} />}
+                  </button>
+                ))}
+              </div>
+            )}
+            <button type="button" className="booking-modern-payment-selector" onClick={() => setPaymentMenuOpen((open) => !open)} aria-expanded={paymentMenuOpen}>
+              <span className="booking-modern-payment-icon"><Icon name="wallet" size={18} /></span>
+              <span><small>PAY USING</small><strong>{paymentLabel}</strong></span>
+              <Icon name="chevron" size={16} />
+            </button>
+          </div>
+          <button type="button" className="booking-modern-pay-button" disabled={!date} onClick={() => setStep("payment")}>
+            <span>Confirm</span>
+            <strong>₹{total.toLocaleString("en-IN")}</strong>
+            <Icon name="arrow" size={17} />
+          </button>
+        </footer>
+      )}
+    </main>
+  )
+}
+
 function PaymentSheet({
   state,
   setState,
@@ -962,7 +1092,7 @@ function RangeDiscoverScreen({
   )
 }
 
-function RangeProfileScreen({ go }: { go: (screen: CourseFlowScreen) => void }) {
+function RangeProfileScreen({ go, openRangeBooking }: { go: (screen: CourseFlowScreen) => void; openRangeBooking: () => void }) {
   return (
     <main className="course-profile-screen range-profile-screen">
       <div className="course-profile-hero"><img src={photos.golfer} alt="Delhi Golf Club Range" /><button onClick={() => go("rangeDiscover")}><Icon name="chevron" /></button><button><Icon name="heart" /></button><span>1 / 4</span></div>
@@ -982,7 +1112,7 @@ function RangeProfileScreen({ go }: { go: (screen: CourseFlowScreen) => void }) 
         <h2>Map & directions</h2>
         <button className="directions-card"><span><Icon name="map" size={24} /></span><div><strong>Delhi Golf Club Range</strong><small>Lodhi Road · 2.8 km</small></div><Icon name="directions" /></button>
       </div>
-      <div className="booking-sticky-bar"><span><small>From</small><strong>₹900</strong></span><button className="primary-button" onClick={() => go("rangeSelect")}>Book a bay</button></div>
+      <div className="booking-sticky-bar"><span><small>From</small><strong>₹900</strong></span><button className="primary-button" onClick={openRangeBooking}>Book a bay</button></div>
     </main>
   )
 }
@@ -1092,14 +1222,14 @@ function RangeCheckoutScreen({
   )
 }
 
-function RangeConfirmationScreen({ go, duration, bucket }: { go: (screen: CourseFlowScreen) => void; duration: number; bucket: boolean }) {
+function RangeConfirmationScreen({ go, date, bucketCount }: { go: (screen: CourseFlowScreen) => void; date: string; bucketCount: number }) {
   const [reminders, setReminders] = useState<boolean | null>(null)
   return (
     <main className="screen confirmation-screen range-confirmation-screen">
       <div className="success-animation"><span><Icon name="check" size={30} /></span><i /><i /></div>
       <ConfirmedBadge /><h1>You’re booked</h1><p>Delhi Golf Club Range is expecting you.</p>
       <span className="booking-reference">Booking reference · <b>DGCR-20931</b></span>
-      <div className="confirmation-summary"><img src={photos.golfer} alt="Delhi Golf Club Range" /><div><strong>Delhi Golf Club Range</strong><span>Today · 9:30 AM · {duration} min</span><span>{bucket ? "Ball bucket included" : "Standard bay"}</span></div></div>
+      <div className="confirmation-summary"><img src={photos.golfer} alt="Delhi Golf Club Range" /><div><strong>Delhi Golf Club Range</strong><span>{date || "Today"}</span><span>{bucketCount ? `${bucketCount} ${bucketCount === 1 ? "ball bucket" : "ball buckets"} included` : "Bay reservation"}</span></div></div>
       <div className="confirmation-actions"><button><Icon name="calendar" /><span>Add to calendar</span><Icon name="chevron" /></button><button><Icon name="directions" /><span>Get directions</span><Icon name="chevron" /></button></div>
       <div className="bring-card"><strong>Bay assigned on arrival</strong><span>Check in at the range desk</span></div>
       <button className="confirmation-cross-sell" onClick={() => go("coachProfile")}><span><Avatar initials="SM" /></span><div><strong>Add a coach to your session</strong><small>Savdeep Mehta · PGA Professional · 4.9</small></div><Icon name="chevron" /></button>
@@ -1110,13 +1240,13 @@ function RangeConfirmationScreen({ go, duration, bucket }: { go: (screen: Course
   )
 }
 
-function RangeBookingDetailScreen({ go, duration, bayType, bucket }: { go: (screen: CourseFlowScreen) => void; duration: number; bayType: string; bucket: boolean }) {
+function RangeBookingDetailScreen({ go, date, bucketCount }: { go: (screen: CourseFlowScreen) => void; date: string; bucketCount: number }) {
   const [cancelOpen, setCancelOpen] = useState(false)
   return (
     <main className="screen booking-detail-screen range-detail-screen">
       <FlowHeader title="Range booking" back={() => go("rangeConfirmation")} />
-      <div className="booking-detail-status"><ConfirmedBadge /><h1>Delhi Golf Club Range</h1><p>Today · 9:30 AM · {duration} min</p></div>
-      <div className="detail-summary-card"><div><span><Icon name="clock" /></span><p><small>SESSION</small><strong>9:30 AM · {duration} minutes</strong><em>{bayType} bay</em></p></div><div><span><Icon name="flag" /></span><p><small>INCLUDED</small><strong>{bucket ? "Ball bucket" : "Bay reservation"}</strong><em>Bay assigned on arrival</em></p></div><div><span><Icon name="wallet" /></span><p><small>PAID</small><strong>₹{((duration === 60 ? 900 : duration === 90 ? 1250 : 1600) + (bayType === "Launch monitor" ? 300 : 0) + (bucket ? 350 : 0)).toLocaleString("en-IN")}</strong><em>UPI · arjun@upi</em></p></div></div>
+      <div className="booking-detail-status"><ConfirmedBadge /><h1>Delhi Golf Club Range</h1><p>{date || "Today"}</p></div>
+      <div className="detail-summary-card"><div><span><Icon name="calendar" /></span><p><small>SESSION</small><strong>{date || "Today"}</strong><em>Bay assigned on arrival</em></p></div><div><span><Icon name="flag" /></span><p><small>INCLUDED</small><strong>{bucketCount ? `${bucketCount} ball ${bucketCount === 1 ? "bucket" : "buckets"}` : "Bay reservation"}</strong><em>Practice balls added</em></p></div><div><span><Icon name="wallet" /></span><p><small>PAID</small><strong>₹{(900 + bucketCount * 350).toLocaleString("en-IN")}</strong><em>UPI · arjun@upi</em></p></div></div>
       <button className="booking-map-card"><span><Icon name="map" size={25} /></span><div><strong>Delhi Golf Club Range</strong><small>Lodhi Road · 2.8 km</small></div><Icon name="directions" /></button>
       <div className="booking-manage-actions"><button className="primary-button" onClick={() => go("rangeSelect")}>Change time</button><button onClick={() => setCancelOpen(true)}>Cancel booking</button></div>
       <div className="detail-links"><button>View receipt <Icon name="chevron" /></button><button>Contact the range <Icon name="chevron" /></button></div>
@@ -1507,6 +1637,11 @@ function CourseBookingPrototype({
   const [rangeDuration, setRangeDuration] = useState(90)
   const [rangeBayType, setRangeBayType] = useState<"Standard" | "Launch monitor">("Standard")
   const [rangeBucket, setRangeBucket] = useState(true)
+  const [rangeBookingOpen, setRangeBookingOpen] = useState(false)
+  const [rangeBookingStep, setRangeBookingStep] = useState<BookingStep>("select")
+  const [rangeBookingDate, setRangeBookingDate] = useState("")
+  const [rangeBucketCount, setRangeBucketCount] = useState(0)
+  const [rangePaymentMethod, setRangePaymentMethod] = useState("UPI")
   const [rangeCredits, setRangeCredits] = useState(false)
   const [coachDiscoverState, setCoachDiscoverState] = useState<CoachDiscoverState>("ready")
   const [coachAvailabilityState, setCoachAvailabilityState] = useState<CoachAvailabilityState>("ready")
@@ -1549,6 +1684,14 @@ function CourseBookingPrototype({
     setScreen(next)
     if (next === "discover") setMode("courses")
   }
+  const openRangeBooking = () => {
+    setRangeBookingDate("")
+    setRangeBucketCount(0)
+    setRangePaymentMethod("UPI")
+    setRangeBookingStep("select")
+    setRangeBookingOpen(true)
+  }
+
   const openBooking = (course: BookingCourse, slot?: string) => {
     setBookingCourse(course)
     setCourseDate(slot ? "Sat 22" : "")
@@ -1572,11 +1715,11 @@ function CourseBookingPrototype({
       {screen === "bookings" && <MyBookingsScreen go={go} />}
       {screen === "bookingDetail" && <BookingDetailScreen go={go} />}
       {screen === "rangeDiscover" && <RangeDiscoverScreen go={go} openSearch={() => setSearchOpen(true)} setMode={setMode} />}
-      {screen === "rangeProfile" && <RangeProfileScreen go={go} />}
+      {screen === "rangeProfile" && <RangeProfileScreen go={go} openRangeBooking={openRangeBooking} />}
       {screen === "rangeSelect" && <RangeSelectScreen go={go} time={rangeTime} setTime={setRangeTime} duration={rangeDuration} setDuration={setRangeDuration} bayType={rangeBayType} setBayType={setRangeBayType} bucket={rangeBucket} setBucket={setRangeBucket} state={rangeState} setState={setRangeState} />}
       {screen === "rangeCheckout" && <RangeCheckoutScreen go={go} time={rangeTime} duration={rangeDuration} bayType={rangeBayType} bucket={rangeBucket} setBucket={setRangeBucket} credits={rangeCredits} setCredits={setRangeCredits} holdSeconds={holdSeconds} openPayment={() => { setPaymentTarget("range"); setPaymentState(holdSeconds === 0 ? "expired" : "methods"); setPaymentOpen(true) }} />}
-      {screen === "rangeConfirmation" && <RangeConfirmationScreen go={go} duration={rangeDuration} bucket={rangeBucket} />}
-      {screen === "rangeDetail" && <RangeBookingDetailScreen go={go} duration={rangeDuration} bayType={rangeBayType} bucket={rangeBucket} />}
+      {screen === "rangeConfirmation" && <RangeConfirmationScreen go={go} date={rangeBookingDate} bucketCount={rangeBucketCount} />}
+      {screen === "rangeDetail" && <RangeBookingDetailScreen go={go} date={rangeBookingDate} bucketCount={rangeBucketCount} />}
       {screen === "coachDiscover" && <CoachDiscoverScreen go={go} state={coachDiscoverState} setState={setCoachDiscoverState} setMode={setMode} openSearch={() => setSearchOpen(true)} />}
       {screen === "coachProfile" && <CoachProfileScreen go={go} />}
       {screen === "coachLesson" && <CoachLessonTypeScreen go={go} lesson={coachLesson} setLesson={setCoachLesson} />}
@@ -1587,6 +1730,7 @@ function CourseBookingPrototype({
       {screen === "coachBookingPending" && <CoachBookingDetailScreen go={go} status="Pending" />}
       {screen === "coachBookingConfirmed" && <CoachBookingDetailScreen go={go} status="Confirmed" />}
       {screen === "coachDeclined" && <CoachDeclinedScreen go={go} />}
+      {rangeBookingOpen && <RangeBookingFlowModal step={rangeBookingStep} setStep={setRangeBookingStep} date={rangeBookingDate} setDate={setRangeBookingDate} bucketCount={rangeBucketCount} setBucketCount={setRangeBucketCount} paymentMethod={rangePaymentMethod} setPaymentMethod={setRangePaymentMethod} close={() => setRangeBookingOpen(false)} complete={() => { setRangeBookingOpen(false); setScreen("rangeConfirmation") }} />}
       {bookingOpen && <BookingFlowModal course={bookingCourse} step={bookingStep} setStep={setBookingStep} date={courseDate} setDate={setCourseDate} time={selectedSlot} setTime={setSelectedSlot} caddyMode={courseCaddyMode} setCaddyMode={setCourseCaddyMode} cartCount={courseCartCount} setCartCount={setCourseCartCount} paymentMethod={coursePaymentMethod} setPaymentMethod={setCoursePaymentMethod} close={() => setBookingOpen(false)} pay={() => setBookingStep("payment")} />}
       {filtersOpen && <FiltersSheet close={() => { setFiltersOpen(false); setResultsState("ready"); go("results") }} />}
       {searchOpen && <SearchExperience denied={locationDenied} setDenied={setLocationDenied} primerSeen={locationPrimerSeen} setPrimerSeen={setLocationPrimerSeen} close={() => setSearchOpen(false)} go={go} />}

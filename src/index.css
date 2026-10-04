@@ -2665,3 +2665,52 @@ small { line-height:1.45; }
   width:100%;
   margin-bottom:14px;
 }
+
+/* Range booking flow. */
+.range-bucket-section{
+  margin-top:4px;
+}
+.range-bucket-input{
+  min-height:76px;
+  display:grid;
+  grid-template-columns:56px minmax(0,1fr) 56px;
+  align-items:center;
+  overflow:hidden;
+  border:1px solid var(--color-border);
+  border-radius:16px;
+  background:var(--color-surface);
+}
+.range-bucket-input > button{
+  width:56px;
+  height:76px;
+  display:grid;
+  place-items:center;
+  border:0;
+  background:var(--color-brand-tint);
+  color:var(--color-brand-text);
+  font-size:26px;
+  font-weight:500;
+}
+.range-bucket-input > button:disabled{
+  opacity:.35;
+}
+.range-bucket-input label{
+  display:flex;
+  align-items:baseline;
+  justify-content:center;
+  gap:7px;
+}
+.range-bucket-input label strong{
+  font-size:24px;
+  line-height:1;
+}
+.range-bucket-input label span{
+  color:var(--color-muted);
+  font-size:12px;
+}
+.range-bucket-hint{
+  display:block;
+  margin-top:8px;
+  color:var(--color-muted);
+  font-size:11px;
+}
