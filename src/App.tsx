@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react"
 
 type Role = "golfer" | "coach"
 type GolferTab = "home" | "discover" | "play" | "improve" | "profile"
+type PrimaryTab = "discover" | "performance" | "coach"
 type CoachTab = "today" | "students" | "practice" | "business" | "profile"
 type IconName = "home" | "search" | "flag" | "spark" | "user" | "calendar" | "users" | "clipboard" | "wallet" | "bell" | "arrow" | "chevron" | "star" | "pin" | "clock" | "video" | "chart" | "message" | "close" | "check" | "switch" | "heart" | "map" | "shield" | "directions" | "share" | "more" | "filter" | "plus" | "loader"
 
@@ -2112,108 +2113,58 @@ function Business() {
   )
 }
 
-function BottomNav<T extends string>({
+function BottomNav({
   items,
   active,
   onChange,
-  compact = false,
 }: {
-  items: { id: T; label: string; icon: IconName }[]
-  active: T
-  onChange: (id: T) => void
-  compact?: boolean
+  items: { id: PrimaryTab; label: string; icon: IconName }[]
+  active: PrimaryTab
+  onChange: (id: PrimaryTab) => void
 }) {
-  const [expanded, setExpanded] = useState(false)
-
-  useEffect(() => {
-    setExpanded(false)
-  }, [compact, active])
-
-  useEffect(() => {
-    if (!compact || !expanded) return
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setExpanded(false)
-    }
-    window.addEventListener("keydown", handleKeyDown)
-    return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [compact, expanded])
-
-  const activeItem = items.find((item) => item.id === active) ?? items[0]
-
   return (
-    <nav
-      className={`bottom-nav ${compact ? "bottom-nav-compact" : "bottom-nav-expanded"} ${expanded ? "bottom-nav-open" : ""}`}
-      aria-label="Primary navigation"
-    >
+    <nav className="bottom-nav bottom-nav-primary" aria-label="Primary navigation">
       <div className="bottom-nav-track">
-        {items.map((item) => {
-          const isActive = item.id === active
-          const hidden = compact && !expanded && !isActive
-          return (
-            <button
-              type="button"
-              key={item.id}
-              className={isActive ? "active" : ""}
-              data-hidden={hidden ? "true" : "false"}
-              onClick={() => {
-                if (compact && isActive) {
-                  setExpanded((value) => !value)
-                } else {
-                  onChange(item.id)
-                }
-              }}
-              aria-current={isActive ? "page" : undefined}
-              aria-expanded={compact && isActive ? expanded : undefined}
-              aria-label={
-                compact && isActive && !expanded
-                  ? `Open navigation, currently in ${activeItem.label}`
-                  : item.label
-              }
-              tabIndex={hidden ? -1 : 0}
-            >
-              <Icon name={item.icon} size={21} />
-              <span>{item.label}</span>
-            </button>
-          )
-        })}
+        {items.map((item) => (
+          <button type="button" key={item.id} className={item.id === active ? "active" : ""} onClick={() => onChange(item.id)} aria-current={item.id === active ? "page" : undefined}>
+            <Icon name={item.icon} size={21} />
+            <span>{item.label}</span>
+          </button>
+        ))}
       </div>
     </nav>
   )
 }
+
 
 function AppTopBar({
   title,
   initials,
   onHome,
   onProfile,
+  back,
 }: {
   title: string
   initials: string
   onHome: () => void
   onProfile: () => void
+  back?: () => void
 }) {
   return (
-    <header className="app-topbar">
-      <button
-        type="button"
-        className="app-topbar-brand"
-        onClick={onHome}
-        aria-label="Go to Fore home"
-      >
-        <span>FORE</span>
-      </button>
+    <header className={\`app-topbar \${back ? "app-topbar-child" : ""}\`}>
+      {back ? (
+        <button type="button" className="app-topbar-back" onClick={back} aria-label="Go back"><Icon name="chevron" size={21} /></button>
+      ) : (
+        <button type="button" className="app-topbar-brand" onClick={onHome} aria-label="Go to Discover"><span>FORE</span></button>
+      )}
       <h1>{title}</h1>
-      <button
-        type="button"
-        className="app-topbar-profile"
-        onClick={onProfile}
-        aria-label="Open profile"
-      >
-        <Avatar initials={initials} />
-      </button>
+      {back ? <span className="app-topbar-spacer" aria-hidden="true" /> : (
+        <button type="button" className="app-topbar-profile" onClick={onProfile} aria-label="Open profile"><Avatar initials={initials} /></button>
+      )}
     </header>
   )
 }
+
 
 function StudentDetail({
   close,
@@ -2369,114 +2320,238 @@ function AssignSheet({ close }: { close: () => void }) {
   )
 }
 
-export default function App() {
-  const [role, setRole] = useState<Role>("golfer")
-  const [golferTab, setGolferTab] = useState<GolferTab>("home")
-  const [coachTab, setCoachTab] = useState<CoachTab>("today")
-  const [moduleNavigation, setModuleNavigation] = useState(false)
-  const [overlay, setOverlay] = useState<"student" | "assign" | null>(
-    null,
+export default 
+function PerformanceHome({ openModule }: { openModule: (module: "sg" | "drills" | "video") => void }) {
+  return (
+    <main className="screen architecture-home performance-home">
+      <div className="architecture-intro">
+        <p className="eyebrow">YOUR GAME</p>
+        <h1>Performance</h1>
+        <p>Choose what you want to work on.</p>
+      </div>
+      <div className="performance-module-list">
+        <button onClick={() => openModule("sg")}>
+          <span className="performance-module-icon"><Icon name="chart" size={22} /></span>
+          <span><small>STROKES GAINED</small><strong>Understand your game</strong><em>See where you gain and lose shots.</em></span>
+          <Icon name="chevron" size={18} />
+        </button>
+        <button onClick={() => openModule("drills")}>
+          <span className="performance-module-icon"><Icon name="clipboard" size={22} /></span>
+          <span><small>DRILLS</small><strong>Practice with purpose</strong><em>Work through drills and track progress.</em></span>
+          <Icon name="chevron" size={18} />
+        </button>
+        <button onClick={() => openModule("video")}>
+          <span className="performance-module-icon"><Icon name="video" size={22} /></span>
+          <span><small>VIDEO ANALYSIS</small><strong>See your swing</strong><em>Review swings and identify what to improve.</em></span>
+          <Icon name="chevron" size={18} />
+        </button>
+      </div>
+      <div className="performance-summary">
+        <span><small>HANDICAP</small><strong>14.2</strong></span>
+        <span><small>LAST ROUND</small><strong>91</strong></span>
+        <span><small>STROKES GAINED</small><strong>-2.4</strong></span>
+      </div>
+    </main>
   )
+}
 
-  const changeRole = (nextRole: Role) => {
-    setRole(nextRole)
-    setModuleNavigation(false)
+function VideoAnalysisModule() {
+  return (
+    <main className="screen focused-module-screen">
+      <div className="focused-module-intro">
+        <p className="eyebrow">PERFORMANCE</p>
+        <h1>Video Analysis</h1>
+        <p>Review your swing, compare frames and build a clearer practice plan.</p>
+      </div>
+      <button className="video-analysis-hero">
+        <div className="video-thumb">
+          <img src={photos.golfer} alt="Golfer working on their swing" />
+          <span><Icon name="video" size={22} /></span>
+          <small>0:42</small>
+        </div>
+        <div><small>RECENT ANALYSIS</small><strong>Driver · takeaway & transition</strong><p>3 annotated frames · Coach feedback ready</p></div>
+      </button>
+      <div className="video-analysis-actions">
+        <button><Icon name="video" size={18} /> Record a swing</button>
+        <button><Icon name="arrow" size={18} /> View analysis</button>
+      </div>
+    </main>
+  )
+}
+
+function CoachHome({ openDiscovery }: { openDiscovery: () => void }) {
+  return (
+    <main className="screen architecture-home coach-home">
+      <div className="architecture-intro">
+        <p className="eyebrow">YOUR LEARNING JOURNEY</p>
+        <h1>Coach</h1>
+        <p>Find the right coach, then keep everything you learn in one place.</p>
+      </div>
+      <button className="coach-find-hero" onClick={openDiscovery}>
+        <span className="coach-find-icon"><Icon name="search" size={25} /></span>
+        <span><small>GET STARTED</small><strong>Find a coach</strong><em>Browse coaches, ratings, specialties and lesson options.</em></span>
+        <Icon name="arrow" size={19} />
+      </button>
+      <section className="coach-journey-preview">
+        <div><small>YOUR COACH</small><strong>Not connected yet</strong><span>Once you choose a coach, your lessons, feedback and practice plan will appear here.</span></div>
+      </section>
+      <SectionHeading title="How coaching works" />
+      <div className="coach-journey-steps">
+        <span><b>1</b><strong>Choose a coach</strong><small>Find someone who fits your game.</small></span>
+        <span><b>2</b><strong>Start learning</strong><small>Book a lesson or package.</small></span>
+        <span><b>3</b><strong>Keep improving</strong><small>Feedback and drills stay with you.</small></span>
+      </div>
+    </main>
+  )
+}
+
+function App() {
+  const [primaryTab, setPrimaryTab] = useState<PrimaryTab>("discover")
+  const [profileOpen, setProfileOpen] = useState(false)
+  const [module, setModule] = useState<"sg" | "drills" | "video" | null>(null)
+  const [coachDiscoveryOpen, setCoachDiscoveryOpen] = useState(false)
+  const [discoverChildOpen, setDiscoverChildOpen] = useState(false)
+  const [overlay, setOverlay] = useState<"student" | "assign" | null>(null)
+
+  const goPrimaryTab = (tab: PrimaryTab) => {
+    setPrimaryTab(tab)
+    setProfileOpen(false)
+    setModule(null)
+    setCoachDiscoveryOpen(false)
+    setDiscoverChildOpen(false)
     setOverlay(null)
   }
 
-  const goGolferTab = (tab: GolferTab) => {
-    setModuleNavigation(false)
-    setOverlay(null)
-    setGolferTab(tab)
+  const openPerformanceModule = (next: "sg" | "drills" | "video") => {
+    setModule(next)
+    setProfileOpen(false)
   }
 
-  const goCoachTab = (tab: CoachTab) => {
-    setModuleNavigation(false)
-    setOverlay(null)
-    setCoachTab(tab)
-  }
-
-  const golferItems: { id: GolferTab; label: string; icon: IconName }[] = [
-    { id: "home", label: "Home", icon: "home" },
+  const primaryItems: { id: PrimaryTab; label: string; icon: IconName }[] = [
     { id: "discover", label: "Discover", icon: "search" },
-    { id: "play", label: "Play", icon: "flag" },
-    { id: "improve", label: "Improve", icon: "spark" },
-    { id: "profile", label: "Profile", icon: "user" },
+    { id: "performance", label: "Performance", icon: "chart" },
+    { id: "coach", label: "Coach", icon: "users" },
   ]
-  const coachItems: { id: CoachTab; label: string; icon: IconName }[] = [
-    { id: "today", label: "Today", icon: "home" },
-    { id: "students", label: "Students", icon: "users" },
-    { id: "practice", label: "Practice", icon: "clipboard" },
-    { id: "business", label: "Business", icon: "wallet" },
-    { id: "profile", label: "Profile", icon: "user" },
-  ]
+
+  const childTitle = profileOpen ? "Profile" : module === "sg" ? "Strokes Gained" : module === "drills" ? "Drills" : "Video Analysis"
 
   return (
     <div className="app-stage">
       <div className="phone-shell">
-        {!moduleNavigation && !overlay && (
+        {!module && !coachDiscoveryOpen && !profileOpen && !discoverChildOpen && !overlay && (
           <AppTopBar
-            title={
-              role === "golfer"
-                ? golferItems.find((item) => item.id === golferTab)?.label ?? "Fore"
-                : coachItems.find((item) => item.id === coachTab)?.label ?? "Fore"
-            }
-            initials={role === "golfer" ? "AK" : "SM"}
-            onHome={() => role === "golfer" ? goGolferTab("home") : goCoachTab("today")}
-            onProfile={() => role === "golfer" ? goGolferTab("profile") : goCoachTab("profile")}
+            title={primaryItems.find((item) => item.id === primaryTab)?.label ?? "Discover"}
+            initials="AK"
+            onHome={() => goPrimaryTab("discover")}
+            onProfile={() => setProfileOpen(true)}
           />
         )}
+
+        {module && !overlay && (
+          <AppTopBar title={childTitle} initials="AK" onHome={() => goPrimaryTab("discover")} onProfile={() => setProfileOpen(true)} back={() => setModule(null)} />
+        )}
+
+        {profileOpen && !overlay && (
+          <AppTopBar title="Profile" initials="AK" onHome={() => goPrimaryTab("discover")} onProfile={() => setProfileOpen(true)} back={() => setProfileOpen(false)} />
+        )}
+
         <div className="scroll-area">
-          {role === "golfer" && (
+          {!profileOpen && !module && !coachDiscoveryOpen && (
             <>
-              {golferTab === "home" && <GolferHome go={goGolferTab} />}
-              {golferTab === "discover" && <Discover onModuleStateChange={setModuleNavigation} />}
-              {golferTab === "play" && <Play onModuleStateChange={setModuleNavigation} />}
-              {golferTab === "improve" && <Improve />}
-              {golferTab === "profile" && (
-                <Profile role={role} onSwitch={() => changeRole("coach")} />
-              )}
+              {primaryTab === "discover" && <Discover onModuleStateChange={setDiscoverChildOpen} />}
+              {primaryTab === "performance" && <PerformanceHome openModule={openPerformanceModule} />}
+              {primaryTab === "coach" && <CoachHome openDiscovery={() => setCoachDiscoveryOpen(true)} />}
             </>
           )}
-          {role === "coach" && (
-            <>
-              {coachTab === "today" && <CoachToday go={goCoachTab} />}
-              {coachTab === "students" && (
-                <Students openStudent={() => setOverlay("student")} />
-              )}
-              {coachTab === "practice" && (
-                <CoachPractice openAssign={() => setOverlay("assign")} />
-              )}
-              {coachTab === "business" && <Business />}
-              {coachTab === "profile" && (
-                <Profile role={role} onSwitch={() => changeRole("golfer")} />
-              )}
-            </>
-          )}
+
+          {profileOpen && <Profile role="golfer" onSwitch={() => undefined} />}
+
+          {module === "sg" && <Play onModuleStateChange={() => undefined} />}
+          {module === "drills" && <Improve />}
+          {module === "video" && <VideoAnalysisModule />}
+
+          {coachDiscoveryOpen && <CoachDiscoveryStandalone onClose={() => setCoachDiscoveryOpen(false)} />}
         </div>
-        {role === "golfer" ? (
-          <BottomNav
-            items={golferItems}
-            active={golferTab}
-            onChange={goGolferTab}
-            compact={moduleNavigation}
-          />
-        ) : (
-          <BottomNav
-            items={coachItems}
-            active={coachTab}
-            onChange={goCoachTab}
-            compact={moduleNavigation}
-          />
+
+        {!module && !coachDiscoveryOpen && !profileOpen && !overlay && (
+          <BottomNav items={primaryItems} active={primaryTab} onChange={goPrimaryTab} />
         )}
-        {overlay === "student" && (
-          <StudentDetail
-            close={() => setOverlay(null)}
-            assign={() => setOverlay("assign")}
-          />
-        )}
+
+        {overlay === "student" && <StudentDetail close={() => setOverlay(null)} assign={() => setOverlay("assign")} />}
         {overlay === "assign" && <AssignSheet close={() => setOverlay(null)} />}
       </div>
     </div>
   )
 }
+
+function CoachDiscoveryStandalone({ onClose }: { onClose: () => void }) {
+  const [screen, setScreen] = useState<CourseFlowScreen>("coachDiscover")
+  const [state, setState] = useState<CoachDiscoverState>("ready")
+  const [coachAvailabilityState, setCoachAvailabilityState] = useState<CoachAvailabilityState>("ready")
+  const [lesson, setLesson] = useState("")
+  const [slot, setSlot] = useState("")
+  const [goals, setGoals] = useState<string[]>([])
+  const [plan, setPlan] = useState<"single" | "pack">("single")
+  const [credits, setCredits] = useState(false)
+
+  const go = (next: CourseFlowScreen) => {
+    if (next === "coachDiscover") {
+      setScreen("coachDiscover")
+      return
+    }
+    setScreen(next)
+  }
+
+  const toggleGoal = (goal: string) => {
+    setGoals((current) => current.includes(goal) ? current.filter((item) => item !== goal) : [...current, goal])
+  }
+
+  return (
+    <>
+      {screen === "coachDiscover" && (
+        <main className="screen coach-discovery-standalone">
+          <div className="coach-discovery-heading">
+            <p className="eyebrow">COACHING</p>
+            <h1>Find a coach</h1>
+            <p>Choose someone who fits your game, goals and way of learning.</p>
+          </div>
+          <button className="search-box coach-discovery-search">
+            <Icon name="search" size={19} /><span>Search coaches</span><Icon name="filter" size={17} />
+          </button>
+          <SectionHeading title="Recommended for you" />
+          <div className="coach-booking-list">
+            <CoachCard name="Savdeep Mehta" rating="4.9" price={1800} image={photos.golfer} onOpen={() => go("coachProfile")} />
+            <CoachCard name="Neha Arora" rating="4.8" price={1500} image={photos.golfer} onOpen={() => go("coachProfile")} />
+            <CoachCard name="Imran Qureshi" rating="4.7" price={2200} image={photos.golfer} onOpen={() => go("coachProfile")} />
+          </div>
+        </main>
+      )}
+
+      {screen === "coachProfile" && <CoachProfileScreen go={go} />}
+
+      {screen === "coachLesson" && <CoachLessonTypeScreen go={go} lesson={lesson} setLesson={setLesson} />}
+
+      {screen === "coachDateTime" && (
+        <CoachDateTimeScreen go={go} slot={slot} setSlot={setSlot} state={coachAvailabilityState} setState={setCoachAvailabilityState} />
+      )}
+
+      {screen === "coachNotes" && <CoachNotesScreen go={go} goals={goals} toggleGoal={toggleGoal} />}
+
+      {screen === "coachCheckout" && (
+        <CoachCheckoutScreen go={go} lesson={lesson} slot={slot} plan={plan} setPlan={setPlan} credits={credits} setCredits={setCredits} />
+      )}
+
+      {screen === "coachRequestSent" && <CoachRequestSentScreen go={go} />}
+
+      {screen === "coachBookingPending" && <CoachBookingDetailScreen go={go} status="Pending" />}
+
+      {screen === "coachBookingConfirmed" && <CoachBookingDetailScreen go={go} status="Confirmed" />}
+
+      {screen === "coachDeclined" && (
+        <main className="screen booking-empty-state"><span><Icon name="close" /></span><h2>Request declined</h2><p>The coach wasn't able to accept this request.</p><button className="primary-button" onClick={() => go("coachDiscover")}>Find another coach</button></main>
+      )}
+    </>
+  )
+}
+
+export default App
