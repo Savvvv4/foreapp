@@ -3023,3 +3023,13 @@ small { line-height:1.45; }
 .coach-footer-summary{display:flex;min-width:0;flex-direction:column;justify-content:center;margin-right:auto}
 .coach-footer-summary small{font-size:7px;font-weight:800;letter-spacing:.07em;color:var(--muted)}
 .coach-footer-summary strong{max-width:170px;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px}
+
+
+/* Coaching booking: fast 3-step flow */
+.coach-modern-progress > div { grid-template-columns: repeat(3, 1fr); }
+.coach-fast-options button { min-height: 68px; padding: 12px 14px; }
+.coach-fast-options button small { max-width: 240px; }
+.coach-fast-hint { margin: -4px 0 4px; color: var(--muted); font-size: 13px; }
+.coach-modern-flow .booking-modern-section + .booking-modern-section { margin-top: 14px; }
+.coach-modern-flow .coach-modern-chips { gap: 8px; }
+.coach-modern-flow .coach-modern-textarea { min-height: 84px; }
