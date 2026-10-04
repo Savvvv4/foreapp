@@ -518,7 +518,7 @@ function DiscoverCourses({
     <main className="screen booking-discover-screen">
       <SectionHeading title="Book Again" />
       <BookAgainCourseCard onOpen={() => go("course")} onBook={() => openBooking(delhiCourse)} />
-      <SectionHeading title="Near you" action="See all" onAction={() => go("results")} />
+      <SectionHeading title="Near you" />
       <div className="near-you-course-list">
         <CourseCard onOpen={() => go("course")} onBook={() => openBooking(delhiCourse)} />
         <CourseCard qutub onOpen={() => go("course")} onBook={() => openBooking(qutubCourse)} />
@@ -950,16 +950,14 @@ function RangeDiscoverScreen({
   setMode: (mode: "courses" | "ranges" | "coaches") => void
 }) {
   return (
-    <main className="screen range-discover-screen">
-      <div className="segment discover-segment">
-        <button onClick={() => { setMode("courses"); go("discover") }}>Courses</button>
-        <button className="active">Ranges</button>
-        <button onClick={() => { setMode("coaches"); go("coachDiscover") }}>Coaches</button>
-      </div>
-      <button className="search-box" onClick={openSearch}><Icon name="search" size={19} /><span>Search ranges in Delhi</span><span className="filter-button">Filters</span></button>
-      <SectionHeading title="Ranges near you" action="Map" />
+    <main className="screen booking-discover-screen range-discover-screen">
+      <SectionHeading title="Book Again" />
       <RangeCard onOpen={() => go("rangeProfile")} />
-      <RangeCard qutub onOpen={() => go("rangeProfile")} />
+      <SectionHeading title="Near you" />
+      <div className="near-you-range-list">
+        <RangeCard onOpen={() => go("rangeProfile")} />
+        <RangeCard qutub onOpen={() => go("rangeProfile")} />
+      </div>
     </main>
   )
 }

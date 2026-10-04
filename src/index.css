@@ -2655,3 +2655,13 @@ small { line-height:1.45; }
   width:100%;
   margin-bottom:14px;
 }
+
+
+/* Range discovery mirrors course discovery. */
+.near-you-range-list{
+  display:block;
+}
+.near-you-range-list .range-card{
+  width:100%;
+  margin-bottom:14px;
+}
