@@ -698,93 +698,126 @@ function BookingFlowModal({
 }) {
   const dates = [["Thu","Thursday","20"],["Fri","Friday","21"],["Sat","Saturday","22"],["Sun","Sunday","23"],["Mon","Monday","24"],["Tue","Tuesday","25"],["Wed","Wednesday","26"]] as const
   const slots = ["6:00 AM","6:10 AM","6:20 AM","6:30 AM","6:40 AM","6:50 AM","7:00 AM","7:10 AM","7:20 AM","7:30 AM"]
+  const [paymentMenuOpen, setPaymentMenuOpen] = useState(false)
   const caddyCost = caddyMode === "auto" ? 320 : 0
   const cartCost = cartCount * 800
   const total = course.price + caddyCost + cartCost
   const selectedDate = dates.find(([day,,dayNumber]) => `${day} ${dayNumber}` === date)
   const formattedDate = selectedDate ? `${selectedDate[1]}, ${selectedDate[2]} August` : ""
-  const stepIndex = step === "select" ? 0 : step === "review" ? 1 : 2
+  const canPay = Boolean(date && time)
+  const paymentLabel = paymentMethod === "Net banking" ? "Net banking" : paymentMethod
+  const extras = [
+    caddyMode === "auto" ? "Caddy" : caddyMode === "own" ? "Own caddy" : "",
+    cartCount > 0 ? `${cartCount} cart` : "",
+  ].filter(Boolean)
+  const heroDetail = formattedDate && time
+    ? `${formattedDate} · ${time}${extras.length ? ` · ${extras.join(" · ")}` : ""}`
+    : "Select a day & tee time"
 
   return (
     <div className="booking-flow-backdrop" onClick={close}>
-      <section className="booking-flow-modal booking-clean-modal" role="dialog" aria-modal="true" aria-label={`${course.name} tee-time booking`} onClick={(event) => event.stopPropagation()}>
-        <header className="booking-clean-header">
-          <button type="button" onClick={close} aria-label="Close booking"><Icon name="close" size={21} /></button>
-          <div><span>BOOK TEE TIME</span><strong>{course.name}</strong></div>
-          <button type="button" onClick={goHome} aria-label="Return to home"><Icon name="home" size={20} /></button>
+      <section className="booking-flow-modal booking-modern-modal" role="dialog" aria-modal="true" aria-label={`Book ${course.name}`} onClick={(event) => event.stopPropagation()}>
+        <header className="booking-modern-header">
+          <button type="button" onClick={close} aria-label="Close booking"><Icon name="close" size={22} /></button>
+          <h1>Choose your tee time</h1>
+          <button type="button" onClick={goHome} aria-label="Return to home"><Icon name="home" size={21} /></button>
         </header>
-        <div className="booking-clean-progress" aria-label={`Booking step ${Math.min(stepIndex + 1, 2)} of 2`}>
-          <i className={stepIndex >= 0 ? "active" : ""} /><i className={stepIndex >= 1 ? "active" : ""} />
+
+        <div className="booking-modern-scroll">
+          <section className="booking-modern-hero">
+            <img src={course.image} alt="" />
+            <span className="booking-modern-hero-shade" />
+            <div className="booking-modern-hero-copy">
+              <span className="eyebrow light">{step === "payment" ? "CONFIRMING BOOKING" : "YOUR ROUND"}</span>
+              <strong>{course.name}</strong>
+              <span>{heroDetail}</span>
+            </div>
+          </section>
+
+          {step !== "payment" ? (
+            <div className="booking-modern-content">
+              <section className="booking-modern-section">
+                <div className="booking-modern-section-heading"><h2>Day</h2><span>August</span></div>
+                <div className="booking-modern-dates">
+                  {dates.map(([day,,dayNumber]) => {
+                    const value = `${day} ${dayNumber}`
+                    return (
+                      <button key={dayNumber} type="button" className={date === value ? "selected" : ""} aria-pressed={date === value} onClick={() => { setDate(value); setTime("") }}>
+                        <small>{day}</small>
+                        <strong>{dayNumber}</strong>
+                        <span>Aug</span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </section>
+
+              <section className="booking-modern-section">
+                <div className="booking-modern-section-heading"><h2>Tee time</h2><span>{time || "Choose one"}</span></div>
+                <div className="booking-modern-times">
+                  {slots.map((slotItem,index) => (
+                    <button key={slotItem} type="button" className={time === slotItem ? "selected" : ""} aria-pressed={time === slotItem} onClick={() => setTime(slotItem)}>
+                      <strong>{slotItem}</strong>
+                      <small>{index % 3 === 0 ? "Popular" : `${4-(index%3)} spots`}</small>
+                    </button>
+                  ))}
+                </div>
+              </section>
+
+              <section className="booking-modern-addons">
+                <div className="booking-modern-addon">
+                  <div><h2>Caddy</h2><span>{caddyMode === "auto" ? "₹320" : "Optional"}</span></div>
+                  <div className="booking-modern-choice">
+                    <button type="button" className={caddyMode === "none" ? "selected" : ""} onClick={() => setCaddyMode("none")}>No</button>
+                    <button type="button" className={caddyMode === "auto" ? "selected" : ""} onClick={() => setCaddyMode("auto")}>Add</button>
+                  </div>
+                </div>
+                <div className="booking-modern-addon">
+                  <div><h2>Golf cart</h2><span>{cartCount > 0 ? "₹800" : "Optional"}</span></div>
+                  <div className="booking-modern-choice">
+                    <button type="button" className={cartCount === 0 ? "selected" : ""} onClick={() => setCartCount(0)}>No</button>
+                    <button type="button" className={cartCount > 0 ? "selected" : ""} onClick={() => setCartCount(1)}>Add</button>
+                  </div>
+                </div>
+              </section>
+
+              <div className="booking-modern-policy"><Icon name="shield" size={14} /> Free cancellation up to 24 hours before tee time.</div>
+            </div>
+          ) : (
+            <div className="booking-modern-processing">
+              <span><Icon name="loader" size={30} /></span>
+              <h2>Securing your tee time</h2>
+              <p>Confirming your booking at {course.name}.</p>
+            </div>
+          )}
         </div>
 
-        <div className="booking-clean-content">
-          {step === "select" && <>
-            <div className="booking-clean-heading">
-              <span>1 OF 2</span><h2>Choose your tee time</h2><p>Select a day and available time.</p>
+        {step !== "payment" && (
+          <footer className="booking-modern-footer">
+            <div className="booking-modern-payment-wrap">
+              {paymentMenuOpen && (
+                <div className="booking-modern-payment-menu" role="menu">
+                  {["UPI","Card","Net banking"].map((method) => (
+                    <button key={method} type="button" className={paymentMethod === method ? "selected" : ""} onClick={() => { setPaymentMethod(method); setPaymentMenuOpen(false) }}>
+                      <span>{method}</span>
+                      {paymentMethod === method && <Icon name="check" size={15} />}
+                    </button>
+                  ))}
+                </div>
+              )}
+              <button type="button" className="booking-modern-payment-selector" onClick={() => setPaymentMenuOpen((open) => !open)} aria-expanded={paymentMenuOpen}>
+                <span className="booking-modern-payment-icon"><Icon name="wallet" size={18} /></span>
+                <span><small>PAY USING</small><strong>{paymentLabel}</strong></span>
+                <Icon name="chevron" size={16} />
+              </button>
             </div>
-            <section className="booking-clean-section">
-              <div className="booking-clean-section-title"><h3>Day</h3><span>August</span></div>
-              <div className="booking-clean-dates">
-                {dates.map(([day,,dayNumber]) => {
-                  const value = `${day} ${dayNumber}`
-                  return <button key={dayNumber} type="button" className={date === value ? "selected" : ""} aria-pressed={date === value} onClick={() => { setDate(value); setTime("") }}>
-                    <small>{day}</small><strong>{dayNumber}</strong>
-                  </button>
-                })}
-              </div>
-            </section>
-            <section className="booking-clean-section booking-clean-times-section">
-              <div className="booking-clean-section-title"><h3>Tee time</h3><span>{time || "Choose one"}</span></div>
-              <div className="booking-clean-times">
-                {slots.map((slotItem,index) => <button key={slotItem} type="button" className={time === slotItem ? "selected" : ""} aria-pressed={time === slotItem} onClick={() => setTime(slotItem)}>
-                  <strong>{slotItem}</strong><small>{index % 3 === 0 ? "Popular" : `${4-(index%3)} spots`}</small>
-                </button>)}
-              </div>
-            </section>
-          </>}
-
-          {step === "review" && <>
-            <div className="booking-clean-heading booking-clean-review-heading">
-              <span>2 OF 2</span><h2>Review & pay</h2><p>Check your tee time and extras before paying.</p>
-            </div>
-            <section className="booking-clean-summary">
-              <div><small>TEE TIME</small><strong>{formattedDate}</strong><span>{time}</span></div>
-              <button type="button" onClick={() => setStep("select")}>Change</button>
-            </section>
-            <section className="booking-clean-section booking-clean-extras">
-              <div className="booking-clean-section-title"><h3>Extras</h3><span>Optional</span></div>
-              <div className="booking-clean-option">
-                <span><strong>Caddy</strong><small>₹320</small></span>
-                <div><button type="button" className={caddyMode === "none" ? "selected" : ""} onClick={() => setCaddyMode("none")}>No</button><button type="button" className={caddyMode === "auto" ? "selected" : ""} onClick={() => setCaddyMode("auto")}>Add</button></div>
-              </div>
-              <div className="booking-clean-option">
-                <span><strong>Golf cart</strong><small>₹800</small></span>
-                <div><button type="button" className={cartCount === 0 ? "selected" : ""} onClick={() => setCartCount(0)}>No</button><button type="button" className={cartCount > 0 ? "selected" : ""} onClick={() => setCartCount(1)}>Add</button></div>
-              </div>
-            </section>
-            <section className="booking-clean-total">
-              <div><span>Green fee</span><strong>₹{course.price.toLocaleString("en-IN")}</strong></div>
-              {caddyCost > 0 && <div><span>Caddy</span><strong>₹{caddyCost.toLocaleString("en-IN")}</strong></div>}
-              {cartCost > 0 && <div><span>Golf cart</span><strong>₹{cartCost.toLocaleString("en-IN")}</strong></div>}
-              <div className="booking-clean-total-row"><span>Total</span><strong>₹{total.toLocaleString("en-IN")}</strong></div>
-            </section>
-            <section className="booking-clean-payment">
-              <div className="booking-clean-section-title"><h3>Payment</h3><span>Charged on confirmation</span></div>
-              <div className="booking-clean-payment-options">
-                {["UPI","Card","Net banking"].map((method) => <button key={method} type="button" className={paymentMethod === method ? "selected" : ""} aria-pressed={paymentMethod === method} onClick={() => setPaymentMethod(method)}>{method}</button>)}
-              </div>
-            </section>
-            <p className="booking-clean-trust"><Icon name="shield" size={14} />Free cancellation up to 24 hours before tee time.</p>
-          </>}
-
-          {step === "payment" && <div className="booking-clean-processing"><span><Icon name="loader" size={28} /></span><h2>Securing your tee time</h2><p>Confirming your booking at {course.name}.</p></div>}
-        </div>
-
-        {step !== "payment" && <footer className="booking-clean-footer">
-          <button type="button" className="primary-button" disabled={step === "select" && (!date || !time)} onClick={() => step === "select" ? setStep("review") : pay()}>
-            {step === "select" ? "Continue to review" : `Pay ₹${total.toLocaleString("en-IN")}`}
-          </button>
-        </footer>}
+            <button type="button" className="booking-modern-pay-button" disabled={!canPay} onClick={pay}>
+              <span>Pay</span>
+              <strong>₹{total.toLocaleString("en-IN")}</strong>
+              <Icon name="arrow" size={17} />
+            </button>
+          </footer>
+        )}
       </section>
     </div>
   )
@@ -1547,7 +1580,7 @@ function CourseBookingPrototype({
     setCourseCaddyMode("none")
     setCourseCartCount(0)
     setCoursePaymentMethod("UPI")
-    setBookingStep(slot ? "review" : "select")
+    setBookingStep("select")
     setBookingOpen(true)
     setHoldSeconds(600)
   }
