@@ -292,12 +292,65 @@ function GolferHome({ go }: { go: (tab: GolferTab) => void }) {
   )
 }
 
+type DiscoverSection = "Courses" | "Ranges" | "Coaches"
+
 function Discover({
   onModuleStateChange,
+  initialSection,
 }: {
-  onModuleStateChange: (active: boolean) => void
+  onModuleStateChange: (active: boolean, section?: DiscoverSection) => void
+  initialSection: DiscoverSection
 }) {
-  return <CourseBookingPrototype onModuleStateChange={onModuleStateChange} />
+  return <CourseBookingPrototype onModuleStateChange={onModuleStateChange} initialSection={initialSection} />
+}
+
+function DiscoverHome({
+  openDiscover,
+}: {
+  openDiscover: (section: DiscoverSection) => void
+}) {
+  return (
+    <main className="screen discover-home-screen">
+      <div className="discover-home-welcome">
+        <div>
+          <p className="eyebrow">THURSDAY, 20 AUGUST</p>
+          <h1>Good morning, Alex</h1>
+          <p>What do you want to do today?</p>
+        </div>
+        <Avatar initials="AK" />
+      </div>
+
+      <button className="next-card discover-home-round" type="button">
+        <img src={photos.course} alt="Delhi Golf Club fairway" />
+        <span className="image-shade" />
+        <span className="next-card-copy">
+          <span className="eyebrow light">NEXT ROUND · TOMORROW</span>
+          <strong>Delhi Golf Club</strong>
+          <span>7:30 AM · 18 holes · 4 players</span>
+          <span className="round-link">View round <Icon name="arrow" size={16} /></span>
+        </span>
+      </button>
+
+      <SectionHeading title="Find your next golf experience" />
+      <div className="discover-home-actions">
+        <button type="button" onClick={() => openDiscover("Courses")}>
+          <span className="discover-home-action-icon"><Icon name="search" size={22} /></span>
+          <span><strong>Find a course</strong><small>Browse courses and book a tee time</small></span>
+          <Icon name="chevron" size={20} />
+        </button>
+        <button type="button" onClick={() => openDiscover("Ranges")}>
+          <span className="discover-home-action-icon"><Icon name="flag" size={22} /></span>
+          <span><strong>Find a range</strong><small>Find a range and book a practice bay</small></span>
+          <Icon name="chevron" size={20} />
+        </button>
+        <button type="button" onClick={() => openDiscover("Coaches")}>
+          <span className="discover-home-action-icon"><Icon name="users" size={22} /></span>
+          <span><strong>Find a coach</strong><small>Discover coaches and start learning</small></span>
+          <Icon name="chevron" size={20} />
+        </button>
+      </div>
+    </main>
+  )
 }
 
 type CourseFlowScreen =
@@ -1418,11 +1471,17 @@ function SignInSheet({
 
 function CourseBookingPrototype({
   onModuleStateChange,
+  initialSection,
 }: {
-  onModuleStateChange: (active: boolean) => void
+  onModuleStateChange: (active: boolean, section?: DiscoverSection) => void
+  initialSection: DiscoverSection
 }) {
-  const [screen, setScreen] = useState<CourseFlowScreen>("discover")
-  const [mode, setMode] = useState<"courses" | "ranges" | "coaches">("courses")
+  const initialScreen: CourseFlowScreen =
+    initialSection === "Ranges" ? "rangeDiscover" :
+    initialSection === "Coaches" ? "coachDiscover" : "discover"
+  const initialMode = initialSection === "Ranges" ? "ranges" : initialSection === "Coaches" ? "coaches" : "courses"
+  const [screen, setScreen] = useState<CourseFlowScreen>(initialScreen)
+  const [mode, setMode] = useState<"courses" | "ranges" | "coaches">(initialMode)
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [locationDenied, setLocationDenied] = useState(false)
@@ -1474,7 +1533,9 @@ function CourseBookingPrototype({
   }, [screen])
 
   useEffect(() => {
-    onModuleStateChange(screen !== "discover" || bookingOpen || filtersOpen || searchOpen || paymentOpen)
+    const active = screen !== "discover" || bookingOpen || filtersOpen || searchOpen || paymentOpen
+    const section: DiscoverSection = screen.startsWith("range") ? "Ranges" : screen.startsWith("coach") ? "Coaches" : "Courses"
+    onModuleStateChange(active, section)
   }, [screen, bookingOpen, filtersOpen, searchOpen, paymentOpen, onModuleStateChange])
 
   const go = (next: CourseFlowScreen) => {
@@ -2410,6 +2471,7 @@ function App() {
   const [module, setModule] = useState<"sg" | "drills" | "video" | null>(null)
   const [coachDiscoveryOpen, setCoachDiscoveryOpen] = useState(false)
   const [discoverChildOpen, setDiscoverChildOpen] = useState(false)
+  const [discoverSection, setDiscoverSection] = useState<DiscoverSection>("Courses")
   const [overlay, setOverlay] = useState<"student" | "assign" | null>(null)
 
   const goPrimaryTab = (tab: PrimaryTab) => {
@@ -2426,6 +2488,21 @@ function App() {
     setProfileOpen(false)
   }
 
+  const openDiscover = (section: DiscoverSection) => {
+    setPrimaryTab("discover")
+    setProfileOpen(false)
+    setModule(null)
+    setCoachDiscoveryOpen(false)
+    setDiscoverSection(section)
+    setDiscoverChildOpen(true)
+    setOverlay(null)
+  }
+
+  const closeDiscover = () => {
+    setDiscoverChildOpen(false)
+    setDiscoverSection("Courses")
+  }
+
   const primaryItems: { id: PrimaryTab; label: string; icon: IconName }[] = [
     { id: "discover", label: "Discover", icon: "search" },
     { id: "performance", label: "Performance", icon: "chart" },
@@ -2439,10 +2516,20 @@ function App() {
       <div className="phone-shell">
         {!module && !coachDiscoveryOpen && !profileOpen && !discoverChildOpen && !overlay && (
           <AppTopBar
-            title={primaryItems.find((item) => item.id === primaryTab)?.label ?? "Discover"}
+            title={primaryTab === "discover" ? "Home" : primaryItems.find((item) => item.id === primaryTab)?.label ?? "Discover"}
             initials="AK"
             onHome={() => goPrimaryTab("discover")}
             onProfile={() => setProfileOpen(true)}
+          />
+        )}
+
+        {discoverChildOpen && !module && !coachDiscoveryOpen && !profileOpen && !overlay && (
+          <AppTopBar
+            title={discoverSection}
+            initials="AK"
+            onHome={() => goPrimaryTab("discover")}
+            onProfile={() => setProfileOpen(true)}
+            back={closeDiscover}
           />
         )}
 
