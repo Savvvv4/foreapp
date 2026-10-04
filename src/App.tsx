@@ -313,9 +313,8 @@ function DiscoverHome({
     <main className="screen discover-home-screen">
       <div className="discover-home-welcome">
         <div>
-          <p className="eyebrow">THURSDAY, 20 AUGUST</p>
-          <h1>Good morning, Alex</h1>
-          <p>What do you want to do today?</p>
+          <p className="eyebrow">YOUR NEXT MOVE</p>
+          <h1>What are you looking for?</h1>
         </div>
         <Avatar initials="AK" />
       </div>
@@ -331,28 +330,27 @@ function DiscoverHome({
         </span>
       </button>
 
-      <SectionHeading title="Find your next golf experience" />
+      <SectionHeading title="Find & book" />
       <div className="discover-home-actions">
         <button type="button" onClick={() => openDiscover("Courses")}>
-          <span className="discover-home-action-icon"><Icon name="search" size={22} /></span>
-          <span><strong>Find a course</strong><small>Browse courses and book a tee time</small></span>
+          <span className="discover-home-action-icon"><Icon name="flag" size={22} /></span>
+          <span><strong>Book a tee time</strong><small>Find a course and book your next round</small></span>
           <Icon name="chevron" size={20} />
         </button>
         <button type="button" onClick={() => openDiscover("Ranges")}>
-          <span className="discover-home-action-icon"><Icon name="flag" size={22} /></span>
-          <span><strong>Find a range</strong><small>Find a range and book a practice bay</small></span>
+          <span className="discover-home-action-icon"><Icon name="map" size={22} /></span>
+          <span><strong>Book a range</strong><small>Find a range and reserve a practice bay</small></span>
           <Icon name="chevron" size={20} />
         </button>
         <button type="button" onClick={() => openDiscover("Coaches")}>
           <span className="discover-home-action-icon"><Icon name="users" size={22} /></span>
-          <span><strong>Find a coach</strong><small>Discover coaches and start learning</small></span>
+          <span><strong>Find a coach</strong><small>Discover coaches and choose how to learn</small></span>
           <Icon name="chevron" size={20} />
         </button>
       </div>
     </main>
   )
 }
-
 type CourseFlowScreen =
   | "discover"
   | "results"

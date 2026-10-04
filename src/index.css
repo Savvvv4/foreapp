@@ -2054,22 +2054,21 @@ small { line-height:1.45; }
 .coach-discovery-standalone .course-profile-screen{margin:-26px -20px -110px;min-height:100%}
 @media(max-width:520px){.architecture-home{padding-top:22px}.performance-module-list>button{min-height:88px}.video-analysis-hero .video-thumb{height:170px}}
 
-/* Discover home: a simple entry point before the three discovery modules. */
+/* Discover home: focused entry point before the three discovery modules. */
 .discover-home-screen{padding:26px 20px 118px}
 .discover-home-welcome{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin:8px 0 24px}
 .discover-home-welcome>div{min-width:0}
 .discover-home-welcome .eyebrow{margin:0 0 7px}
-.discover-home-welcome h1{margin:0;color:var(--color-ink);font-size:30px;line-height:1.08;letter-spacing:-.04em}
-.discover-home-welcome p:last-child{margin:8px 0 0;color:var(--color-muted);font-size:14px}
-.discover-home-welcome .avatar{width:56px;height:56px;flex:0 0 56px}
-.discover-home-round{margin-bottom:26px}
+.discover-home-welcome h1{margin:0;color:var(--color-ink);font-size:28px;line-height:1.1;letter-spacing:-.035em}
+.discover-home-welcome .avatar{width:52px;height:52px;flex:0 0 52px}
+.discover-home-round{margin-bottom:24px}
 .discover-home-screen .section-heading{margin:0 0 11px}
 .discover-home-screen .section-heading h2{font-size:14px;letter-spacing:-.01em}
 .discover-home-actions{display:grid;gap:10px}
-.discover-home-actions>button{width:100%;min-height:88px;display:grid;grid-template-columns:50px minmax(0,1fr) 24px;align-items:center;gap:13px;padding:14px 15px;border:1px solid var(--color-border);border-radius:18px;background:var(--color-surface);color:var(--color-ink);text-align:left;box-shadow:0 8px 24px rgba(36,31,27,.04)}
+.discover-home-actions>button{width:100%;min-height:92px;display:grid;grid-template-columns:50px minmax(0,1fr) 24px;align-items:center;gap:13px;padding:14px 15px;border:1px solid var(--color-border);border-radius:18px;background:var(--color-surface);color:var(--color-ink);text-align:left;box-shadow:0 8px 24px rgba(36,31,27,.04)}
 .discover-home-actions>button:active{transform:translateY(1px);background:var(--color-surface-subtle)}
 .discover-home-action-icon{width:50px;height:50px;display:grid;place-items:center;border-radius:15px;background:var(--color-brand-soft);color:var(--color-brand-dark)}
 .discover-home-actions>button>span:nth-child(2){min-width:0;display:flex;flex-direction:column;gap:4px}
-.discover-home-actions strong{font-size:16px;line-height:1.2}
+.discover-home-actions strong{font-size:17px;line-height:1.2}
 .discover-home-actions small{color:var(--color-muted);font-size:12px;line-height:1.35}
 .discover-home-actions>button>.icon{color:var(--color-muted)}
