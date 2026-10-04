@@ -701,24 +701,7 @@ function BookingFlowModal({
   ].join(" · ")
 
   return (
-    <div
-      className="booking-flow-backdrop"
-      style={{
-        backgroundImage: `linear-gradient(180deg,rgba(22,29,24,.12),rgba(22,29,24,.34)),url("${course.image}")`,
-      }}
-      onClick={close}
-    >
-      <button
-        className="booking-home-button"
-        onClick={goHome}
-        aria-label="Back to home"
-      >
-        <Icon name="home" size={18} />
-      </button>
-      <div className="booking-course-backdrop-copy">
-        <strong>{course.name}</strong>
-        <div>{bookingSummary}</div>
-      </div>
+    <div className="booking-flow-backdrop" onClick={close}>
 
       <section
         className="booking-flow-modal"
