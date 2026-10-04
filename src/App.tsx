@@ -702,9 +702,9 @@ function BookingFlowModal({
     cartCount > 0 ? `${cartCount} cart` : "",
   ].filter(Boolean)
   const heroDetail = !date
-    ? "Select a day and time"
+    ? ""
     : !time
-      ? `${formattedDate} · Select a tee time`
+      ? `${formattedDate}`
       : `${formattedDate} · ${time}${extras.length ? ` · ${extras.join(" · ")}` : ""}`
 
   return (
@@ -723,7 +723,7 @@ function BookingFlowModal({
           <div className="booking-modern-hero-copy">
             <span className="eyebrow light">{step === "payment" ? "CONFIRMING BOOKING" : "YOUR ROUND"}</span>
             <strong>{course.name}</strong>
-            <span>{heroDetail}</span>
+            {heroDetail && <span>{heroDetail}</span>}
           </div>
         </section>
 
@@ -748,10 +748,9 @@ function BookingFlowModal({
               <section className="booking-modern-section">
                 <div className="booking-modern-section-heading"><h2>Tee time</h2><span>{time || "Select a time"}</span></div>
                 <div className="booking-modern-times">
-                  {slots.map((slotItem,index) => (
+                  {slots.map((slotItem) => (
                     <button key={slotItem} type="button" className={time === slotItem ? "selected" : ""} aria-pressed={time === slotItem} onClick={() => setTime(slotItem)}>
                       <strong>{slotItem}</strong>
-                      <small>{index % 3 === 0 ? "Popular" : `${4-(index%3)} spots`}</small>
                     </button>
                   ))}
                 </div>
