@@ -1434,11 +1434,9 @@ function CoachLessonTypeScreen({ go, lesson, setLesson }: { go: (screen: CourseF
           </div>
         </section>
         <div className="booking-modern-content coach-premium-content">
-          <div className="coach-premium-step"><span>01</span><strong>Lesson</strong><i /><em>03</em></div>
           <section className="coach-premium-section">
             <div className="coach-premium-heading">
               <h2>Choose a lesson</h2>
-              <span>All prices include the session</span>
             </div>
             <div className="coach-premium-options">
               {lessons.map(([title, duration, cost, copy]) => (
@@ -1484,7 +1482,6 @@ function CoachDateTimeScreen({ go, date, setDate, slot, setSlot, state, setState
           </div>
         </section>
         <div className="booking-modern-content coach-premium-content">
-          <div className="coach-premium-step"><span>02</span><strong>Time</strong><i /><em>03</em></div>
           <section className="coach-premium-section">
             <div className="coach-premium-heading">
               <h2>Pick a day</h2>
@@ -1534,11 +1531,9 @@ function CoachDateTimeScreen({ go, date, setDate, slot, setSlot, state, setState
   )
 }
 
-function CoachCheckoutScreen({ go, lesson, date, slot, goals, toggleGoal, notes, setNotes, plan, setPlan, credits, setCredits }: { go:(screen:CourseFlowScreen)=>void; lesson:string; date:string; slot:string; goals:string[]; toggleGoal:(goal:string)=>void; notes:string; setNotes:(notes:string)=>void; plan:"single"|"pack"; setPlan:(plan:"single"|"pack")=>void; credits:boolean; setCredits:(credits:boolean)=>void }) {
+function CoachCheckoutScreen({ go, lesson, date, slot, goals, toggleGoal, notes, setNotes }: { go:(screen:CourseFlowScreen)=>void; lesson:string; date:string; slot:string; goals:string[]; toggleGoal:(goal:string)=>void; notes:string; setNotes:(notes:string)=>void }) {
   const singlePrice=lesson==="Playing lesson"?3500:lesson==="Junior lesson"?1500:1800
-  const subtotal=plan==="pack"?19440:singlePrice
-  const creditValue=credits?Math.min(1740,subtotal):0
-  const total=subtotal-creditValue
+  const total=singlePrice
   const dayLabel=date==="20"?"Thu":date==="22"?"Sat":date==="23"?"Sun":date==="24"?"Mon":"Fri"
 
   return (
@@ -1557,7 +1552,6 @@ function CoachCheckoutScreen({ go, lesson, date, slot, goals, toggleGoal, notes,
           </div>
         </section>
         <div className="booking-modern-content coach-premium-content">
-          <div className="coach-premium-step"><span>03</span><strong>Confirm</strong><i /><em>03</em></div>
 
           <section className="coach-premium-summary">
             <div className="coach-premium-summary-main">
@@ -1582,18 +1576,6 @@ function CoachCheckoutScreen({ go, lesson, date, slot, goals, toggleGoal, notes,
                 ))}
               </div>
               <textarea value={notes} onChange={event=>setNotes(event.target.value)} placeholder="Anything you'd like Savdeep to know?" />
-            </div>
-          </details>
-
-          <details className="coach-premium-details">
-            <summary>Payment <span>₹{total.toLocaleString("en-IN")}</span></summary>
-            <div className="coach-premium-details-body">
-              <div className="coach-premium-payment-options">
-                <button type="button" className={plan==="single"?"selected":""} onClick={()=>setPlan("single")}><span><strong>Single lesson</strong><small>Charged only if accepted</small></span><b>₹{singlePrice.toLocaleString("en-IN")}</b></button>
-                <button type="button" className={plan==="pack"?"selected":""} onClick={()=>setPlan("pack")}><span><strong>12-lesson pack</strong><small>Save 10% · Flexible scheduling</small></span><b>₹19,440</b></button>
-              </div>
-              <div className="coach-premium-credit-row"><span>Use Fore! credits</span><button type="button" className={"checkout-toggle "+(credits?"on":"")} onClick={()=>setCredits(!credits)}><i/></button></div>
-              <div className="coach-premium-total"><span>Total</span><strong>₹{total.toLocaleString("en-IN")}</strong></div>
             </div>
           </details>
 
@@ -1803,8 +1785,6 @@ function CourseBookingPrototype({
   const [coachSlot, setCoachSlot] = useState("")
   const [coachGoals, setCoachGoals] = useState<string[]>([])
   const [coachNotes, setCoachNotes] = useState("")
-  const [coachPlan, setCoachPlan] = useState<"single" | "pack">("single")
-  const [coachCredits, setCoachCredits] = useState(false)
 
   useEffect(() => {
     if (screen !== "rangeCheckout" || holdSeconds <= 0) return
@@ -1879,7 +1859,7 @@ function CourseBookingPrototype({
       {screen === "coachProfile" && <CoachProfileScreen go={go} />}
       {screen === "coachLesson" && <CoachLessonTypeScreen go={go} lesson={coachLesson} setLesson={setCoachLesson} />}
       {screen === "coachDateTime" && <CoachDateTimeScreen go={go} date={coachDate} setDate={setCoachDate} slot={coachSlot} setSlot={setCoachSlot} state={coachAvailabilityState} setState={setCoachAvailabilityState} />}
-      {screen === "coachCheckout" && <CoachCheckoutScreen go={go} lesson={coachLesson} date={coachDate} slot={coachSlot} goals={coachGoals} toggleGoal={(goal) => setCoachGoals((items) => items.includes(goal) ? items.filter((item) => item !== goal) : [...items, goal])} notes={coachNotes} setNotes={setCoachNotes} plan={coachPlan} setPlan={setCoachPlan} credits={coachCredits} setCredits={setCoachCredits} />}
+      {screen === "coachCheckout" && <CoachCheckoutScreen go={go} lesson={coachLesson} date={coachDate} slot={coachSlot} goals={coachGoals} toggleGoal={(goal) => setCoachGoals((items) => items.includes(goal) ? items.filter((item) => item !== goal) : [...items, goal])} notes={coachNotes} setNotes={setCoachNotes} />}
       {screen === "coachRequestSent" && <CoachRequestSentScreen go={go} />}
       {screen === "coachBookingPending" && <CoachBookingDetailScreen go={go} status="Pending" />}
       {screen === "coachBookingConfirmed" && <CoachBookingDetailScreen go={go} status="Confirmed" />}

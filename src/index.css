@@ -3148,3 +3148,30 @@ small { line-height:1.45; }
   .coach-premium-times{grid-template-columns:repeat(2,1fr)}
   .coach-premium-footer{left:0!important;right:0!important;bottom:0!important;border-radius:0!important}
 }
+
+/* Coaching booking footer alignment */
+.coach-premium-footer{
+  display:block!important;
+  left:12px!important;
+  right:12px!important;
+  width:auto!important;
+  box-sizing:border-box;
+}
+.coach-premium-footer .booking-modern-pay-button{
+  display:flex!important;
+  width:100%!important;
+  min-width:0!important;
+  margin:0!important;
+  align-items:center!important;
+  justify-content:center!important;
+  box-sizing:border-box;
+}
+@media(max-width:520px){
+  .coach-premium-footer{
+    left:12px!important;
+    right:12px!important;
+    width:auto!important;
+    padding:8px!important;
+    border-radius:18px!important;
+  }
+}
