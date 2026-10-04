@@ -2055,68 +2055,277 @@ small { line-height:1.45; }
 @media(max-width:520px){.architecture-home{padding-top:22px}.performance-module-list>button{min-height:88px}.video-analysis-hero .video-thumb{height:170px}}
 
 /* Modern unified tee-time booking flow. */
-.booking-modern-modal{height:min(820px,94%);max-height:94%;display:flex;flex-direction:column;overflow:hidden;border-radius:28px 28px 0 0;background:var(--color-bg)}
-.booking-modern-header{height:68px;flex:0 0 68px;display:grid;grid-template-columns:48px minmax(0,1fr) 48px;align-items:center;padding:0 12px;border-bottom:1px solid var(--color-border);background:var(--color-surface)}
-.booking-modern-header button{width:44px;height:44px;display:grid;place-items:center;border:0;border-radius:13px;background:transparent;color:var(--color-ink-soft)}
-.booking-modern-header button:active{background:var(--color-surface-subtle)}
-.booking-modern-header h1{margin:0;text-align:center;color:var(--color-ink);font-size:18px;line-height:1.2;letter-spacing:-.025em}
-.booking-modern-scroll{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding-bottom:18px}
-.booking-modern-hero{position:relative;height:190px;overflow:hidden}
+.booking-flow-page{
+  position:absolute;
+  inset:0;
+  z-index:100;
+  display:flex;
+  flex-direction:column;
+  min-height:100%;
+  overflow:hidden;
+  background:var(--color-bg);
+}
+.booking-flow-page .flow-page-header{
+  position:relative;
+  z-index:2;
+  flex:0 0 68px;
+  background:var(--color-surface);
+}
+.booking-modern-scroll{
+  flex:1;
+  min-height:0;
+  overflow:auto;
+  overscroll-behavior:contain;
+  padding-bottom:18px;
+}
+.booking-modern-hero{
+  position:relative;
+  height:240px;
+  overflow:hidden;
+}
 .booking-modern-hero img{width:100%;height:100%;object-fit:cover}
-.booking-modern-hero-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.08) 10%,rgba(0,0,0,.62) 100%)}
-.booking-modern-hero-copy{position:absolute;left:22px;right:22px;bottom:20px;display:flex;flex-direction:column;gap:4px;color:white}
+.booking-modern-hero-shade{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.04) 12%,rgba(0,0,0,.68) 100%);
+}
+.booking-modern-hero-copy{
+  position:absolute;
+  left:22px;
+  right:22px;
+  bottom:22px;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  color:white;
+}
 .booking-modern-hero-copy .eyebrow{margin:0 0 2px}
-.booking-modern-hero-copy strong{font-size:28px;line-height:1.08;letter-spacing:-.035em}
-.booking-modern-hero-copy>span:last-child{font-size:13px;line-height:1.35;color:rgba(255,255,255,.9)}
-.booking-modern-content{padding:20px 18px 8px}
+.booking-modern-hero-copy strong{font-size:30px;line-height:1.08;letter-spacing:-.035em}
+.booking-modern-hero-copy>span:last-child{font-size:13px;line-height:1.4;color:rgba(255,255,255,.92)}
+.booking-modern-content{padding:22px 18px 8px}
 .booking-modern-section{margin-bottom:22px}
-.booking-modern-section-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+.booking-modern-section-heading{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:10px;
+}
 .booking-modern-section-heading h2{margin:0;font-size:17px;letter-spacing:-.02em}
 .booking-modern-section-heading span{color:var(--color-muted);font-size:12px}
-.booking-modern-dates{display:flex;gap:8px;overflow-x:auto;padding:1px 1px 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.booking-modern-dates{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:1px 1px 4px;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+}
 .booking-modern-dates::-webkit-scrollbar{display:none}
-.booking-modern-dates button{width:64px;min-width:64px;height:78px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;border:1px solid var(--color-border);border-radius:16px;background:var(--color-surface);color:var(--color-ink-soft)}
-.booking-modern-dates button.selected{border:2px solid var(--color-brand);background:var(--color-brand-soft);color:var(--color-brand-dark)}
-.booking-modern-dates small{font-size:10px}.booking-modern-dates strong{font-size:22px;line-height:1.05}.booking-modern-dates span{font-size:9px;color:var(--color-muted)}
+.booking-modern-dates button{
+  width:64px;
+  min-width:64px;
+  height:78px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:1px;
+  border:1px solid var(--color-border);
+  border-radius:16px;
+  background:var(--color-surface);
+  color:var(--color-ink-soft);
+}
+.booking-modern-dates button.selected{
+  border:2px solid var(--color-brand);
+  background:var(--color-brand-soft);
+  color:var(--color-brand-dark);
+}
+.booking-modern-dates small{font-size:10px}
+.booking-modern-dates strong{font-size:22px;line-height:1.05}
+.booking-modern-dates span{font-size:9px;color:var(--color-muted)}
 .booking-modern-dates button.selected span{color:var(--color-brand-dark)}
 .booking-modern-times{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.booking-modern-times button{min-height:62px;padding:8px 5px;border:1px solid var(--color-border);border-radius:15px;background:var(--color-surface);color:var(--color-ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
-.booking-modern-times button.selected{border:2px solid var(--color-brand);background:var(--color-brand-soft);color:var(--color-brand-dark)}
-.booking-modern-times strong{font-size:15px;line-height:1.1}.booking-modern-times small{color:var(--color-muted);font-size:10px}.booking-modern-times button.selected small{color:var(--color-brand-dark)}
-.booking-modern-addons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:16px}
-.booking-modern-addon{padding:13px;border:1px solid var(--color-border);border-radius:17px;background:var(--color-surface)}
-.booking-modern-addon>div:first-child{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:10px}
-.booking-modern-addon h2{margin:0;font-size:14px}.booking-modern-addon span{color:var(--color-muted);font-size:10px}
+.booking-modern-times button{
+  min-height:62px;
+  padding:8px 5px;
+  border:1px solid var(--color-border);
+  border-radius:15px;
+  background:var(--color-surface);
+  color:var(--color-ink);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+}
+.booking-modern-times button.selected{
+  border:2px solid var(--color-brand);
+  background:var(--color-brand-soft);
+  color:var(--color-brand-dark);
+}
+.booking-modern-times strong{font-size:15px;line-height:1.1}
+.booking-modern-times small{color:var(--color-muted);font-size:10px}
+.booking-modern-times button.selected small{color:var(--color-brand-dark)}
+.booking-modern-addons{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin-bottom:16px;
+}
+.booking-modern-addon{
+  padding:13px;
+  border:1px solid var(--color-border);
+  border-radius:17px;
+  background:var(--color-surface);
+}
+.booking-modern-addon>div:first-child{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:10px;
+}
+.booking-modern-addon h2{margin:0;font-size:14px}
+.booking-modern-addon span{color:var(--color-muted);font-size:10px}
 .booking-modern-choice{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
-.booking-modern-choice button{min-height:40px;border:1px solid var(--color-border);border-radius:11px;background:var(--color-surface);font-size:11px;font-weight:750}
-.booking-modern-choice button.selected{border-color:var(--color-brand);background:var(--color-brand-soft);color:var(--color-brand-dark)}
-.booking-modern-policy{display:flex;align-items:center;gap:7px;color:var(--color-muted);font-size:10px;line-height:1.4;padding:0 2px}
+.booking-modern-choice button{
+  min-height:40px;
+  border:1px solid var(--color-border);
+  border-radius:11px;
+  background:var(--color-surface);
+  font-size:11px;
+  font-weight:750;
+}
+.booking-modern-choice button.selected{
+  border-color:var(--color-brand);
+  background:var(--color-brand-soft);
+  color:var(--color-brand-dark);
+}
+.booking-modern-policy{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:var(--color-muted);
+  font-size:10px;
+  line-height:1.4;
+  padding:0 2px;
+}
 .booking-modern-policy .icon{color:var(--color-brand-dark);flex:0 0 auto}
-.booking-modern-processing{min-height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center}
-.booking-modern-processing>span{width:56px;height:56px;display:grid;place-items:center;border-radius:18px;background:var(--color-brand-soft);color:var(--color-brand-dark)}
+.booking-modern-processing{
+  min-height:300px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:40px 24px;
+  text-align:center;
+}
+.booking-modern-processing>span{
+  width:56px;
+  height:56px;
+  display:grid;
+  place-items:center;
+  border-radius:18px;
+  background:var(--color-brand-soft);
+  color:var(--color-brand-dark);
+}
 .booking-modern-processing h2{margin:16px 0 5px;font-size:22px}
 .booking-modern-processing p{margin:0;color:var(--color-muted);font-size:13px}
-.booking-modern-footer{position:relative;z-index:20;display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,.95fr);gap:8px;align-items:center;padding:10px 12px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--color-border);background:rgba(255,255,255,.98);box-shadow:0 -8px 28px rgba(36,31,27,.07)}
+.booking-modern-footer{
+  position:relative;
+  z-index:20;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(150px,.95fr);
+  gap:8px;
+  align-items:center;
+  padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+  border-top:1px solid var(--color-border);
+  background:rgba(255,255,255,.98);
+  box-shadow:0 -8px 28px rgba(36,31,27,.07);
+}
 .booking-modern-payment-wrap{position:relative;min-width:0}
-.booking-modern-payment-selector{width:100%;min-height:56px;display:grid;grid-template-columns:36px minmax(0,1fr) 18px;align-items:center;gap:8px;padding:7px 10px;border:1px solid var(--color-border);border-radius:14px;background:var(--color-surface);color:var(--color-ink);text-align:left}
-.booking-modern-payment-icon{width:32px;height:32px;display:grid;place-items:center;border-radius:9px;background:var(--color-surface-subtle);color:var(--color-brand-dark)}
-.booking-modern-payment-selector>span:nth-child(2){min-width:0;display:flex;flex-direction:column;gap:2px}
+.booking-modern-payment-selector{
+  width:100%;
+  min-height:56px;
+  display:grid;
+  grid-template-columns:36px minmax(0,1fr) 18px;
+  align-items:center;
+  gap:8px;
+  padding:7px 10px;
+  border:1px solid var(--color-border);
+  border-radius:14px;
+  background:var(--color-surface);
+  color:var(--color-ink);
+  text-align:left;
+}
+.booking-modern-payment-icon{
+  width:32px;
+  height:32px;
+  display:grid;
+  place-items:center;
+  border-radius:9px;
+  background:var(--color-surface-subtle);
+  color:var(--color-brand-dark);
+}
+.booking-modern-payment-selector>span:nth-child(2){
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
 .booking-modern-payment-selector small{color:var(--color-muted);font-size:8px;font-weight:800;letter-spacing:.08em}
 .booking-modern-payment-selector strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
 .booking-modern-payment-selector>.icon{color:var(--color-muted);transform:rotate(-90deg)}
-.booking-modern-payment-menu{position:absolute;left:0;right:0;bottom:calc(100% + 8px);display:grid;gap:4px;padding:7px;border:1px solid var(--color-border);border-radius:15px;background:var(--color-surface);box-shadow:0 16px 34px rgba(36,31,27,.14)}
-.booking-modern-payment-menu button{min-height:42px;display:flex;align-items:center;justify-content:space-between;padding:0 10px;border:0;border-radius:9px;background:transparent;color:var(--color-ink);font-size:12px;font-weight:700;text-align:left}
+.booking-modern-payment-menu{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:calc(100% + 8px);
+  display:grid;
+  gap:4px;
+  padding:7px;
+  border:1px solid var(--color-border);
+  border-radius:15px;
+  background:var(--color-surface);
+  box-shadow:0 16px 34px rgba(36,31,27,.14);
+}
+.booking-modern-payment-menu button{
+  min-height:42px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 10px;
+  border:0;
+  border-radius:9px;
+  background:transparent;
+  color:var(--color-ink);
+  font-size:12px;
+  font-weight:700;
+  text-align:left;
+}
 .booking-modern-payment-menu button.selected{background:var(--color-brand-soft);color:var(--color-brand-dark)}
-.booking-modern-pay-button{min-height:56px;display:flex;align-items:center;justify-content:center;gap:5px;padding:0 12px;border:0;border-radius:14px;background:var(--color-brand);color:white;font-size:13px;font-weight:750}
+.booking-modern-pay-button{
+  min-height:56px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  padding:0 12px;
+  border:0;
+  border-radius:14px;
+  background:var(--color-brand);
+  color:white;
+  font-size:13px;
+  font-weight:750;
+}
 .booking-modern-pay-button strong{font-size:16px}
 .booking-modern-pay-button:disabled{background:var(--color-border);color:var(--color-muted);opacity:1}
 .booking-modern-pay-button:active:not(:disabled){transform:translateY(1px)}
+.phone-shell:has(.booking-flow-page) .bottom-nav{display:none}
 @media(max-width:520px){
-  .booking-modern-modal{height:94%;max-height:94%;border-radius:26px 26px 0 0}
-  .booking-modern-hero{height:174px}
-  .booking-modern-hero-copy strong{font-size:25px}
+  .booking-modern-hero{height:220px}
+  .booking-modern-hero-copy strong{font-size:27px}
   .booking-modern-content{padding-inline:16px}
-  .booking-modern-times{grid-template-columns:repeat(3,minmax(0,1fr))}
   .booking-modern-footer{grid-template-columns:minmax(0,1fr) 150px}
 }
-

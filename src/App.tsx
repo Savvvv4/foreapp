@@ -311,14 +311,6 @@ function DiscoverHome({
 }) {
   return (
     <main className="screen discover-home-screen">
-      <div className="discover-home-welcome">
-        <div>
-          <p className="eyebrow">YOUR NEXT MOVE</p>
-          <h1>What are you looking for?</h1>
-        </div>
-        <Avatar initials="AK" />
-      </div>
-
       <button className="next-card discover-home-round" type="button">
         <img src={photos.course} alt="Delhi Golf Club fairway" />
         <span className="image-shade" />
@@ -677,7 +669,7 @@ function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScree
 
 function BookingFlowModal({
   course, step, setStep, date, setDate, time, setTime, caddyMode, setCaddyMode,
-  cartCount, setCartCount, paymentMethod, setPaymentMethod, close, goHome, pay,
+  cartCount, setCartCount, paymentMethod, setPaymentMethod, close, pay,
 }: {
   course: BookingCourse
   step: BookingStep
@@ -693,7 +685,6 @@ function BookingFlowModal({
   paymentMethod: string
   setPaymentMethod: (method: string) => void
   close: () => void
-  goHome: () => void
   pay: () => void
 }) {
   const dates = [["Thu","Thursday","20"],["Fri","Friday","21"],["Sat","Saturday","22"],["Sun","Sunday","23"],["Mon","Monday","24"],["Tue","Tuesday","25"],["Wed","Wednesday","26"]] as const
@@ -715,13 +706,8 @@ function BookingFlowModal({
     : "Select a day & tee time"
 
   return (
-    <div className="booking-flow-backdrop" onClick={close}>
-      <section className="booking-flow-modal booking-modern-modal" role="dialog" aria-modal="true" aria-label={`Book ${course.name}`} onClick={(event) => event.stopPropagation()}>
-        <header className="booking-modern-header">
-          <button type="button" onClick={close} aria-label="Close booking"><Icon name="close" size={22} /></button>
-          <h1>Choose your tee time</h1>
-          <button type="button" onClick={goHome} aria-label="Return to home"><Icon name="home" size={21} /></button>
-        </header>
+    <main className="booking-flow-page" aria-label={`Book ${course.name}`}>
+      <FlowHeader title="Choose your tee time" back={close} />
 
         <div className="booking-modern-scroll">
           <section className="booking-modern-hero">
@@ -818,8 +804,7 @@ function BookingFlowModal({
             </button>
           </footer>
         )}
-      </section>
-    </div>
+    </main>
   )
 }
 function PaymentSheet({
@@ -1611,7 +1596,7 @@ function CourseBookingPrototype({
       {screen === "coachBookingPending" && <CoachBookingDetailScreen go={go} status="Pending" />}
       {screen === "coachBookingConfirmed" && <CoachBookingDetailScreen go={go} status="Confirmed" />}
       {screen === "coachDeclined" && <CoachDeclinedScreen go={go} />}
-      {bookingOpen && <BookingFlowModal course={bookingCourse} step={bookingStep} setStep={setBookingStep} date={courseDate} setDate={setCourseDate} time={selectedSlot} setTime={setSelectedSlot} caddyMode={courseCaddyMode} setCaddyMode={setCourseCaddyMode} cartCount={courseCartCount} setCartCount={setCourseCartCount} paymentMethod={coursePaymentMethod} setPaymentMethod={setCoursePaymentMethod} close={() => setBookingOpen(false)} goHome={() => { setBookingOpen(false); setScreen("discover"); setMode("courses") }} pay={() => setBookingStep("payment")} />}
+      {bookingOpen && <BookingFlowModal course={bookingCourse} step={bookingStep} setStep={setBookingStep} date={courseDate} setDate={setCourseDate} time={selectedSlot} setTime={setSelectedSlot} caddyMode={courseCaddyMode} setCaddyMode={setCourseCaddyMode} cartCount={courseCartCount} setCartCount={setCourseCartCount} paymentMethod={coursePaymentMethod} setPaymentMethod={setCoursePaymentMethod} close={() => setBookingOpen(false)} pay={() => setBookingStep("payment")} />}
       {filtersOpen && <FiltersSheet close={() => { setFiltersOpen(false); setResultsState("ready"); go("results") }} />}
       {searchOpen && <SearchExperience denied={locationDenied} setDenied={setLocationDenied} primerSeen={locationPrimerSeen} setPrimerSeen={setLocationPrimerSeen} close={() => setSearchOpen(false)} go={go} />}
       {paymentOpen && <PaymentSheet state={paymentState} setState={setPaymentState} close={() => setPaymentOpen(false)} succeed={() => { setPaymentOpen(false); go(paymentTarget === "range" ? "rangeConfirmation" : "confirmation") }} recheck={() => { setPaymentOpen(false); setRangeState("ready"); go("rangeSelect") }} />}
