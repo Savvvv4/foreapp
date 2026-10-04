@@ -1410,115 +1410,109 @@ function CoachProfileScreen({ go }: { go: (screen: CourseFlowScreen) => void }) 
   )
 }
 
-function CoachLessonTypeScreen({
-  go,
-  lesson,
-  setLesson,
-}: {
-  go: (screen: CourseFlowScreen) => void
-  lesson: string
-  setLesson: (lesson: string) => void
-}) {
+function CoachLessonTypeScreen({ go, lesson, setLesson }: { go: (screen: CourseFlowScreen) => void; lesson: string; setLesson: (lesson: string) => void }) {
   const lessons = [
     ["Individual lesson","60 min","₹1,800","Focused one-to-one coaching and a practice plan."],
     ["Playing lesson","9 holes","₹3,500","Strategy, decisions, and real on-course feedback."],
     ["Junior lesson","45 min","₹1,500","Age-appropriate fundamentals in a positive session."],
   ]
+  const price = lesson === "Playing lesson" ? 3500 : lesson === "Junior lesson" ? 1500 : 1800
   return (
-    <main className="screen coach-flow-screen">
-      <FlowHeader title="Book Savdeep" back={() => go("coachProfile")} />
-      <div className="coach-step-indicator"><span>1 of 4</span><div><i className="active" /><i /><i /><i /></div></div>
-      <div className="coach-flow-heading"><h1>Choose a lesson</h1><p>You can review everything before sending the request.</p></div>
-      <div className="coach-lesson-cards">{lessons.map(([title,duration,price,copy]) => <button className={lesson === title ? "selected" : ""} onClick={() => setLesson(title)} key={title}><span><strong>{title}</strong><small>{duration}</small><p>{copy}</p></span><b>{price}</b><i>{lesson === title && <Icon name="check" size={13} />}</i></button>)}</div>
-      <div className="booking-sticky-bar"><span><small>{lesson || "Select a lesson"}</small><strong>{lesson === "Playing lesson" ? "₹3,500" : lesson === "Junior lesson" ? "₹1,500" : lesson ? "₹1,800" : "—"}</strong></span><button className="primary-button" disabled={!lesson} onClick={() => go("coachDateTime")}>Continue</button></div>
+    <main className="booking-flow-page coach-modern-flow" aria-label="Book Savdeep Mehta">
+      <header className="booking-page-topbar"><button type="button" className="app-topbar-back" onClick={() => go("coachProfile")} aria-label="Go back"><Icon name="chevron" size={21} /></button><span /></header>
+      <div className="booking-modern-scroll">
+        <section className="booking-modern-hero">
+          <img src={photos.golfer} alt="" /><span className="booking-modern-hero-shade" />
+          <div className="booking-modern-hero-copy"><span className="eyebrow light">YOUR LESSON</span><strong>Savdeep Mehta</strong><span>{lesson ? lesson + " · " + (lesson === "Playing lesson" ? "9 holes" : lesson === "Junior lesson" ? "45 min" : "60 min") : "Choose a lesson type"}</span></div>
+        </section>
+        <div className="booking-modern-content">
+          <div className="coach-modern-progress"><span>Step 1 of 4</span><div><i className="active" /><i /><i /><i /></div></div>
+          <section className="booking-modern-section">
+            <div className="booking-modern-section-heading"><h2>Lesson type</h2><span>Select one</span></div>
+            <div className="coach-modern-options">{lessons.map(([title,duration,cost,copy]) => <button key={title} type="button" className={lesson === title ? "selected" : ""} onClick={() => setLesson(title)}><span><strong>{title}</strong><small>{duration} · {copy}</small></span><b>{cost}</b>{lesson === title && <Icon name="check" size={16} />}</button>)}</div>
+          </section>
+        </div>
+      </div>
+      <footer className="booking-modern-footer">
+        <div className="coach-footer-summary"><small>LESSON</small><strong>{lesson || "Select a lesson"}</strong></div>
+        <button type="button" className="booking-modern-pay-button" disabled={!lesson} onClick={() => go("coachDateTime")}><span>Continue</span><strong>₹{price.toLocaleString("en-IN")}</strong><Icon name="arrow" size={17} /></button>
+      </footer>
     </main>
   )
 }
 
-function CoachDateTimeScreen({
-  go,
-  slot,
-  setSlot,
-  state,
-  setState,
-}: {
-  go: (screen: CourseFlowScreen) => void
-  slot: string
-  setSlot: (slot: string) => void
-  state: CoachAvailabilityState
-  setState: (state: CoachAvailabilityState) => void
-}) {
+function CoachDateTimeScreen({ go, slot, setSlot, state, setState }: { go: (screen: CourseFlowScreen) => void; slot: string; setSlot: (slot: string) => void; state: CoachAvailabilityState; setState: (state: CoachAvailabilityState) => void }) {
+  const dates = [["Thu","20","2 slots"],["Fri","21","4 slots"],["Sat","22","2 slots"],["Sun","23","2 slots"],["Mon","24","1 slot"]]
   return (
-    <main className="screen coach-flow-screen">
-      <FlowHeader title="Date & time" back={() => go("coachLesson")} />
-      <div className="coach-step-indicator"><span>2 of 4</span><div><i className="active" /><i className="active" /><i /><i /></div></div>
-      <div className="coach-flow-heading"><h1>When works for you?</h1><p>Savdeep’s available times in Delhi.</p></div>
-      <div className="tee-date-strip coach-date-strip">{[["Thu","20"],["Fri","21"],["Sat","22"],["Sun","23"],["Mon","24"]].map(([day,date],index) => <button className={index === 1 ? "selected" : ""} key={date}><small>{day}</small><strong>{date}</strong><em>{index === 1 ? "4 slots" : "2 slots"}</em></button>)}</div>
-      {state === "loading" && <div className="range-slot-skeleton">{Array.from({length:6}).map((_,index) => <i key={index} />)}<button onClick={() => setState("ready")}>Show times</button></div>}
-      {state === "empty" && <div className="tee-empty-state coach-slot-empty"><span><Icon name="calendar" /></span><h2>No slots this week</h2><p>Ask Savdeep for another time or start a conversation.</p><button className="primary-button">Request a time</button><button className="message-coach-link"><Icon name="message" size={15} /> Message the coach</button></div>}
-      {state === "ready" && <><div className="coach-location-line"><Icon name="pin" size={15} /><span><strong>Delhi Golf Club</strong><small>Lodhi Road · 2.1 km</small></span></div><div className="coach-time-grid">{["7:00 AM","8:30 AM","9:30 AM","11:00 AM","2:30 PM","4:00 PM"].map((time) => <button className={slot === time ? "selected" : ""} onClick={() => setSlot(time)} key={time}>{time}</button>)}</div></>}
-      <div className="booking-sticky-bar"><span><small>{slot || "Select a time"}</small><strong>{slot ? "Fri 21 Aug" : "—"}</strong></span><button className="primary-button" disabled={!slot} onClick={() => go("coachNotes")}>Continue</button></div>
+    <main className="booking-flow-page coach-modern-flow" aria-label="Choose lesson time">
+      <header className="booking-page-topbar"><button type="button" className="app-topbar-back" onClick={() => go("coachLesson")} aria-label="Go back"><Icon name="chevron" size={21} /></button><span /></header>
+      <div className="booking-modern-scroll">
+        <section className="booking-modern-hero">
+          <img src={photos.golfer} alt="" /><span className="booking-modern-hero-shade" />
+          <div className="booking-modern-hero-copy"><span className="eyebrow light">YOUR LESSON</span><strong>Savdeep Mehta</strong><span>{slot ? "Friday, 21 August · " + slot : "Choose a day and time"}</span></div>
+        </section>
+        <div className="booking-modern-content">
+          <div className="coach-modern-progress"><span>Step 2 of 4</span><div><i className="active" /><i className="active" /><i /><i /></div></div>
+          <section className="booking-modern-section">
+            <div className="booking-modern-section-heading"><h2>Day</h2><span>Select a day</span></div>
+            <div className="booking-modern-dates">{dates.map(([day,date,count]) => <button key={date} type="button" className={date === "21" ? "selected" : ""} onClick={() => { setSlot(""); }}><small>{day}</small><strong>{date}</strong><span>Aug</span><em>{count}</em></button>)}</div>
+          </section>
+          {state === "loading" && <div className="range-slot-skeleton">{Array.from({length:6}).map((_,i)=><i key={i}/>)}<button onClick={()=>setState("ready")}>Show times</button></div>}
+          {state === "empty" && <div className="tee-empty-state coach-slot-empty"><span><Icon name="calendar" /></span><h2>No slots this week</h2><p>Ask Savdeep for another time or start a conversation.</p><button className="primary-button">Request a time</button><button className="message-coach-link"><Icon name="message" size={15} /> Message the coach</button></div>}
+          {state === "ready" && <><section className="booking-modern-section"><div className="booking-modern-section-heading"><h2>Tee time</h2><span>{slot || "Select a time"}</span></div><div className="booking-modern-times coach-modern-times">{["7:00 AM","8:30 AM","9:30 AM","11:00 AM","2:30 PM","4:00 PM"].map(time => <button key={time} type="button" className={slot===time ? "selected":""} onClick={()=>setSlot(time)}><strong>{time}</strong></button>)}</div></section><div className="coach-modern-location"><Icon name="pin" size={16}/><span><strong>Delhi Golf Club</strong><small>Lodhi Road · 2.1 km</small></span></div></>}
+        </div>
+      </div>
+      <footer className="booking-modern-footer"><div className="coach-footer-summary"><small>DATE & TIME</small><strong>{slot ? "Fri 21 Aug · " + slot : "Select a time"}</strong></div><button type="button" className="booking-modern-pay-button" disabled={!slot} onClick={()=>go("coachNotes")}><span>Continue</span><Icon name="arrow" size={17}/></button></footer>
     </main>
   )
 }
 
-function CoachNotesScreen({
-  go,
-  goals,
-  toggleGoal,
-}: {
-  go: (screen: CourseFlowScreen) => void
-  goals: string[]
-  toggleGoal: (goal: string) => void
-}) {
+function CoachNotesScreen({ go, goals, toggleGoal }: { go: (screen: CourseFlowScreen) => void; goals: string[]; toggleGoal: (goal: string) => void }) {
   return (
-    <main className="screen coach-flow-screen">
-      <FlowHeader title="Lesson notes" back={() => go("coachDateTime")} />
-      <div className="coach-step-indicator"><span>3 of 4</span><div><i className="active" /><i className="active" /><i className="active" /><i /></div></div>
-      <div className="coach-flow-heading"><h1>What do you want to work on?</h1><p>Everything here is optional. You can skip this step.</p></div>
-      <div className="coach-goal-chips">{["Driver","Irons","Short game","Putting","Course strategy"].map((goal) => <button className={goals.includes(goal) ? "selected" : ""} onClick={() => toggleGoal(goal)} key={goal}>{goals.includes(goal) && <Icon name="check" size={13} />}{goal}</button>)}</div>
-      <label className="coach-notes-field"><span>Anything else Savdeep should know?</span><textarea placeholder="For example: I’m losing shots around the green…" /></label>
-      <label className="handicap-share"><span><strong>Share your handicap</strong><small>HCP 14.2 · Helps Savdeep prepare</small></span><input type="checkbox" defaultChecked /><i><Icon name="check" size={13} /></i></label>
-      <div className="booking-sticky-bar coach-notes-sticky"><button className="skip-button" onClick={() => go("coachCheckout")}>Skip</button><button className="primary-button" onClick={() => go("coachCheckout")}>Continue</button></div>
+    <main className="booking-flow-page coach-modern-flow" aria-label="Lesson preferences">
+      <header className="booking-page-topbar"><button type="button" className="app-topbar-back" onClick={() => go("coachDateTime")} aria-label="Go back"><Icon name="chevron" size={21} /></button><span /></header>
+      <div className="booking-modern-scroll">
+        <section className="booking-modern-hero">
+          <img src={photos.golfer} alt="" /><span className="booking-modern-hero-shade" />
+          <div className="booking-modern-hero-copy"><span className="eyebrow light">YOUR LESSON</span><strong>Savdeep Mehta</strong><span>Tell your coach what to focus on</span></div>
+        </section>
+        <div className="booking-modern-content">
+          <div className="coach-modern-progress"><span>Step 3 of 4</span><div><i className="active"/><i className="active"/><i className="active"/><i/></div></div>
+          <section className="booking-modern-section">
+            <div className="booking-modern-section-heading"><h2>Focus areas</h2><span>Optional</span></div>
+            <div className="coach-modern-chips">{["Driver","Irons","Short game","Putting","Course strategy"].map(goal=><button key={goal} type="button" className={goals.includes(goal)?"selected":""} onClick={()=>toggleGoal(goal)}>{goals.includes(goal)&&<Icon name="check" size={13}/>} {goal}</button>)}</div>
+          </section>
+          <section className="booking-modern-section coach-modern-note-section"><div className="booking-modern-section-heading"><h2>Notes for your coach</h2><span>Optional</span></div><textarea className="coach-modern-textarea" placeholder="Anything Savdeep should know before the lesson?" /></section>
+          <label className="coach-modern-handicap"><span><strong>Share your handicap</strong><small>HCP 14.2 · Helps Savdeep prepare</small></span><input type="checkbox" defaultChecked /><i><Icon name="check" size={13}/></i></label>
+        </div>
+      </div>
+      <footer className="booking-modern-footer"><div className="coach-footer-summary"><small>YOUR PREFERENCES</small><strong>{goals.length ? goals.join(" · ") : "No focus areas added"}</strong></div><button type="button" className="booking-modern-pay-button" onClick={()=>go("coachCheckout")}><span>Continue</span><Icon name="arrow" size={17}/></button></footer>
     </main>
   )
 }
 
-function CoachCheckoutScreen({
-  go,
-  lesson,
-  slot,
-  plan,
-  setPlan,
-  credits,
-  setCredits,
-}: {
-  go: (screen: CourseFlowScreen) => void
-  lesson: string
-  slot: string
-  plan: "single" | "pack"
-  setPlan: (plan: "single" | "pack") => void
-  credits: boolean
-  setCredits: (credits: boolean) => void
-}) {
+function CoachCheckoutScreen({ go, lesson, slot, plan, setPlan, credits, setCredits }: { go: (screen: CourseFlowScreen) => void; lesson: string; slot: string; plan: "single" | "pack"; setPlan: (plan: "single" | "pack") => void; credits: boolean; setCredits: (credits: boolean) => void }) {
   const subtotal = plan === "pack" ? 19440 : lesson === "Playing lesson" ? 3500 : lesson === "Junior lesson" ? 1500 : 1800
   const creditValue = credits ? Math.min(1740, subtotal) : 0
   const total = subtotal - creditValue
+  const paymentMethod = "UPI"
   return (
-    <main className="screen checkout-screen coach-checkout-screen">
-      <FlowHeader title="Review request" back={() => go("coachNotes")} />
-      <div className="coach-step-indicator"><span>4 of 4</span><div><i className="active" /><i className="active" /><i className="active" /><i className="active" /></div></div>
-      <div className="coach-checkout-summary"><Avatar initials="SM" /><div><span><strong>Savdeep Mehta</strong><button onClick={() => go("coachProfile")}>Edit</button></span><p>{lesson || "Individual lesson"} · {slot || "7:00 AM"}</p><p>Fri 21 Aug · Delhi Golf Club</p></div></div>
-      <div className="checkout-section-heading"><h2>Choose payment option</h2></div>
-      <div className="coach-plan-selector"><button className={plan === "single" ? "selected" : ""} onClick={() => setPlan("single")}><span><strong>Single lesson</strong><small>Pay per accepted lesson</small></span><b>₹1,800</b><i>{plan === "single" && <Icon name="check" size={13} />}</i></button><button className={plan === "pack" ? "selected" : ""} onClick={() => setPlan("pack")}><span><em>Save 10%</em><strong>12-lesson pack</strong><small>Flexible scheduling</small></span><b>₹19,440</b><i>{plan === "pack" && <Icon name="check" size={13} />}</i></button></div>
-      <div className="checkout-section-heading"><h2>Wallet & credits</h2></div>
-      <div className="credit-row"><span><Icon name="wallet" /><div><strong>Use ₹1,740 credits</strong><small>Fore! wallet balance</small></div></span><button className={`checkout-toggle ${credits ? "on" : ""}`} onClick={() => setCredits(!credits)}><i /></button></div>
-      <div className="checkout-section-heading"><h2>Payment method</h2><button>Change</button></div>
-      <button className="payment-method-row"><span>UPI</span><div><strong>arjun@upi</strong><small>Saved payment method</small></div><Icon name="chevron" /></button>
-      <div className="checkout-section-heading"><h2>Price details</h2></div>
-      <div className="price-breakdown"><div><span>{plan === "pack" ? "12-lesson pack" : "Single lesson"}</span><strong>₹{subtotal.toLocaleString("en-IN")}</strong></div><div><span>GST</span><strong>Included</strong></div>{creditValue > 0 && <div className="credit-line"><span>Fore! credits</span><strong>−₹{creditValue.toLocaleString("en-IN")}</strong></div>}<div className="total-line"><span>Authorised amount</span><strong>₹{total.toLocaleString("en-IN")}</strong></div></div>
-      <p className="coach-payment-trust"><Icon name="shield" size={15} /> Payment is authorised now and charged only when Savdeep accepts.</p>
-      <div className="booking-sticky-bar coach-send-sticky"><span><small>Authorise</small><strong>₹{total.toLocaleString("en-IN")}</strong></span><button className="primary-button" onClick={() => go("coachRequestSent")}>Send request</button></div>
+    <main className="booking-flow-page coach-modern-flow" aria-label="Review coaching request">
+      <header className="booking-page-topbar"><button type="button" className="app-topbar-back" onClick={() => go("coachNotes")} aria-label="Go back"><Icon name="chevron" size={21}/></button><span/></header>
+      <div className="booking-modern-scroll">
+        <section className="booking-modern-hero">
+          <img src={photos.golfer} alt="" /><span className="booking-modern-hero-shade" />
+          <div className="booking-modern-hero-copy"><span className="eyebrow light">REVIEW REQUEST</span><strong>Savdeep Mehta</strong><span>{lesson || "Individual lesson"} · {slot || "7:00 AM"} · Delhi Golf Club</span></div>
+        </section>
+        <div className="booking-modern-content">
+          <div className="coach-modern-progress"><span>Step 4 of 4</span><div><i className="active"/><i className="active"/><i className="active"/><i className="active"/></div></div>
+          <section className="booking-modern-section"><div className="booking-modern-section-heading"><h2>Lesson plan</h2><span>Choose one</span></div><div className="coach-modern-options"><button className={plan==="single"?"selected":""} onClick={()=>setPlan("single")}><span><strong>Single lesson</strong><small>Pay when the coach accepts</small></span><b>₹1,800</b>{plan==="single"&&<Icon name="check" size={16}/>}</button><button className={plan==="pack"?"selected":""} onClick={()=>setPlan("pack")}><span><strong>12-lesson pack</strong><small>Save 10% · Flexible scheduling</small></span><b>₹19,440</b>{plan==="pack"&&<Icon name="check" size={16}/>}</button></div></section>
+          <section className="booking-modern-section"><div className="booking-modern-section-heading"><h2>Wallet & credits</h2><span>₹1,740 available</span></div><div className="coach-credit-row"><span><Icon name="wallet" size={18}/><strong>Use available credits</strong></span><button className={"checkout-toggle "+(credits?"on":"")} onClick={()=>setCredits(!credits)}><i/></button></div></section>
+          <section className="booking-modern-section"><div className="booking-modern-section-heading"><h2>Price details</h2><span>{paymentMethod}</span></div><div className="price-breakdown"><div><span>{plan==="pack"?"12-lesson pack":"Single lesson"}</span><strong>₹{subtotal.toLocaleString("en-IN")}</strong></div><div><span>GST</span><strong>Included</strong></div>{creditValue>0&&<div className="credit-line"><span>Fore! credits</span><strong>−₹{creditValue.toLocaleString("en-IN")}</strong></div>}<div className="total-line"><span>Authorised amount</span><strong>₹{total.toLocaleString("en-IN")}</strong></div></div></section>
+          <div className="coach-authorise-note"><Icon name="shield" size={15}/><span><strong>No charge until accepted</strong><small>Your payment is authorised now and charged only if Savdeep accepts the request.</small></span></div>
+        </div>
+      </div>
+      <footer className="booking-modern-footer"><div className="booking-modern-payment-wrap"><button type="button" className="booking-modern-payment-selector"><span className="booking-modern-payment-icon"><Icon name="wallet" size={18}/></span><span><small>PAY USING</small><strong>UPI</strong></span><Icon name="chevron" size={16}/></button></div><button type="button" className="booking-modern-pay-button" onClick={()=>go("coachRequestSent")}><span>Send request</span><strong>₹{total.toLocaleString("en-IN")}</strong><Icon name="arrow" size={17}/></button></footer>
     </main>
   )
 }
@@ -1567,8 +1561,8 @@ function CoachDeclinedScreen({ go }: { go: (screen: CourseFlowScreen) => void })
       <h2>Alternative times with Savdeep</h2>
       <div className="declined-time-chips">{["Fri 9:30 AM","Sat 7:00 AM","Mon 4:00 PM"].map((time) => <button onClick={() => go("coachDateTime")} key={time}>{time}</button>)}</div>
       <h2>Similar coaches</h2>
-      <CoachCard name="Neha Arora" rating="4.8" price={1500} onOpen={() => go("coachProfile")} />
-      <CoachCard name="Imran Qureshi" rating="4.7" price={2200} onOpen={() => go("coachProfile")} />
+      <CoachCard name="Neha Arora" rating="4.8" price={1500} onOpen={() => go("coachProfile")} onBook={() => go("coachLesson")} />
+      <CoachCard name="Imran Qureshi" rating="4.7" price={2200} onOpen={() => go("coachProfile")} onBook={() => go("coachLesson")} />
     </main>
   )
 }
