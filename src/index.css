@@ -2465,52 +2465,64 @@ small { line-height:1.45; }
 }
 .discover-home-actions{
   display:grid;
-  gap:0;
+  gap:12px;
 }
 .discover-home-actions > button{
   width:100%;
-  min-height:82px;
+  min-height:108px;
   display:grid;
-  grid-template-columns:32px minmax(0,1fr) 20px;
+  grid-template-columns:72px minmax(0,1fr) 22px;
   align-items:center;
-  gap:10px;
-  padding:8px 0;
-  border:0;
-  border-bottom:1px solid transparent;
-  background:transparent;
+  gap:20px;
+  padding:16px 18px;
+  border:1.5px solid #e8ded6;
+  border-radius:24px;
+  background:var(--surface);
+  box-shadow:0 5px 18px rgba(66,40,20,.045);
   text-align:left;
   cursor:pointer;
 }
 .discover-home-action-icon{
-  width:30px;
-  height:30px;
+  width:72px;
+  height:72px;
   display:grid;
   place-items:center;
-  color:var(--ink);
+  border-radius:22px;
+  background:var(--green-soft);
+  color:var(--green);
+}
+.discover-home-action-icon .icon{
+  width:28px;
+  height:28px;
+  stroke-width:1.8;
 }
 .discover-home-actions > button > span:nth-child(2){
   min-width:0;
   display:flex;
   flex-direction:column;
-  gap:3px;
+  gap:5px;
 }
 .discover-home-actions strong{
   display:block;
   color:var(--ink);
-  font-size:16px;
+  font-size:18px;
   line-height:1.15;
-  letter-spacing:-.02em;
+  letter-spacing:-.025em;
 }
 .discover-home-actions small{
   display:block;
   color:var(--muted);
-  font-size:11px;
+  font-size:13px;
   line-height:1.35;
 }
 .discover-home-actions > button > .icon{
   justify-self:end;
-  color:var(--ink);
+  color:#746c65;
+  width:22px;
+  height:22px;
+  stroke-width:2;
 }
+
 @media(max-width:520px){
   .app-topbar{
     height:calc(58px + env(safe-area-inset-top));
@@ -2527,9 +2539,15 @@ small { line-height:1.45; }
     height:226px;
   }
   .discover-home-actions > button{
-    min-height:78px;
+    min-height:108px;
+    grid-template-columns:72px minmax(0,1fr) 22px;
+    gap:20px;
+    padding:16px 18px;
   }
   .discover-home-actions strong{
-    font-size:16px;
+    font-size:18px;
+  }
+  .discover-home-actions small{
+    font-size:13px;
   }
 }
