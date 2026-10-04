@@ -2329,3 +2329,31 @@ small { line-height:1.45; }
   .booking-modern-content{padding-inline:16px}
   .booking-modern-footer{grid-template-columns:minmax(0,1fr) 150px}
 }
+.booking-page-topbar{
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  z-index:30;
+  height:68px;
+  display:grid;
+  grid-template-columns:48px 1fr;
+  align-items:center;
+  padding:0 12px;
+  background:linear-gradient(180deg,rgba(0,0,0,.28),rgba(0,0,0,0));
+}
+.booking-page-topbar .app-topbar-back{
+  color:#fff;
+  border-radius:14px;
+  background:rgba(0,0,0,.16);
+  backdrop-filter:blur(6px);
+}
+.booking-page-topbar .app-topbar-back:active{background:rgba(0,0,0,.28)}
+.booking-flow-page .booking-modern-scroll{padding-top:0}
+.booking-flow-page .booking-modern-hero{height:310px}
+.booking-flow-page .booking-modern-hero-copy{bottom:24px}
+@media(max-width:520px){
+  .booking-page-topbar{height:68px;padding-inline:10px}
+  .booking-flow-page .booking-modern-hero{height:300px}
+  .booking-flow-page .booking-modern-hero-copy{left:20px;right:20px;bottom:22px}
+}

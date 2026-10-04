@@ -701,29 +701,36 @@ function BookingFlowModal({
     caddyMode === "auto" ? "Caddy" : caddyMode === "own" ? "Own caddy" : "",
     cartCount > 0 ? `${cartCount} cart` : "",
   ].filter(Boolean)
-  const heroDetail = formattedDate && time
-    ? `${formattedDate} · ${time}${extras.length ? ` · ${extras.join(" · ")}` : ""}`
-    : "Select a day & tee time"
+  const heroDetail = !date
+    ? "Select a day and time"
+    : !time
+      ? `${formattedDate} · Select a tee time`
+      : `${formattedDate} · ${time}${extras.length ? ` · ${extras.join(" · ")}` : ""}`
 
   return (
     <main className="booking-flow-page" aria-label={`Book ${course.name}`}>
-      <FlowHeader title="Choose your tee time" back={close} />
+      <header className="booking-page-topbar">
+        <button type="button" className="app-topbar-back" onClick={close} aria-label="Go back">
+          <Icon name="chevron" size={21} />
+        </button>
+        <span className="app-topbar-spacer" aria-hidden="true" />
+      </header>
 
-        <div className="booking-modern-scroll">
-          <section className="booking-modern-hero">
-            <img src={course.image} alt="" />
-            <span className="booking-modern-hero-shade" />
-            <div className="booking-modern-hero-copy">
-              <span className="eyebrow light">{step === "payment" ? "CONFIRMING BOOKING" : "YOUR ROUND"}</span>
-              <strong>{course.name}</strong>
-              <span>{heroDetail}</span>
-            </div>
-          </section>
+      <div className="booking-modern-scroll">
+        <section className="booking-modern-hero">
+          <img src={course.image} alt="" />
+          <span className="booking-modern-hero-shade" />
+          <div className="booking-modern-hero-copy">
+            <span className="eyebrow light">{step === "payment" ? "CONFIRMING BOOKING" : "YOUR ROUND"}</span>
+            <strong>{course.name}</strong>
+            <span>{heroDetail}</span>
+          </div>
+        </section>
 
           {step !== "payment" ? (
             <div className="booking-modern-content">
               <section className="booking-modern-section">
-                <div className="booking-modern-section-heading"><h2>Day</h2><span>August</span></div>
+                <div className="booking-modern-section-heading"><h2>Day</h2><span>Select a day</span></div>
                 <div className="booking-modern-dates">
                   {dates.map(([day,,dayNumber]) => {
                     const value = `${day} ${dayNumber}`
@@ -739,7 +746,7 @@ function BookingFlowModal({
               </section>
 
               <section className="booking-modern-section">
-                <div className="booking-modern-section-heading"><h2>Tee time</h2><span>{time || "Choose one"}</span></div>
+                <div className="booking-modern-section-heading"><h2>Tee time</h2><span>{time || "Select a time"}</span></div>
                 <div className="booking-modern-times">
                   {slots.map((slotItem,index) => (
                     <button key={slotItem} type="button" className={time === slotItem ? "selected" : ""} aria-pressed={time === slotItem} onClick={() => setTime(slotItem)}>
