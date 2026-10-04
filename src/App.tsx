@@ -4,6 +4,8 @@ type Role = "golfer" | "coach"
 type GolferTab = "home" | "discover" | "play" | "improve" | "profile"
 type PrimaryTab = "discover" | "performance" | "coach"
 type CoachTab = "today" | "students" | "practice" | "business" | "profile"
+type ConnectionStatus = "none" | "pending" | "connected"
+
 type IconName = "home" | "search" | "flag" | "spark" | "user" | "calendar" | "users" | "clipboard" | "wallet" | "bell" | "arrow" | "chevron" | "star" | "pin" | "clock" | "video" | "chart" | "message" | "close" | "check" | "switch" | "heart" | "map" | "shield" | "directions" | "share" | "more" | "filter" | "plus" | "loader"
 
 const photos = {
@@ -1383,14 +1385,14 @@ function CoachDiscoverScreen({
   )
 }
 
-function CoachProfileScreen({ go }: { go: (screen: CourseFlowScreen) => void }) {
+function CoachProfileScreen({go,connectionStatus,onConnect}:{go:(screen:CourseFlowScreen)=>void;connectionStatus:ConnectionStatus;onConnect:()=>void}){
   return (
     <main className="course-profile-screen coach-profile-booking-screen">
       <div className="course-profile-hero"><img src={photos.golfer} alt="Savdeep Mehta coaching" /><button onClick={() => go("coachDiscover")}><Icon name="chevron" /></button><button><Icon name="heart" /></button></div>
       <div className="course-profile-content">
         <p className="eyebrow">PGA PROFESSIONAL · 12 YEARS</p>
         <div className="course-title-row"><h1>Savdeep Mehta</h1><span className="rating"><Icon name="star" size={14} /> 4.9 (86)</span></div>
-        <div className="specialty-pills large"><i>Short game</i><i>Swing</i><i>Course play</i></div>
+        <div className="specialty-pills large"><i>Short game</i><i>Swing</i><i>Course play</i></div><section className="coach-connection-panel"><div><small>COACH CONNECTION</small><strong>{connectionStatus==="connected"?"You’re connected":connectionStatus==="pending"?"Request pending":"Build an ongoing coaching relationship"}</strong><span>{connectionStatus==="connected"?"Your lessons, feedback and practice plan are linked.":connectionStatus==="pending"?"Savdeep will review your profile and goals.":"Connect first to keep coaching, feedback and drills together."}</span></div>{connectionStatus==="none"&&<button type="button" onClick={onConnect}>Connect</button>}{connectionStatus==="pending"&&<span className="connection-badge pending"><Icon name="clock" size={13}/> Pending</span>}{connectionStatus==="connected"&&<span className="connection-badge"><Icon name="check" size={13}/> Connected</span>}</section>
         <h2>About Savdeep</h2><p className="body-copy">I help golfers build simple, repeatable technique and make better decisions on the course. Every session ends with a clear practice plan. <button>Read more</button></p>
         <h2>Lesson types</h2>
         <div className="coach-profile-lessons">{[["Individual lesson","60 min","₹1,800"],["Playing lesson","9 holes","₹3,500"],["Junior lesson","45 min","₹1,500"]].map(([title,duration,price]) => <button key={title} onClick={() => go("coachLesson")}><span><strong>{title}</strong><small>{duration}</small></span><b>{price}</b><Icon name="chevron" /></button>)}</div>
@@ -1856,7 +1858,7 @@ function CourseBookingPrototype({
       {screen === "rangeConfirmation" && <RangeConfirmationScreen go={go} date={rangeBookingDate} bucketCount={rangeBucketCount} />}
       {screen === "rangeDetail" && <RangeBookingDetailScreen go={go} date={rangeBookingDate} bucketCount={rangeBucketCount} />}
       {screen === "coachDiscover" && <CoachDiscoverScreen go={go} state={coachDiscoverState} setState={setCoachDiscoverState} setMode={setMode} openSearch={() => setSearchOpen(true)} />}
-      {screen === "coachProfile" && <CoachProfileScreen go={go} />}
+      {screen === "coachProfile" && <CoachProfileScreen go={go} connectionStatus={connectionStatus} onConnect={onConnect} />}
       {screen === "coachLesson" && <CoachLessonTypeScreen go={go} lesson={coachLesson} setLesson={setCoachLesson} />}
       {screen === "coachDateTime" && <CoachDateTimeScreen go={go} date={coachDate} setDate={setCoachDate} slot={coachSlot} setSlot={setCoachSlot} state={coachAvailabilityState} setState={setCoachAvailabilityState} />}
       {screen === "coachCheckout" && <CoachCheckoutScreen go={go} lesson={coachLesson} date={coachDate} slot={coachSlot} goals={coachGoals} toggleGoal={(goal) => setCoachGoals((items) => items.includes(goal) ? items.filter((item) => item !== goal) : [...items, goal])} notes={coachNotes} setNotes={setCoachNotes} />}
@@ -2255,52 +2257,7 @@ function CoachToday({ go }: { go: (tab: CoachTab) => void }) {
   )
 }
 
-function Students({ openStudent }: { openStudent: () => void }) {
-  const [query, setQuery] = useState("")
-  const filtered = useMemo(
-    () =>
-      students.filter((student) =>
-        student.name.toLowerCase().includes(query.toLowerCase()),
-      ),
-    [query],
-  )
-  return (
-    <main className="screen">
-      <div className="page-title page-title-action">
-        <span>
-          <p className="eyebrow">COACHING</p>
-          <h1>Students</h1>
-          <p>18 active · 5 packages</p>
-        </span>
-        <button>+</button>
-      </div>
-      <label className="search-input">
-        <Icon name="search" size={18} />
-        <input
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search students"
-        />
-      </label>
-      <div className="student-list">
-        {filtered.map((student, index) => (
-          <button key={student.name} onClick={openStudent}>
-            <Avatar initials={student.initials} />
-            <span>
-              <strong>{student.name}</strong>
-              <small>{student.meta}</small>
-            </span>
-            <em className={index === 0 || index === 3 ? "warn" : ""}>
-              {student.status}
-            </em>
-            <Icon name="chevron" size={17} />
-          </button>
-        ))}
-      </div>
-    </main>
-  )
-}
-
+function Students({openStudent,connectionStatus,onAccept,onDecline}:{openStudent:()=>void;connectionStatus:ConnectionStatus;onAccept:()=>void;onDecline:()=>void}){const[query,setQuery]=useState("");const filtered=useMemo(()=>students.filter(x=>x.name.toLowerCase().includes(query.toLowerCase())),[query]);return <main className="screen"><div className="page-title page-title-action"><span><p className="eyebrow">COACHING</p><h1>Students</h1><p>18 active · 5 packages</p></span><button><Icon name="plus" size={18}/></button></div>{connectionStatus==="pending"&&<section className="connection-request-card"><div className="connection-request-head"><Avatar initials="AK"/><span><small>NEW CONNECTION REQUEST</small><strong>Alex Kapoor</strong><em>Amateur · HCP 14.2</em></span><span className="connection-badge pending">Pending</span></div><p>Alex wants to connect for ongoing coaching and practice support.</p><div className="connection-request-actions"><button onClick={onDecline}>Decline</button><button className="primary-button" onClick={onAccept}>Accept connection</button></div></section>}{connectionStatus==="connected"&&<section className="connection-request-card connected"><div className="connection-request-head"><Avatar initials="AK"/><span><small>CONNECTED STUDENT</small><strong>Alex Kapoor</strong><em>Amateur · HCP 14.2 · New student</em></span><span className="connection-badge"><Icon name="check" size={13}/> Connected</span></div><button className="connection-inline-action" onClick={openStudent}>Open student profile <Icon name="arrow" size={15}/></button></section>}<label className="search-input"><Icon name="search" size={18}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search students"/></label><div className="student-list">{filtered.map((student,index)=><button key={student.name} onClick={openStudent}><Avatar initials={student.initials}/><span><strong>{student.name}</strong><small>{student.meta}</small></span><em className={index===0||index===3?"warn":""}>{student.status}</em><Icon name="chevron" size={17}/></button>)}</div></main>}
 function CoachPractice({ openAssign }: { openAssign: () => void }) {
   return (
     <main className="screen">
@@ -2552,101 +2509,7 @@ function AppTopBar({
 }
 
 
-function StudentDetail({
-  close,
-  assign,
-}: {
-  close: () => void
-  assign: () => void
-}) {
-  return (
-    <div className="overlay light-overlay">
-      <div className="overlay-bar">
-        <button onClick={close}>
-          <Icon name="close" />
-        </button>
-        <span>Student profile</span>
-        <button>
-          <Icon name="message" />
-        </button>
-      </div>
-      <div className="student-profile">
-        <Avatar initials="MP" />
-        <h1>Meera Pillai</h1>
-        <p>Intermediate · HCP 6.4</p>
-        <div>
-          <span>
-            <strong>8</strong>
-            <small>Lessons</small>
-          </span>
-          <span>
-            <strong>2</strong>
-            <small>Open tasks</small>
-          </span>
-          <span>
-            <strong>5</strong>
-            <small>Videos</small>
-          </span>
-        </div>
-      </div>
-      <div className="detail-content student-detail-content">
-        <div className="student-actions">
-          <button onClick={assign}>
-            <Icon name="clipboard" />
-            <span>Assign drill</span>
-          </button>
-          <button>
-            <Icon name="video" />
-            <span>Feedback</span>
-          </button>
-          <button>
-            <Icon name="flag" />
-            <span>Add round</span>
-          </button>
-        </div>
-        <SectionHeading title="Performance" action="Full analysis" />
-        <div className="performance-grid">
-          <div>
-            <span>Avg score</span>
-            <strong>74.8</strong>
-            <small className="positive">↓ 2.1</small>
-          </div>
-          <div>
-            <span>Strokes gained</span>
-            <strong>+2.6</strong>
-            <small>Last 5 rounds</small>
-          </div>
-        </div>
-        <div className="sg-bars compact">
-          {[
-            ["Off tee", 72, "+1.2"],
-            ["Approach", 64, "+0.8"],
-            ["Short game", 48, "+0.2"],
-            ["Putting", 58, "+0.4"],
-          ].map(([label, width, value]) => (
-            <div key={label}>
-              <span>{label}</span>
-              <i>
-                <b style={{ width: `${width}%` }} />
-              </i>
-              <strong>{value}</strong>
-            </div>
-          ))}
-        </div>
-        <SectionHeading title="Current practice" action="View all" />
-        <div className="routine-card">
-          <span className="routine-letter">A</span>
-          <span>
-            <strong>Putting — Start Line</strong>
-            <small>Daily · 3 drills · 86% complete</small>
-          </span>
-          <em>On track</em>
-        </div>
-      </div>
-    </div>
-  )
-}
-
+function StudentDetail({close,assign,connectionStatus,onRemove}:{close:()=>void;assign:()=>void;connectionStatus:ConnectionStatus;onRemove:()=>void}){const connected=connectionStatus==="connected";return <div className="overlay light-overlay"><div className="overlay-bar"><button onClick={close}><Icon name="close"/></button><span>Student profile</span><button><Icon name="message"/></button></div><div className="student-profile"><Avatar initials={connected?"AK":"MP"}/><h1>{connected?"Alex Kapoor":"Meera Pillai"}</h1><p>{connected?"Amateur · HCP 14.2":"Intermediate · HCP 6.4"}</p>{connected&&<span className="connection-badge"><Icon name="check" size={13}/> Connected student</span>}<div><span><strong>{connected?"0":"8"}</strong><small>Lessons</small></span><span><strong>{connected?"3":"2"}</strong><small>Open tasks</small></span><span><strong>{connected?"1":"5"}</strong><small>Videos</small></span></div></div><div className="detail-content student-detail-content"><div className="student-actions"><button onClick={assign}><Icon name="clipboard"/><span>Assign drill</span></button><button><Icon name="video"/><span>Feedback</span></button><button><Icon name="flag"/><span>Add round</span></button></div><SectionHeading title="Performance" action="Full analysis"/><div className="performance-grid"><div><span>Avg score</span><strong>{connected?"91.0":"74.8"}</strong><small className="positive">{connected?"First baseline":"↓ 2.1"}</small></div><div><span>Strokes gained</span><strong>{connected?"-2.4":"+2.6"}</strong><small>{connected?"Last round":"Last 5 rounds"}</small></div></div><div className="sg-bars compact">{[["Off tee",72,"+0.4"],["Approach",64,"-0.8"],["Short game",48,"-1.1"],["Putting",58,"-0.9"]].map(([label,width,value])=><div key={label}><span>{label}</span><i><b style={{width:`${width}%`}}/></i><strong>{value}</strong></div>)}</div><SectionHeading title={connected?"Coaching relationship":"Current practice"} action={connected?"Message":"View all"}/><div className="routine-card"><span className="routine-letter">A</span><span><strong>{connected?"New student plan":"Putting — Start Line"}</strong><small>{connected?"Goals: consistency · short game · course strategy":"Daily · 3 drills · 86% complete"}</small></span><em>{connected?"Start plan":"On track"}</em></div>{connected&&<button className="disconnect-link" onClick={onRemove}>Remove student connection</button>}</div></div>}
 function AssignSheet({ close }: { close: () => void }) {
   const [assigned, setAssigned] = useState(false)
   return (
@@ -2764,34 +2627,11 @@ function VideoAnalysisModule() {
   )
 }
 
-function CoachHome({ openDiscovery }: { openDiscovery: () => void }) {
-  return (
-    <main className="screen architecture-home coach-home">
-      <div className="architecture-intro">
-        <p className="eyebrow">YOUR LEARNING JOURNEY</p>
-        <h1>Coach</h1>
-        <p>Find the right coach, then keep everything you learn in one place.</p>
-      </div>
-      <button className="coach-find-hero" onClick={openDiscovery}>
-        <span className="coach-find-icon"><Icon name="search" size={25} /></span>
-        <span><small>GET STARTED</small><strong>Find a coach</strong><em>Browse coaches, ratings, specialties and lesson options.</em></span>
-        <Icon name="arrow" size={19} />
-      </button>
-      <section className="coach-journey-preview">
-        <div><small>YOUR COACH</small><strong>Not connected yet</strong><span>Once you choose a coach, your lessons, feedback and practice plan will appear here.</span></div>
-      </section>
-      <SectionHeading title="How coaching works" />
-      <div className="coach-journey-steps">
-        <span><b>1</b><strong>Choose a coach</strong><small>Find someone who fits your game.</small></span>
-        <span><b>2</b><strong>Start learning</strong><small>Book a lesson or package.</small></span>
-        <span><b>3</b><strong>Keep improving</strong><small>Feedback and drills stay with you.</small></span>
-      </div>
-    </main>
-  )
-}
+function CoachHome({openDiscovery,status,onCancelRequest}:{openDiscovery:()=>void;status:ConnectionStatus;onCancelRequest:()=>void}){return <main className="screen architecture-home coach-home"><div className="architecture-intro"><p className="eyebrow">YOUR LEARNING JOURNEY</p><h1>Coach</h1><p>Find the right coach, then keep everything you learn in one place.</p></div>{status==="connected"?<section className="connected-coach-card"><div className="connected-coach-head"><Avatar initials="SM" image={photos.golfer}/><span><small>YOUR COACH</small><strong>Savdeep Mehta</strong><em>PGA Professional · 4.9</em></span><span className="connection-badge"><Icon name="check" size={13}/> Connected</span></div><div className="connected-coach-stats"><span><strong>Next lesson</strong><small>Tomorrow · 7:00 AM</small></span><span><strong>Practice plan</strong><small>3 drills · 72% complete</small></span></div><div className="connected-coach-actions"><button><Icon name="message" size={17}/> Message</button><button><Icon name="calendar" size={17}/> Lessons</button></div></section>:status==="pending"?<section className="connected-coach-card pending"><div className="connected-coach-head"><Avatar initials="SM" image={photos.golfer}/><span><small>CONNECTION REQUEST</small><strong>Savdeep Mehta</strong><em>Waiting for coach to accept</em></span><span className="connection-badge pending"><Icon name="clock" size={13}/> Pending</span></div><p>Your profile and coaching goals will be shared once the coach accepts.</p><button className="secondary-button" onClick={onCancelRequest}>Cancel request</button></section>:<button className="coach-find-hero" onClick={openDiscovery}><span className="coach-find-icon"><Icon name="search" size={25}/></span><span><small>GET STARTED</small><strong>Find a coach</strong><em>Browse coaches, ratings, specialties and lesson options.</em></span><Icon name="arrow" size={19}/></button>}{status==="none"&&<section className="coach-journey-preview"><div><small>YOUR COACH</small><strong>Not connected yet</strong><span>Once you choose a coach, your lessons, feedback and practice plan will appear here.</span></div></section>}<SectionHeading title={status==="none"?"How coaching works":"What happens next"}/><div className="coach-journey-steps"><span><b>1</b><strong>{status==="none"?"Choose a coach":"Coach reviews"}</strong><small>{status==="none"?"Find someone who fits your game.":"Your request and goals are shared."}</small></span><span><b>2</b><strong>{status==="none"?"Connect":"Connection accepted"}</strong><small>{status==="none"?"Send a request and share your goals.":"Your coaching space opens."}</small></span><span><b>3</b><strong>Keep improving</strong><small>Feedback and drills stay with you.</small></span></div></main>}
+function CoachApp({tab,setTab,profileOpen,setProfileOpen,overlay,setOverlay,connectionStatus,onAccept,onDecline,onRemove,onSwitch}:{tab:CoachTab;setTab:(t:CoachTab)=>void;profileOpen:boolean;setProfileOpen:(v:boolean)=>void;overlay:"student"|"assign"|null;setOverlay:(v:"student"|"assign"|null)=>void;connectionStatus:ConnectionStatus;onAccept:()=>void;onDecline:()=>void;onRemove:()=>void;onSwitch:()=>void}){const items:[CoachTab,string,IconName][]=[["today","Today","home"],["students","Students","users"],["practice","Practice","clipboard"],["business","Business","wallet"]];return <>{!profileOpen&&!overlay&&<AppTopBar title={tab==="today"?"Today":tab==="students"?"Students":tab==="practice"?"Practice":"Business"} initials="AR" onHome={()=>setTab("today")} onProfile={()=>setProfileOpen(true)}/>} {profileOpen&&!overlay&&<AppTopBar title="Profile" initials="AR" onHome={()=>setTab("today")} onProfile={()=>setProfileOpen(true)} back={()=>setProfileOpen(false)}/>}<div className="scroll-area">{profileOpen?<Profile role="coach" onSwitch={onSwitch}/>:<>{tab==="today"&&<CoachToday go={setTab}/>} {tab==="students"&&<Students openStudent={()=>setOverlay("student")} connectionStatus={connectionStatus} onAccept={onAccept} onDecline={onDecline}/>} {tab==="practice"&&<CoachPractice openAssign={()=>setOverlay("assign")}/>} {tab==="business"&&<Business/>}</>}</div>{!profileOpen&&!overlay&&<nav className="bottom-nav bottom-nav-primary" aria-label="Coach navigation"><div className="bottom-nav-track">{items.map(([id,label,icon])=><button type="button" key={id} className={id===tab?"active":""} onClick={()=>setTab(id)}><Icon name={icon} size={21}/><span>{label}</span></button>)}</div></nav>}{overlay==="student"&&<StudentDetail close={()=>setOverlay(null)} assign={()=>setOverlay("assign")} connectionStatus={connectionStatus} onRemove={onRemove}/>} {overlay==="assign"&&<AssignSheet close={()=>setOverlay(null)}/>}</>}
 
-function App() {
-  const [primaryTab, setPrimaryTab] = useState<PrimaryTab>("discover")
+function App(){
+ const [role,setRole]=useState<Role>("golfer");const[coachTab,setCoachTab]=useState<CoachTab>("today");const[coachProfileOpen,setCoachProfileOpen]=useState(false);const[connectionStatus,setConnectionStatus]=useState<ConnectionStatus>("none");const [primaryTab, setPrimaryTab] = useState<PrimaryTab>("discover")
   const [profileOpen, setProfileOpen] = useState(false)
   const [module, setModule] = useState<"sg" | "drills" | "video" | null>(null)
   const [coachDiscoveryOpen, setCoachDiscoveryOpen] = useState(false)
@@ -2829,6 +2669,8 @@ function App() {
     setDiscoverChildOpen(false)
     setDiscoverSection("Courses")
   }
+
+  const switchRole=()=>{setRole(r=>r==="golfer"?"coach":"golfer");setProfileOpen(false);setCoachProfileOpen(false);setCoachDiscoveryOpen(false);setOverlay(null)};const sendConnectionRequest=()=>setConnectionStatus("pending");const cancelConnectionRequest=()=>setConnectionStatus("none");const acceptConnection=()=>setConnectionStatus("connected");const declineConnection=()=>setConnectionStatus("none");const removeConnection=()=>setConnectionStatus("none");if(role==="coach")return <div className="app-stage"><div className="phone-shell"><CoachApp tab={coachTab} setTab={t=>{setCoachTab(t);setCoachProfileOpen(false);setOverlay(null)}} profileOpen={coachProfileOpen} setProfileOpen={setCoachProfileOpen} overlay={overlay} setOverlay={setOverlay} connectionStatus={connectionStatus} onAccept={acceptConnection} onDecline={declineConnection} onRemove={removeConnection} onSwitch={switchRole}/></div></div>
 
   const primaryItems: { id: PrimaryTab; label: string; icon: IconName }[] = [
     { id: "discover", label: "Discover", icon: "search" },
@@ -2890,31 +2732,31 @@ function App() {
                 />
               )}
               {primaryTab === "performance" && <PerformanceHome openModule={openPerformanceModule} />}
-              {primaryTab === "coach" && <CoachHome openDiscovery={() => setCoachDiscoveryOpen(true)} />}
+              {primaryTab === "coach" && <CoachHome openDiscovery={()=>setCoachDiscoveryOpen(true)} status={connectionStatus} onCancelRequest={cancelConnectionRequest} />}
             </>
           )}
 
-          {profileOpen && <Profile role="golfer" onSwitch={() => undefined} />}
+          {profileOpen && <Profile role="golfer" onSwitch={switchRole} />}
 
           {module === "sg" && <Play onModuleStateChange={() => undefined} />}
           {module === "drills" && <Improve />}
           {module === "video" && <VideoAnalysisModule />}
 
-          {coachDiscoveryOpen && <CoachDiscoveryStandalone onClose={() => setCoachDiscoveryOpen(false)} />}
+          {coachDiscoveryOpen && <CoachDiscoveryStandalone onClose={()=>setCoachDiscoveryOpen(false)} connectionStatus={connectionStatus} onConnect={sendConnectionRequest} />}
         </div>
 
         {!module && !coachDiscoveryOpen && !profileOpen && !discoverChildOpen && !overlay && (
           <BottomNav items={primaryItems} active={primaryTab} onChange={goPrimaryTab} />
         )}
 
-        {overlay === "student" && <StudentDetail close={() => setOverlay(null)} assign={() => setOverlay("assign")} />}
+        {overlay === "student" && <StudentDetail close={()=>setOverlay(null)} assign={()=>setOverlay("assign")} connectionStatus={connectionStatus} onRemove={removeConnection} />}
         {overlay === "assign" && <AssignSheet close={() => setOverlay(null)} />}
       </div>
     </div>
   )
 }
 
-function CoachDiscoveryStandalone({ onClose }: { onClose: () => void }) {
+function CoachDiscoveryStandalone({onClose,connectionStatus,onConnect}:{onClose:()=>void;connectionStatus:ConnectionStatus;onConnect:()=>void}){
   const [screen, setScreen] = useState<CourseFlowScreen>("coachDiscover")
   const [state, setState] = useState<CoachDiscoverState>("ready")
   const [coachAvailabilityState, setCoachAvailabilityState] = useState<CoachAvailabilityState>("ready")
@@ -2952,9 +2794,9 @@ function CoachDiscoveryStandalone({ onClose }: { onClose: () => void }) {
           </button>
           <SectionHeading title="Recommended for you" />
           <div className="coach-booking-list">
-            <CoachCard name="Savdeep Mehta" rating="4.9" price={1800} image={photos.golfer} onOpen={() => go("coachProfile")} />
-            <CoachCard name="Neha Arora" rating="4.8" price={1500} image={photos.golfer} onOpen={() => go("coachProfile")} />
-            <CoachCard name="Imran Qureshi" rating="4.7" price={2200} image={photos.golfer} onOpen={() => go("coachProfile")} />
+            <CoachCard name="Savdeep Mehta" rating="4.9" price={1800} image={photos.golfer} onOpen={()=>go("coachProfile")} onBook={()=>go("coachLesson")} />
+            <CoachCard name="Neha Arora" rating="4.8" price={1500} image={photos.golfer} onOpen={()=>go("coachProfile")} onBook={()=>go("coachLesson")} />
+            <CoachCard name="Imran Qureshi" rating="4.7" price={2200} image={photos.golfer} onOpen={()=>go("coachProfile")} onBook={()=>go("coachLesson")} />
           </div>
         </main>
       )}
