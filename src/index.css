@@ -3241,3 +3241,80 @@ small { line-height:1.45; }
   .coach-week-grid{padding-left:14px!important;padding-right:14px!important}
   .coach-week-times span{font-size:7px!important}
 }
+
+
+/* Coach schedule modal + segmented control polish */
+.coach-schedule-segment.segment{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:4px!important;
+  padding:4px!important;
+  min-height:48px!important;
+  margin:0 22px 18px!important;
+  background:var(--soft)!important;
+  border-radius:15px!important;
+}
+.coach-schedule-segment.segment button{
+  min-width:0!important;
+  min-height:40px!important;
+  padding:0 8px!important;
+  border-radius:11px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:12px!important;
+  font-weight:700!important;
+}
+.coach-schedule-segment.segment button.active{
+  background:#fff!important;
+  color:var(--color-brand-500)!important;
+  box-shadow:0 3px 12px rgba(42,35,29,.08)!important;
+}
+.phone-shell:has(.sheet-backdrop) .bottom-nav{display:none!important}
+.sheet-backdrop{z-index:300!important}
+.coach-schedule-sheet{
+  width:100%!important;
+  max-height:90dvh!important;
+  overflow-y:auto!important;
+  padding:8px 22px calc(24px + env(safe-area-inset-bottom))!important;
+  border-radius:26px 26px 0 0!important;
+}
+.coach-schedule-sheet .sheet-handle{margin:0 auto 18px!important}
+.coach-schedule-sheet .sheet-title{margin-bottom:22px!important}
+.coach-schedule-sheet .sheet-title h2{
+  font-size:27px!important;
+  line-height:1.05!important;
+  letter-spacing:-.035em!important;
+}
+.coach-schedule-sheet .sheet-title .eyebrow{
+  color:var(--color-brand-text)!important;
+  font-size:10px!important;
+}
+.coach-schedule-sheet label{margin-bottom:15px!important}
+.coach-schedule-sheet label>span{
+  font-size:10px!important;
+  letter-spacing:.06em!important;
+  margin-bottom:7px!important;
+}
+.coach-schedule-sheet input,
+.coach-schedule-sheet select{
+  min-height:46px!important;
+  padding:0 13px!important;
+  border:1px solid var(--line)!important;
+  border-radius:13px!important;
+  background:#fff!important;
+  font-size:14px!important;
+  color:var(--ink)!important;
+}
+.coach-schedule-sheet input:focus,
+.coach-schedule-sheet select:focus{
+  border-color:var(--color-brand-500)!important;
+  outline:none!important;
+}
+.coach-schedule-sheet .coach-form-grid{gap:10px!important}
+.coach-schedule-sheet>.primary-button{
+  margin-top:6px!important;
+  min-height:48px!important;
+  border-radius:13px!important;
+  font-size:13px!important;
+}
