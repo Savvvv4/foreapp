@@ -637,8 +637,7 @@ function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScree
       <div className="course-profile-hero course-profile-hero-premium">
         <img src={photos.course} alt="Delhi Golf Club fairway" />
         <span className="course-hero-gradient" />
-        <button onClick={() => go("results")} aria-label="Back"><Icon name="chevron" /></button>
-        <button aria-label="Save course"><Icon name="heart" /></button>
+        <button className="course-hero-save" aria-label="Save course"><Icon name="heart" /></button>
         <div className="course-hero-copy">
           <span className="eyebrow light">DELHI · 18 HOLES</span>
           <h1>Delhi Golf Club</h1>
