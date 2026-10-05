@@ -3406,3 +3406,59 @@ small { line-height:1.45; }
   .course-profile-hero-premium { height:420px; }
   .course-profile-content-premium { max-width:760px; margin:0 auto; }
 }
+
+
+/* Course detail conversion redesign */
+.course-profile-screen{padding-bottom:112px!important;background:var(--surface)!important}
+.course-profile-hero-premium{height:286px!important;border-radius:0!important}
+.course-hero-gradient{background:linear-gradient(180deg,rgba(0,0,0,.03) 18%,rgba(0,0,0,.78) 100%)!important}
+.course-hero-copy{left:20px!important;right:62px!important;bottom:22px!important}
+.course-hero-copy h1{font-size:28px!important}
+.course-hero-copy p{font-size:10px!important}
+.course-photo-count{right:14px!important;bottom:20px!important;padding:5px 8px!important;border:1px solid rgba(255,255,255,.35)!important;border-radius:999px!important;background:rgba(0,0,0,.24)!important;color:#fff!important;font-size:8px!important;font-weight:750!important}
+.course-profile-content-premium{padding:14px 18px 26px!important}
+.course-location-row{padding:0!important}
+.course-facts-premium{margin-top:14px!important}
+.course-booking-section{margin-top:18px!important;padding:17px 14px 14px!important;border-radius:16px!important;box-shadow:0 4px 18px rgba(31,23,18,.045)!important}
+.course-booking-heading{align-items:flex-end!important}
+.course-booking-eyebrow{display:block!important;margin-bottom:5px!important;color:var(--color-brand-text)!important;font-size:7px!important;letter-spacing:.11em!important}
+.course-booking-heading h2{font-size:18px!important}
+.course-price-anchor{display:flex!important;flex-direction:column!important;align-items:flex-end!important;color:var(--color-brand-text)!important;font-size:15px!important;white-space:nowrap!important}
+.course-price-anchor small{margin-top:2px!important;color:var(--muted)!important;font-size:8px!important;font-weight:650!important}
+.course-date-summary{display:flex!important;justify-content:space-between!important;align-items:center!important;margin-top:13px!important;padding:9px 10px!important;border-radius:10px!important;background:var(--soft)!important;font-size:9px!important}
+.course-date-summary span{display:flex!important;align-items:center!important;gap:5px!important;font-weight:700!important}
+.course-date-summary strong{color:var(--color-brand-text)!important;font-size:9px!important}
+.course-date-strip{margin-top:9px!important;padding-bottom:0!important;gap:6px!important}
+.course-date-strip button{min-width:55px!important;height:67px!important;padding:7px 5px!important;border:1px solid var(--line)!important;border-radius:12px!important;background:#fff!important}
+.course-date-strip button.selected{border-color:var(--color-brand-500)!important;background:var(--color-brand-tint)!important;color:var(--color-brand-text)!important;box-shadow:0 2px 7px rgba(255,110,0,.10)!important}
+.course-date-strip button small{font-size:8px!important}
+.course-date-strip button strong{font-size:17px!important}
+.course-date-strip button span{margin-top:1px!important;color:var(--muted)!important;font-size:7px!important}
+.course-date-strip button.selected span{color:var(--color-brand-text)!important}
+.course-availability-heading{margin:17px 0 8px!important}
+.course-availability-heading strong{font-size:11px!important}
+.course-availability-heading span{font-size:8px!important}
+.course-availability-slots{gap:6px!important}
+.course-availability-slots button{min-height:62px!important;grid-template-columns:1fr auto 18px!important;padding:9px 9px 9px 12px!important;border-radius:12px!important;transition:border-color .16s ease,background .16s ease,transform .16s ease!important}
+.course-availability-slots button.selected{border-color:var(--color-brand-500)!important;background:var(--color-brand-tint)!important}
+.course-availability-slots button:active{transform:scale(.99)!important}
+.course-availability-slots button strong{font-size:13px!important}
+.course-availability-slots button small{font-size:7.5px!important;line-height:11px!important}
+.course-availability-slots button b{font-size:10px!important}
+.course-booking-confidence{display:flex!important;flex-wrap:wrap!important;gap:6px 12px!important;margin-top:11px!important;padding-top:11px!important;border-top:1px solid var(--line)!important}
+.course-booking-confidence span{display:flex!important;align-items:center!important;gap:4px!important;color:var(--muted)!important;font-size:7.5px!important}
+.course-booking-confidence .icon{color:var(--color-brand-text)!important}
+.course-about-section{margin-top:25px!important}
+.course-info-section{margin-top:26px!important}
+.course-sticky-bar{position:absolute!important;display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:12px!important;min-height:84px!important;padding:11px 16px calc(11px + env(safe-area-inset-bottom))!important}
+.course-sticky-bar>span{display:flex!important;flex-direction:column!important;min-width:0!important}
+.course-sticky-bar>span small{color:var(--muted)!important;font-size:7px!important;text-transform:uppercase!important;letter-spacing:.06em!important;font-weight:750!important}
+.course-sticky-bar>span strong{margin-top:2px!important;font-size:13px!important;white-space:nowrap!important}
+.course-sticky-bar>span em{margin-top:2px!important;color:var(--muted)!important;font-size:7.5px!important;font-style:normal!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.course-sticky-bar .primary-button{min-width:164px!important;min-height:50px!important;padding:0 14px!important;border-radius:14px!important;font-size:10px!important}
+.course-sticky-bar .primary-button[aria-disabled="true"]{background:#ebe8e5!important;color:#9a928b!important;box-shadow:none!important;cursor:pointer!important}
+@media (min-width:700px){
+  .course-profile-hero-premium{height:330px!important}
+  .course-profile-content-premium{max-width:760px!important}
+  .course-sticky-bar{left:50%!important;right:auto!important;width:min(760px,100%)!important;transform:translateX(-50%)!important}
+}
