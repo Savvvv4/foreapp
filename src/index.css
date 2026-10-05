@@ -3326,7 +3326,7 @@ small { line-height:1.45; }
 .course-profile-hero-premium > img { display:block; width:100%; height:100%; object-fit:cover; }
 .course-hero-gradient { position:absolute; inset:0; background:linear-gradient(180deg,rgba(0,0,0,.08) 25%,rgba(0,0,0,.72) 100%); pointer-events:none; }
 .course-profile-hero-premium > button { z-index:2; }
-.course-profile-hero-premium .course-hero-save { right:14px; }
+.course-profile-hero-premium .course-hero-save { left:auto; right:14px; }
 .course-profile-hero-premium .course-hero-copy { pointer-events:none; }
 .course-hero-copy { position:absolute; z-index:2; left:22px; right:70px; bottom:28px; color:#fff; }
 .course-hero-copy .eyebrow { display:block; margin-bottom:7px; font-size:8px; letter-spacing:.12em; }
