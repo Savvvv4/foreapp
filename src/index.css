@@ -3195,3 +3195,49 @@ small { line-height:1.45; }
 
 /* Coach schedule + student parity */
 .coach-date-strip-wrap{display:grid;grid-template-columns:28px minmax(0,1fr) 28px;align-items:center;gap:3px;padding:0 18px 12px}.coach-strip-arrow{border:0;background:transparent;color:var(--muted);font-size:24px}.coach-date-strip{display:flex;gap:7px;overflow:hidden}.coach-date-strip button{min-width:58px;height:58px;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--muted);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px}.coach-date-strip button.selected{border-color:var(--color-brand-500);background:var(--color-brand-tint);color:var(--color-brand-text)}.coach-day-empty-slot,.coach-week-cell{position:absolute;left:0;right:0;border:0;background:transparent;z-index:1}.coach-day-empty-slot:active,.coach-week-cell:active{background:var(--color-brand-tint)}.coach-day-personal{position:absolute;left:58px;right:0;z-index:2;padding:8px;border:1px dashed var(--color-brand-500);border-radius:10px;background:var(--color-brand-tint);text-align:left}.coach-day-personal strong,.coach-day-personal small{display:block}.coach-day-personal small{margin-top:3px;color:var(--muted);font-size:8px}.coach-day-caption{display:flex;align-items:center;justify-content:space-between;padding:2px 22px 12px}.coach-day-caption>div{display:flex;gap:8px}.coach-day-caption button{border:0;background:none;color:var(--color-brand-text);font-size:10px;font-weight:800}.coach-schedule-event{touch-action:none}.coach-student-filters{display:flex;gap:7px;overflow:auto;padding:0 22px 12px}.coach-student-filters button{white-space:nowrap;border:1px solid var(--line);border-radius:999px;background:var(--surface);padding:7px 10px;color:var(--muted);font-size:9px;font-weight:750}.coach-student-filters button.active{border-color:var(--color-brand-500);background:var(--color-brand-tint);color:var(--color-brand-text)}.coach-student-tabs{display:flex;gap:6px;overflow:auto;margin:4px 0 18px;padding-bottom:4px;border-bottom:1px solid var(--line)}.coach-student-tabs button{white-space:nowrap;border:0;background:transparent;padding:8px 9px;color:var(--muted);font-size:9px;font-weight:750}.coach-student-tabs button.active{color:var(--color-brand-text);border-bottom:2px solid var(--color-brand-500)}.student-detail-list{display:grid;gap:8px}.student-detail-row{display:flex;flex-direction:column;gap:4px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);text-align:left}.student-detail-row strong{font-size:10px}.student-detail-row small{color:var(--muted);font-size:8px}.coach-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.coach-schedule-sheet label{display:grid;gap:6px;margin-bottom:11px}.coach-schedule-sheet label>span{font-size:9px;font-weight:750;color:var(--muted);text-transform:uppercase}.coach-schedule-sheet input,.coach-schedule-sheet select{width:100%;min-height:44px;padding:0 11px;border:1px solid var(--line);border-radius:11px;background:var(--surface);font:inherit;font-size:11px}.coach-schedule-sheet .primary-button{width:100%;min-height:44px}.coach-event-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}.coach-event-summary span{display:flex;flex-direction:column;gap:4px;padding:11px;border-radius:11px;background:var(--soft)}.coach-event-summary small{font-size:7px;color:var(--muted);font-weight:750}.coach-event-summary strong{font-size:10px}.coach-event-actions{display:grid;gap:8px}.coach-event-actions button{min-height:44px;border:1px solid var(--line);border-radius:11px;background:var(--surface);font-size:10px;font-weight:750}.coach-event-actions .primary-button{border:0}.coach-request-row{display:grid;grid-template-columns:38px 1fr;gap:9px;padding:12px 0;border-bottom:1px solid var(--line)}.coach-request-row>span{display:flex;flex-direction:column;gap:3px}.coach-request-row strong{font-size:10px}.coach-request-row small,.coach-request-row em{font-size:8px;color:var(--muted);font-style:normal}.coach-request-row>div{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:7px}.coach-request-row>div button{min-height:38px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:9px;font-weight:750}.coach-request-row>div .primary-button{border:0}.empty-state-copy{padding:18px 0;color:var(--muted);font-size:10px}
+
+
+/* Schedule parity pass: single BMG-style date strip, clean timeline, reliable touch gestures */
+.coach-schedule-screen{padding:25px 0 110px!important;min-height:100%}
+.coach-schedule-screen>.page-title{padding:0 22px;margin:3px 0 21px!important}
+.coach-schedule-segment{margin:0 22px 18px!important}
+.coach-date-strip-wrap{display:grid!important;grid-template-columns:30px minmax(0,1fr) 30px!important;align-items:center!important;gap:4px!important;padding:0 14px 16px!important}
+.coach-strip-arrow{width:30px!important;height:30px!important;border:1px solid var(--line)!important;border-radius:9px!important;background:var(--surface)!important;color:var(--muted)!important;font-size:22px!important;line-height:1!important;display:grid!important;place-items:center!important}
+.coach-date-strip{display:flex!important;gap:4px!important;overflow:hidden!important;padding:0!important}
+.coach-date-strip button{flex:1 1 0!important;min-width:0!important;height:58px!important;padding:7px 2px!important;border:0!important;border-radius:16px!important;background:transparent!important;color:var(--muted)!important}
+.coach-date-strip button.selected{border:1.5px solid var(--color-brand-500)!important;background:var(--color-brand-tint)!important;color:var(--color-brand-text)!important}
+.coach-date-strip small{font-size:9px!important;font-weight:700!important}
+.coach-date-strip strong{font-size:18px!important}
+.coach-day-caption{padding:0 22px 12px!important}
+.coach-day-timeline{height:696px!important;margin:0 22px 20px 54px!important;border-left:0!important;overflow:hidden!important}
+.coach-hour-row{height:58px!important;border-top:1px solid var(--line)!important}
+.coach-hour-row span{left:-42px!important;top:-6px!important}
+.coach-hour-row i{margin-left:0!important}
+.coach-day-empty-slot{left:0!important;right:0!important;z-index:1!important;touch-action:manipulation!important}
+.coach-schedule-event{left:0!important;right:0!important;z-index:3!important;touch-action:none!important;cursor:grab!important}
+.coach-schedule-event.dragging{cursor:grabbing!important;opacity:.94!important;box-shadow:0 10px 24px rgba(66,40,20,.2)!important}
+.coach-day-open{position:absolute;left:0;right:0;z-index:3;border:1.5px dashed #6f9a88;border-radius:10px;background:#eef7f2;color:#39755c;text-align:left;padding:7px 9px;font-size:9px;font-weight:750;touch-action:manipulation}
+.coach-day-personal{left:0!important;right:0!important;z-index:3!important;touch-action:manipulation!important}
+.coach-week-controls{padding:0 22px 12px!important}
+.coach-week-grid{display:grid!important;grid-template-columns:36px minmax(0,1fr)!important;gap:4px!important;padding:0 14px 0 14px!important;overflow:hidden!important}
+.coach-week-times{padding-top:0!important}
+.coach-week-times span{height:58px!important;font-size:8px!important;transform:translateY(-5px)!important}
+.coach-week-days{display:grid!important;grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:3px!important;min-width:0!important}
+.coach-week-day{min-width:0!important}
+.coach-week-column{height:696px!important;border:0!important;border-radius:0!important;background:repeating-linear-gradient(to bottom,transparent 0,transparent 57px,var(--line) 57px,var(--line) 58px)!important;overflow:visible!important;position:relative!important}
+.coach-week-cell{left:0!important;right:0!important;height:58px!important;z-index:1!important;touch-action:manipulation!important}
+.coach-week-open,.coach-week-event{left:1px!important;right:1px!important;z-index:3!important}
+.coach-week-event{touch-action:none!important;cursor:grab!important;min-height:28px!important;padding:4px 3px!important;font-size:8px!important}
+.coach-week-event strong{font-size:8px!important;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.coach-week-event small{font-size:7px!important}
+.coach-week-event.dragging{cursor:grabbing!important;opacity:.94!important;box-shadow:0 10px 24px rgba(66,40,20,.2)!important}
+.coach-week-column.drop-target{background-color:rgba(255,110,0,.06)!important}
+.coach-week-drop-ghost{position:absolute;left:1px;right:1px;border:1.5px dashed var(--color-brand-500);border-radius:7px;background:var(--color-brand-tint);opacity:.8;z-index:2;pointer-events:none}
+.coach-week-controls button{touch-action:manipulation}
+.coach-schedule-legend{padding:12px 22px 0!important}
+.coach-schedule-hint{padding:8px 22px 0!important;line-height:14px}
+@media(max-width:520px){
+  .coach-schedule-screen>.page-title{padding:0 22px!important}
+  .coach-week-grid{padding-left:14px!important;padding-right:14px!important}
+  .coach-week-times span{font-size:7px!important}
+}
