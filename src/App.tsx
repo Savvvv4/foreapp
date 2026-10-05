@@ -645,6 +645,10 @@ function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScree
     else document.getElementById("course-tee-times")?.scrollIntoView({ behavior: "smooth", block: "center" })
   }
 
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" })
+  }
+
   return (
     <main className="course-profile-screen">
       <div className="course-profile-hero course-profile-hero-premium">
@@ -660,90 +664,152 @@ function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScree
       </div>
 
       <div className="course-profile-content course-profile-content-premium">
-        <div className="course-location-row">
-          <span><Icon name="pin" size={15} /> Lodhi Road, Delhi · 2.1 km away</span>
-          <button aria-label="Share course"><Icon name="share" size={16} /></button>
-        </div>
+        <nav className="course-anchor-nav" aria-label="Course sections">
+          <button className="active" onClick={() => scrollToSection("course-tee-times")}>Book</button>
+          <button onClick={() => scrollToSection("course-overview")}>Course</button>
+          <button onClick={() => scrollToSection("course-reviews")}>Reviews</button>
+          <button onClick={() => scrollToSection("course-location")}>Location</button>
+        </nav>
 
-        <div className="course-facts course-facts-premium">
-          <div><strong>18</strong><span>Holes</span></div>
-          <div><strong>72</strong><span>Par</span></div>
-          <div><strong>6,935</strong><span>Yards</span></div>
-          <div><strong>Private</strong><span>Access</span></div>
-        </div>
-
-        <section className="course-booking-section" id="course-tee-times">
-          <div className="course-section-heading course-booking-heading">
-            <div><span className="eyebrow course-booking-eyebrow">TEE TIMES</span><h2>When do you want to play?</h2><p>Select a day and tee time. Your choice stays ready in the booking bar.</p></div>
+        <section className="course-booking-module" id="course-tee-times">
+          <div className="course-booking-module-head">
+            <div>
+              <span className="eyebrow">BOOK YOUR ROUND</span>
+              <h2>Choose when you want to play.</h2>
+              <p>Pick a day, then choose an available tee time.</p>
+            </div>
+            <div className="course-booking-price"><strong>₹2,500</strong><span>per player</span></div>
           </div>
+
           <div className="course-date-summary">
-            <span><Icon name="calendar" size={14} /> {selectedDay} {selectedDate} August</span><strong>{selectedSlots.length} available</strong>
+            <span><Icon name="calendar" size={14} /> {selectedDay} {selectedDate} August</span>
+            <strong>{selectedSlots.length} tee times</strong>
           </div>
-          <div className="profile-date-strip course-date-strip">
+
+          <div className="course-date-strip course-date-strip-primary">
             {dates.map(([day, date]) => {
               const count = availabilityCount(date)
-              return <button key={date} className={selectedDate === date ? "selected" : ""} onClick={() => { setSelectedDate(date); setSelectedSlot("") }} aria-pressed={selectedDate === date}><small>{day}</small><strong>{date}</strong><span>{count} {count === 1 ? "slot" : "slots"}</span></button>
+              return (
+                <button key={date} className={selectedDate === date ? "selected" : ""} onClick={() => { setSelectedDate(date); setSelectedSlot("") }} aria-pressed={selectedDate === date}>
+                  <small>{day}</small>
+                  <strong>{date}</strong>
+                  <span>{count} {count === 1 ? "time" : "times"}</span>
+                </button>
+              )
             })}
           </div>
-          <div className="course-availability-heading"><strong>Available tee times</strong><span>{selectedSlots.length} options · 4 players</span></div>
-          <div className="availability-slots course-availability-slots">
+
+          <div className="course-time-heading">
+            <div><strong>Available times</strong><span>Instant confirmation</span></div>
+            <small>4 players</small>
+          </div>
+
+          <div className="course-time-list">
             {selectedSlots.map((slot, index) => {
               const players = index < 2 ? 4 : 2
               const isSelected = selectedSlot === slot
-              return <button key={slot} className={isSelected ? "selected" : ""} onClick={() => chooseSlot(slot)} aria-pressed={isSelected}><span><strong>{slot}</strong><small>{players} players available · Instant confirmation</small></span><b>₹2,500</b><Icon name={isSelected ? "check" : "chevron"} size={17} /></button>
+              return (
+                <button key={slot} className={isSelected ? "selected" : ""} onClick={() => chooseSlot(slot)} aria-pressed={isSelected}>
+                  <span className="course-time-main"><strong>{slot}</strong><small>{players} players available</small></span>
+                  <span className="course-time-price">₹2,500</span>
+                  <span className="course-time-action"><Icon name={isSelected ? "check" : "chevron"} size={17} /></span>
+                </button>
+              )
             })}
           </div>
-          <div className="course-booking-confidence"><span><Icon name="check" size={13} /> Instant confirmation</span><span><Icon name="shield" size={13} /> Free cancellation until 24h before</span></div>
-        </section>
 
-        <section className="course-info-section course-about-section">
-          <div className="course-section-heading"><div><h2>About the course</h2></div></div>
-          <p className="body-copy">A historic 18-hole course in the heart of Delhi, with tree-lined fairways, strategic bunkering and fast greens. The layout rewards accuracy off the tee and thoughtful approach play.</p>
-          <button className="course-text-link">Read more <Icon name="chevron" size={13} /></button>
-          <div className="course-good-to-know">
-            <strong>Good to know</strong>
-            <div><span>• Challenging for beginners</span><span>• Caddies available</span><span>• Walking available</span></div>
+          <div className={`course-selection-state ${selectedSlot ? "ready" : ""}`}>
+            <span><Icon name={selectedSlot ? "check" : "calendar"} size={14} /></span>
+            <div>
+              <strong>{selectedSlot ? "Tee time selected" : "Your tee time will appear here"}</strong>
+              <small>{selectedSlot ? `${selectedDay} ${selectedDate} August · ${selectedSlot}` : "Choose a time above to continue."}</small>
+            </div>
+          </div>
+
+          <div className="course-booking-trust">
+            <span><Icon name="check" size={12} /> Instant confirmation</span>
+            <span><Icon name="shield" size={12} /> Free cancellation until 24h before</span>
           </div>
         </section>
 
-        <section className="course-info-section">
-          <div className="course-section-heading"><div><h2>Facilities</h2><p>Everything you need before and after your round.</p></div></div>
-          <div className="amenity-grid course-amenity-grid">
-            {["Driving range", "Caddies", "Golf carts", "Club rental", "Pro shop", "Restaurant"].map((amenity) => (
-              <span key={amenity}><Icon name="check" size={14} /> {amenity}</span>
-            ))}
+        <section className="course-overview-section" id="course-overview">
+          <div className="course-editorial-head">
+            <span className="eyebrow">THE COURSE</span>
+            <h2>A Delhi classic worth planning your round around.</h2>
+            <p>A historic 18-hole course in the heart of Delhi. Tree-lined fairways, strategic bunkering and fast greens reward accuracy and thoughtful approach play.</p>
+          </div>
+
+          <div className="course-facts course-facts-editorial">
+            <div><strong>18</strong><span>Holes</span></div>
+            <div><strong>72</strong><span>Par</span></div>
+            <div><strong>6,935</strong><span>Yards</span></div>
+            <div><strong>Private</strong><span>Access</span></div>
+          </div>
+
+          <div className="course-before-play">
+            <div>
+              <span className="eyebrow">BEFORE YOU PLAY</span>
+              <strong>Plan the essentials</strong>
+            </div>
+            <div className="course-essentials">
+              <span><Icon name="check" size={13} /> Caddies available</span>
+              <span><Icon name="check" size={13} /> Walking available</span>
+              <span><Icon name="check" size={13} /> Driving range</span>
+              <span><Icon name="check" size={13} /> Golf carts</span>
+              <span><Icon name="check" size={13} /> Club rental</span>
+              <span><Icon name="check" size={13} /> Restaurant</span>
+            </div>
           </div>
         </section>
 
-        <section className="course-info-section">
-          <div className="course-section-heading"><div><h2>Course layout</h2><p>18 holes · Par 72 · 6,935 yards</p></div></div>
-          <div className="course-layout-summary"><span><strong>18</strong><small>Holes</small></span><span><strong>72</strong><small>Par</small></span><span><strong>6,935</strong><small>Yards</small></span><span><strong>4 hr</strong><small>Typical pace</small></span></div>
-          <p className="course-layout-note">Tree-lined fairways, strategic bunkers and fast greens. Accuracy off the tee is rewarded.</p>
-        </section>
-
-        <section className="course-info-section">
-          <div className="course-section-heading"><div><h2>What golfers say</h2><p>Based on 312 reviews</p></div><strong className="course-review-score">4.7 <Icon name="star" size={13} /></strong></div>
-          <div className="course-review-bars">
-            <div><span>Course condition</span><b>4.8</b></div>
-            <div><span>Facilities</span><b>4.6</b></div>
-            <div><span>Staff</span><b>4.7</b></div>
+        <section className="course-layout-feature">
+          <div className="course-layout-copy">
+            <span className="eyebrow">THE LAYOUT</span>
+            <h2>Play it smart.</h2>
+            <p>Tree-lined fairways and strategically placed bunkers make position more important than power.</p>
           </div>
-          <div className="profile-review course-review-card"><span>★★★★★</span><p>“Beautiful course, smooth check-in, and excellent caddies.”</p><small>Rohit S. · Played 2 weeks ago</small></div>
-          <button className="course-text-link">See all 312 reviews <Icon name="arrow" size={14} /></button>
+          <div className="course-layout-metrics">
+            <span><strong>6,935</strong><small>yards</small></span>
+            <span><strong>72</strong><small>par</small></span>
+            <span><strong>4 hr</strong><small>typical pace</small></span>
+          </div>
+          <button className="course-layout-action">View course details <Icon name="arrow" size={14} /></button>
         </section>
 
-        <section className="course-info-section">
-          <div className="course-section-heading"><div><h2>Getting there</h2><p>About 18 minutes by car from central Delhi.</p></div></div>
+        <section className="course-reviews-feature" id="course-reviews">
+          <div className="course-review-score-block">
+            <span className="eyebrow">GOLFER RATING</span>
+            <strong>4.7</strong>
+            <span className="course-stars">★★★★★</span>
+            <small>312 reviews</small>
+          </div>
+          <div className="course-review-breakdown">
+            <div><span>Course condition</span><strong>4.8</strong></div>
+            <div><span>Facilities</span><strong>4.6</strong></div>
+            <div><span>Staff</span><strong>4.7</strong></div>
+          </div>
+          <blockquote>“Beautiful course, smooth check-in, and excellent caddies.”</blockquote>
+          <small className="course-review-author">Rohit S. · Played 2 weeks ago</small>
+          <button className="course-text-link">Read all 312 reviews <Icon name="arrow" size={14} /></button>
+        </section>
+
+        <section className="course-location-feature" id="course-location">
+          <div className="course-location-copy">
+            <span className="eyebrow">LOCATION</span>
+            <h2>Easy to get to.</h2>
+            <p>Lodhi Road, Delhi · 2.1 km away</p>
+          </div>
           <button className="directions-card course-directions-card">
             <span><Icon name="map" size={24} /></span>
-            <div><strong>Delhi Golf Club</strong><small>Lodhi Road, Delhi · 2.1 km · 18 min drive</small></div>
+            <div><strong>Delhi Golf Club</strong><small>About 18 min drive</small></div>
             <Icon name="directions" />
           </button>
         </section>
 
         <section className="course-coach-cross-sell">
           <span className="eyebrow">WANT TO IMPROVE?</span>
-          <h2>Learn with a coach at this course</h2>
+          <h2>Learn with a coach at this course.</h2>
+          <p>Turn your next round into a lesson.</p>
           <button className="lesson-cross-sell" onClick={() => go("coachProfile")}><Avatar initials="SM" /><span><strong>Savdeep Mehta</strong><small>PGA Professional · 4.9 · from ₹1,800</small></span><Icon name="chevron" /></button>
         </section>
       </div>
