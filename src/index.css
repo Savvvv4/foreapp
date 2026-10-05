@@ -2598,16 +2598,23 @@ small { line-height:1.45; }
 }
 .app-topbar-brand{
   justify-self:start;
-  min-width:48px;
+  width:86px;
   height:42px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
   padding:0;
   border:0;
   background:transparent;
   color:var(--ink);
-  font-size:18px;
-  font-weight:800;
-  letter-spacing:-.045em;
   text-align:left;
+}
+.app-topbar-brand img{
+  display:block;
+  width:82px;
+  height:auto;
+  max-height:28px;
+  object-fit:contain;
 }
 .app-topbar-profile{
   justify-self:end;

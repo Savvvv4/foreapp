@@ -2468,7 +2468,7 @@ function AppTopBar({
       {back ? (
         <button type="button" className="app-topbar-back" onClick={back} aria-label="Go back"><Icon name="chevron" size={21} /></button>
       ) : (
-        <button type="button" className="app-topbar-brand" onClick={onHome} aria-label="Go to Discover"><span>FORE</span></button>
+        <button type="button" className="app-topbar-brand" onClick={onHome} aria-label="Go to Discover"><img src="/fore-logo-orange.svg" alt="Fore" /></button>
       )}
       {isDiscoverySelector ? (
         <div className="app-topbar-selector-wrap">
