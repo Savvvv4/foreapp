@@ -610,56 +610,155 @@ function ResultsScreen({
 }
 
 function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScreen) => void; openBooking: (course: BookingCourse, slot?: string) => void }) {
+  const dates = [
+    ["Thu", "20"],
+    ["Fri", "21"],
+    ["Sat", "22"],
+    ["Sun", "23"],
+    ["Mon", "24"],
+    ["Tue", "25"],
+    ["Wed", "26"],
+  ] as const
+  const [selectedDate, setSelectedDate] = useState("22")
+  const slotsByDate: Record<string, string[]> = {
+    "20": ["6:30 AM", "7:40 AM", "9:10 AM"],
+    "21": ["6:10 AM", "7:20 AM", "8:40 AM", "10:00 AM"],
+    "22": ["6:30 AM", "7:30 AM", "8:30 AM"],
+    "23": ["7:00 AM", "7:40 AM", "8:50 AM", "10:10 AM"],
+    "24": ["6:40 AM", "8:00 AM", "9:20 AM"],
+    "25": ["7:10 AM", "8:30 AM", "10:00 AM"],
+    "26": ["6:30 AM", "7:50 AM", "9:30 AM"],
+  }
+  const selectedSlots = slotsByDate[selectedDate] || []
+  const selectedDay = dates.find(([, day]) => day === selectedDate)?.[0] || "Sat"
+
   return (
     <main className="course-profile-screen">
-      <div className="course-profile-hero">
+      <div className="course-profile-hero course-profile-hero-premium">
         <img src={photos.course} alt="Delhi Golf Club fairway" />
-        <button onClick={() => go("results")}><Icon name="chevron" /></button>
-        <button><Icon name="heart" /></button>
-        <span>1 / 5</span>
-      </div>
-      <div className="course-profile-content">
-        <div className="course-title-row">
+        <span className="course-hero-gradient" />
+        <button onClick={() => go("results")} aria-label="Back"><Icon name="chevron" /></button>
+        <button aria-label="Save course"><Icon name="heart" /></button>
+        <div className="course-hero-copy">
+          <span className="eyebrow light">DELHI · 18 HOLES</span>
           <h1>Delhi Golf Club</h1>
-          <span className="rating"><Icon name="star" size={14} /> 4.7 (312)</span>
+          <p><Icon name="star" size={13} /> 4.7 (312 reviews) <span>·</span> Lodhi Road</p>
         </div>
-        <p className="course-address"><Icon name="pin" size={15} /> Lodhi Road, Delhi · 2.1 km</p>
-        <p className="trust-line"><Icon name="shield" size={15} /> Free cancellation until 24h before</p>
-        <div className="course-facts">
-          {[["18", "Holes"], ["72", "Par"], ["6,935", "Yards"], ["Collared", "Dress code"]].map(([value, label]) => (
-            <div key={label}><strong>{value}</strong><span>{label}</span></div>
-          ))}
-        </div>
-        <h2>Amenities</h2>
-        <div className="amenity-grid">
-          {["Driving range", "Caddies", "Golf carts", "Club rental"].map((amenity) => <span key={amenity}><Icon name="check" size={14} /> {amenity}</span>)}
-        </div>
-        <h2>About the course</h2>
-        <p className="body-copy">A historic championship course in the heart of Delhi, known for tree-lined fairways, strategic bunkering, and fast greens. <button>Read more</button></p>
-        <div className="profile-section-heading"><h2>Availability</h2><button onClick={() => openBooking(delhiCourse)}>All tee times</button></div>
-        <div className="profile-date-strip">
-          {["Thu 20", "Fri 21", "Sat 22", "Sun 23", "Mon 24", "Tue 25", "Wed 26"].map((date, index) => (
-            <button className={index === 2 ? "selected" : ""} key={date}><small>{date.split(" ")[0]}</small><strong>{date.split(" ")[1]}</strong></button>
-          ))}
-        </div>
-        <div className="availability-slots">
-          {["6:30 AM", "7:30 AM", "8:30 AM"].map((slot) => <button key={slot} onClick={() => openBooking(delhiCourse, slot)}><strong>{slot}</strong><span>₹2,500</span></button>)}
-        </div>
-        <div className="profile-section-heading"><h2>Reviews</h2><button>See all 312</button></div>
-        <div className="profile-review"><span>★★★★★</span><p>“Beautiful course, smooth check-in, and excellent caddies.”</p><small>Rohit S. · 2 weeks ago</small></div>
-        <h2>Map & directions</h2>
-        <button className="directions-card"><span><Icon name="map" size={24} /></span><div><strong>Lodhi Road, Delhi</strong><small>18 min drive · 2.1 km</small></div><Icon name="directions" /></button>
-        <h2>Add a lesson at this course</h2>
-        <button className="lesson-cross-sell" onClick={() => go("coachProfile")}><Avatar initials="SM" /><span><strong>Savdeep Mehta</strong><small>PGA Professional · 4.9 · from ₹1,800</small></span><Icon name="chevron" /></button>
+        <span className="course-photo-count">1 / 5</span>
       </div>
-      <div className="booking-sticky-bar">
-        <span><small>From</small><strong>₹2,500</strong></span>
-        <button className="primary-button" onClick={() => openBooking(delhiCourse)}>Select tee time</button>
+
+      <div className="course-profile-content course-profile-content-premium">
+        <div className="course-location-row">
+          <span><Icon name="pin" size={15} /> Lodhi Road, Delhi · 2.1 km away</span>
+          <button aria-label="Share course"><Icon name="share" size={16} /></button>
+        </div>
+
+        <div className="course-facts course-facts-premium">
+          <div><strong>18</strong><span>Holes</span></div>
+          <div><strong>72</strong><span>Par</span></div>
+          <div><strong>6,935</strong><span>Yards</span></div>
+          <div><strong>Private</strong><span>Course</span></div>
+        </div>
+
+        <section className="course-booking-section">
+          <div className="course-section-heading">
+            <div><h2>Book a tee time</h2><p>Choose a day, then pick a time.</p></div>
+            <span>₹2,500 / player</span>
+          </div>
+          <div className="profile-date-strip course-date-strip">
+            {dates.map(([day, date]) => (
+              <button
+                key={date}
+                className={selectedDate === date ? "selected" : ""}
+                onClick={() => setSelectedDate(date)}
+                aria-pressed={selectedDate === date}
+              >
+                <small>{day}</small><strong>{date}</strong><span>Aug</span>
+              </button>
+            ))}
+          </div>
+          <div className="course-availability-heading">
+            <strong>Available tee times</strong>
+            <span>{selectedDay} {selectedDate} August</span>
+          </div>
+          <div className="availability-slots course-availability-slots">
+            {selectedSlots.map((slot, index) => (
+              <button key={slot} onClick={() => openBooking(delhiCourse, slot)}>
+                <span><strong>{slot}</strong><small>{index === 0 ? "4 players available" : index === 1 ? "4 players available" : "2 players available"}</small></span>
+                <b>₹2,500</b>
+                <Icon name="chevron" size={17} />
+              </button>
+            ))}
+          </div>
+          <button className="course-view-times" onClick={() => openBooking(delhiCourse)}>View all tee times <Icon name="arrow" size={15} /></button>
+        </section>
+
+        <section className="course-info-section">
+          <div className="course-section-heading"><div><h2>About the course</h2></div></div>
+          <p className="body-copy">A historic 18-hole course in the heart of Delhi, with tree-lined fairways, strategic bunkering and fast greens. The layout rewards accuracy off the tee and thoughtful approach play.</p>
+          <button className="course-text-link">Read more <Icon name="chevron" size={13} /></button>
+          <div className="course-good-to-know">
+            <strong>Good to know</strong>
+            <div><span>• Challenging for beginners</span><span>• Caddies available</span><span>• Walking available</span></div>
+          </div>
+        </section>
+
+        <section className="course-info-section">
+          <div className="course-section-heading"><div><h2>Facilities</h2></div><button className="course-section-link">View all</button></div>
+          <div className="amenity-grid course-amenity-grid">
+            {["Driving range", "Caddies", "Golf carts", "Club rental", "Pro shop", "Restaurant"].map((amenity) => (
+              <span key={amenity}><Icon name="check" size={14} /> {amenity}</span>
+            ))}
+          </div>
+        </section>
+
+        <section className="course-info-section">
+          <div className="course-section-heading"><div><h2>Course layout</h2><p>18 holes · Par 72 · 6,935 yards</p></div></div>
+          <div className="course-scorecard-preview">
+            <div className="scorecard-top"><span>Front 9</span><strong>Par 36</strong><b>3,418 yd</b></div>
+            <div className="scorecard-holes">
+              {[["1","4","412"],["2","5","528"],["3","4","386"],["4","3","174"],["5","4","421"]].map(([hole, par, yards]) => (
+                <div key={hole}><small>{hole}</small><span>Par {par}</span><strong>{yards} yd</strong></div>
+              ))}
+            </div>
+          </div>
+          <button className="course-text-link">View full scorecard <Icon name="arrow" size={14} /></button>
+        </section>
+
+        <section className="course-info-section">
+          <div className="course-section-heading"><div><h2>What golfers say</h2><p>Based on 312 reviews</p></div><strong className="course-review-score">4.7 <Icon name="star" size={13} /></strong></div>
+          <div className="course-review-bars">
+            <div><span>Course condition</span><b>4.8</b></div>
+            <div><span>Facilities</span><b>4.6</b></div>
+            <div><span>Staff</span><b>4.7</b></div>
+          </div>
+          <div className="profile-review course-review-card"><span>★★★★★</span><p>“Beautiful course, smooth check-in, and excellent caddies.”</p><small>Rohit S. · Played 2 weeks ago</small></div>
+          <button className="course-text-link">See all 312 reviews <Icon name="arrow" size={14} /></button>
+        </section>
+
+        <section className="course-info-section">
+          <div className="course-section-heading"><div><h2>Getting there</h2></div></div>
+          <button className="directions-card course-directions-card">
+            <span><Icon name="map" size={24} /></span>
+            <div><strong>Delhi Golf Club</strong><small>Lodhi Road, Delhi · 2.1 km · 18 min drive</small></div>
+            <Icon name="directions" />
+          </button>
+        </section>
+
+        <section className="course-coach-cross-sell">
+          <span className="eyebrow">WANT TO IMPROVE WHILE YOU PLAY?</span>
+          <h2>Book a lesson at Delhi Golf Club</h2>
+          <button className="lesson-cross-sell" onClick={() => go("coachProfile")}><Avatar initials="SM" /><span><strong>Savdeep Mehta</strong><small>PGA Professional · 4.9 · from ₹1,800</small></span><Icon name="chevron" /></button>
+        </section>
+      </div>
+
+      <div className="booking-sticky-bar course-sticky-bar">
+        <span><small>From</small><strong>₹2,500 <em>/ player</em></strong></span>
+        <button className="primary-button" onClick={() => openBooking(delhiCourse)}>Book tee time <Icon name="arrow" size={15} /></button>
       </div>
     </main>
   )
 }
-
 function BookingFlowModal({
   course, step, setStep, date, setDate, time, setTime, caddyMode, setCaddyMode,
   cartCount, setCartCount, paymentMethod, setPaymentMethod, close, pay,
