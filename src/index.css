@@ -3462,3 +3462,72 @@ small { line-height:1.45; }
   .course-profile-content-premium{max-width:760px!important}
   .course-sticky-bar{left:50%!important;right:auto!important;width:min(760px,100%)!important;transform:translateX(-50%)!important}
 }
+
+/* Course detail v2 */
+.course-profile-screen{padding-bottom:0!important;background:#fff}
+.course-profile-hero-premium{height:330px!important;overflow:hidden}
+.course-profile-hero-premium .course-hero-save{top:18px!important;right:18px!important;left:auto!important;width:46px!important;height:46px!important;border:1px solid rgba(255,255,255,.78)!important;color:#241f1b!important;background:rgba(255,255,255,.94)!important;box-shadow:0 6px 18px rgba(0,0,0,.14)!important;transform:none!important}
+.course-profile-hero-premium .course-hero-save .icon{width:21px;height:21px;transform:none!important}
+.course-profile-hero-premium .course-hero-save.saved{color:var(--color-brand-text)!important;background:#fff4eb!important}
+.course-profile-hero-premium .course-hero-copy{left:22px!important;right:22px!important;bottom:24px!important}
+.course-profile-content-premium{padding:0 20px 150px!important;max-width:760px;margin:0 auto}
+.course-location-row{min-height:62px!important;margin:0!important;padding:0!important;border-bottom:1px solid var(--line)}
+.course-location-row button{width:40px!important;height:40px!important;border:1px solid var(--line)!important;border-radius:50%!important;background:#fff!important}
+.course-facts-premium{margin-top:0!important;padding:17px 0!important}
+.course-facts-premium strong{font-size:16px!important}
+.course-booking-section{margin-top:22px!important;padding:0 0 22px!important;border:0!important;border-bottom:1px solid var(--line)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+.course-booking-heading{align-items:flex-start!important}
+.course-booking-heading h2{margin-top:2px!important;font-size:20px!important}
+.course-booking-heading p{max-width:300px;margin-top:5px!important;font-size:9px!important;line-height:14px!important}
+.course-booking-eyebrow{font-size:7px!important;letter-spacing:.12em!important}
+.course-date-summary{margin-top:14px!important;padding:10px 11px!important;border:1px solid var(--line)!important;background:var(--soft)!important;border-radius:12px!important}
+.course-date-strip{margin-top:10px!important;gap:7px!important}
+.course-date-strip button{min-width:58px!important;min-height:68px!important;border-radius:13px!important}
+.course-date-strip button.selected{border-color:var(--color-brand-500)!important;box-shadow:0 0 0 1px var(--color-brand-500)!important}
+.course-availability-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:18px}
+.course-availability-heading strong{font-size:12px}
+.course-availability-heading span{color:var(--muted);font-size:8px}
+.course-availability-slots{display:grid!important;grid-template-columns:1fr!important;gap:8px!important;margin-top:9px!important}
+.course-availability-slots button{min-height:62px!important;display:grid!important;grid-template-columns:1fr auto auto!important;align-items:center!important;gap:10px!important;padding:10px 12px!important;border:1px solid var(--line)!important;border-radius:14px!important;background:#fff!important;text-align:left!important}
+.course-availability-slots button.selected{border-color:var(--color-brand-500)!important;background:var(--color-brand-tint)!important;box-shadow:0 0 0 1px var(--color-brand-500)!important}
+.course-availability-slots button>span{display:flex!important;flex-direction:column!important;align-items:flex-start!important}
+.course-availability-slots strong{font-size:13px!important}
+.course-availability-slots small{margin-top:3px!important;color:var(--muted)!important;font-size:8px!important}
+.course-availability-slots b{color:var(--color-brand-text);font-size:11px}
+.course-booking-confidence{display:flex!important;flex-wrap:wrap!important;gap:8px 14px!important;margin-top:12px!important}
+.course-booking-confidence span{display:flex;align-items:center;gap:4px;color:var(--muted);font-size:8px!important}
+.course-booking-confidence .icon{color:var(--color-brand-text)}
+.course-info-section{margin-top:28px!important}
+.course-section-heading h2{font-size:19px!important}
+.course-good-to-know{margin-top:13px!important;padding-top:13px!important;border-top:1px solid var(--line)}
+.course-good-to-know>div{display:flex!important;flex-wrap:wrap!important;gap:6px!important;margin-top:8px!important}
+.course-good-to-know>div span{padding:7px 9px;border-radius:999px;background:var(--soft);color:var(--muted);font-size:8px}
+.course-amenity-grid{gap:0!important;margin-top:9px;overflow:hidden;border:1px solid var(--line);border-radius:14px}
+.course-amenity-grid span{min-height:44px;padding:0 10px;border-bottom:1px solid var(--line);font-size:9px!important}
+.course-amenity-grid span:nth-child(odd){border-right:1px solid var(--line)}
+.course-amenity-grid span:nth-last-child(-n+2){border-bottom:0}
+.course-layout-summary{display:grid;grid-template-columns:repeat(4,1fr);margin-top:10px;padding:13px 0;border-block:1px solid var(--line)}
+.course-layout-summary span{display:flex;flex-direction:column;align-items:center;border-right:1px solid var(--line)}
+.course-layout-summary span:last-child{border-right:0}
+.course-layout-summary strong{font-size:13px}
+.course-layout-summary small{margin-top:4px;color:var(--muted);font-size:8px}
+.course-layout-note{margin:10px 0 0!important;color:var(--muted);font-size:9px!important;line-height:15px!important}
+.course-review-bars{gap:6px!important;margin-top:12px!important}
+.course-review-bars div{padding:10px!important;border:1px solid var(--line);background:var(--soft)!important}
+.course-review-bars b{font-size:12px!important}
+.course-review-card{margin-top:9px!important;padding:16px!important;border-radius:15px!important;background:#fff!important}
+.course-directions-card{margin-top:10px!important;min-height:76px!important}
+.course-coach-cross-sell{margin-top:28px!important;margin-bottom:10px!important;padding:18px!important;border:1px solid #ffd9bf;border-radius:18px!important;background:var(--color-brand-tint)!important}
+.course-coach-cross-sell h2{margin:6px 0 12px!important;font-size:17px!important}
+.course-sticky-bar{position:fixed!important;z-index:60!important;left:50%!important;right:auto!important;bottom:0!important;width:min(100vw,760px)!important;min-height:82px!important;padding:10px 18px calc(10px + env(safe-area-inset-bottom))!important;transform:translateX(-50%)!important;border-top:1px solid var(--line)!important;box-shadow:0 -10px 28px rgba(31,23,18,.08)!important}
+.course-sticky-bar>span{min-width:105px!important}
+.course-sticky-bar small{font-size:8px!important;letter-spacing:.04em}
+.course-sticky-bar strong{font-size:17px!important}
+.course-sticky-bar em{font-size:8px!important}
+.course-sticky-bar .primary-button{min-width:178px!important;min-height:52px!important;border-radius:17px!important;justify-content:center}
+.course-sticky-bar .primary-button:disabled{color:#aaa39d!important;background:#ebe7e3!important;box-shadow:none!important}
+@media(max-width:520px){
+ .course-profile-hero-premium{height:330px!important}
+ .course-sticky-bar{width:100vw!important}
+ .course-sticky-bar .primary-button{min-width:162px!important}
+}

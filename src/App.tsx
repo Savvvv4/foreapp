@@ -621,6 +621,7 @@ function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScree
   ] as const
   const [selectedDate, setSelectedDate] = useState("22")
   const [selectedSlot, setSelectedSlot] = useState("")
+  const [saved, setSaved] = useState(false)
   const slotsByDate: Record<string, string[]> = {
     "20": ["6:30 AM", "7:40 AM", "9:10 AM"],
     "21": ["6:10 AM", "7:20 AM", "8:40 AM", "10:00 AM"],
@@ -633,7 +634,6 @@ function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScree
   const selectedSlots = slotsByDate[selectedDate] || []
   const selectedDay = dates.find(([, day]) => day === selectedDate)?.[0] || "Sat"
   const availabilityCount = (date: string) => slotsByDate[date]?.length || 0
-  const selectionLabel = selectedSlot ? `Book · ₹2,500` : "Choose a tee time"
   const selectionSubtext = selectedSlot ? `${selectedDay} ${selectedDate} Aug · ${selectedSlot}` : "₹2,500 per player"
 
   const chooseSlot = (slot: string) => {
@@ -650,7 +650,7 @@ function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScree
       <div className="course-profile-hero course-profile-hero-premium">
         <img src={photos.course} alt="Delhi Golf Club fairway" />
         <span className="course-hero-gradient" />
-        <button className="course-hero-save" aria-label="Save course"><Icon name="heart" /></button>
+        <button type="button" className={`course-hero-save ${saved ? "saved" : ""}`} onClick={() => setSaved((value) => !value)} aria-label={saved ? "Remove course from saved" : "Save course"} aria-pressed={saved}><Icon name="heart" /></button>
         <div className="course-hero-copy">
           <span className="eyebrow light">DELHI · 18 HOLES</span>
           <h1>Delhi Golf Club</h1>
@@ -669,73 +669,31 @@ function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScree
           <div><strong>18</strong><span>Holes</span></div>
           <div><strong>72</strong><span>Par</span></div>
           <div><strong>6,935</strong><span>Yards</span></div>
-          <div><strong>Private</strong><span>Course</span></div>
+          <div><strong>Private</strong><span>Access</span></div>
         </div>
 
         <section className="course-booking-section" id="course-tee-times">
           <div className="course-section-heading course-booking-heading">
-            <div>
-              <span className="eyebrow course-booking-eyebrow">BOOK YOUR ROUND</span>
-              <h2>Choose a tee time</h2>
-              <p>Availability updates when you change the day.</p>
-            </div>
-            <strong className="course-price-anchor">₹2,500 <small>/ player</small></strong>
+            <div><span className="eyebrow course-booking-eyebrow">TEE TIMES</span><h2>When do you want to play?</h2><p>Select a day and tee time. Your choice stays ready in the booking bar.</p></div>
           </div>
-
           <div className="course-date-summary">
-            <span><Icon name="calendar" size={14} /> {selectedDay} {selectedDate} August</span>
-            <strong>{selectedSlots.length} tee times</strong>
+            <span><Icon name="calendar" size={14} /> {selectedDay} {selectedDate} August</span><strong>{selectedSlots.length} available</strong>
           </div>
-
           <div className="profile-date-strip course-date-strip">
             {dates.map(([day, date]) => {
               const count = availabilityCount(date)
-              return (
-                <button
-                  key={date}
-                  className={selectedDate === date ? "selected" : ""}
-                  onClick={() => { setSelectedDate(date); setSelectedSlot("") }}
-                  aria-pressed={selectedDate === date}
-                >
-                  <small>{day}</small>
-                  <strong>{date}</strong>
-                  <span>{count} {count === 1 ? "slot" : "slots"}</span>
-                </button>
-              )
+              return <button key={date} className={selectedDate === date ? "selected" : ""} onClick={() => { setSelectedDate(date); setSelectedSlot("") }} aria-pressed={selectedDate === date}><small>{day}</small><strong>{date}</strong><span>{count} {count === 1 ? "slot" : "slots"}</span></button>
             })}
           </div>
-
-          <div className="course-availability-heading">
-            <strong>Available tee times</strong>
-            <span>{selectedSlots.length} options · 4 players</span>
-          </div>
-
+          <div className="course-availability-heading"><strong>Available tee times</strong><span>{selectedSlots.length} options · 4 players</span></div>
           <div className="availability-slots course-availability-slots">
             {selectedSlots.map((slot, index) => {
               const players = index < 2 ? 4 : 2
               const isSelected = selectedSlot === slot
-              return (
-                <button
-                  key={slot}
-                  className={isSelected ? "selected" : ""}
-                  onClick={() => chooseSlot(slot)}
-                  aria-pressed={isSelected}
-                >
-                  <span>
-                    <strong>{slot}</strong>
-                    <small>{players} players available · Instant confirmation</small>
-                  </span>
-                  <b>₹2,500</b>
-                  <Icon name={isSelected ? "check" : "chevron"} size={17} />
-                </button>
-              )
+              return <button key={slot} className={isSelected ? "selected" : ""} onClick={() => chooseSlot(slot)} aria-pressed={isSelected}><span><strong>{slot}</strong><small>{players} players available · Instant confirmation</small></span><b>₹2,500</b><Icon name={isSelected ? "check" : "chevron"} size={17} /></button>
             })}
           </div>
-
-          <div className="course-booking-confidence">
-            <span><Icon name="check" size={13} /> Instant confirmation</span>
-            <span><Icon name="shield" size={13} /> Free cancellation until 24h before</span>
-          </div>
+          <div className="course-booking-confidence"><span><Icon name="check" size={13} /> Instant confirmation</span><span><Icon name="shield" size={13} /> Free cancellation until 24h before</span></div>
         </section>
 
         <section className="course-info-section course-about-section">
@@ -749,7 +707,7 @@ function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScree
         </section>
 
         <section className="course-info-section">
-          <div className="course-section-heading"><div><h2>Facilities</h2></div><button className="course-section-link">View all</button></div>
+          <div className="course-section-heading"><div><h2>Facilities</h2><p>Everything you need before and after your round.</p></div></div>
           <div className="amenity-grid course-amenity-grid">
             {["Driving range", "Caddies", "Golf carts", "Club rental", "Pro shop", "Restaurant"].map((amenity) => (
               <span key={amenity}><Icon name="check" size={14} /> {amenity}</span>
@@ -759,15 +717,8 @@ function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScree
 
         <section className="course-info-section">
           <div className="course-section-heading"><div><h2>Course layout</h2><p>18 holes · Par 72 · 6,935 yards</p></div></div>
-          <div className="course-scorecard-preview">
-            <div className="scorecard-top"><span>Front 9</span><strong>Par 36</strong><b>3,418 yd</b></div>
-            <div className="scorecard-holes">
-              {[["1","4","412"],["2","5","528"],["3","4","386"],["4","3","174"],["5","4","421"]].map(([hole, par, yards]) => (
-                <div key={hole}><small>{hole}</small><span>Par {par}</span><strong>{yards} yd</strong></div>
-              ))}
-            </div>
-          </div>
-          <button className="course-text-link">View full scorecard <Icon name="arrow" size={14} /></button>
+          <div className="course-layout-summary"><span><strong>18</strong><small>Holes</small></span><span><strong>72</strong><small>Par</small></span><span><strong>6,935</strong><small>Yards</small></span><span><strong>4 hr</strong><small>Typical pace</small></span></div>
+          <p className="course-layout-note">Tree-lined fairways, strategic bunkers and fast greens. Accuracy off the tee is rewarded.</p>
         </section>
 
         <section className="course-info-section">
@@ -782,7 +733,7 @@ function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScree
         </section>
 
         <section className="course-info-section">
-          <div className="course-section-heading"><div><h2>Getting there</h2></div></div>
+          <div className="course-section-heading"><div><h2>Getting there</h2><p>About 18 minutes by car from central Delhi.</p></div></div>
           <button className="directions-card course-directions-card">
             <span><Icon name="map" size={24} /></span>
             <div><strong>Delhi Golf Club</strong><small>Lodhi Road, Delhi · 2.1 km · 18 min drive</small></div>
@@ -791,20 +742,20 @@ function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScree
         </section>
 
         <section className="course-coach-cross-sell">
-          <span className="eyebrow">WANT TO IMPROVE WHILE YOU PLAY?</span>
-          <h2>Book a lesson at Delhi Golf Club</h2>
+          <span className="eyebrow">WANT TO IMPROVE?</span>
+          <h2>Learn with a coach at this course</h2>
           <button className="lesson-cross-sell" onClick={() => go("coachProfile")}><Avatar initials="SM" /><span><strong>Savdeep Mehta</strong><small>PGA Professional · 4.9 · from ₹1,800</small></span><Icon name="chevron" /></button>
         </section>
       </div>
 
       <div className="booking-sticky-bar course-sticky-bar">
         <span>
-          <small>{selectedSlot ? "Selected tee time" : "Tee time"}</small>
+          <small>{selectedSlot ? "READY TO BOOK" : "SELECT A TEE TIME"}</small>
           <strong>{selectedSlot ? selectedSlot : "Choose a time"}</strong>
           <em>{selectionSubtext}</em>
         </span>
-        <button className="primary-button" onClick={continueToBooking} aria-disabled={!selectedSlot}>
-          {selectionLabel} <Icon name="arrow" size={15} />
+        <button className="primary-button" onClick={continueToBooking} disabled={!selectedSlot}>
+          {selectedSlot ? <>Book · ₹2,500 <Icon name="arrow" size={15} /></> : "Select a time"}
         </button>
       </div>
     </main>
