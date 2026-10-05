@@ -620,6 +620,7 @@ function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScree
     ["Wed", "26"],
   ] as const
   const [selectedDate, setSelectedDate] = useState("22")
+  const [selectedSlot, setSelectedSlot] = useState("")
   const slotsByDate: Record<string, string[]> = {
     "20": ["6:30 AM", "7:40 AM", "9:10 AM"],
     "21": ["6:10 AM", "7:20 AM", "8:40 AM", "10:00 AM"],
@@ -631,6 +632,18 @@ function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScree
   }
   const selectedSlots = slotsByDate[selectedDate] || []
   const selectedDay = dates.find(([, day]) => day === selectedDate)?.[0] || "Sat"
+  const availabilityCount = (date: string) => slotsByDate[date]?.length || 0
+  const selectionLabel = selectedSlot ? `Book · ₹2,500` : "Choose a tee time"
+  const selectionSubtext = selectedSlot ? `${selectedDay} ${selectedDate} Aug · ${selectedSlot}` : "₹2,500 per player"
+
+  const chooseSlot = (slot: string) => {
+    setSelectedSlot(slot)
+  }
+
+  const continueToBooking = () => {
+    if (selectedSlot) openBooking(delhiCourse, selectedSlot)
+    else document.getElementById("course-tee-times")?.scrollIntoView({ behavior: "smooth", block: "center" })
+  }
 
   return (
     <main className="course-profile-screen">
@@ -643,7 +656,7 @@ function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScree
           <h1>Delhi Golf Club</h1>
           <p><Icon name="star" size={13} /> 4.7 (312 reviews) <span>·</span> Lodhi Road</p>
         </div>
-        <span className="course-photo-count">1 / 5</span>
+        <span className="course-photo-count">5 photos</span>
       </div>
 
       <div className="course-profile-content course-profile-content-premium">
@@ -659,40 +672,73 @@ function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScree
           <div><strong>Private</strong><span>Course</span></div>
         </div>
 
-        <section className="course-booking-section">
-          <div className="course-section-heading">
-            <div><h2>Book a tee time</h2><p>Choose a day, then pick a time.</p></div>
-            <span>₹2,500 / player</span>
+        <section className="course-booking-section" id="course-tee-times">
+          <div className="course-section-heading course-booking-heading">
+            <div>
+              <span className="eyebrow course-booking-eyebrow">BOOK YOUR ROUND</span>
+              <h2>Choose a tee time</h2>
+              <p>Availability updates when you change the day.</p>
+            </div>
+            <strong className="course-price-anchor">₹2,500 <small>/ player</small></strong>
           </div>
+
+          <div className="course-date-summary">
+            <span><Icon name="calendar" size={14} /> {selectedDay} {selectedDate} August</span>
+            <strong>{selectedSlots.length} tee times</strong>
+          </div>
+
           <div className="profile-date-strip course-date-strip">
-            {dates.map(([day, date]) => (
-              <button
-                key={date}
-                className={selectedDate === date ? "selected" : ""}
-                onClick={() => setSelectedDate(date)}
-                aria-pressed={selectedDate === date}
-              >
-                <small>{day}</small><strong>{date}</strong><span>Aug</span>
-              </button>
-            ))}
+            {dates.map(([day, date]) => {
+              const count = availabilityCount(date)
+              return (
+                <button
+                  key={date}
+                  className={selectedDate === date ? "selected" : ""}
+                  onClick={() => { setSelectedDate(date); setSelectedSlot("") }}
+                  aria-pressed={selectedDate === date}
+                >
+                  <small>{day}</small>
+                  <strong>{date}</strong>
+                  <span>{count} {count === 1 ? "slot" : "slots"}</span>
+                </button>
+              )
+            })}
           </div>
+
           <div className="course-availability-heading">
             <strong>Available tee times</strong>
-            <span>{selectedDay} {selectedDate} August</span>
+            <span>{selectedSlots.length} options · 4 players</span>
           </div>
+
           <div className="availability-slots course-availability-slots">
-            {selectedSlots.map((slot, index) => (
-              <button key={slot} onClick={() => openBooking(delhiCourse, slot)}>
-                <span><strong>{slot}</strong><small>{index === 0 ? "4 players available" : index === 1 ? "4 players available" : "2 players available"}</small></span>
-                <b>₹2,500</b>
-                <Icon name="chevron" size={17} />
-              </button>
-            ))}
+            {selectedSlots.map((slot, index) => {
+              const players = index < 2 ? 4 : 2
+              const isSelected = selectedSlot === slot
+              return (
+                <button
+                  key={slot}
+                  className={isSelected ? "selected" : ""}
+                  onClick={() => chooseSlot(slot)}
+                  aria-pressed={isSelected}
+                >
+                  <span>
+                    <strong>{slot}</strong>
+                    <small>{players} players available · Instant confirmation</small>
+                  </span>
+                  <b>₹2,500</b>
+                  <Icon name={isSelected ? "check" : "chevron"} size={17} />
+                </button>
+              )
+            })}
           </div>
-          <button className="course-view-times" onClick={() => openBooking(delhiCourse)}>View all tee times <Icon name="arrow" size={15} /></button>
+
+          <div className="course-booking-confidence">
+            <span><Icon name="check" size={13} /> Instant confirmation</span>
+            <span><Icon name="shield" size={13} /> Free cancellation until 24h before</span>
+          </div>
         </section>
 
-        <section className="course-info-section">
+        <section className="course-info-section course-about-section">
           <div className="course-section-heading"><div><h2>About the course</h2></div></div>
           <p className="body-copy">A historic 18-hole course in the heart of Delhi, with tree-lined fairways, strategic bunkering and fast greens. The layout rewards accuracy off the tee and thoughtful approach play.</p>
           <button className="course-text-link">Read more <Icon name="chevron" size={13} /></button>
@@ -752,8 +798,14 @@ function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScree
       </div>
 
       <div className="booking-sticky-bar course-sticky-bar">
-        <span><small>From</small><strong>₹2,500 <em>/ player</em></strong></span>
-        <button className="primary-button" onClick={() => openBooking(delhiCourse)}>Book tee time <Icon name="arrow" size={15} /></button>
+        <span>
+          <small>{selectedSlot ? "Selected tee time" : "Tee time"}</small>
+          <strong>{selectedSlot ? selectedSlot : "Choose a time"}</strong>
+          <em>{selectionSubtext}</em>
+        </span>
+        <button className="primary-button" onClick={continueToBooking} aria-disabled={!selectedSlot}>
+          {selectionLabel} <Icon name="arrow" size={15} />
+        </button>
       </div>
     </main>
   )
