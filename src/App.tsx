@@ -612,6 +612,11 @@ function ResultsScreen({
 function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScreen) => void; openBooking: (course: BookingCourse, slot?: string) => void }) {
   const [saved, setSaved] = useState(false)
 
+  useEffect(() => {
+    document.body.classList.add("course-detail-open")
+    return () => document.body.classList.remove("course-detail-open")
+  }, [])
+
   return (
     <main className="course-profile-screen course-profile-screen-v4">
       <section className="course-profile-hero course-profile-hero-premium course-profile-hero-v4">
@@ -622,9 +627,11 @@ function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScree
         <div className="course-hero-copy course-hero-copy-v4">
           <span className="eyebrow light">DELHI · 18 HOLES</span>
           <h1>Delhi Golf Club</h1>
-          <p><Icon name="star" size={13} /> 4.7 (312 reviews) <span>·</span> Lodhi Road</p>
+          <div className="course-hero-meta-v4">
+            <span><Icon name="star" size={15} /> 4.7 <em>(312 reviews)</em></span>
+            <span><Icon name="pin" size={15} /> Lodhi Road · 2.1 km</span>
+          </div>
         </div>
-        <span className="course-photo-count">5 photos</span>
       </section>
 
       <div className="course-profile-content course-profile-content-premium course-profile-content-v4">
