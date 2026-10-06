@@ -617,44 +617,67 @@ function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScree
     return () => document.body.classList.remove("course-detail-open")
   }, [])
 
+  const quickTimes = ["6:10 AM", "6:40 AM", "7:20 AM"]
+
   return (
-    <main className="course-profile-screen course-profile-screen-v4">
-      <section className="course-profile-hero course-profile-hero-premium course-profile-hero-v4">
+    <main className="course-profile-screen course-profile-screen-v5">
+      <section className="course-profile-hero course-profile-hero-v5">
         <img src={photos.course} alt="Delhi Golf Club fairway" />
         <span className="course-hero-gradient" />
         <button type="button" className="course-hero-control course-hero-back" onClick={() => go("discover")} aria-label="Go back"><Icon name="chevron" size={20} /></button>
         <button type="button" className={`course-hero-control course-hero-save ${saved ? "saved" : ""}`} onClick={() => setSaved((value) => !value)} aria-label={saved ? "Remove course from saved" : "Save course"} aria-pressed={saved}><Icon name="heart" size={20} /></button>
-        <div className="course-hero-copy course-hero-copy-v4">
+        <div className="course-hero-copy course-hero-copy-v5">
           <span className="eyebrow light">DELHI · 18 HOLES</span>
           <h1>Delhi Golf Club</h1>
-          <div className="course-hero-meta-v4">
-            <span><Icon name="star" size={15} /> 4.7 <em>(312 reviews)</em></span>
-            <span><Icon name="pin" size={15} /> Lodhi Road · 2.1 km</span>
+          <div className="course-hero-meta-v5">
+            <span><Icon name="star" size={14} /> <strong>4.7</strong> <em>312 reviews</em></span>
+            <span><Icon name="pin" size={14} /> Lodhi Road · 2.1 km</span>
           </div>
         </div>
       </section>
 
-      <div className="course-profile-content course-profile-content-premium course-profile-content-v4">
-        <section className="course-intro-v4">
-          <div className="course-intro-copy-v4">
-            <span className="eyebrow">ABOUT THE COURSE</span>
-            <h2>A Delhi classic, built for strategic golf.</h2>
-            <p>Tree-lined fairways, strategic bunkering and fast greens reward accuracy and thoughtful approach play.</p>
+      <div className="course-profile-content course-profile-content-v5">
+        <section className="course-book-card-v5">
+          <div className="course-book-heading-v5">
+            <div>
+              <span className="eyebrow">TEE TIMES</span>
+              <h2>Play Delhi Golf Club</h2>
+              <p>Next available · Sat, 22 Aug</p>
+            </div>
+            <strong>From ₹2,500</strong>
           </div>
-          <div className="course-facts course-facts-v4">
-            <div><strong>18</strong><span>Holes</span></div>
-            <div><strong>72</strong><span>Par</span></div>
-            <div><strong>6,935</strong><span>Yards</span></div>
-            <div><strong>4 hr</strong><span>Typical pace</span></div>
+          <div className="course-quick-times-v5">
+            {quickTimes.map((slot) => (
+              <button key={slot} type="button" onClick={() => openBooking(delhiCourse, slot)}>
+                <strong>{slot}</strong>
+                <span>₹2,500</span>
+              </button>
+            ))}
           </div>
+          <button type="button" className="course-see-times-v5" onClick={() => openBooking(delhiCourse)}>
+            See all tee times <Icon name="arrow" size={14} />
+          </button>
         </section>
 
-        <section className="course-section-v4 course-good-to-know-v4">
-          <div className="course-section-label-v4">
+        <section className="course-intro-v5">
+          <span className="eyebrow">ABOUT THE COURSE</span>
+          <h2>A Delhi classic, built for strategic golf.</h2>
+          <p>Tree-lined fairways, strategic bunkering and fast greens reward accuracy and thoughtful approach play.</p>
+        </section>
+
+        <section className="course-facts course-facts-v5">
+          <div><strong>18</strong><span>Holes</span></div>
+          <div><strong>72</strong><span>Par</span></div>
+          <div><strong>6,935</strong><span>Yards</span></div>
+          <div><strong>4 hr</strong><span>Typical pace</span></div>
+        </section>
+
+        <section className="course-section-v5">
+          <div className="course-section-heading-v5">
             <span className="eyebrow">GOOD TO KNOW</span>
-            <p>Useful details before you arrive.</p>
+            <span>Before you play</span>
           </div>
-          <div className="course-essentials course-essentials-v4">
+          <div className="course-essentials course-essentials-v5">
             <span><Icon name="check" size={14} /> Caddies available</span>
             <span><Icon name="check" size={14} /> Walking available</span>
             <span><Icon name="check" size={14} /> Driving range</span>
@@ -664,32 +687,34 @@ function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScree
           </div>
         </section>
 
-        <section className="course-location-feature course-location-feature-v4">
-          <div className="course-location-copy">
+        <section className="course-location-feature course-location-feature-v5">
+          <div>
             <span className="eyebrow">LOCATION</span>
-            <h2>Easy to get to.</h2>
-            <p>Lodhi Road, Delhi · 2.1 km away</p>
+            <h2>Lodhi Road, Delhi</h2>
+            <p>2.1 km away · About 18 min drive</p>
           </div>
           <button className="directions-card course-directions-card" data-prototype="Directions" data-prototype-body="Maps and turn-by-turn directions are simulated here.">
-            <span><Icon name="map" size={24} /></span>
-            <div><strong>Delhi Golf Club</strong><small>About 18 min drive</small></div>
+            <span><Icon name="map" size={22} /></span>
+            <div><strong>Delhi Golf Club</strong><small>Get directions</small></div>
             <Icon name="directions" />
           </button>
         </section>
 
-        <section className="course-section-v4 course-reviews-v4">
-          <div className="course-section-title-v4">
-            <div><span className="eyebrow">REVIEWS</span><h2>What golfers say</h2></div>
-            <div className="course-rating-v4"><strong>4.7</strong><span>★★★★★</span><small>312 reviews</small></div>
+        <section className="course-reviews-v5">
+          <div className="course-section-title-v5">
+            <div><span className="eyebrow">REVIEWS</span><h2>4.7 from 312 golfers</h2></div>
+            <span className="course-stars-v5">★★★★★</span>
           </div>
           <blockquote>“Beautiful course, smooth check-in, and excellent caddies.”</blockquote>
-          <small className="course-review-author">Rohit S. · Played 2 weeks ago</small>
-          <button className="course-text-link" data-prototype="Course reviews" data-prototype-body="312 course reviews would open here.">Read all 312 reviews <Icon name="arrow" size={14} /></button>
+          <small>Rohit S. · Played 2 weeks ago</small>
+          <button className="course-text-link" data-prototype="Course reviews" data-prototype-body="312 course reviews would open here.">Read all reviews <Icon name="arrow" size={14} /></button>
         </section>
       </div>
 
-      <div className="course-floating-book-v4">
-        <button className="primary-button" onClick={() => openBooking(delhiCourse)}>Book tee time <Icon name="arrow" size={16} /></button>
+      <div className="course-floating-book-v5">
+        <button className="primary-button" onClick={() => openBooking(delhiCourse)}>
+          Book tee time <Icon name="arrow" size={16} />
+        </button>
       </div>
     </main>
   )
