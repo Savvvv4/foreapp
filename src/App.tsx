@@ -972,6 +972,7 @@ function PaymentSheet({
   recheck: () => void
 }) {
   const [method, setMethod] = useState("UPI")
+  const [selectedInstrument, setSelectedInstrument] = useState("GPay")
   useEffect(() => {
     if (state !== "processing") return
     const timer = window.setTimeout(succeed, 1100)
@@ -987,8 +988,8 @@ function PaymentSheet({
         {state === "methods" && <>
           <div className="sheet-title"><span><p className="eyebrow">SECURE PAYMENT</p><h2>Choose payment method</h2></span><button onClick={close}><Icon name="close" /></button></div>
           <div className="payment-method-tabs">{["UPI", "Cards", "Netbanking", "Wallets"].map((item) => <button className={method === item ? "active" : ""} onClick={() => setMethod(item)} key={item}>{item}</button>)}</div>
-          {method === "UPI" && <div className="payment-choice-list">{["GPay", "PhonePe", "Paytm", "arjun@upi"].map((item,index) => <button className={index === 0 ? "selected" : ""} key={item}><span className="payment-logo">{item[0]}</span><strong>{item}</strong><i>{index === 0 && <Icon name="check" size={13} />}</i></button>)}</div>}
-          {method === "Cards" && <button className="saved-card"><span>HDFC</span><div><strong>Visa ending 4218</strong><small>Expires 08/28</small></div><Icon name="check" /></button>}
+          {method === "UPI" && <div className="payment-choice-list">{["GPay", "PhonePe", "Paytm", "arjun@upi"].map(item => <button className={selectedInstrument === item ? "selected" : ""} onClick={() => setSelectedInstrument(item)} key={item}><span className="payment-logo">{item[0]}</span><strong>{item}</strong><i>{selectedInstrument === item && <Icon name="check" size={13} />}</i></button>)}</div>}
+          {method === "Cards" && <button className="saved-card selected" onClick={() => setSelectedInstrument("Visa ending 4218")}><span>HDFC</span><div><strong>Visa ending 4218</strong><small>Expires 08/28</small></div><Icon name="check" /></button>}
           {method === "Netbanking" && <div className="payment-placeholder"><Icon name="wallet" /><span>Select your bank on the next secure screen.</span></div>}
           {method === "Wallets" && <div className="payment-placeholder"><Icon name="wallet" /><span>Paytm and supported wallets available.</span></div>}
           <button className="primary-button payment-primary" onClick={process}>Pay securely</button>
@@ -1057,7 +1058,7 @@ function BookingDetailScreen({ go }: { go: (screen: CourseFlowScreen) => void })
       <FlowHeader title="Booking details" back={() => go("bookings")} />
       <div className="booking-detail-status"><ConfirmedBadge /><h1>Delhi Golf Club</h1><p>Sat 22 Aug · 7:30 AM · 4 players</p></div>
       <div className="detail-summary-card"><div><span><Icon name="calendar" /></span><p><small>DATE & TIME</small><strong>Saturday, 22 August</strong><em>7:30 AM</em></p></div><div><span><Icon name="users" /></span><p><small>PLAYERS</small><strong>4 players</strong><em>Arjun Kapoor + 3 guests</em></p></div><div><span><Icon name="wallet" /></span><p><small>PAID</small><strong>₹10,000</strong><em>UPI · arjun@upi</em></p></div></div>
-      <button className="booking-map-card"><span><Icon name="map" size={25} /></span><div><strong>Delhi Golf Club</strong><small>Lodhi Road · 2.1 km</small></div><Icon name="directions" /></button>
+      <button className="booking-map-card" data-prototype="Directions" data-prototype-body="Maps and directions are simulated here."><span><Icon name="map" size={25} /></span><div><strong>Delhi Golf Club</strong><small>Lodhi Road · 2.1 km</small></div><Icon name="directions" /></button>
       <div className="booking-manage-actions"><button className="primary-button" data-prototype="Change tee time" data-prototype-body="Choose another available tee time and confirm the change.">Change time</button><button onClick={() => setCancelOpen(true)}>Cancel booking</button></div>
       <div className="detail-links"><button data-prototype="Receipt" data-prototype-body="Your payment receipt would open here with the booking and payment breakdown.">View receipt <Icon name="chevron" /></button><button data-prototype="Contact course" data-prototype-body="Course contact options would open here.">Contact the course <Icon name="chevron" /></button></div>
       {cancelOpen && <div className="sheet-backdrop" onClick={() => setCancelOpen(false)}><div className="sheet cancel-sheet" onClick={(event) => event.stopPropagation()}><div className="sheet-handle" /><div className="sheet-title"><span><p className="eyebrow">CANCEL BOOKING</p><h2>Cancel this tee time?</h2></span><button onClick={() => setCancelOpen(false)}><Icon name="close" /></button></div><p>You’ll receive a full refund because you’re cancelling more than 24 hours before the tee time.</p><div className="refund-row"><span>Refund to arjun@upi</span><strong>₹10,000</strong></div><button className="cancel-confirm-button" data-prototype="Booking cancelled" data-prototype-body="The tee time would be cancelled and ₹10,000 refunded to the original UPI method.">Cancel and refund ₹10,000</button><button className="primary-button" onClick={() => setCancelOpen(false)}>Keep booking</button></div></div>}
@@ -1149,7 +1150,7 @@ function RangeDiscoverScreen({
 function RangeProfileScreen({ go, openRangeBooking }: { go: (screen: CourseFlowScreen) => void; openRangeBooking: () => void }) {
   return (
     <main className="course-profile-screen range-profile-screen">
-      <div className="course-profile-hero"><img src={photos.golfer} alt="Delhi Golf Club Range" /><button onClick={() => go("rangeDiscover")}><Icon name="chevron" /></button><button><Icon name="heart" /></button><span>1 / 4</span></div>
+      <div className="course-profile-hero"><img src={photos.golfer} alt="Delhi Golf Club Range" /><button onClick={() => go("rangeDiscover")}><Icon name="chevron" /></button><button data-prototype="Range saved" data-prototype-body="Delhi Golf Club Range has been saved to your favourites."><Icon name="heart" /></button><span>1 / 4</span></div>
       <div className="course-profile-content">
         <span className="featured-tag inline-badge">Open now · until 9:00 PM</span>
         <div className="course-title-row"><h1>Delhi Golf Club Range</h1><span className="rating"><Icon name="star" size={14} /> 4.6 (184)</span></div>
@@ -1157,14 +1158,14 @@ function RangeProfileScreen({ go, openRangeBooking }: { go: (screen: CourseFlowS
         <div className="course-facts range-facts">
           {[["60","Bays"],["Mixed","Covered / open"],["Yes","Floodlit"],["TrackMan","Launch monitors"]].map(([value,label]) => <div key={label}><strong>{value}</strong><span>{label}</span></div>)}
         </div>
-        <div className="profile-section-heading"><h2>Packages</h2><button>View all</button></div>
-        <div className="range-package-grid"><button><small>MONTHLY</small><strong>Unlimited Balls</strong><span>Practice any day</span><b>₹2,999</b></button><button><em>Save 15%</em><small>10 VISITS</small><strong>10 Bucket Pack</strong><span>Valid for 90 days</span><b>₹2,975</b></button></div>
+        <div className="profile-section-heading"><h2>Packages</h2><button data-prototype="Range packages" data-prototype-body="View all range membership and bucket packages.">View all</button></div>
+        <div className="range-package-grid"><button data-prototype="Unlimited Balls" data-prototype-body="Monthly unlimited range access for ₹2,999. Purchase flow is simulated."><small>MONTHLY</small><strong>Unlimited Balls</strong><span>Practice any day</span><b>₹2,999</b></button><button data-prototype="10 Bucket Pack" data-prototype-body="Ten range visits for ₹2,975. Purchase flow is simulated."><em>Save 15%</em><small>10 VISITS</small><strong>10 Bucket Pack</strong><span>Valid for 90 days</span><b>₹2,975</b></button></div>
         <h2>Add a coach to your session</h2>
         <button className="lesson-cross-sell" onClick={() => go("coachProfile")}><Avatar initials="SM" /><span><strong>Savdeep Mehta</strong><small>PGA Professional · 12 yrs · 4.9</small></span><Icon name="chevron" /></button>
-        <div className="profile-section-heading"><h2>Reviews</h2><button>See all 184</button></div>
+        <div className="profile-section-heading"><h2>Reviews</h2><button data-prototype="Range reviews" data-prototype-body="184 range reviews would open here.">See all 184</button></div>
         <div className="profile-review"><span>★★★★★</span><p>“Plenty of space, good mats, and launch monitors were easy to reserve.”</p><small>Ankit R. · 6 days ago</small></div>
         <h2>Map & directions</h2>
-        <button className="directions-card"><span><Icon name="map" size={24} /></span><div><strong>Delhi Golf Club Range</strong><small>Lodhi Road · 2.8 km</small></div><Icon name="directions" /></button>
+        <button className="directions-card" data-prototype="Directions" data-prototype-body="Maps and directions are simulated here."><span><Icon name="map" size={24} /></span><div><strong>Delhi Golf Club Range</strong><small>Lodhi Road · 2.8 km</small></div><Icon name="directions" /></button>
       </div>
       <div className="booking-sticky-bar"><span><small>From</small><strong>₹900</strong></span><button className="primary-button" onClick={openRangeBooking}>Book a bay</button></div>
     </main>
@@ -1198,12 +1199,13 @@ function RangeSelectScreen({
 }) {
   const basePrice = duration === 60 ? 900 : duration === 90 ? 1250 : 1600
   const total = basePrice + (bayType === "Launch monitor" ? 300 : 0) + (bucket ? 350 : 0)
+  const [selectedDate, setSelectedDate] = useState("20")
   const times = ["6:30 AM","7:00 AM","7:30 AM","8:00 AM","8:30 AM","9:00 AM","9:30 AM","10:00 AM","10:30 AM","11:00 AM","2:00 PM","2:30 PM","3:00 PM","3:30 PM","4:00 PM"]
   return (
     <main className="screen range-select-screen">
       <FlowHeader title="Delhi Golf Club Range" back={() => go("rangeProfile")} />
       {state === "offline" && <div className="booking-banner offline-banner"><Icon name="shield" /><span><strong>You’re offline</strong><small>Showing the last saved availability.</small></span></div>}
-      <div className="tee-date-strip range-date-strip">{[["Thu","20"],["Fri","21"],["Sat","22"],["Sun","23"],["Mon","24"]].map(([day,date],index) => <button className={index === 0 ? "selected" : ""} key={date}><small>{day}</small><strong>{date}</strong><em>{index === 0 ? "Today" : "Open"}</em></button>)}</div>
+      <div className="tee-date-strip range-date-strip">{[["Thu","20"],["Fri","21"],["Sat","22"],["Sun","23"],["Mon","24"]].map(([day,date]) => <button className={selectedDate === date ? "selected" : ""} onClick={() => setSelectedDate(date)} key={date}><small>{day}</small><strong>{date}</strong><em>{date === "20" ? "Today" : "Open"}</em></button>)}</div>
       {state === "loading" && <div className="range-slot-skeleton">{Array.from({length:12}).map((_,index) => <i key={index} />)}<button onClick={() => setState("ready")}>Show availability</button></div>}
       {state === "empty" && <div className="tee-empty-state range-empty"><span><Icon name="clock" /></span><h2>No bays available at this time</h2><p>These are the next open times today.</p><div>{["11:30 AM","12:00 PM","2:00 PM"].map((slot) => <button key={slot} onClick={() => { setTime(slot); setState("ready") }}>{slot}</button>)}</div></div>}
       {(state === "ready" || state === "offline") && <><h2 className="range-section-title">Select a time</h2><div className="range-time-grid">{times.map((slot,index) => <button className={`${time === slot ? "selected" : ""} ${[3,8,11].includes(index) ? "full" : ""}`} disabled={[3,8,11].includes(index)} onClick={() => setTime(slot)} key={slot}>{slot}{[3,8,11].includes(index) && <small>Full</small>}</button>)}</div></>}
@@ -1303,7 +1305,7 @@ function RangeBookingDetailScreen({ go, date, bucketCount }: { go: (screen: Cour
       <div className="detail-summary-card"><div><span><Icon name="calendar" /></span><p><small>SESSION</small><strong>{date || "Today"}</strong><em>Bay assigned on arrival</em></p></div><div><span><Icon name="flag" /></span><p><small>INCLUDED</small><strong>{bucketCount ? `${bucketCount} ball ${bucketCount === 1 ? "bucket" : "buckets"}` : "Bay reservation"}</strong><em>Practice balls added</em></p></div><div><span><Icon name="wallet" /></span><p><small>PAID</small><strong>₹{(900 + bucketCount * 350).toLocaleString("en-IN")}</strong><em>UPI · arjun@upi</em></p></div></div>
       <button className="booking-map-card"><span><Icon name="map" size={25} /></span><div><strong>Delhi Golf Club Range</strong><small>Lodhi Road · 2.8 km</small></div><Icon name="directions" /></button>
       <div className="booking-manage-actions"><button className="primary-button" onClick={() => go("rangeSelect")}>Change time</button><button onClick={() => setCancelOpen(true)}>Cancel booking</button></div>
-      <div className="detail-links"><button>View receipt <Icon name="chevron" /></button><button>Contact the range <Icon name="chevron" /></button></div>
+      <div className="detail-links"><button data-prototype="Range receipt" data-prototype-body="Your range payment receipt would open here.">View receipt <Icon name="chevron" /></button><button data-prototype="Contact range" data-prototype-body="Range contact options would open here.">Contact the range <Icon name="chevron" /></button></div>
       {cancelOpen && <div className="sheet-backdrop" onClick={() => setCancelOpen(false)}><div className="sheet cancel-sheet" onClick={(event) => event.stopPropagation()}><div className="sheet-handle" /><div className="sheet-title"><span><p className="eyebrow">CANCEL RANGE</p><h2>Cancel this bay?</h2></span><button onClick={() => setCancelOpen(false)}><Icon name="close" /></button></div><p>You’re eligible for a full refund to your original UPI method.</p><div className="refund-row"><span>Refund amount</span><strong>₹1,250</strong></div><button className="cancel-confirm-button" data-prototype="Range booking cancelled" data-prototype-body="The bay would be cancelled and the eligible amount refunded.">Cancel and refund</button><button className="primary-button" onClick={() => setCancelOpen(false)}>Keep booking</button></div></div>}
     </main>
   )
@@ -1401,20 +1403,20 @@ function CoachDiscoverScreen({
 function CoachProfileScreen({go,connectionStatus,onConnect}:{go:(screen:CourseFlowScreen)=>void;connectionStatus:ConnectionStatus;onConnect:()=>void}){
   return (
     <main className="course-profile-screen coach-profile-booking-screen">
-      <div className="course-profile-hero"><img src={photos.golfer} alt="Savdeep Mehta coaching" /><button onClick={() => go("coachDiscover")}><Icon name="chevron" /></button><button><Icon name="heart" /></button></div>
+      <div className="course-profile-hero"><img src={photos.golfer} alt="Savdeep Mehta coaching" /><button onClick={() => go("coachDiscover")}><Icon name="chevron" /></button><button data-prototype="Coach saved" data-prototype-body="Savdeep Mehta has been saved to your coaches."><Icon name="heart" /></button></div>
       <div className="course-profile-content">
         <p className="eyebrow">PGA PROFESSIONAL · 12 YEARS</p>
         <div className="course-title-row"><h1>Savdeep Mehta</h1><span className="rating"><Icon name="star" size={14} /> 4.9 (86)</span></div>
         <div className="specialty-pills large"><i>Short game</i><i>Swing</i><i>Course play</i></div><section className="coach-connection-panel"><div><small>COACH CONNECTION</small><strong>{connectionStatus==="connected"?"You’re connected":connectionStatus==="pending"?"Request pending":"Build an ongoing coaching relationship"}</strong><span>{connectionStatus==="connected"?"Your lessons, feedback and practice plan are linked.":connectionStatus==="pending"?"Savdeep will review your profile and goals.":"Connect first to keep coaching, feedback and drills together."}</span></div>{connectionStatus==="none"&&<button type="button" onClick={onConnect}>Connect</button>}{connectionStatus==="pending"&&<span className="connection-badge pending"><Icon name="clock" size={13}/> Pending</span>}{connectionStatus==="connected"&&<span className="connection-badge"><Icon name="check" size={13}/> Connected</span>}</section>
-        <h2>About Savdeep</h2><p className="body-copy">I help golfers build simple, repeatable technique and make better decisions on the course. Every session ends with a clear practice plan. <button>Read more</button></p>
+        <h2>About Savdeep</h2><p className="body-copy">I help golfers build simple, repeatable technique and make better decisions on the course. Every session ends with a clear practice plan. <button data-prototype="Coach bio" data-prototype-body="Savdeep’s full coaching philosophy and experience would open here.">Read more</button></p>
         <h2>Lesson types</h2>
         <div className="coach-profile-lessons">{[["Individual lesson","60 min","₹1,800"],["Playing lesson","9 holes","₹3,500"],["Junior lesson","45 min","₹1,500"]].map(([title,duration,price]) => <button key={title} onClick={() => go("coachLesson")}><span><strong>{title}</strong><small>{duration}</small></span><b>{price}</b><Icon name="chevron" /></button>)}</div>
         <button className="coach-package-card" onClick={() => go("coachCheckout")}><span><small>BEST VALUE · SAVE 10%</small><strong>12-lesson pack</strong><p>12 individual lessons · Flexible scheduling</p></span><b>₹19,440</b></button>
         <h2>Teaching locations</h2>
-        <div className="teaching-locations"><button><span><Icon name="pin" /></span><div><strong>Delhi Golf Club</strong><small>Lodhi Road · 2.1 km</small></div><Icon name="chevron" /></button><button><span><Icon name="pin" /></span><div><strong>Qutub Golf Course</strong><small>Mehrauli · 5.4 km</small></div><Icon name="chevron" /></button></div>
+        <div className="teaching-locations"><button data-prototype="Teaching location" data-prototype-body="Delhi Golf Club teaching details and directions would open here."><span><Icon name="pin" /></span><div><strong>Delhi Golf Club</strong><small>Lodhi Road · 2.1 km</small></div><Icon name="chevron" /></button><button data-prototype="Teaching location" data-prototype-body="Qutub Golf Course teaching details and directions would open here."><span><Icon name="pin" /></span><div><strong>Qutub Golf Course</strong><small>Mehrauli · 5.4 km</small></div><Icon name="chevron" /></button></div>
         <div className="profile-section-heading"><h2>Next available</h2><button onClick={() => go("coachDateTime")}>View calendar</button></div>
         <div className="availability-slots coach-availability-preview">{["Tomorrow 7:00","Tomorrow 9:30","Fri 4:00"].map((slot) => <button key={slot} onClick={() => go("coachDateTime")}><strong>{slot}</strong><span>Delhi Golf Club</span></button>)}</div>
-        <div className="profile-section-heading"><h2>Reviews</h2><button>See all 86</button></div>
+        <div className="profile-section-heading"><h2>Reviews</h2><button data-prototype="Coach reviews" data-prototype-body="86 coach reviews would open here.">See all 86</button></div>
         <div className="profile-review"><span>★★★★★</span><p>“Savdeep made my short game feel simple and gave me a plan I can actually repeat.”</p><small>Armaan K. · 10 days ago</small></div>
         <h2>Cancellation policy</h2><p className="body-copy">Free cancellation until 24 hours before a confirmed lesson.</p>
         <p className="coach-trust-line"><Icon name="shield" size={15} /> You’re only charged when the coach accepts</p>
@@ -1637,7 +1639,7 @@ function CoachBookingDetailScreen({
       <FlowHeader title="Lesson request" back={() => go(status === "Pending" ? "coachRequestSent" : "coachBookingPending")} />
       <div className={`booking-detail-status ${status.toLowerCase()}`}>{status === "Pending" ? <PendingBadge /> : <ConfirmedBadge />}<h1>{status === "Pending" ? "Waiting for Savdeep" : "Lesson confirmed"}</h1><p>Individual lesson · Fri 21 Aug · 7:00 AM</p></div>
       <div className="detail-summary-card"><div><span><Icon name="user" /></span><p><small>COACH</small><strong>Savdeep Mehta</strong><em>PGA Professional · 4.9</em></p></div><div><span><Icon name="calendar" /></span><p><small>DATE & TIME</small><strong>Friday, 21 August</strong><em>7:00–8:00 AM</em></p></div><div><span><Icon name="pin" /></span><p><small>LOCATION</small><strong>Delhi Golf Club</strong><em>Lodhi Road · 2.1 km</em></p></div><div><span><Icon name="wallet" /></span><p><small>PAYMENT</small><strong>₹1,800</strong><em>{status === "Pending" ? "Authorised · Not charged" : "Charged to arjun@upi"}</em></p></div></div>
-      {status === "Pending" ? <div className="booking-manage-actions coach-pending-actions"><button className="primary-button" data-prototype="Message coach" data-prototype-body="The coach conversation would open here. Messaging is simulated in this prototype."><Icon name="message" size={16} /> Message coach</button><button data-prototype="Request cancelled" data-prototype-body="The pending lesson request would be cancelled with no charge.">Cancel request · Free</button></div> : <div className="booking-manage-actions"><button className="primary-button"><Icon name="calendar" size={16} /> Add to calendar</button><button className="coach-reschedule-button" data-prototype="Reschedule lesson" data-prototype-body="Choose another lesson date and time. The rescheduling flow is simulated.">Reschedule</button></div>}
+      {status === "Pending" ? <div className="booking-manage-actions coach-pending-actions"><button className="primary-button" data-prototype="Message coach" data-prototype-body="The coach conversation would open here. Messaging is simulated in this prototype."><Icon name="message" size={16} /> Message coach</button><button data-prototype="Request cancelled" data-prototype-body="The pending lesson request would be cancelled with no charge.">Cancel request · Free</button></div> : <div className="booking-manage-actions"><button className="primary-button" data-prototype="Calendar event added" data-prototype-body="The confirmed lesson would be added to your device calendar."><Icon name="calendar" size={16} /> Add to calendar</button><button className="coach-reschedule-button" data-prototype="Reschedule lesson" data-prototype-body="Choose another lesson date and time. The rescheduling flow is simulated.">Reschedule</button></div>}
     </main>
   )
 }
@@ -2114,7 +2116,7 @@ function Profile({ role, onSwitch }: { role: Role; onSwitch: () => void }) {
         )}
       </div>
       <div className="settings-list">
-        <button>
+        <button data-prototype="Payments & wallet" data-prototype-body="View saved payment methods, credits, receipts and coach payouts.">
           <span className="setting-icon">
             <Icon name="wallet" />
           </span>
@@ -2128,7 +2130,7 @@ function Profile({ role, onSwitch }: { role: Role; onSwitch: () => void }) {
           </span>
           <Icon name="chevron" />
         </button>
-        <button>
+        <button data-prototype="Messages" data-prototype-body="Open your conversations with coaches and students. Messaging is simulated.">
           <span className="setting-icon">
             <Icon name="message" />
           </span>
@@ -2333,7 +2335,7 @@ function Business() {
             ["DI", "Divya Iyer", "Mon 24 Aug · 6:30 AM", "₹800"],
             ["RN", "Rahul Nath · Group", "Wed 26 Aug · 10:00 AM", "₹4,800"],
           ].map((item) => (
-            <button className="booking-row" key={item[1]}>
+            <button className="booking-row" data-prototype="Lesson details" data-prototype-body="Open the lesson, student notes, payment status and scheduling controls." key={item[1]}>
               <Avatar initials={item[0]} />
               <span>
                 <strong>{item[1]}</strong>
@@ -2485,18 +2487,14 @@ function AssignSheet({ close }: { close: () => void }) {
         </div>
         <label>
           <span>Student</span>
-          <button className="select-row">
-            <span>
-              <Avatar initials="MP" /> Meera Pillai
+          <button className="select-row" data-prototype="Choose student" data-prototype-body="Select a student for this practice assignment."><span><Avatar initials="MP" /> Meera Pillai
             </span>
             <Icon name="chevron" />
           </button>
         </label>
         <label>
           <span>Routine</span>
-          <button className="select-row">
-            <span>
-              <Icon name="clipboard" /> Putting — Start Line
+          <button className="select-row" data-prototype="Choose routine" data-prototype-body="Select a practice routine to assign."><span><Icon name="clipboard" /> Putting — Start Line
             </span>
             <Icon name="chevron" />
           </button>
@@ -2585,7 +2583,7 @@ function VideoAnalysisModule() {
   )
 }
 
-function CoachHome({openDiscovery,status,onCancelRequest}:{openDiscovery:()=>void;status:ConnectionStatus;onCancelRequest:()=>void}){return <main className="screen architecture-home coach-home"><div className="architecture-intro"><p className="eyebrow">YOUR LEARNING JOURNEY</p><h1>Coach</h1><p>Find the right coach, then keep everything you learn in one place.</p></div>{status==="connected"?<section className="connected-coach-card"><div className="connected-coach-head"><Avatar initials="SM" image={photos.golfer}/><span><small>YOUR COACH</small><strong>Savdeep Mehta</strong><em>PGA Professional · 4.9</em></span><span className="connection-badge"><Icon name="check" size={13}/> Connected</span></div><div className="connected-coach-stats"><span><strong>Next lesson</strong><small>Tomorrow · 7:00 AM</small></span><span><strong>Practice plan</strong><small>3 drills · 72% complete</small></span></div><div className="connected-coach-actions"><button><Icon name="message" size={17}/> Message</button><button><Icon name="calendar" size={17}/> Lessons</button></div></section>:status==="pending"?<section className="connected-coach-card pending"><div className="connected-coach-head"><Avatar initials="SM" image={photos.golfer}/><span><small>CONNECTION REQUEST</small><strong>Savdeep Mehta</strong><em>Waiting for coach to accept</em></span><span className="connection-badge pending"><Icon name="clock" size={13}/> Pending</span></div><p>Your profile and coaching goals will be shared once the coach accepts.</p><button className="secondary-button" onClick={onCancelRequest}>Cancel request</button></section>:<button className="coach-find-hero" onClick={openDiscovery}><span className="coach-find-icon"><Icon name="search" size={25}/></span><span><small>GET STARTED</small><strong>Find a coach</strong><em>Browse coaches, ratings, specialties and lesson options.</em></span><Icon name="arrow" size={19}/></button>}{status==="none"&&<section className="coach-journey-preview"><div><small>YOUR COACH</small><strong>Not connected yet</strong><span>Once you choose a coach, your lessons, feedback and practice plan will appear here.</span></div></section>}<SectionHeading title={status==="none"?"How coaching works":"What happens next"}/><div className="coach-journey-steps"><span><b>1</b><strong>{status==="none"?"Choose a coach":"Coach reviews"}</strong><small>{status==="none"?"Find someone who fits your game.":"Your request and goals are shared."}</small></span><span><b>2</b><strong>{status==="none"?"Connect":"Connection accepted"}</strong><small>{status==="none"?"Send a request and share your goals.":"Your coaching space opens."}</small></span><span><b>3</b><strong>Keep improving</strong><small>Feedback and drills stay with you.</small></span></div></main>}
+function CoachHome({openDiscovery,status,onCancelRequest}:{openDiscovery:()=>void;status:ConnectionStatus;onCancelRequest:()=>void}){return <main className="screen architecture-home coach-home"><div className="architecture-intro"><p className="eyebrow">YOUR LEARNING JOURNEY</p><h1>Coach</h1><p>Find the right coach, then keep everything you learn in one place.</p></div>{status==="connected"?<section className="connected-coach-card"><div className="connected-coach-head"><Avatar initials="SM" image={photos.golfer}/><span><small>YOUR COACH</small><strong>Savdeep Mehta</strong><em>PGA Professional · 4.9</em></span><span className="connection-badge"><Icon name="check" size={13}/> Connected</span></div><div className="connected-coach-stats"><span><strong>Next lesson</strong><small>Tomorrow · 7:00 AM</small></span><span><strong>Practice plan</strong><small>3 drills · 72% complete</small></span></div><div className="connected-coach-actions"><button data-prototype="Message Savdeep" data-prototype-body="Your conversation with Savdeep would open here. Messaging is simulated."><Icon name="message" size={17}/> Message</button><button data-prototype="Your lessons" data-prototype-body="Upcoming and past lessons with Savdeep would open here."><Icon name="calendar" size={17}/> Lessons</button></div></section>:status==="pending"?<section className="connected-coach-card pending"><div className="connected-coach-head"><Avatar initials="SM" image={photos.golfer}/><span><small>CONNECTION REQUEST</small><strong>Savdeep Mehta</strong><em>Waiting for coach to accept</em></span><span className="connection-badge pending"><Icon name="clock" size={13}/> Pending</span></div><p>Your profile and coaching goals will be shared once the coach accepts.</p><button className="secondary-button" onClick={onCancelRequest}>Cancel request</button></section>:<button className="coach-find-hero" onClick={openDiscovery}><span className="coach-find-icon"><Icon name="search" size={25}/></span><span><small>GET STARTED</small><strong>Find a coach</strong><em>Browse coaches, ratings, specialties and lesson options.</em></span><Icon name="arrow" size={19}/></button>}{status==="none"&&<section className="coach-journey-preview"><div><small>YOUR COACH</small><strong>Not connected yet</strong><span>Once you choose a coach, your lessons, feedback and practice plan will appear here.</span></div></section>}<SectionHeading title={status==="none"?"How coaching works":"What happens next"}/><div className="coach-journey-steps"><span><b>1</b><strong>{status==="none"?"Choose a coach":"Coach reviews"}</strong><small>{status==="none"?"Find someone who fits your game.":"Your request and goals are shared."}</small></span><span><b>2</b><strong>{status==="none"?"Connect":"Connection accepted"}</strong><small>{status==="none"?"Send a request and share your goals.":"Your coaching space opens."}</small></span><span><b>3</b><strong>Keep improving</strong><small>Feedback and drills stay with you.</small></span></div></main>}
 function CoachApp({tab,setTab,profileOpen,setProfileOpen,overlay,setOverlay,connectionStatus,onAccept,onDecline,onRemove,onSwitch}:{tab:CoachTab;setTab:(t:CoachTab)=>void;profileOpen:boolean;setProfileOpen:(v:boolean)=>void;overlay:"student"|"assign"|null;setOverlay:(v:"student"|"assign"|null)=>void;connectionStatus:ConnectionStatus;onAccept:()=>void;onDecline:()=>void;onRemove:()=>void;onSwitch:()=>void}){const items:[CoachTab,string,IconName][]=[["home","Home","home"],["schedule","Schedule","calendar"],["students","Students","users"]],title=tab==="home"?"Home":tab==="schedule"?"Schedule":"Students";return <>{!profileOpen&&!overlay&&<AppTopBar title={title} initials="AR" onHome={()=>setTab("home")} onProfile={()=>setProfileOpen(true)}/>} {profileOpen&&!overlay&&<AppTopBar title="Profile" initials="AR" onHome={()=>setTab("home")} onProfile={()=>setProfileOpen(true)} back={()=>setProfileOpen(false)}/>}<div className="scroll-area">{profileOpen?<Profile role="coach" onSwitch={onSwitch}/>:<>{tab==="home"&&<CoachDashboardHome go={setTab}/>} {tab==="schedule"&&<CoachSchedule go={setTab}/>} {tab==="students"&&<Students openStudent={()=>setOverlay("student")} connectionStatus={connectionStatus} onAccept={onAccept} onDecline={onDecline}/>}</>}</div>{!profileOpen&&!overlay&&<nav className="bottom-nav bottom-nav-primary" aria-label="Coach navigation"><div className="bottom-nav-track">{items.map(([id,label,icon])=><button type="button" key={id} className={id===tab?"active":""} onClick={()=>setTab(id)}><Icon name={icon} size={21}/><span>{label}</span></button>)}</div></nav>}{overlay==="student"&&<StudentDetail close={()=>setOverlay(null)} assign={()=>setOverlay("assign")} connectionStatus={connectionStatus} onRemove={onRemove}/>} {overlay==="assign"&&<AssignSheet close={()=>setOverlay(null)}/>}</>}
 
 type PrototypeAction = { title: string; body: string }

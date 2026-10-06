@@ -3864,3 +3864,7 @@ body.course-detail-open .phone-shell{padding-top:0!important}
 /* Prototype completion layer */
 .prototype-action-backdrop{position:absolute;z-index:260;inset:0;display:flex;align-items:flex-end;justify-content:center;background:rgba(36,31,27,.34);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
 .prototype-action-sheet{width:100%;max-width:430px;padding:14px 20px calc(20px + env(safe-area-inset-bottom));border:1px solid var(--color-border);border-bottom:0;border-radius:24px 24px 0 0;background:var(--color-surface);box-shadow:0 -18px 50px rgba(36,31,27,.16);animation:sheet-up .18s ease-out}.prototype-action-sheet .sheet-handle{margin:0 auto 18px}.prototype-action-sheet .eyebrow{margin:0 0 7px;color:var(--color-brand-dark);font-size:9px;font-weight:800;letter-spacing:.1em}.prototype-action-sheet h2{margin:0;color:var(--color-ink);font-size:22px;line-height:1.15}.prototype-action-sheet p:not(.eyebrow){margin:9px 0 18px;color:var(--color-muted);font-size:13px;line-height:19px}.prototype-action-icon{width:42px;height:42px;display:grid;place-items:center;margin:0 0 12px;border-radius:13px;background:var(--color-brand-soft);color:var(--color-brand-dark)}.prototype-action-sheet .primary-button{width:100%}
+
+
+/* Iteration 2: explicit interactive states for booking and lesson controls. */
+.payment-choice-list button.selected,.saved-card.selected{border-color:var(--color-brand)!important;background:var(--color-brand-soft)!important;box-shadow:0 0 0 1px var(--color-brand)!important}
