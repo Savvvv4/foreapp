@@ -3868,3 +3868,50 @@ body.course-detail-open .phone-shell{padding-top:0!important}
 
 /* Iteration 2: explicit interactive states for booking and lesson controls. */
 .payment-choice-list button.selected,.saved-card.selected{border-color:var(--color-brand)!important;background:var(--color-brand-soft)!important;box-shadow:0 0 0 1px var(--color-brand)!important}
+
+
+/* Coach mobile polish: remove duplicated page titles, keep actions, and prevent week-view duplication. */
+@media (max-width:520px){
+  .coach-schedule-screen .page-title-action,
+  .coach-students-screen .page-title-action{
+    min-height:40px;
+    margin:0 0 16px;
+    justify-content:flex-end;
+    align-items:center;
+  }
+  .coach-schedule-screen .page-title-action > span,
+  .coach-students-screen .page-title-action > span{
+    display:none;
+  }
+  .coach-schedule-screen.view-week .coach-date-strip-wrap{
+    display:none;
+  }
+  .coach-schedule-screen,
+  .coach-students-screen{
+    padding-bottom:130px;
+  }
+}
+
+/* Coach form fields: prevent native date/time controls from forcing the two-column grid wider than the sheet. */
+.coach-form-grid{
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+}
+.coach-form-grid > label{
+  min-width:0;
+}
+.coach-schedule-sheet input,
+.coach-schedule-sheet select{
+  min-width:0;
+  max-width:100%;
+  box-sizing:border-box;
+}
+
+/* Sheet actions must retain the primary action styling after row-level button rules. */
+.coach-request-row > div .primary-button{
+  border:1px solid var(--color-brand)!important;
+  background:var(--color-brand)!important;
+  color:#fff!important;
+}
+.sheet-backdrop{
+  z-index:240!important;
+}

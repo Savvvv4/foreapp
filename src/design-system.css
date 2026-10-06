@@ -808,3 +808,17 @@ select:focus-visible {
     animation-iteration-count: 1 !important;
   }
 }
+
+/* The Fore logo asset is white, so the brand button must retain its orange background. */
+.app-topbar-brand{
+  background:#ff7951!important;
+  color:#fff!important;
+}
+.app-topbar-brand img{
+  display:block;
+  width:82px;
+  max-width:100%;
+  height:auto;
+  max-height:28px;
+  object-fit:contain;
+}
