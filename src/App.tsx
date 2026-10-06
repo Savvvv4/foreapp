@@ -642,44 +642,55 @@ function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScree
             <p>Tree-lined fairways, strategic bunkering and fast greens reward accuracy and thoughtful approach play.</p>
           </div>
           <div className="course-facts course-facts-v4">
-            <div><strong>18</strong><span>Holes</span></div><div><strong>72</strong><span>Par</span></div><div><strong>6,935</strong><span>Yards</span></div><div><strong>4 hr</strong><span>Typical pace</span></div>
+            <div><strong>18</strong><span>Holes</span></div>
+            <div><strong>72</strong><span>Par</span></div>
+            <div><strong>6,935</strong><span>Yards</span></div>
+            <div><strong>4 hr</strong><span>Typical pace</span></div>
           </div>
         </section>
 
-        <section className="course-section-v4">
-          <div className="course-section-label-v4"><span className="eyebrow">GOOD TO KNOW</span><p>Everything you need before you arrive.</p></div>
+        <section className="course-section-v4 course-good-to-know-v4">
+          <div className="course-section-label-v4">
+            <span className="eyebrow">GOOD TO KNOW</span>
+            <p>Useful details before you arrive.</p>
+          </div>
           <div className="course-essentials course-essentials-v4">
-            <span><Icon name="check" size={14} /> Caddies available</span><span><Icon name="check" size={14} /> Walking available</span>
-            <span><Icon name="check" size={14} /> Driving range</span><span><Icon name="check" size={14} /> Golf carts</span>
-            <span><Icon name="check" size={14} /> Club rental</span><span><Icon name="check" size={14} /> Restaurant</span>
+            <span><Icon name="check" size={14} /> Caddies available</span>
+            <span><Icon name="check" size={14} /> Walking available</span>
+            <span><Icon name="check" size={14} /> Driving range</span>
+            <span><Icon name="check" size={14} /> Golf carts</span>
+            <span><Icon name="check" size={14} /> Club rental</span>
+            <span><Icon name="check" size={14} /> Restaurant</span>
           </div>
         </section>
 
-        <section className="course-layout-feature course-layout-feature-v4">
-          <div className="course-layout-copy"><span className="eyebrow">THE LAYOUT</span><h2>Position over power.</h2><p>Place your tee shots carefully. The course rewards players who manage angles and approach distances rather than simply chasing yardage.</p></div>
-          <div className="course-layout-metrics"><span><strong>6,935</strong><small>yards</small></span><span><strong>72</strong><small>par</small></span><span><strong>4 hr</strong><small>pace</small></span></div>
+        <section className="course-location-feature course-location-feature-v4">
+          <div className="course-location-copy">
+            <span className="eyebrow">LOCATION</span>
+            <h2>Easy to get to.</h2>
+            <p>Lodhi Road, Delhi · 2.1 km away</p>
+          </div>
+          <button className="directions-card course-directions-card" data-prototype="Directions" data-prototype-body="Maps and turn-by-turn directions are simulated here.">
+            <span><Icon name="map" size={24} /></span>
+            <div><strong>Delhi Golf Club</strong><small>About 18 min drive</small></div>
+            <Icon name="directions" />
+          </button>
         </section>
 
         <section className="course-section-v4 course-reviews-v4">
-          <div className="course-section-title-v4"><div><span className="eyebrow">REVIEWS</span><h2>What golfers say</h2></div><div className="course-rating-v4"><strong>4.7</strong><span>★★★★★</span><small>312 reviews</small></div></div>
-          <div className="course-review-breakdown course-review-breakdown-v4"><div><span>Course condition</span><strong>4.8</strong></div><div><span>Facilities</span><strong>4.6</strong></div><div><span>Staff</span><strong>4.7</strong></div></div>
+          <div className="course-section-title-v4">
+            <div><span className="eyebrow">REVIEWS</span><h2>What golfers say</h2></div>
+            <div className="course-rating-v4"><strong>4.7</strong><span>★★★★★</span><small>312 reviews</small></div>
+          </div>
           <blockquote>“Beautiful course, smooth check-in, and excellent caddies.”</blockquote>
           <small className="course-review-author">Rohit S. · Played 2 weeks ago</small>
           <button className="course-text-link" data-prototype="Course reviews" data-prototype-body="312 course reviews would open here.">Read all 312 reviews <Icon name="arrow" size={14} /></button>
         </section>
-
-        <section className="course-location-feature course-location-feature-v4">
-          <div className="course-location-copy"><span className="eyebrow">LOCATION</span><h2>Easy to get to.</h2><p>Lodhi Road, Delhi · 2.1 km away</p></div>
-          <button className="directions-card course-directions-card" data-prototype="Directions" data-prototype-body="Maps and turn-by-turn directions are simulated here."><span><Icon name="map" size={24} /></span><div><strong>Delhi Golf Club</strong><small>About 18 min drive</small></div><Icon name="directions" /></button>
-        </section>
-
-        <section className="course-coach-cross-sell course-coach-v4">
-          <span className="eyebrow">WANT TO IMPROVE?</span><h2>Learn with a coach here.</h2><p>Turn your next round into a lesson with a Fore coach.</p>
-          <button className="lesson-cross-sell" onClick={() => go("coachProfile")}><Avatar initials="SM" /><span><strong>Savdeep Mehta</strong><small>PGA Professional · 4.9 · from ₹1,800</small></span><Icon name="chevron" /></button>
-        </section>
       </div>
 
-      <div className="course-floating-book-v4"><button className="primary-button" onClick={() => openBooking(delhiCourse)}>Book tee time <Icon name="arrow" size={16} /></button></div>
+      <div className="course-floating-book-v4">
+        <button className="primary-button" onClick={() => openBooking(delhiCourse)}>Book tee time <Icon name="arrow" size={16} /></button>
+      </div>
     </main>
   )
 }

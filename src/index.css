@@ -4067,3 +4067,194 @@ body.course-detail-open .phone-shell{padding-top:0!important}
     max-width:430px!important;
   }
 }
+
+
+/* Course details: compact hero + booking-first information hierarchy */
+.course-profile-screen-v4{
+  background:var(--surface);
+}
+.course-profile-hero-v4{
+  height:380px!important;
+  min-height:380px!important;
+}
+.course-profile-hero-v4 img{
+  object-position:center 42%!important;
+}
+.course-profile-hero-v4 .course-hero-gradient{
+  opacity:.82!important;
+}
+.course-profile-hero-v4 .course-hero-copy-v4{
+  left:24px!important;
+  right:24px!important;
+  bottom:24px!important;
+}
+.course-profile-hero-v4 .course-hero-copy-v4 h1{
+  font-size:32px!important;
+  line-height:1.02!important;
+  margin:6px 0 9px!important;
+}
+.course-profile-hero-v4 .course-hero-meta-v4{
+  gap:12px!important;
+  font-size:13px!important;
+}
+.course-profile-hero-v4 .course-hero-control{
+  width:46px!important;
+  height:46px!important;
+  top:18px!important;
+}
+.course-profile-hero-v4 .course-hero-back{left:18px!important}
+.course-profile-hero-v4 .course-hero-save{right:18px!important}
+
+.course-profile-content-v4{
+  padding:0 24px 122px!important;
+}
+.course-intro-v4{
+  padding:30px 0 24px!important;
+}
+.course-intro-copy-v4 h2{
+  max-width:560px;
+  font-size:28px!important;
+  line-height:1.08!important;
+  letter-spacing:-.035em;
+  margin:8px 0 11px!important;
+}
+.course-intro-copy-v4 p{
+  max-width:590px;
+  font-size:15px!important;
+  line-height:22px!important;
+  margin:0!important;
+}
+.course-facts-v4{
+  margin-top:24px!important;
+  padding:17px 0!important;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.course-facts-v4 strong{
+  font-size:20px!important;
+  line-height:1!important;
+}
+.course-facts-v4 span{
+  font-size:10px!important;
+  margin-top:5px!important;
+}
+
+.course-good-to-know-v4{
+  margin-top:28px!important;
+}
+.course-section-label-v4{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:14px;
+}
+.course-section-label-v4 p{
+  margin:0!important;
+  font-size:12px!important;
+  color:var(--muted)!important;
+}
+.course-essentials-v4{
+  margin-top:12px!important;
+  border-radius:15px!important;
+  overflow:hidden;
+}
+.course-essentials-v4 span{
+  min-height:54px!important;
+  padding:0 13px!important;
+  font-size:12px!important;
+}
+
+.course-location-feature-v4{
+  margin-top:30px!important;
+  padding-top:28px!important;
+  border-top:1px solid var(--line);
+}
+.course-location-feature-v4 h2{
+  font-size:25px!important;
+  margin:6px 0 4px!important;
+}
+.course-location-feature-v4 p{
+  margin:0!important;
+  font-size:13px!important;
+}
+.course-directions-card{
+  margin-top:13px!important;
+  min-height:66px!important;
+}
+
+.course-reviews-v4{
+  margin-top:30px!important;
+  padding-top:28px!important;
+  border-top:1px solid var(--line);
+}
+.course-section-title-v4 h2{
+  font-size:25px!important;
+  margin-top:6px!important;
+}
+.course-rating-v4 strong{
+  font-size:30px!important;
+}
+.course-rating-v4 span{
+  font-size:12px!important;
+}
+.course-rating-v4 small{
+  font-size:9px!important;
+}
+.course-reviews-v4 blockquote{
+  margin:20px 0 7px!important;
+  font-size:16px!important;
+  line-height:23px!important;
+}
+.course-review-author{
+  font-size:10px!important;
+}
+.course-reviews-v4 .course-text-link{
+  margin-top:14px!important;
+  font-size:11px!important;
+}
+
+.course-floating-book-v4{
+  padding:10px 18px calc(10px + env(safe-area-inset-bottom))!important;
+}
+.course-floating-book-v4 .primary-button{
+  min-height:54px!important;
+  border-radius:16px!important;
+  font-size:15px!important;
+}
+
+@media(max-width:520px){
+  .course-profile-hero-v4{
+    height:360px!important;
+    min-height:360px!important;
+  }
+  .course-profile-hero-v4 .course-hero-copy-v4{
+    left:24px!important;
+    right:24px!important;
+    bottom:22px!important;
+  }
+  .course-profile-hero-v4 .course-hero-copy-v4 h1{
+    font-size:31px!important;
+  }
+  .course-profile-hero-v4 .course-hero-meta-v4{
+    font-size:12px!important;
+  }
+  .course-profile-content-v4{
+    padding-inline:24px!important;
+  }
+  .course-intro-v4{
+    padding-top:27px!important;
+  }
+  .course-section-label-v4{
+    display:block;
+  }
+  .course-section-label-v4 p{
+    margin-top:4px!important;
+  }
+  .course-essentials-v4 span{
+    min-height:52px!important;
+  }
+  .course-floating-book-v4{
+    width:100vw!important;
+    padding-inline:18px!important;
+  }
+}
