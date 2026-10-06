@@ -4304,3 +4304,83 @@ body.course-detail-open .phone-shell{padding-top:0!important}
   .course-profile-content-v5{padding-inline:18px!important}
   .course-book-heading-v5 h2{font-size:21px!important}
 }
+
+
+/* Course details v6: distinct hierarchy between booking, editorial, facts, amenities, location and social proof. */
+.course-profile-screen-v6{min-height:100%;background:var(--surface);padding-bottom:100px!important}
+.course-profile-hero-v6{position:relative;height:318px!important;min-height:318px!important;overflow:hidden}
+.course-profile-hero-v6>img{width:100%;height:100%;object-fit:cover;object-position:center 43%!important}
+.course-profile-hero-v6 .course-hero-gradient{position:absolute;inset:auto 0 0;height:52%;background:linear-gradient(to bottom,transparent,rgba(15,13,10,.84))!important}
+.course-profile-hero-v6 .course-hero-control{width:46px!important;height:46px!important;top:16px!important;background:rgba(255,255,255,.95)!important}
+.course-profile-hero-v6 .course-hero-back{left:16px!important}.course-profile-hero-v6 .course-hero-save{right:16px!important}
+.course-profile-hero-v6 .course-hero-copy-v6{position:absolute;left:22px!important;right:22px!important;bottom:20px!important;color:#fff}
+.course-profile-hero-v6 .course-hero-copy-v6 .eyebrow{font-size:10px!important;letter-spacing:.13em!important}
+.course-profile-hero-v6 .course-hero-copy-v6 h1{margin:5px 0 8px!important;font-size:32px!important;line-height:1!important;letter-spacing:-.04em!important}
+.course-hero-meta-v6{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:12px;line-height:18px}
+.course-hero-meta-v6>span{display:flex;align-items:center;gap:5px;white-space:nowrap}.course-hero-meta-v6 em{font-style:normal;opacity:.78}
+.course-profile-content-v6{padding:0 18px 126px!important}
+
+/* 1. Booking is the dominant action, so it gets the only elevated section treatment. */
+.course-book-card-v6{margin:14px 0 0!important;padding:18px 15px 13px!important;border:1px solid var(--line)!important;border-radius:18px!important;background:var(--soft)!important;box-shadow:0 5px 18px rgba(31,23,18,.045)}
+.course-book-heading-v6{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.course-book-heading-v6 .eyebrow{font-size:10px!important;letter-spacing:.12em!important}
+.course-book-heading-v6 h2{margin:5px 0 2px!important;font-size:23px!important;line-height:1.05!important;letter-spacing:-.035em!important}
+.course-book-heading-v6 p{margin:0!important;color:var(--muted)!important;font-size:11px!important}
+.course-book-heading-v6>strong{flex:0 0 auto;padding-top:17px;font-size:12px;color:var(--color-brand-text)}
+.course-quick-times-v6{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:14px}
+.course-quick-times-v6 button{min-height:58px;display:flex;align-items:flex-start;justify-content:center;flex-direction:column;padding:0 11px;border:1px solid var(--line);border-radius:12px;background:var(--surface);text-align:left}
+.course-quick-times-v6 button:active{border-color:var(--color-brand-500);background:var(--color-brand-tint)}
+.course-quick-times-v6 strong{font-size:12px}.course-quick-times-v6 span{margin-top:4px;color:var(--color-brand-text);font-size:10px}
+.course-see-times-v6{width:100%;min-height:39px;display:flex;align-items:center;justify-content:center;gap:5px;margin-top:5px;border:0;background:none;color:var(--color-brand-text);font-size:11px;font-weight:750}
+
+/* 2. About becomes an editorial block, not another generic card. */
+.course-intro-v6{padding:31px 2px 22px!important}
+.course-intro-v6 .eyebrow{font-size:10px!important;letter-spacing:.12em!important}
+.course-intro-v6 h2{max-width:600px;margin:7px 0 10px!important;font-size:30px!important;line-height:1.06!important;letter-spacing:-.04em!important}
+.course-intro-v6 p{max-width:600px;margin:0!important;color:var(--muted)!important;font-size:14px!important;line-height:21px!important}
+
+/* 3. Facts are a proof strip attached to the editorial section. */
+.course-facts-v6{margin:0!important;padding:18px 0!important;border-top:1px solid var(--line)!important;border-bottom:1px solid var(--line)!important}
+.course-facts-v6>div{position:relative}
+.course-facts-v6>div+div:before{content:"";position:absolute;left:0;top:3px;bottom:3px;width:1px;background:var(--line)}
+.course-facts-v6 strong{font-size:20px!important;line-height:1!important}.course-facts-v6 span{font-size:9px!important;margin-top:5px!important;color:var(--muted)!important}
+
+/* 4. Amenities use a lighter list treatment; no box around the entire section. */
+.course-section-v6{margin-top:29px!important}
+.course-section-heading-v6{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.course-section-heading-v6 h2{margin:0!important;font-size:18px!important;line-height:1.1!important;letter-spacing:-.02em!important}
+.course-essentials-v6{display:grid!important;grid-template-columns:1fr 1fr;margin-top:12px!important;border:0!important;border-radius:0!important;background:none!important}
+.course-essentials-v6 span{min-height:45px!important;padding:0!important;border-bottom:1px solid var(--line);font-size:11px!important;color:var(--color-ink)!important}
+.course-essentials-v6 span:nth-last-child(-n+2){border-bottom:0}
+.course-essentials-v6 svg{color:var(--color-brand-text)!important;flex:0 0 auto}
+
+/* 5. Location is a practical destination card, visually different from editorial content. */
+.course-location-feature-v6{display:grid;gap:12px;margin-top:29px!important;padding:24px 15px 15px!important;border:1px solid var(--line)!important;border-radius:18px!important;background:var(--soft)!important}
+.course-location-feature-v6 .eyebrow{font-size:10px!important;letter-spacing:.12em!important}
+.course-location-feature-v6 h2{margin:6px 0 3px!important;font-size:24px!important;letter-spacing:-.035em!important}.course-location-feature-v6 p{margin:0!important;color:var(--muted)!important;font-size:11px!important}
+.course-location-feature-v6 .course-directions-card{margin:0!important;min-height:64px!important;background:var(--surface)!important}
+
+/* 6. Reviews are social proof, so lead with the rating and quote rather than another eyebrow-heavy block. */
+.course-reviews-v6{margin-top:29px!important;padding:27px 2px 8px!important;border-top:1px solid var(--line)}
+.course-section-title-v6{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.course-section-title-v6 .eyebrow{font-size:10px!important;letter-spacing:.12em!important}
+.course-section-title-v6 h2{margin:6px 0 0!important;font-size:22px!important;line-height:1.05!important;letter-spacing:-.03em!important}
+.course-stars-v6{color:#e58200;font-size:12px;letter-spacing:1px;white-space:nowrap}
+.course-reviews-v6 blockquote{margin:18px 0 6px!important;font-size:16px!important;line-height:23px!important}
+.course-reviews-v6>small{color:var(--muted);font-size:10px!important}
+.course-reviews-v6 .course-text-link{display:flex;align-items:center;gap:5px;margin-top:14px;padding:0;border:0;background:none;color:var(--color-brand-text);font-size:11px;font-weight:750}
+
+.course-floating-book-v6{position:fixed!important;z-index:80!important;left:50%!important;bottom:0!important;width:min(100vw,760px)!important;padding:9px 18px calc(9px + env(safe-area-inset-bottom))!important;transform:translateX(-50%)!important;border-top:1px solid var(--line);background:rgba(255,255,255,.96);box-shadow:0 -8px 26px rgba(31,23,18,.08);backdrop-filter:blur(14px)}
+.course-floating-book-v6 .primary-button{width:100%!important;min-height:52px!important;justify-content:center!important;border-radius:15px!important;font-size:15px!important}
+@media(max-width:520px){
+  .course-profile-hero-v6{height:320px!important;min-height:320px!important}
+  .course-profile-hero-v6 .course-hero-copy-v6{left:20px!important;right:20px!important;bottom:18px!important}
+  .course-profile-hero-v6 .course-hero-copy-v6 h1{font-size:30px!important}
+  .course-profile-content-v6{padding-inline:18px!important}
+  .course-book-card-v6{margin-top:12px!important;padding-inline:14px!important}
+  .course-intro-v6{padding-top:28px!important}
+  .course-intro-v6 h2{font-size:29px!important}
+  .course-section-heading-v6 h2{font-size:18px!important}
+  .course-location-feature-v6{padding-inline:14px!important}
+  .course-floating-book-v6{width:100vw!important;padding-inline:18px!important}
+}
