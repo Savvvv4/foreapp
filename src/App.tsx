@@ -1890,83 +1890,21 @@ function CourseBookingPrototype({
   )
 }
 
-function Play({
-  onModuleStateChange,
-}: {
-  onModuleStateChange: (active: boolean) => void
-}) {
+function Play({ onModuleStateChange }: { onModuleStateChange: (active: boolean) => void }) {
   const [tracking, setTracking] = useState(false)
-
-  useEffect(() => {
-    onModuleStateChange(tracking)
-  }, [tracking, onModuleStateChange])
+  const [finished, setFinished] = useState(false)
   const [hole, setHole] = useState(1)
   const [score, setScore] = useState(4)
-  if (tracking) {
-    return (
-      <main className="screen round-screen">
-        <div className="round-top">
-          <button onClick={() => setTracking(false)}>Finish later</button>
-          <span>Delhi Golf Club</span>
-          <button>•••</button>
-        </div>
-        <div className="hole-heading">
-          <span>HOLE</span>
-          <strong>{hole}</strong>
-          <small>PAR 4 · 389 YDS</small>
-        </div>
-        <div className="hole-map">
-          <img src={photos.course} alt="Fairway overview" />
-          <span className="distance-pill">214 yds to pin</span>
-        </div>
-        <div className="score-panel">
-          <p>Score</p>
-          <div className="score-stepper">
-            <button onClick={() => setScore(Math.max(1, score - 1))}>−</button>
-            <strong>{score}</strong>
-            <button onClick={() => setScore(score + 1)}>+</button>
-          </div>
-          <div className="shot-pills">
-            <button>Fairway</button>
-            <button>GIR</button>
-            <button>2 putts</button>
-          </div>
-          <button
-            className="primary-button"
-            onClick={() => {
-              setHole(Math.min(18, hole + 1))
-              setScore(4)
-            }}
-          >
-            Save hole · Next <Icon name="arrow" size={17} />
-          </button>
-        </div>
-      </main>
-    )
-  }
-  return (
-    <main className="screen">
-      <div className="page-title">
-        <p className="eyebrow">PERFORMANCE</p>
-        <h1>Your game</h1>
-        <p>Track rounds. See where every shot is going.</p>
-      </div>
-      <button
-        className="primary-button start-round"
-        onClick={() => setTracking(true)}
-      >
-        <Icon name="flag" size={18} /> Start a round
-      </button>
-      <div className="sg-card">
-        <div className="sg-head">
-          <span>
-            <small>STROKES GAINED</small>
-            <strong>−2.4</strong>
-            <em>vs 10 handicap</em>
-          </span>
-          <span className="trend-badge">+1.2</span>
-        </div>
-        <div className="sg-bars">
+  const [fairway, setFairway] = useState(false)
+  const [gir, setGir] = useState(false)
+  const [putts, setPutts] = useState(2)
+  const [savedHoles, setSavedHoles] = useState(0)
+  useEffect(() => { onModuleStateChange(tracking) }, [tracking, onModuleStateChange])
+  const startRound = () => { setFinished(false); setTracking(true); setHole(1); setScore(4); setFairway(false); setGir(false); setPutts(2); setSavedHoles(0) }
+  const saveHole = () => { setSavedHoles(value => value + 1); if (hole >= 18) { setTracking(false); setFinished(true); return }; setHole(value => value + 1); setScore(4); setFairway(false); setGir(false); setPutts(2) }
+  if (finished) return <main className="screen round-complete-screen"><div className="page-title"><p className="eyebrow">ROUND COMPLETE</p><h1>Delhi Golf Club</h1><p>Your round has been saved to your history.</p></div><div className="stats-card"><div><strong>91</strong><span>Score</span><small>+19 to par</small></div><div><strong>18</strong><span>Holes</span><small>Completed</small></div></div><div className="detail-summary-card"><div><span><Icon name="flag" /></span><p><small>ROUND SUMMARY</small><strong>14 fairways · 9 GIR · 34 putts</strong><em>18 holes tracked · {savedHoles} saved in this session</em></p></div></div><button className="primary-button start-round" onClick={() => setFinished(false)}>Back to your game</button></main>
+  if (tracking) return <main className="screen round-screen"><div className="round-top"><button onClick={() => setTracking(false)}>Finish later</button><span>Delhi Golf Club</span><button data-prototype="Round options" data-prototype-body="Round settings, scorecard and exit options would open here.">•••</button></div><div className="hole-heading"><span>HOLE</span><strong>{hole}</strong><small>PAR 4 · 389 YDS</small></div><div className="hole-map"><img src={photos.course} alt="Fairway overview" /><span className="distance-pill">214 yds to pin</span></div><div className="score-panel"><p>Score</p><div className="score-stepper"><button onClick={() => setScore(value => Math.max(1, value - 1))}>−</button><strong>{score}</strong><button onClick={() => setScore(value => value + 1)}>+</button></div><div className="shot-pills"><button className={fairway ? "selected" : ""} onClick={() => setFairway(value => !value)}>Fairway</button><button className={gir ? "selected" : ""} onClick={() => setGir(value => !value)}>GIR</button><button className={putts === 2 ? "selected" : ""} onClick={() => setPutts(value => value === 1 ? 2 : value === 2 ? 3 : 1)}>{putts} putts</button></div><div className="round-progress-note">Hole {hole} of 18 · {savedHoles} saved</div><button className="primary-button" onClick={saveHole}>{hole === 18 ? "Finish round" : "Save hole · Next"} <Icon name="arrow" size={17} /></button></div></main>
+  return <main className="screen"><div className="page-title"><p className="eyebrow">PERFORMANCE</p><h1>Your game</h1><p>Track rounds. See where every shot is going.</p></div><button className="primary-button start-round" onClick={startRound}><Icon name="flag" size={18} /> Start a round</button><div className="sg-bars">
           {[
             ["Off tee", 72, "+0.4"],
             ["Approach", 48, "−0.8"],
@@ -1981,28 +1919,7 @@ function Play({
               <strong>{value}</strong>
             </div>
           ))}
-        </div>
-      </div>
-      <SectionHeading title="Recent rounds" action="All rounds" />
-      {[
-        ["Delhi Golf Club", "18 Aug · 18 holes", "91", "+19"],
-        ["Noida Golf Course", "10 Aug · 18 holes", "89", "+17"],
-        ["Qutab Golf Course", "02 Aug · 9 holes", "44", "+8"],
-      ].map((round) => (
-        <button className="round-row" key={round[0]}>
-          <span>
-            <strong>{round[0]}</strong>
-            <small>{round[1]}</small>
-          </span>
-          <span>
-            <strong>{round[2]}</strong>
-            <small>{round[3]}</small>
-          </span>
-          <Icon name="chevron" size={17} />
-        </button>
-      ))}
-    </main>
-  )
+        </div><SectionHeading title="Recent rounds" action="All rounds" onAction={() => emitPrototypeEvent("Round history","Your complete round history would open here.")}/>{[["Delhi Golf Club","18 Aug · 18 holes","91","+19"],["Noida Golf Course","10 Aug · 18 holes","89","+17"],["Qutab Golf Course","02 Aug · 9 holes","44","+8"]].map(round => <button className="round-row" key={round[0]} data-prototype="Round details" data-prototype-body={"View " + round[0] + " with its scorecard, notes and saved statistics."}><span><strong>{round[0]}</strong><small>{round[1]}</small></span><span><strong>{round[2]}</strong><small>{round[3]}</small></span><Icon name="chevron" size={17}/></button>)}</main>
 }
 
 function Improve() {
