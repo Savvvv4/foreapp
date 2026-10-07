@@ -1096,3 +1096,18 @@
   height:15px!important;
   stroke:#FF6A00!important;
 }
+
+
+/* Use Fore's app-standard typography throughout discovery, course cards and facility/course details. */
+.booking-discover-screen,
+.booking-discover-screen *,
+.course-card,
+.course-card *,
+.range-card,
+.range-card *,
+.course-profile-screen,
+.course-profile-screen *,
+.range-template-detail,
+.range-template-detail *{
+  font-family:"Inter",system-ui,sans-serif!important;
+}
