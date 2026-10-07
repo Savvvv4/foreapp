@@ -2624,7 +2624,18 @@ function App(){
   const [facilityDetailOpen, setFacilityDetailOpen] = useState(false)
   const [overlay, setOverlay] = useState<"student" | "assign" | null>(null)
   const [discoverSearchRequest, setDiscoverSearchRequest] = useState(0)
+  const [sharedFacility, setSharedFacility] = useState<"hamoni" | null>(null)
   const [prototypeAction, setPrototypeAction] = useState<PrototypeAction | null>(null)
+  useEffect(() => {
+    const facility = new URLSearchParams(window.location.search).get("facility")
+    if (facility === "hamoni") {
+      setPrimaryTab("discover")
+      setDiscoverSection("Facilities")
+      setDiscoverChildOpen(true)
+      setFacilityDetailOpen(true)
+      setSharedFacility("hamoni")
+    }
+  }, [])
   useEffect(() => { const handler = (event: Event) => { const detail = (event as CustomEvent<{title?: string; body?: string}>).detail; if (detail?.title) setPrototypeAction({ title: detail.title, body: detail.body ?? "This interaction is simulated in the prototype." }) }; window.addEventListener("fore:prototype-action", handler); return () => window.removeEventListener("fore:prototype-action", handler) }, [])
   const handlePrototypeCapture = (event: React.MouseEvent) => { const target = (event.target as HTMLElement).closest("[data-prototype]") as HTMLElement | null; if (target) setPrototypeAction({ title: target.dataset.prototype ?? "Action", body: target.dataset.prototypeBody ?? "This interaction is simulated in the prototype." }) }
 
@@ -2635,6 +2646,7 @@ function App(){
     setCoachDiscoveryOpen(false)
     setDiscoverChildOpen(false)
     setDiscoverSection("Courses")
+    setSharedFacility(null)
     setOverlay(null)
   }
 
@@ -2650,6 +2662,7 @@ function App(){
     setCoachDiscoveryOpen(false)
     setDiscoverSection(section)
     setDiscoverChildOpen(true)
+    setSharedFacility(null)
     setOverlay(null)
   }
 
@@ -2713,6 +2726,7 @@ function App(){
                   key={discoverSection}
                   initialSection={discoverSection}
                   searchRequest={discoverSearchRequest}
+                  initialScreen={sharedFacility === "hamoni" ? "hamoniRangeProfile" : undefined}
                   onModuleStateChange={(_active, section, screen) => {
                     if (section) setDiscoverSection(section)
                     setFacilityDetailOpen(screen === "hamoniRangeProfile" || screen === "rangeProfile")
