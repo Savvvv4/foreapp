@@ -1152,7 +1152,7 @@ function RangeCard({
       >
         <div className="range-card-image">
           <img src={image} alt={name} />
-          {hamoni && <span className="range-featured-pill">Featured</span>}
+          {hamoni && <span className="range-featured-pill"><Icon name="star" size={12} /> Featured</span>}
           <span className="range-rating-pill"><Icon name="star" size={13} /> {rating}</span>
         </div>
         <div className="range-card-copy">
@@ -1896,7 +1896,7 @@ function CourseBookingPrototype({
 
   useEffect(() => {
     const active = screen !== "discover" || bookingOpen || filtersOpen || searchOpen || paymentOpen
-    const section: DiscoverSection = screen.startsWith("range") ? "Facilities" : screen.startsWith("coach") ? "Coaches" : "Courses"
+    const section: DiscoverSection = screen === "hamoniRangeProfile" || screen.startsWith("range") ? "Facilities" : screen.startsWith("coach") ? "Coaches" : "Courses"
     onModuleStateChange(active, section)
   }, [screen, bookingOpen, filtersOpen, searchOpen, paymentOpen, onModuleStateChange])
 
@@ -1907,7 +1907,7 @@ function CourseBookingPrototype({
       onModuleStateChange(false, "Courses")
       return
     }
-    if (next.startsWith("range")) {
+    if (next === "hamoniRangeProfile" || next.startsWith("range")) {
       setMode("ranges")
       onModuleStateChange(true, "Facilities")
       return

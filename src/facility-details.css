@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap');
 
 /* Facility discovery + details visual system.
    Source: supplied "Facility card and details template".
@@ -28,13 +28,13 @@
 }
 
 .app-topbar.app-topbar-discovery > * {
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: "DM Sans", system-ui, sans-serif;
 }
 
 .app-topbar.app-topbar-discovery .app-topbar-title,
 .app-topbar.app-topbar-discovery h1,
 .app-topbar.app-topbar-discovery h2 {
-  font-family: "Inter", "Inter", system-ui, sans-serif !important;
+  font-family: "Bricolage Grotesque", sans-serif !important;
   font-size: 17px !important;
   font-weight: 800 !important;
   letter-spacing: -.02em !important;
@@ -65,7 +65,7 @@
   border-radius: 20px !important;
   background: var(--facility-surface) !important;
   color: var(--facility-ink) !important;
-  font: 800 17px "Inter", "Inter", sans-serif !important;
+  font: 800 17px "Bricolage Grotesque", sans-serif !important;
 }
 
 .app-topbar-discovery [role="menu"] {
@@ -115,7 +115,7 @@
 .results-screen .section-heading h2,
 .range-discover-screen .section-heading h2 {
   color: var(--facility-ink) !important;
-  font: 800 20px/1.2 "Inter", "Inter", sans-serif !important;
+  font: 800 20px/1.2 "Bricolage Grotesque", sans-serif !important;
   letter-spacing: -.02em !important;
 }
 
@@ -185,7 +185,7 @@
 .course-featured-pill,
 .range-featured-pill {
   z-index: 3 !important;
-  font: 700 12px "Inter", sans-serif !important;
+  font: 700 12px "DM Sans", sans-serif !important;
   border-radius: 99px !important;
 }
 
@@ -242,7 +242,7 @@
 .range-card-title-row h3 {
   margin: 0 !important;
   color: var(--facility-ink) !important;
-  font: 800 20px/1.2 "Inter", "Inter", sans-serif !important;
+  font: 800 20px/1.2 "Bricolage Grotesque", sans-serif !important;
   letter-spacing: -.02em !important;
 }
 
@@ -298,7 +298,7 @@
 .range-card-meta strong {
   margin-left: auto !important;
   color: var(--facility-ink) !important;
-  font: 800 19px "Inter", "Inter", sans-serif !important;
+  font: 800 19px "Bricolage Grotesque", sans-serif !important;
   letter-spacing: -.02em !important;
   white-space: nowrap !important;
 }
@@ -325,7 +325,7 @@
   border-radius: 10px !important;
   background: var(--facility-surface) !important;
   color: var(--facility-ink) !important;
-  font: 700 15px "Inter", sans-serif !important;
+  font: 700 15px "DM Sans", sans-serif !important;
 }
 
 .course-book-button,
@@ -336,7 +336,7 @@
   border-radius: 10px !important;
   background: var(--facility-orange) !important;
   color: #fff !important;
-  font: 700 15px "Inter", sans-serif !important;
+  font: 700 15px "DM Sans", sans-serif !important;
 }
 
 .course-book-button .icon,
@@ -443,7 +443,7 @@
 .course-title-row h1 {
   margin: 0 !important;
   color: var(--facility-ink) !important;
-  font: 800 28px/1.1 "Inter", "Inter", sans-serif !important;
+  font: 800 28px/1.1 "Bricolage Grotesque", sans-serif !important;
   letter-spacing: -.02em !important;
 }
 
@@ -493,7 +493,7 @@
 .course-facts strong,
 .course-facts-v6 strong {
   color: var(--facility-ink) !important;
-  font: 800 20px/1 "Inter", "Inter", sans-serif !important;
+  font: 800 20px/1 "Bricolage Grotesque", sans-serif !important;
 }
 
 .course-facts span,
@@ -511,7 +511,7 @@
 .course-intro-v6 .eyebrow,
 .course-section-title-v6 .eyebrow {
   color: var(--facility-muted) !important;
-  font: 700 10px "Inter", sans-serif !important;
+  font: 700 10px "DM Sans", sans-serif !important;
   letter-spacing: .12em !important;
 }
 
@@ -519,7 +519,7 @@
   max-width: 600px !important;
   margin: 7px 0 10px !important;
   color: var(--facility-ink) !important;
-  font: 800 27px/1.08 "Inter", "Inter", sans-serif !important;
+  font: 800 27px/1.08 "Bricolage Grotesque", sans-serif !important;
   letter-spacing: -.035em !important;
 }
 
@@ -538,7 +538,7 @@
 .profile-section-heading h2,
 .course-profile-content > h2 {
   margin: 0 0 10px !important;
-  font: 800 20px/1.2 "Inter", "Inter", sans-serif !important;
+  font: 800 20px/1.2 "Bricolage Grotesque", sans-serif !important;
   letter-spacing: -.02em !important;
 }
 
@@ -578,7 +578,7 @@
 
 .range-rate-row-v7 strong {
   color: var(--facility-ink) !important;
-  font: 700 14px "Inter", sans-serif !important;
+  font: 700 14px "DM Sans", sans-serif !important;
 }
 
 .range-rate-row-v7 small {
@@ -588,7 +588,7 @@
 
 .range-rate-row-v7 b {
   color: var(--facility-ink) !important;
-  font: 800 18px "Inter", "Inter", sans-serif !important;
+  font: 800 18px "Bricolage Grotesque", sans-serif !important;
 }
 
 .range-pass-card-v7 {
@@ -657,7 +657,7 @@
 .course-location-feature-v4 h2,
 .course-reviews-v6 h2 {
   color: var(--facility-ink) !important;
-  font: 800 20px/1.2 "Inter", "Inter", sans-serif !important;
+  font: 800 20px/1.2 "Bricolage Grotesque", sans-serif !important;
   letter-spacing: -.02em !important;
 }
 
@@ -705,7 +705,7 @@
 .facility-action-bar-v7 .secondary-button {
   min-height: 48px !important;
   border-radius: 10px !important;
-  font: 700 15px "Inter", sans-serif !important;
+  font: 700 15px "DM Sans", sans-serif !important;
 }
 
 .course-floating-book-v6 .primary-button,
@@ -750,7 +750,7 @@
 .range-hours-v7 strong,
 .range-loyalty-v7 strong {
   color: var(--facility-ink) !important;
-  font: 700 14px "Inter", sans-serif !important;
+  font: 700 14px "DM Sans", sans-serif !important;
 }
 
 .range-hours-v7 small,
@@ -825,39 +825,105 @@
 @media(max-width:520px){.range-template-detail .facility-template-content{padding-left:16px!important;padding-right:16px!important}.range-template-detail .facility-template-heading h1{font-size:27px!important}}
 
 
-/* Discovery top bar: match the supplied facility template while using Fore's standard Inter typeface. */
+/* Final facility-template cascade: intentionally scoped to discovery/detail UI only. */
 .app-topbar.app-topbar-discovery{
-  flex:0 0 auto!important;height:64px!important;display:grid!important;
-  grid-template-columns:40px minmax(0,1fr) 40px!important;align-items:center!important;
-  padding:12px 16px!important;border-bottom:1px solid #E3E6E1!important;
-  background:#fff!important;position:relative!important;z-index:50!important;
+  flex:0 0 64px!important;
+  height:64px!important;
+  min-height:64px!important;
+  display:grid!important;
+  grid-template-columns:40px minmax(0,1fr) 40px!important;
+  align-items:center!important;
+  padding:12px 16px!important;
+  border-bottom:1px solid #E3E6E1!important;
+  background:#fff!important;
+  backdrop-filter:none!important;
+  z-index:80!important;
 }
-.app-topbar-discovery .app-topbar-back,.app-topbar-discovery .app-topbar-search{
-  width:40px!important;height:40px!important;border-radius:50%!important;
-  border:1px solid #E3E6E1!important;background:#fff!important;display:grid!important;
-  place-items:center!important;padding:0!important;color:#12201A!important;
+.app-topbar.app-topbar-discovery .app-topbar-back,
+.app-topbar.app-topbar-discovery .app-topbar-search{
+  width:40px!important;
+  height:40px!important;
+  min-width:40px!important;
+  min-height:40px!important;
+  display:grid!important;
+  place-items:center!important;
+  padding:0!important;
+  border:1px solid #E3E6E1!important;
+  border-radius:50%!important;
+  background:#fff!important;
+  color:#12201A!important;
 }
-.app-topbar-discovery .app-topbar-back{justify-self:start!important}.app-topbar-discovery .app-topbar-back .icon{transform:none!important}
-.app-topbar-discovery .app-topbar-selector-wrap{position:relative!important;justify-self:center!important}
-.app-topbar-discovery .app-topbar-selector{
-  height:40px!important;min-height:40px!important;padding:0 16px!important;border-radius:20px!important;
-  border:1px solid #E3E6E1!important;background:#fff!important;display:flex!important;align-items:center!important;
-  justify-content:center!important;gap:6px!important;color:#12201A!important;
-  font:700 17px/1 "Inter",system-ui,sans-serif!important;letter-spacing:-.025em!important;
+.app-topbar.app-topbar-discovery .app-topbar-back .icon{transform:none!important}
+.app-topbar.app-topbar-discovery .app-topbar-selector-wrap{position:relative!important;justify-self:center!important}
+.app-topbar.app-topbar-discovery .app-topbar-selector{
+  height:40px!important;
+  min-height:40px!important;
+  padding:0 16px!important;
+  border:1px solid #E3E6E1!important;
+  border-radius:20px!important;
+  background:#fff!important;
+  color:#12201A!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:6px!important;
+  font:800 17px/1 "Bricolage Grotesque",sans-serif!important;
 }
-.app-topbar-discovery .app-topbar-selector .icon{color:#5E6B64!important;width:14px!important;height:14px!important;transition:transform .15s!important}
-.app-topbar-discovery .app-topbar-selector[aria-expanded="true"] .icon{transform:rotate(90deg)!important}
-.app-topbar-discovery .app-topbar-selector-menu{
-  position:absolute!important;top:46px!important;left:50%!important;transform:translateX(-50%)!important;
-  min-width:210px!important;padding:6px!important;border:1px solid #E3E6E1!important;border-radius:12px!important;
-  background:#fff!important;box-shadow:0 8px 24px rgba(0,0,0,.12)!important;z-index:80!important;
+.app-topbar.app-topbar-discovery .app-topbar-selector .icon{width:14px!important;height:14px!important;color:#5E6B64!important}
+.app-topbar.app-topbar-discovery .app-topbar-selector[aria-expanded="true"] .icon{transform:rotate(180deg)!important}
+.app-topbar.app-topbar-discovery .app-topbar-selector-menu{
+  position:absolute!important;
+  top:46px!important;
+  left:50%!important;
+  transform:translateX(-50%)!important;
+  min-width:210px!important;
+  padding:6px!important;
+  border:1px solid #E3E6E1!important;
+  border-radius:12px!important;
+  background:#fff!important;
+  box-shadow:0 8px 24px rgba(0,0,0,.12)!important;
+  z-index:100!important;
 }
-.app-topbar-discovery .app-topbar-selector-menu button{
-  display:block!important;width:100%!important;min-height:40px!important;padding:11px 12px!important;
-  border:0!important;border-radius:8px!important;background:transparent!important;color:#12201A!important;
-  font:500 14px/1.2 "Inter",system-ui,sans-serif!important;text-align:left!important;
+.app-topbar.app-topbar-discovery .app-topbar-selector-menu button{
+  width:100%!important;
+  min-height:40px!important;
+  padding:11px 12px!important;
+  border:0!important;
+  border-radius:8px!important;
+  background:transparent!important;
+  color:#12201A!important;
+  font:500 14px/1.2 "DM Sans",sans-serif!important;
+  text-align:left!important;
 }
-.app-topbar-discovery .app-topbar-selector-menu button.active{background:#FFF1E6!important;color:#B84A00!important;font-weight:700!important}
-.facility-template-card .range-card-main{cursor:pointer!important;outline:none!important}
-.facility-template-card .range-card-main:focus-visible{outline:3px solid #FF6A00!important;outline-offset:-3px!important}
-@media(max-width:520px){.app-topbar.app-topbar-discovery{grid-template-columns:40px minmax(0,1fr) 40px!important;padding:12px 16px!important}}
+.app-topbar.app-topbar-discovery .app-topbar-selector-menu button.active{
+  background:#FFF1E6!important;
+  color:#B84A00!important;
+  font-weight:700!important;
+}
+.facility-template-card .range-featured-pill{
+  left:12px!important;
+  top:12px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:5px!important;
+  min-height:28px!important;
+  padding:5px 10px!important;
+  border-radius:99px!important;
+  background:#FF6A00!important;
+  color:#fff!important;
+  font:700 12px/1 "DM Sans",sans-serif!important;
+  z-index:4!important;
+  box-shadow:0 3px 12px rgba(0,0,0,.10)!important;
+}
+.facility-template-card .range-featured-pill .icon{
+  width:12px!important;height:12px!important;
+  stroke:#fff!important;fill:none!important;
+}
+.facility-template-card .range-card-main{
+  cursor:pointer!important;
+  outline:none!important;
+}
+.facility-template-card .range-card-main:focus-visible{
+  outline:3px solid rgba(255,106,0,.45)!important;
+  outline-offset:-3px!important;
+}
