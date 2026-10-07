@@ -1111,3 +1111,28 @@
 .range-template-detail *{
   font-family:"Inter",system-ui,sans-serif!important;
 }
+
+
+/* Product-wide typography: discovery and detail templates use Fore's standard Inter system. */
+.app-topbar.app-topbar-discovery,
+.app-topbar.app-topbar-discovery *,
+.booking-discover-screen,
+.booking-discover-screen *,
+.results-screen,
+.results-screen *,
+.range-discover-screen,
+.range-discover-screen *,
+.coach-discovery-standalone,
+.coach-discovery-standalone *,
+.course-card,
+.course-card *,
+.range-card,
+.range-card *,
+.course-profile-screen,
+.course-profile-screen *,
+.range-profile-screen,
+.range-profile-screen *,
+.range-template-detail,
+.range-template-detail *{
+  font-family:var(--font-sans)!important;
+}
