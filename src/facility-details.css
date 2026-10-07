@@ -28,13 +28,13 @@
 }
 
 .app-topbar.app-topbar-discovery > * {
-  font-family: "DM Sans", system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
 }
 
 .app-topbar.app-topbar-discovery .app-topbar-title,
 .app-topbar.app-topbar-discovery h1,
 .app-topbar.app-topbar-discovery h2 {
-  font-family: "Bricolage Grotesque", sans-serif !important;
+  font-family: "Inter", sans-serif !important;
   font-size: 17px !important;
   font-weight: 800 !important;
   letter-spacing: -.02em !important;
@@ -65,7 +65,7 @@
   border-radius: 20px !important;
   background: var(--facility-surface) !important;
   color: var(--facility-ink) !important;
-  font: 800 17px "Bricolage Grotesque", sans-serif !important;
+  font: 800 17px "Inter", sans-serif !important;
 }
 
 .app-topbar-discovery [role="menu"] {
@@ -115,7 +115,7 @@
 .results-screen .section-heading h2,
 .range-discover-screen .section-heading h2 {
   color: var(--facility-ink) !important;
-  font: 800 20px/1.2 "Bricolage Grotesque", sans-serif !important;
+  font: 800 20px/1.2 "Inter", sans-serif !important;
   letter-spacing: -.02em !important;
 }
 
@@ -185,7 +185,7 @@
 .course-featured-pill,
 .range-featured-pill {
   z-index: 3 !important;
-  font: 700 12px "DM Sans", sans-serif !important;
+  font: 700 12px "Inter", sans-serif !important;
   border-radius: 99px !important;
 }
 
@@ -242,7 +242,7 @@
 .range-card-title-row h3 {
   margin: 0 !important;
   color: var(--facility-ink) !important;
-  font: 800 20px/1.2 "Bricolage Grotesque", sans-serif !important;
+  font: 800 20px/1.2 "Inter", sans-serif !important;
   letter-spacing: -.02em !important;
 }
 
@@ -298,7 +298,7 @@
 .range-card-meta strong {
   margin-left: auto !important;
   color: var(--facility-ink) !important;
-  font: 800 19px "Bricolage Grotesque", sans-serif !important;
+  font: 800 19px "Inter", sans-serif !important;
   letter-spacing: -.02em !important;
   white-space: nowrap !important;
 }
@@ -325,7 +325,7 @@
   border-radius: 10px !important;
   background: var(--facility-surface) !important;
   color: var(--facility-ink) !important;
-  font: 700 15px "DM Sans", sans-serif !important;
+  font: 700 15px "Inter", sans-serif !important;
 }
 
 .course-book-button,
@@ -336,7 +336,7 @@
   border-radius: 10px !important;
   background: var(--facility-orange) !important;
   color: #fff !important;
-  font: 700 15px "DM Sans", sans-serif !important;
+  font: 700 15px "Inter", sans-serif !important;
 }
 
 .course-book-button .icon,
@@ -443,7 +443,7 @@
 .course-title-row h1 {
   margin: 0 !important;
   color: var(--facility-ink) !important;
-  font: 800 28px/1.1 "Bricolage Grotesque", sans-serif !important;
+  font: 800 28px/1.1 "Inter", sans-serif !important;
   letter-spacing: -.02em !important;
 }
 
@@ -493,7 +493,7 @@
 .course-facts strong,
 .course-facts-v6 strong {
   color: var(--facility-ink) !important;
-  font: 800 20px/1 "Bricolage Grotesque", sans-serif !important;
+  font: 800 20px/1 "Inter", sans-serif !important;
 }
 
 .course-facts span,
@@ -511,7 +511,7 @@
 .course-intro-v6 .eyebrow,
 .course-section-title-v6 .eyebrow {
   color: var(--facility-muted) !important;
-  font: 700 10px "DM Sans", sans-serif !important;
+  font: 700 10px "Inter", sans-serif !important;
   letter-spacing: .12em !important;
 }
 
@@ -519,7 +519,7 @@
   max-width: 600px !important;
   margin: 7px 0 10px !important;
   color: var(--facility-ink) !important;
-  font: 800 27px/1.08 "Bricolage Grotesque", sans-serif !important;
+  font: 800 27px/1.08 "Inter", sans-serif !important;
   letter-spacing: -.035em !important;
 }
 
@@ -538,7 +538,7 @@
 .profile-section-heading h2,
 .course-profile-content > h2 {
   margin: 0 0 10px !important;
-  font: 800 20px/1.2 "Bricolage Grotesque", sans-serif !important;
+  font: 800 20px/1.2 "Inter", sans-serif !important;
   letter-spacing: -.02em !important;
 }
 
@@ -578,7 +578,7 @@
 
 .range-rate-row-v7 strong {
   color: var(--facility-ink) !important;
-  font: 700 14px "DM Sans", sans-serif !important;
+  font: 700 14px "Inter", sans-serif !important;
 }
 
 .range-rate-row-v7 small {
@@ -588,7 +588,7 @@
 
 .range-rate-row-v7 b {
   color: var(--facility-ink) !important;
-  font: 800 18px "Bricolage Grotesque", sans-serif !important;
+  font: 800 18px "Inter", sans-serif !important;
 }
 
 .range-pass-card-v7 {
@@ -657,7 +657,7 @@
 .course-location-feature-v4 h2,
 .course-reviews-v6 h2 {
   color: var(--facility-ink) !important;
-  font: 800 20px/1.2 "Bricolage Grotesque", sans-serif !important;
+  font: 800 20px/1.2 "Inter", sans-serif !important;
   letter-spacing: -.02em !important;
 }
 
@@ -705,7 +705,7 @@
 .facility-action-bar-v7 .secondary-button {
   min-height: 48px !important;
   border-radius: 10px !important;
-  font: 700 15px "DM Sans", sans-serif !important;
+  font: 700 15px "Inter", sans-serif !important;
 }
 
 .course-floating-book-v6 .primary-button,
@@ -750,7 +750,7 @@
 .range-hours-v7 strong,
 .range-loyalty-v7 strong {
   color: var(--facility-ink) !important;
-  font: 700 14px "DM Sans", sans-serif !important;
+  font: 700 14px "Inter", sans-serif !important;
 }
 
 .range-hours-v7 small,
@@ -800,7 +800,7 @@
 }
 
 /* Exact template structure, translated to Fore's Inter system. */
-.range-template-detail{font-family:"DM Sans",system-ui,sans-serif!important}
+.range-template-detail{font-family:"Inter",system-ui,sans-serif!important}
 .range-template-detail{background:#F3F4F1!important;color:#12201A!important;padding-bottom:78px!important}
 .range-template-detail .facility-template-hero{height:230px!important;position:relative!important;overflow:hidden!important;background:#294d2d!important}
 .range-template-detail .facility-template-hero img{width:100%!important;height:100%!important;object-fit:cover!important}
@@ -821,7 +821,7 @@
 .range-template-detail .facility-map-placeholder{height:100px!important;border-radius:12px 12px 0 0!important;background:repeating-linear-gradient(35deg,#F3F4F1 0 16px,#E3E6E1 16px 17px)!important}.range-template-detail .facility-directions{width:100%!important;display:flex!important;align-items:center!important;gap:10px!important;padding:12px!important;border:1px solid #E3E6E1!important;border-top:0!important;border-radius:0 0 12px 12px!important;background:#fff!important;text-align:left!important}.range-template-detail .facility-directions span{flex:1!important}.range-template-detail .facility-directions b,.range-template-detail .facility-directions small{display:block!important}.range-template-detail .facility-directions small{color:#5E6B64!important;margin-top:3px!important}.range-template-detail .facility-directions strong{color:#B84A00!important;font-size:14px!important}
 .range-template-detail .facility-reviews{border-top:1px solid #E3E6E1!important;margin-top:26px!important;padding-top:26px!important}.range-template-detail .facility-reviews h2{display:flex!important;align-items:center!important;gap:5px!important}.range-template-detail .facility-reviews h2 svg{color:#FF6A00!important;fill:#FF6A00!important}.range-template-detail .facility-reviews blockquote{margin:18px 0 6px!important;font-size:18px!important;line-height:1.35!important;font-weight:600!important;letter-spacing:-.015em!important}.range-template-detail .facility-reviews>small{color:#5E6B64!important;font-size:12.5px!important}
 .range-template-detail .facility-template-action{position:fixed!important;left:0!important;right:0!important;bottom:0!important;z-index:40!important;padding:10px 16px 14px!important;border-top:1px solid #E3E6E1!important;background:#fff!important}.range-template-detail .facility-template-action .primary-button{width:100%!important;min-height:48px!important;border-radius:10px!important;background:#FF6A00!important;color:#fff!important;border:1.5px solid #FF6A00!important}
-.facility-template-card{font-family:"DM Sans",system-ui,sans-serif!important}.facility-template-card .range-card-image{aspect-ratio:16/9!important;height:auto!important}.facility-template-card .range-card-copy{padding:14px!important}.facility-template-card .range-card-title-row h3{font-size:20px!important;line-height:1.2!important;font-weight:700!important;letter-spacing:-.025em!important}.facility-template-card .range-location{color:#5E6B64!important;font-size:13.5px!important}.facility-template-card .range-card-meta{min-height:30px!important;margin-top:12px!important}.facility-template-card .range-deal-pill{white-space:nowrap!important;color:#1C7A4F!important;background:#E4F3EA!important;padding:5px 11px!important;border-radius:99px!important;font-size:12.5px!important;font-weight:700!important}.facility-template-card .range-deal-pill.muted{color:#12201A!important;background:#F3F4F1!important}.facility-template-card .range-price-copy{margin-left:auto!important;color:#5E6B64!important;font-size:12.5px!important;white-space:nowrap!important}.facility-template-card .range-price-copy strong{color:#12201A!important;font-size:19px!important;font-weight:700!important}.facility-template-card .range-price-copy small{font-size:12.5px!important}.facility-template-card .range-card-actions{grid-template-columns:1fr 1.4fr!important;gap:10px!important;padding:0 14px 14px!important}.facility-template-card .range-details-button,.facility-template-card .range-book-button{min-height:48px!important;border-radius:10px!important;font-size:15px!important;font-weight:700!important}.facility-template-card .range-details-button{background:#fff!important;border:1.5px solid #E3E6E1!important;color:#12201A!important}.facility-template-card .range-book-button{background:#FF6A00!important;border:1.5px solid #FF6A00!important;color:#fff!important}.facility-template-card .range-featured-pill{left:12px!important;top:12px!important;background:#FF6A00!important;color:#fff!important;padding:5px 10px!important;border-radius:99px!important;font-size:12px!important;font-weight:700!important;z-index:3!important}.facility-template-card .range-rating-pill{right:12px!important;top:12px!important;background:#fff!important;color:#12201A!important;padding:5px 10px!important;border-radius:99px!important}
+.facility-template-card{font-family:"Inter",system-ui,sans-serif!important}.facility-template-card .range-card-image{aspect-ratio:16/9!important;height:auto!important}.facility-template-card .range-card-copy{padding:14px!important}.facility-template-card .range-card-title-row h3{font-size:20px!important;line-height:1.2!important;font-weight:700!important;letter-spacing:-.025em!important}.facility-template-card .range-location{color:#5E6B64!important;font-size:13.5px!important}.facility-template-card .range-card-meta{min-height:30px!important;margin-top:12px!important}.facility-template-card .range-deal-pill{white-space:nowrap!important;color:#1C7A4F!important;background:#E4F3EA!important;padding:5px 11px!important;border-radius:99px!important;font-size:12.5px!important;font-weight:700!important}.facility-template-card .range-deal-pill.muted{color:#12201A!important;background:#F3F4F1!important}.facility-template-card .range-price-copy{margin-left:auto!important;color:#5E6B64!important;font-size:12.5px!important;white-space:nowrap!important}.facility-template-card .range-price-copy strong{color:#12201A!important;font-size:19px!important;font-weight:700!important}.facility-template-card .range-price-copy small{font-size:12.5px!important}.facility-template-card .range-card-actions{grid-template-columns:1fr 1.4fr!important;gap:10px!important;padding:0 14px 14px!important}.facility-template-card .range-details-button,.facility-template-card .range-book-button{min-height:48px!important;border-radius:10px!important;font-size:15px!important;font-weight:700!important}.facility-template-card .range-details-button{background:#fff!important;border:1.5px solid #E3E6E1!important;color:#12201A!important}.facility-template-card .range-book-button{background:#FF6A00!important;border:1.5px solid #FF6A00!important;color:#fff!important}.facility-template-card .range-featured-pill{left:12px!important;top:12px!important;background:#FF6A00!important;color:#fff!important;padding:5px 10px!important;border-radius:99px!important;font-size:12px!important;font-weight:700!important;z-index:3!important}.facility-template-card .range-rating-pill{right:12px!important;top:12px!important;background:#fff!important;color:#12201A!important;padding:5px 10px!important;border-radius:99px!important}
 @media(max-width:520px){.range-template-detail .facility-template-content{padding-left:16px!important;padding-right:16px!important}.range-template-detail .facility-template-heading h1{font-size:27px!important}}
 
 
@@ -867,7 +867,7 @@
   align-items:center!important;
   justify-content:center!important;
   gap:6px!important;
-  font:800 17px/1 "Bricolage Grotesque",sans-serif!important;
+  font:800 17px/1 "Inter",sans-serif!important;
 }
 .app-topbar.app-topbar-discovery .app-topbar-selector .icon{width:14px!important;height:14px!important;color:#5E6B64!important}
 .app-topbar.app-topbar-discovery .app-topbar-selector[aria-expanded="true"] .icon{transform:rotate(180deg)!important}
@@ -892,7 +892,7 @@
   border-radius:8px!important;
   background:transparent!important;
   color:#12201A!important;
-  font:500 14px/1.2 "DM Sans",sans-serif!important;
+  font:500 14px/1.2 "Inter",sans-serif!important;
   text-align:left!important;
 }
 .app-topbar.app-topbar-discovery .app-topbar-selector-menu button.active{
@@ -914,7 +914,7 @@
   border-radius:99px!important;
   background:#FF6A00!important;
   color:#fff!important;
-  font:700 12px/1 "DM Sans",sans-serif!important;
+  font:700 12px/1 "Inter",sans-serif!important;
   z-index:6!important;
   box-shadow:0 3px 12px rgba(0,0,0,.10)!important;
   white-space:nowrap!important;
@@ -932,15 +932,15 @@
   outline-offset:-3px!important;
 }
 
-.facility-template-card .range-card-title-row h3,.range-template-detail .facility-template-heading h1,.range-template-detail .facility-template-section h2,.range-template-detail .facility-reviews h2{font-family:"Bricolage Grotesque",sans-serif!important}
-.facility-template-card .range-location,.facility-template-card .range-card-meta,.facility-template-card .range-details-button,.facility-template-card .range-book-button,.range-template-detail .facility-template-stat,.range-template-detail .facility-score,.range-template-detail .facility-rate,.range-template-detail .facility-points,.range-template-detail .facility-pass,.range-template-detail .facility-amenities,.range-template-detail .facility-directions,.range-template-detail .facility-reviews blockquote,.range-template-detail .facility-reviews>small{font-family:"DM Sans",sans-serif!important}
+.facility-template-card .range-card-title-row h3,.range-template-detail .facility-template-heading h1,.range-template-detail .facility-template-section h2,.range-template-detail .facility-reviews h2{font-family:"Inter",sans-serif!important}
+.facility-template-card .range-location,.facility-template-card .range-card-meta,.facility-template-card .range-details-button,.facility-template-card .range-book-button,.range-template-detail .facility-template-stat,.range-template-detail .facility-score,.range-template-detail .facility-rate,.range-template-detail .facility-points,.range-template-detail .facility-pass,.range-template-detail .facility-amenities,.range-template-detail .facility-directions,.range-template-detail .facility-reviews blockquote,.range-template-detail .facility-reviews>small{font-family:"Inter",sans-serif!important}
 
 /* Facility detail final visual alignment */
 
 /* Facility detail: reference-matched typography, hero controls and passes */
 .range-template-detail,
 .range-template-detail *{
-  font-family:"DM Sans",system-ui,sans-serif!important;
+  font-family:"Inter",system-ui,sans-serif!important;
 }
 .range-template-detail h1,
 .range-template-detail h2,
@@ -949,7 +949,7 @@
 .range-template-detail .facility-score td,
 .range-template-detail .facility-rate-price,
 .range-template-detail .facility-pass-price strong{
-  font-family:"Bricolage Grotesque",sans-serif!important;
+  font-family:"Inter",sans-serif!important;
 }
 .range-template-detail .facility-template-heading h1{
   font-weight:800!important;
@@ -1006,13 +1006,13 @@
 }
 .range-template-detail .facility-pass-copy b{
   display:block!important;
-  font:700 15px/1.2 "DM Sans",sans-serif!important;
+  font:700 15px/1.2 "Inter",sans-serif!important;
 }
 .range-template-detail .facility-pass-copy small{
   display:block!important;
   margin-top:4px!important;
   color:#5E6B64!important;
-  font:400 12.5px/1.3 "DM Sans",sans-serif!important;
+  font:400 12.5px/1.3 "Inter",sans-serif!important;
 }
 .range-template-detail .facility-pass-price{
   display:flex!important;
@@ -1021,12 +1021,12 @@
   text-align:right!important;
 }
 .range-template-detail .facility-pass-price strong{
-  font:800 18px/1 "Bricolage Grotesque",sans-serif!important;
+  font:800 18px/1 "Inter",sans-serif!important;
 }
 .range-template-detail .facility-pass-price small{
   margin-top:4px!important;
   color:#1C7A4F!important;
-  font:700 11.5px/1 "DM Sans",sans-serif!important;
+  font:700 11.5px/1 "Inter",sans-serif!important;
 }
 .range-template-detail .facility-pass-badge{
   position:absolute!important;
@@ -1036,7 +1036,7 @@
   border-radius:99px!important;
   background:#FF6A00!important;
   color:#fff!important;
-  font:700 11.5px/1.25 "DM Sans",sans-serif!important;
+  font:700 11.5px/1.25 "Inter",sans-serif!important;
 }
 .range-template-detail .facility-pass:nth-child(4) .facility-pass-badge{
   background:#1C7A4F!important;
@@ -1079,7 +1079,7 @@
   color:#12201A!important;
 }
 .range-template-detail .facility-location-stat > strong{
-  font:600 13.5px/1.2 "DM Sans",sans-serif!important;
+  font:600 13.5px/1.2 "Inter",sans-serif!important;
 }
 .range-template-detail .facility-location-icon{
   width:28px!important;
@@ -1173,4 +1173,13 @@
 .range-template-detail .facility-score tr:last-child td,
 .range-template-detail .facility-score tr:last-child th{
   border-bottom:1px solid #E3E6E1!important;
+}
+
+
+/* Single typography source of truth: Fore uses Inter everywhere. */
+html,
+body,
+#root,
+#root *{
+  font-family:var(--font-sans)!important;
 }
