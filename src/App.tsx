@@ -1134,9 +1134,22 @@ function RangeCard({
   const deal = hamoni ? "Special offer" : qutub ? "" : "Open now"
   const price = hamoni ? "₹500" : "₹900"
   const unit = hamoni ? "/ person" : "/ 60 min"
+
   return (
     <article className={`range-card facility-template-card${hamoni ? " featured" : ""}`}>
-      <button className="range-card-main" onClick={onOpen}>
+      <div
+        className="range-card-main"
+        role="button"
+        tabIndex={0}
+        onClick={onOpen}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault()
+            onOpen()
+          }
+        }}
+        aria-label={`Open ${name} details`}
+      >
         <div className="range-card-image">
           <img src={image} alt={name} />
           {hamoni && <span className="range-featured-pill">Featured</span>}
@@ -1144,15 +1157,20 @@ function RangeCard({
         </div>
         <div className="range-card-copy">
           <div className="range-card-title-row">
-            <div><h3>{name}</h3><p className="range-location"><Icon name="pin" size={14} /> {distance}</p></div>
-            <button type="button" className={`range-save-button ${saved ? "saved" : ""}`} onClick={(event) => { event.stopPropagation(); setSaved(!saved) }} aria-label={saved ? "Remove saved facility" : "Save facility"} aria-pressed={saved}><Icon name="heart" size={18} /></button>
+            <div>
+              <h3>{name}</h3>
+              <p className="range-location"><Icon name="pin" size={14} /> {distance}</p>
+            </div>
+            <button type="button" className={`range-save-button ${saved ? "saved" : ""}`} onClick={(event) => { event.stopPropagation(); setSaved((value) => !value) }} aria-label={saved ? "Remove saved facility" : "Save facility"} aria-pressed={saved}>
+              <Icon name="heart" size={18} />
+            </button>
           </div>
           <div className="range-card-meta">
             <span className={`range-deal-pill${deal ? "" : " muted"}`}>{deal || "Available to book"}</span>
             <span className="range-price-copy">From <strong>{price}</strong> <small>{unit}</small></span>
           </div>
         </div>
-      </button>
+      </div>
       <div className="range-card-actions">
         <button type="button" className="range-details-button" onClick={onOpen}>View details</button>
         <button type="button" className="range-book-button" onClick={onBook}>Book a bay <Icon name="arrow" size={15} /></button>
@@ -1884,7 +1902,22 @@ function CourseBookingPrototype({
 
   const go = (next: CourseFlowScreen) => {
     setScreen(next)
-    if (next === "discover") setMode("courses")
+    if (next === "discover") {
+      setMode("courses")
+      onModuleStateChange(false, "Courses")
+      return
+    }
+    if (next.startsWith("range")) {
+      setMode("ranges")
+      onModuleStateChange(true, "Facilities")
+      return
+    }
+    if (next.startsWith("coach")) {
+      setMode("coaches")
+      onModuleStateChange(true, "Coaches")
+      return
+    }
+    onModuleStateChange(true, "Courses")
   }
   const [rangeBookingVenue, setRangeBookingVenue] = useState<RangeVenue>("delhi")
 
