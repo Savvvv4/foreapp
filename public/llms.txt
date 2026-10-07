@@ -1,0 +1,21 @@
+# Fore
+
+> Fore is a connected golf platform for golfers, coaches, and golf facilities.
+
+## Website
+
+https://foreapp.vercel.app/
+
+## Public content
+
+The website contains publicly accessible golf discovery and booking experiences, including:
+- Golf courses
+- Practice facilities
+- Coaching
+- Golf-related services
+
+Automated agents may crawl and index publicly accessible content on this website.
+
+## Crawl policy
+
+See https://foreapp.vercel.app/robots.txt for crawler permissions.
