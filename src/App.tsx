@@ -294,7 +294,7 @@ function GolferHome({ go }: { go: (tab: GolferTab) => void }) {
   )
 }
 
-type DiscoverSection = "Courses" | "Ranges" | "Coaches"
+type DiscoverSection = "Courses" | "Facilities" | "Coaches"
 
 function Discover({
   onModuleStateChange,
@@ -333,7 +333,7 @@ function DiscoverHome({
           <span><strong>Book a tee time</strong><small>Find a course and book your next round</small></span>
           <Icon name="chevron" size={20} />
         </button>
-        <button type="button" onClick={() => openDiscover("Ranges")}>
+        <button type="button" onClick={() => openDiscover("Facilities")}>
           <span className="discover-home-action-icon"><Icon name="map" size={22} /></span>
           <span><strong>Book a range</strong><small>Find a range and reserve a practice bay</small></span>
           <Icon name="chevron" size={20} />
@@ -1748,7 +1748,7 @@ function SearchExperience({
       <div className="suggestion-content">
         <h2>Recent searches</h2><button onClick={() => { close(); go("results") }}><Icon name="clock" /><span><strong>Delhi · Today</strong><small>4 players</small></span><Icon name="chevron" /></button>
         <h2>Courses</h2>{["Delhi Golf Club", "Qutub Golf Course"].map((item) => <button key={item} onClick={() => { close(); go("course") }}><Icon name="flag" /><span><strong>{item}</strong><small>Delhi</small></span><Icon name="chevron" /></button>)}
-        <h2>Ranges</h2><button onClick={() => { close(); go("rangeProfile") }}><Icon name="pin" /><span><strong>Delhi Golf Club Range</strong><small>2.8 km · 42 of 60 bays occupied</small></span><Icon name="chevron" /></button>
+        <h2>Facilities</h2><button onClick={() => { close(); go("rangeProfile") }}><Icon name="pin" /><span><strong>Delhi Golf Club Range</strong><small>2.8 km · 42 of 60 bays occupied</small></span><Icon name="chevron" /></button>
         <h2>Coaches</h2><button onClick={() => { close(); go("coachProfile") }}><Avatar initials="SM" /><span><strong>Savdeep Mehta</strong><small>PGA Professional · 4.9</small></span><Icon name="chevron" /></button>
       </div>
     </div>
@@ -1815,9 +1815,9 @@ function CourseBookingPrototype({
   searchRequest: number
 }) {
   const initialScreen: CourseFlowScreen =
-    initialSection === "Ranges" ? "rangeDiscover" :
+    initialSection === "Facilities" ? "rangeDiscover" :
     initialSection === "Coaches" ? "coachDiscover" : "discover"
-  const initialMode = initialSection === "Ranges" ? "ranges" : initialSection === "Coaches" ? "coaches" : "courses"
+  const initialMode = initialSection === "Facilities" ? "ranges" : initialSection === "Coaches" ? "coaches" : "courses"
   const [screen, setScreen] = useState<CourseFlowScreen>(initialScreen)
   const [mode, setMode] = useState<"courses" | "ranges" | "coaches">(initialMode)
   const [filtersOpen, setFiltersOpen] = useState(false)
@@ -1881,7 +1881,7 @@ function CourseBookingPrototype({
 
   useEffect(() => {
     const active = screen !== "discover" || bookingOpen || filtersOpen || searchOpen || paymentOpen
-    const section: DiscoverSection = screen.startsWith("range") ? "Ranges" : screen.startsWith("coach") ? "Coaches" : "Courses"
+    const section: DiscoverSection = screen.startsWith("range") ? "Facilities" : screen.startsWith("coach") ? "Coaches" : "Courses"
     onModuleStateChange(active, section)
   }, [screen, bookingOpen, filtersOpen, searchOpen, paymentOpen, onModuleStateChange])
 
@@ -2395,7 +2395,7 @@ function AppTopBar({
 }) {
   const [selectorOpen, setSelectorOpen] = useState(false)
   const isDiscoverySelector = Boolean(discoverySection && onDiscoverySectionChange)
-  const options: DiscoverSection[] = ["Courses", "Ranges", "Coaches"]
+  const options: DiscoverSection[] = ["Courses", "Facilities", "Coaches"]
 
   return (
     <header className={`app-topbar ${back ? "app-topbar-child" : ""} ${isDiscoverySelector ? "app-topbar-discovery" : ""}`}>
