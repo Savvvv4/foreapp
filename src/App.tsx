@@ -517,6 +517,7 @@ function DiscoverCourses({
   openFilters,
   openSearch,
   openBooking,
+  openRangeBooking,
   mode,
   setMode,
 }: {
@@ -524,6 +525,7 @@ function DiscoverCourses({
   openFilters: () => void
   openSearch: () => void
   openBooking: (course: BookingCourse, slot?: string) => void
+  openRangeBooking: (range?: RangeVenue) => void
   mode: "courses" | "ranges" | "coaches"
   setMode: (mode: "courses" | "ranges" | "coaches") => void
 }) {
@@ -1914,7 +1916,7 @@ function CourseBookingPrototype({
 
   return (
     <>
-      {screen === "discover" && <DiscoverCourses go={go} openFilters={() => setFiltersOpen(true)} openSearch={() => setSearchOpen(true)} openBooking={openBooking} mode={mode} setMode={setMode} />}
+      {screen === "discover" && <DiscoverCourses go={go} openFilters={() => setFiltersOpen(true)} openSearch={() => setSearchOpen(true)} openBooking={openBooking} openRangeBooking={openRangeBooking} mode={mode} setMode={setMode} />}
       {screen === "results" && <ResultsScreen go={go} openFilters={() => setFiltersOpen(true)} state={resultsState} setState={setResultsState} openBooking={openBooking} />}
       {screen === "course" && <CourseProfileScreen go={go} openBooking={openBooking} />}
       {screen === "confirmation" && <ConfirmationScreen go={go} course={bookingCourse} date={courseDate} time={selectedSlot} caddy={courseCaddySummary} cartCount={courseCartCount} total={bookingCourse.price + courseCaddyCost + courseCartCount * 800} />}
