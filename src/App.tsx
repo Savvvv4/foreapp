@@ -301,7 +301,7 @@ function Discover({
   initialSection,
   searchRequest,
 }: {
-  onModuleStateChange: (active: boolean, section?: DiscoverSection) => void
+  onModuleStateChange: (active: boolean, section?: DiscoverSection, screen?: CourseFlowScreen) => void
   initialSection: DiscoverSection
   searchRequest: number
 }) {
@@ -1897,7 +1897,7 @@ function CourseBookingPrototype({
   useEffect(() => {
     const active = screen !== "discover" || bookingOpen || filtersOpen || searchOpen || paymentOpen
     const section: DiscoverSection = screen === "hamoniRangeProfile" || screen.startsWith("range") ? "Facilities" : screen.startsWith("coach") ? "Coaches" : "Courses"
-    onModuleStateChange(active, section)
+    onModuleStateChange(active, section, screen)
   }, [screen, bookingOpen, filtersOpen, searchOpen, paymentOpen, onModuleStateChange])
 
   const go = (next: CourseFlowScreen) => {
@@ -2604,6 +2604,7 @@ function App(){
   const [coachDiscoveryOpen, setCoachDiscoveryOpen] = useState(false)
   const [discoverChildOpen, setDiscoverChildOpen] = useState(false)
   const [discoverSection, setDiscoverSection] = useState<DiscoverSection>("Courses")
+  const [facilityDetailOpen, setFacilityDetailOpen] = useState(false)
   const [overlay, setOverlay] = useState<"student" | "assign" | null>(null)
   const [discoverSearchRequest, setDiscoverSearchRequest] = useState(0)
   const [prototypeAction, setPrototypeAction] = useState<PrototypeAction | null>(null)
@@ -2662,7 +2663,7 @@ function App(){
           />
         )}
 
-        {discoverChildOpen && !module && !coachDiscoveryOpen && !profileOpen && !overlay && (
+        {discoverChildOpen && !facilityDetailOpen && !module && !coachDiscoveryOpen && !profileOpen && !overlay && (
           <AppTopBar
             title={discoverSection}
             initials="AK"
@@ -2695,8 +2696,9 @@ function App(){
                   key={discoverSection}
                   initialSection={discoverSection}
                   searchRequest={discoverSearchRequest}
-                  onModuleStateChange={(_active, section) => {
+                  onModuleStateChange={(_active, section, screen) => {
                     if (section) setDiscoverSection(section)
+                    setFacilityDetailOpen(screen === "hamoniRangeProfile" || screen === "rangeProfile")
                     setDiscoverChildOpen(true)
                   }}
                 />
