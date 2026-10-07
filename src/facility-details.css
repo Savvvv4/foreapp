@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap');
+700;800&family=DM+Sans:wght@400;500;600;700&display=swap');
 
 /* Facility discovery + details visual system.
    Source: supplied "Facility card and details template".
@@ -1135,4 +1135,42 @@
 .range-template-detail,
 .range-template-detail *{
   font-family:var(--font-sans)!important;
+}
+
+
+/* Final Fore typography + facility glance table normalization. */
+.range-template-detail,
+.range-template-detail *,
+.facility-template-card,
+.facility-template-card *,
+.booking-discover-screen,
+.booking-discover-screen *,
+.course-profile-screen,
+.course-profile-screen *,
+.range-profile-screen,
+.range-profile-screen *{
+  font-family:var(--font-sans)!important;
+}
+
+.range-template-detail .facility-score td{
+  text-align:left!important;
+  font-weight:400!important;
+  color:#5E6B64!important;
+  font-size:14px!important;
+  padding:11px 0!important;
+  border-top:1px solid #E3E6E1!important;
+}
+
+.range-template-detail .facility-score th{
+  text-align:right!important;
+  font-weight:700!important;
+  color:#12201A!important;
+  font-size:16px!important;
+  padding:11px 0!important;
+  border-top:1px solid #E3E6E1!important;
+}
+
+.range-template-detail .facility-score tr:last-child td,
+.range-template-detail .facility-score tr:last-child th{
+  border-bottom:1px solid #E3E6E1!important;
 }
