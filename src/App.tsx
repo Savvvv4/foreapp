@@ -1220,6 +1220,11 @@ function RangeProfileScreen({ go, openRangeBooking, hamoni = false }: { go: (scr
         <img src={photos.golfer} alt={name} />
         <span className="facility-template-hero-gradient" />
         <button type="button" className="facility-hero-button facility-hero-back" onClick={() => go("rangeDiscover")} aria-label="Go back"><Icon name="chevron" size={20} /></button>
+        <button type="button" className="facility-hero-button facility-hero-share" onClick={() => {
+          const shareData = { title: name, text: `Check out ${name} on Fore`, url: window.location.href }
+          if (navigator.share) navigator.share(shareData).catch(() => undefined)
+          else emitPrototypeEvent("Share facility", `${name} can be shared from here.`)
+        }} aria-label={`Share ${name}`}><Icon name="share" size={19} /></button>
         <button type="button" className={`facility-hero-button facility-hero-save ${saved ? "saved" : ""}`} onClick={() => setSaved((value) => !value)} aria-label={saved ? "Remove facility from saved" : "Save facility"} aria-pressed={saved}><Icon name="heart" size={20} /></button>
       </section>
       <div className="facility-template-content">
@@ -1229,7 +1234,17 @@ function RangeProfileScreen({ go, openRangeBooking, hamoni = false }: { go: (scr
         </header>
         <section className="facility-template-section"><h2>At a glance</h2><table className="facility-score"><tbody><tr><th>Open</th><td>{hamoni ? "Tue – Sun, 6 AM – 10 PM" : "Daily, 6 AM – 9 PM"}</td></tr>{facts.map(([label, value]) => <tr key={label}><th>{label}</th><td>{value}</td></tr>)}</tbody></table></section>
         <section className="facility-template-section"><h2>Rates</h2><div className="facility-rate-list">{rates.map(([label, sub, price]) => <div className="facility-rate" key={label}><span><b>{label}</b> <small>{sub}</small></span><strong>{price}</strong></div>)}</div><p className="facility-points"><Icon name="star" size={15} /> Earn {hamoni ? 150 : 100} points on every booking</p></section>
-        {hamoni && <section className="facility-template-section"><h2>Passes</h2><p className="facility-section-sub">Unlimited ball rentals and access to grass bays.</p><div className="facility-pass-list">{passes.map(([label, price, note], index) => <button type="button" className={`facility-pass ${index === 1 ? "selected" : ""}`} key={label} onClick={() => {}}><span><b>{label}</b><small>{note}</small></span><strong>{price}</strong></button>)}</div><button type="button" className="primary-button facility-pass-button" onClick={() => {}}>Continue with 3 months · ₹24,000</button></section>}
+        {hamoni && <section className="facility-template-section"><h2>Passes</h2><p className="facility-section-sub">Unlimited ball rentals and access to grass bays.</p><div className="facility-pass-list" role="radiogroup" aria-label="Choose a pass">{passes.map(([label, price, note], index) => {
+          const selected = index === 1
+          const badge = index === 1 ? "Most popular" : index === 3 ? "Best value" : ""
+          const saving = index === 1 ? "Save 33%" : index === 2 ? "Save 31%" : index === 3 ? "Save 44%" : ""
+          return <button type="button" role="radio" aria-checked={selected} className={`facility-pass ${selected ? "selected" : ""}`} key={label} onClick={() => {}}>
+            {badge && <span className="facility-pass-badge">{badge}</span>}
+            <span className="facility-pass-radio" aria-hidden="true" />
+            <span className="facility-pass-copy"><b>{label}</b><small>{note}</small></span>
+            <span className="facility-pass-price"><strong>{price}</strong>{saving && <small>{saving}</small>}</span>
+          </button>
+        })}</div><button type="button" className="primary-button facility-pass-button" onClick={() => {}}>Continue with 3 months · ₹24,000</button></section>}
         <section className="facility-template-section"><h2>On site</h2><div className="facility-amenities">{amenities.map((item) => <span key={item}><Icon name="check" size={15} />{item}</span>)}</div></section>
         <section className="facility-template-section"><h2>Coaching here</h2><button className="facility-coach-card" onClick={() => go("coachProfile")}><Avatar initials="SM" /><span><b>Savdeep Mehta</b><small>PGA Professional · 12 yrs · 4.9</small></span><Icon name="chevron" /></button></section>
         <section className="facility-template-section"><h2>Getting there</h2><div className="facility-map-placeholder" /><button className="facility-directions" data-prototype="Directions" data-prototype-body="Maps and directions are simulated here."><span><b>{name}</b><small>{address}</small></span><strong>Directions</strong></button></section>
