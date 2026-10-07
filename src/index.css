@@ -4384,3 +4384,22 @@ body.course-detail-open .phone-shell{padding-top:0!important}
   .course-location-feature-v6{padding-inline:14px!important}
   .course-floating-book-v6{width:100vw!important;padding-inline:18px!important}
 }
+
+
+/* Fore logo: keep the full wordmark visible in the top bar. */
+.app-topbar-brand{
+  width:86px!important;
+  min-width:86px!important;
+  max-width:86px!important;
+  flex:none!important;
+  overflow:visible!important;
+}
+.app-topbar-brand img{
+  width:76px!important;
+  min-width:76px!important;
+  max-width:none!important;
+  height:auto!important;
+  max-height:none!important;
+  flex:none!important;
+  object-fit:contain!important;
+}
