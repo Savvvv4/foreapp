@@ -1044,3 +1044,29 @@
 .range-template-detail .facility-pass-button{
   margin-top:14px!important;
 }
+
+/* Fix pass selector circles: the generic pass span rule must never stretch the radio control. */
+.range-template-detail .facility-pass > .facility-pass-radio{
+  display:block!important;
+  flex:0 0 20px!important;
+  width:20px!important;
+  min-width:20px!important;
+  max-width:20px!important;
+  height:20px!important;
+  min-height:20px!important;
+  max-height:20px!important;
+  aspect-ratio:1 / 1!important;
+  border-radius:50%!important;
+  box-sizing:border-box!important;
+}
+.range-template-detail .facility-pass.selected > .facility-pass-radio{
+  flex:0 0 20px!important;
+  width:20px!important;
+  min-width:20px!important;
+  max-width:20px!important;
+  height:20px!important;
+  min-height:20px!important;
+  max-height:20px!important;
+  aspect-ratio:1 / 1!important;
+  border:6px solid #FF6A00!important;
+}
