@@ -1,147 +1,800 @@
-/*
- * Facility and course details: hours strip, rate lists, pass cards, and the shared
- * two-action bar (coaches + book). Loads after index.css so these rules win ties.
- */
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Sans:wght@400;500;700&display=swap');
 
-.facility-action-bar-v7 {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr);
-  gap: 10px;
+/* Facility discovery + details visual system.
+   Source: supplied "Facility card and details template".
+   This file intentionally overrides the existing prototype styling only for
+   discovery cards, discovery chrome, and course/facility detail surfaces. */
+
+:root {
+  --facility-bg: #F3F4F1;
+  --facility-surface: #FFFFFF;
+  --facility-ink: #12201A;
+  --facility-muted: #5E6B64;
+  --facility-line: #E3E6E1;
+  --facility-orange: #FF6A00;
+  --facility-orange-ink: #B84A00;
+  --facility-orange-tint: #FFF1E6;
+  --facility-green: #1C7A4F;
+  --facility-green-tint: #E4F3EA;
 }
-.course-floating-book-v6.facility-action-bar-v7 .primary-button,
-.course-floating-book-v6.facility-action-bar-v7 .secondary-button {
+
+.app-topbar.app-topbar-discovery {
+  position: relative !important;
+  min-height: 64px !important;
+  padding: 12px 16px !important;
+  background: var(--facility-surface) !important;
+  border-bottom: 1px solid var(--facility-line) !important;
+  z-index: 30 !important;
+}
+
+.app-topbar.app-topbar-discovery > * {
+  font-family: "DM Sans", system-ui, sans-serif;
+}
+
+.app-topbar.app-topbar-discovery .app-topbar-title,
+.app-topbar.app-topbar-discovery h1,
+.app-topbar.app-topbar-discovery h2 {
+  font-family: "Bricolage Grotesque", "DM Sans", system-ui, sans-serif !important;
+  font-size: 17px !important;
+  font-weight: 800 !important;
+  letter-spacing: -.02em !important;
+}
+
+.app-topbar-discovery .app-topbar-back,
+.app-topbar-discovery .app-topbar-search,
+.app-topbar-discovery .app-topbar-action {
+  width: 40px !important;
+  height: 40px !important;
+  border: 1px solid var(--facility-line) !important;
+  border-radius: 50% !important;
+  background: var(--facility-surface) !important;
+  color: var(--facility-ink) !important;
+}
+
+.app-topbar-discovery .app-topbar-search {
+  display: grid !important;
+  place-items: center !important;
+}
+
+.app-topbar-discovery .discovery-selector,
+.app-topbar-discovery .app-topbar-selector,
+.app-topbar-discovery .selector-trigger {
+  height: 40px !important;
+  padding: 0 16px !important;
+  border: 1px solid var(--facility-line) !important;
+  border-radius: 20px !important;
+  background: var(--facility-surface) !important;
+  color: var(--facility-ink) !important;
+  font: 800 17px "Bricolage Grotesque", "DM Sans", sans-serif !important;
+}
+
+.app-topbar-discovery [role="menu"] {
+  min-width: 210px !important;
+  padding: 6px !important;
+  border: 1px solid var(--facility-line) !important;
+  border-radius: 12px !important;
+  background: var(--facility-surface) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12) !important;
+}
+
+.app-topbar-discovery [role="menuitemradio"] {
   width: 100% !important;
-  min-height: 52px !important;
+  min-height: 42px !important;
+  padding: 11px 12px !important;
+  border: 0 !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  color: var(--facility-ink) !important;
+  text-align: left !important;
+  font: 500 14px "DM Sans", sans-serif !important;
+}
+
+.app-topbar-discovery [role="menuitemradio"][aria-checked="true"] {
+  background: var(--facility-orange-tint) !important;
+  color: var(--facility-orange-ink) !important;
+  font-weight: 700 !important;
+}
+
+/* Discovery list */
+.booking-discover-screen,
+.results-screen,
+.range-discover-screen,
+.coach-discovery-standalone {
+  background: var(--facility-bg) !important;
+  color: var(--facility-ink) !important;
+  font-family: "DM Sans", system-ui, sans-serif !important;
+}
+
+.booking-discover-screen .section-heading,
+.results-screen .section-heading,
+.range-discover-screen .section-heading {
+  margin: 18px 0 10px !important;
+}
+
+.booking-discover-screen .section-heading h2,
+.results-screen .section-heading h2,
+.range-discover-screen .section-heading h2 {
+  color: var(--facility-ink) !important;
+  font: 800 20px/1.2 "Bricolage Grotesque", "DM Sans", sans-serif !important;
+  letter-spacing: -.02em !important;
+}
+
+/* Shared facility/course card */
+.booking-discover-screen .course-card,
+.booking-discover-screen .range-card,
+.results-screen .course-card,
+.range-discover-screen .range-card {
+  position: relative !important;
+  overflow: hidden !important;
+  margin-bottom: 18px !important;
+  border: 1px solid var(--facility-line) !important;
+  border-radius: 16px !important;
+  background: var(--facility-surface) !important;
+  box-shadow: none !important;
+}
+
+.booking-discover-screen .course-card-main,
+.booking-discover-screen .range-card-main,
+.results-screen .course-card-main,
+.range-discover-screen .range-card-main {
+  display: block !important;
+  width: 100% !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: var(--facility-ink) !important;
+  text-align: left !important;
+}
+
+.booking-discover-screen .course-card-image,
+.booking-discover-screen .range-card-image,
+.results-screen .course-card-image,
+.range-discover-screen .range-card-image {
+  position: relative !important;
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 16 / 9 !important;
+  overflow: hidden !important;
+  background: #dfe7df !important;
+}
+
+.booking-discover-screen .course-card-image img,
+.booking-discover-screen .range-card-image img,
+.results-screen .course-card-image img,
+.range-discover-screen .range-card-image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.booking-discover-screen .course-card-image::after,
+.booking-discover-screen .range-card-image::after,
+.results-screen .course-card-image::after,
+.range-discover-screen .range-card-image::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: linear-gradient(180deg, rgba(18,32,26,.06), transparent 55%, rgba(18,32,26,.12)) !important;
+  pointer-events: none !important;
+}
+
+.course-status-pill,
+.range-status-pill,
+.course-rating-pill,
+.range-rating-pill,
+.course-featured-pill,
+.range-featured-pill {
+  z-index: 3 !important;
+  font: 700 12px "DM Sans", sans-serif !important;
+  border-radius: 99px !important;
+}
+
+.course-rating-pill,
+.range-rating-pill {
+  top: 12px !important;
+  right: 12px !important;
+  padding: 5px 10px !important;
+  background: var(--facility-surface) !important;
+  color: var(--facility-ink) !important;
+}
+
+.course-rating-pill .icon,
+.range-rating-pill .icon {
+  color: var(--facility-orange) !important;
+  fill: var(--facility-orange) !important;
+}
+
+.course-status-pill,
+.range-status-pill {
+  top: 12px !important;
+  left: 12px !important;
+  padding: 5px 10px !important;
+  background: var(--facility-surface) !important;
+  color: var(--facility-ink) !important;
+}
+
+.course-featured-pill,
+.range-featured-pill {
+  top: 12px !important;
+  left: 12px !important;
+  padding: 5px 10px !important;
+  background: var(--facility-orange) !important;
+  color: #fff !important;
+}
+
+.booking-discover-screen .course-card-copy,
+.booking-discover-screen .range-card-copy,
+.results-screen .course-card-copy,
+.range-discover-screen .range-card-copy {
+  padding: 14px !important;
+  background: var(--facility-surface) !important;
+}
+
+.course-card-title-row,
+.range-card-title-row {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+}
+
+.course-card-title-row h3,
+.range-card-title-row h3 {
+  margin: 0 !important;
+  color: var(--facility-ink) !important;
+  font: 800 20px/1.2 "Bricolage Grotesque", "DM Sans", sans-serif !important;
+  letter-spacing: -.02em !important;
+}
+
+.course-location,
+.range-location {
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  margin: 4px 0 0 !important;
+  color: var(--facility-muted) !important;
+  font: 400 13.5px/1.4 "DM Sans", sans-serif !important;
+}
+
+.course-location .icon,
+.range-location .icon {
+  color: var(--facility-muted) !important;
+}
+
+.course-save-button,
+.range-save-button {
+  position: relative !important;
+  z-index: 8 !important;
+  width: 40px !important;
+  height: 40px !important;
+  flex: none !important;
+  display: grid !important;
+  place-items: center !important;
+  border: 1px solid var(--facility-line) !important;
+  border-radius: 10px !important;
+  background: var(--facility-surface) !important;
+  color: var(--facility-muted) !important;
+}
+
+.course-save-button.saved,
+.range-save-button.saved {
+  border-color: var(--facility-orange) !important;
+  color: var(--facility-orange) !important;
+}
+
+.course-card-meta,
+.range-card-meta {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  min-height: 30px !important;
+  margin-top: 12px !important;
+  color: var(--facility-muted) !important;
+  font: 400 12.5px "DM Sans", sans-serif !important;
+}
+
+.course-card-meta strong,
+.range-card-meta strong {
+  margin-left: auto !important;
+  color: var(--facility-ink) !important;
+  font: 800 19px "Bricolage Grotesque", "DM Sans", sans-serif !important;
+  letter-spacing: -.02em !important;
+  white-space: nowrap !important;
+}
+
+.course-card-meta strong small,
+.range-card-meta strong small {
+  color: var(--facility-muted) !important;
+  font: 400 12.5px "DM Sans", sans-serif !important;
+}
+
+.course-card-actions,
+.range-card-actions {
+  display: grid !important;
+  grid-template-columns: 1fr 1.4fr !important;
+  gap: 10px !important;
+  padding: 0 14px 14px !important;
+}
+
+.course-details-button,
+.range-details-button {
+  min-height: 48px !important;
+  padding: 0 18px !important;
+  border: 1.5px solid var(--facility-line) !important;
+  border-radius: 10px !important;
+  background: var(--facility-surface) !important;
+  color: var(--facility-ink) !important;
+  font: 700 15px "DM Sans", sans-serif !important;
+}
+
+.course-book-button,
+.range-book-button {
+  min-height: 48px !important;
+  padding: 0 18px !important;
+  border: 1.5px solid var(--facility-orange) !important;
+  border-radius: 10px !important;
+  background: var(--facility-orange) !important;
+  color: #fff !important;
+  font: 700 15px "DM Sans", sans-serif !important;
+}
+
+.course-book-button .icon,
+.range-book-button .icon {
+  flex: none !important;
+}
+
+.course-card.out,
+.range-card.out {
+  opacity: 1 !important;
+}
+
+.course-card.out .course-card-image::before,
+.range-card.out .range-card-image::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 2 !important;
+  background: rgba(18,32,26,.5) !important;
+}
+
+.course-card.out .course-book-button,
+.range-card.out .range-book-button {
+  background: var(--facility-surface) !important;
+  color: var(--facility-orange-ink) !important;
+}
+
+/* Details */
+.course-profile-screen,
+.range-profile-screen {
+  position: relative !important;
+  min-height: 100% !important;
+  padding-bottom: 94px !important;
+  background: var(--facility-bg) !important;
+  color: var(--facility-ink) !important;
+  font-family: "DM Sans", system-ui, sans-serif !important;
+}
+
+.course-profile-hero {
+  position: relative !important;
+  height: 230px !important;
+  overflow: hidden !important;
+  background: #294d2d !important;
+}
+
+.course-profile-hero > img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.course-profile-hero .course-hero-gradient {
+  position: absolute !important;
+  inset: 0 !important;
+  background: linear-gradient(180deg, rgba(18,32,26,.08) 0%, transparent 48%, rgba(18,32,26,.38) 100%) !important;
+  pointer-events: none !important;
+}
+
+.course-profile-hero > button {
+  top: 14px !important;
+  width: 40px !important;
+  height: 40px !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: var(--facility-surface) !important;
+  color: var(--facility-ink) !important;
+  box-shadow: none !important;
+  z-index: 5 !important;
+}
+
+.course-profile-hero > button:first-of-type {
+  left: 14px !important;
+}
+
+.course-profile-hero > button:first-of-type .icon {
+  transform: rotate(180deg) !important;
+}
+
+.course-profile-hero > button:last-of-type {
+  right: 14px !important;
+}
+
+.course-profile-hero > button:nth-of-type(2) {
+  right: 62px !important;
+}
+
+.course-profile-content {
+  padding: 16px 16px 108px !important;
+  background: var(--facility-bg) !important;
+}
+
+.course-profile-content-v6 {
+  max-width: none !important;
+}
+
+.course-title-row {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  margin-top: 0 !important;
+}
+
+.course-title-row h1 {
+  margin: 0 !important;
+  color: var(--facility-ink) !important;
+  font: 800 28px/1.1 "Bricolage Grotesque", "DM Sans", sans-serif !important;
+  letter-spacing: -.02em !important;
+}
+
+.course-address,
+.trust-line {
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  margin: 8px 0 0 !important;
+  color: var(--facility-muted) !important;
+  font: 400 14px/1.4 "DM Sans", sans-serif !important;
+}
+
+.course-profile-content > h2,
+.profile-section-heading h2,
+.course-section-title-v6 h2 {
+  color: var(--facility-ink) !important;
+  font-family: "Bricolage Grotesque", "DM Sans", sans-serif !important;
+}
+
+.course-facts,
+.course-facts-v6 {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 0 !important;
+  margin: 18px 0 0 !important;
+  padding: 14px 0 !important;
+  border-top: 1px solid var(--facility-line) !important;
+  border-bottom: 1px solid var(--facility-line) !important;
+}
+
+.course-facts > div,
+.course-facts-v6 > div {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
   justify-content: center !important;
-  border-radius: 15px !important;
-  font-size: 15px !important;
+  border-right: 1px solid var(--facility-line) !important;
+}
+
+.course-facts > div:last-child,
+.course-facts-v6 > div:last-child {
+  border-right: 0 !important;
+}
+
+.course-facts strong,
+.course-facts-v6 strong {
+  color: var(--facility-ink) !important;
+  font: 800 20px/1 "Bricolage Grotesque", "DM Sans", sans-serif !important;
+}
+
+.course-facts span,
+.course-facts-v6 span {
+  margin-top: 5px !important;
+  color: var(--facility-muted) !important;
+  font: 400 12px/1.2 "DM Sans", sans-serif !important;
+}
+
+/* Editorial sections replace stacked generic cards */
+.course-intro-v6 {
+  padding: 26px 0 22px !important;
+}
+
+.course-intro-v6 .eyebrow,
+.course-section-title-v6 .eyebrow {
+  color: var(--facility-muted) !important;
+  font: 700 10px "DM Sans", sans-serif !important;
+  letter-spacing: .12em !important;
+}
+
+.course-intro-v6 h2 {
+  max-width: 600px !important;
+  margin: 7px 0 10px !important;
+  color: var(--facility-ink) !important;
+  font: 800 27px/1.08 "Bricolage Grotesque", "DM Sans", sans-serif !important;
+  letter-spacing: -.035em !important;
+}
+
+.course-intro-v6 p {
+  max-width: 600px !important;
+  margin: 0 !important;
+  color: var(--facility-muted) !important;
+  font: 400 14px/1.5 "DM Sans", sans-serif !important;
+}
+
+/* Existing sections */
+.profile-section-heading {
+  margin-top: 26px !important;
+}
+
+.profile-section-heading h2,
+.course-profile-content > h2 {
+  margin: 0 0 10px !important;
+  font: 800 20px/1.2 "Bricolage Grotesque", "DM Sans", sans-serif !important;
+  letter-spacing: -.02em !important;
+}
+
+.amenity-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px 14px !important;
+}
+
+.amenity-grid span {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  color: var(--facility-muted) !important;
+  font: 400 14px/1.35 "DM Sans", sans-serif !important;
+}
+
+.amenity-grid .icon {
+  color: var(--facility-green) !important;
+}
+
+/* Rate rows */
+.range-rate-list-v7 {
+  margin-top: 12px !important;
+  border: 1px solid var(--facility-line) !important;
+  border-radius: 14px !important;
+  background: var(--facility-surface) !important;
+  overflow: hidden !important;
+}
+
+.range-rate-row-v7 {
+  min-height: 60px !important;
+  padding: 10px 14px !important;
+  border-bottom: 1px solid var(--facility-line) !important;
+  background: transparent !important;
+}
+
+.range-rate-row-v7 strong {
+  color: var(--facility-ink) !important;
+  font: 700 14px "DM Sans", sans-serif !important;
+}
+
+.range-rate-row-v7 small {
+  color: var(--facility-muted) !important;
+  font: 400 12.5px "DM Sans", sans-serif !important;
+}
+
+.range-rate-row-v7 b {
+  color: var(--facility-ink) !important;
+  font: 800 18px "Bricolage Grotesque", "DM Sans", sans-serif !important;
+}
+
+.range-pass-card-v7 {
+  margin-top: 26px !important;
+  padding: 18px 16px !important;
+  border: 1px solid #CFE4D5 !important;
+  border-radius: 18px !important;
+  background: var(--facility-green-tint) !important;
+}
+
+.range-pass-card-v7 .eyebrow {
+  color: var(--facility-green) !important;
+}
+
+.range-pass-card-v7 h3 {
+  margin: 6px 0 8px !important;
+  color: var(--facility-ink) !important;
+  font: 800 28px/1 "Bricolage Grotesque", sans-serif !important;
+  letter-spacing: -.035em !important;
+}
+
+.range-pass-card-v7 p {
+  color: var(--facility-muted) !important;
+  font: 400 13px/1.45 "DM Sans", sans-serif !important;
+}
+
+.range-pass-includes-v7 {
+  border-top-color: #CFE4D5 !important;
+  color: var(--facility-ink) !important;
+}
+
+.range-pass-includes-v7 svg {
+  color: var(--facility-green) !important;
+}
+
+.range-pass-grid-v7 {
+  gap: 10px !important;
+}
+
+.range-pass-grid-v7 > div {
+  min-height: 82px !important;
+  padding: 12px 14px !important;
+  border: 1px solid var(--facility-line) !important;
+  border-radius: 14px !important;
+  background: var(--facility-surface) !important;
+}
+
+.range-pass-grid-v7 strong {
+  color: var(--facility-ink) !important;
+  font: 800 20px "Bricolage Grotesque", sans-serif !important;
+}
+
+.range-pass-grid-v7 em {
+  background: var(--facility-green-tint) !important;
+  color: var(--facility-green) !important;
+}
+
+/* Coaching / location / review surfaces */
+.course-coach-v4,
+.course-location-feature-v4,
+.course-reviews-v6 {
+  margin-top: 26px !important;
+}
+
+.course-coach-v4 h2,
+.course-location-feature-v4 h2,
+.course-reviews-v6 h2 {
+  color: var(--facility-ink) !important;
+  font: 800 20px/1.2 "Bricolage Grotesque", "DM Sans", sans-serif !important;
+  letter-spacing: -.02em !important;
+}
+
+.course-location-feature-v4 .course-location-row {
+  margin-top: 10px !important;
+}
+
+.course-reviews-v6 {
+  padding: 26px 0 8px !important;
+  border-top: 1px solid var(--facility-line) !important;
+}
+
+.course-section-title-v6 h2 {
+  margin-top: 6px !important;
+  font-size: 22px !important;
+}
+
+.course-stars-v6 {
+  color: var(--facility-orange) !important;
+}
+
+.course-reviews-v6 blockquote {
+  margin: 18px 0 6px !important;
+  color: var(--facility-ink) !important;
+  font: 600 18px/1.35 "Bricolage Grotesque", "DM Sans", sans-serif !important;
+  letter-spacing: -.01em !important;
+}
+
+.course-reviews-v6 > small {
+  color: var(--facility-muted) !important;
+  font: 400 12.5px "DM Sans", sans-serif !important;
+}
+
+/* Sticky single primary action: orange, full-width */
+.course-floating-book-v6,
+.facility-action-bar-v7 {
+  padding: 10px 16px 14px !important;
+  border-top: 1px solid var(--facility-line) !important;
+  background: var(--facility-surface) !important;
+}
+
+.course-floating-book-v6 .primary-button,
+.course-floating-book-v6 .secondary-button,
+.facility-action-bar-v7 .primary-button,
+.facility-action-bar-v7 .secondary-button {
+  min-height: 48px !important;
+  border-radius: 10px !important;
+  font: 700 15px "DM Sans", sans-serif !important;
+}
+
+.course-floating-book-v6 .primary-button,
+.facility-action-bar-v7 .primary-button {
+  border: 1.5px solid var(--facility-orange) !important;
+  background: var(--facility-orange) !important;
+  color: #fff !important;
+}
+
+.course-floating-book-v6 .secondary-button,
+.facility-action-bar-v7 .secondary-button {
+  border: 1.5px solid var(--facility-line) !important;
+  background: var(--facility-surface) !important;
+  color: var(--facility-ink) !important;
+}
+
+/* The template has one decisive sticky action. On the details page,
+   secondary actions remain available above, but the sticky CTA is primary. */
+.course-floating-book-v6.facility-action-bar-v7 {
+  grid-template-columns: 1fr !important;
+}
+
+/* Range details */
+.range-profile-screen-v7 .course-facts-v6 {
+  margin-top: 18px !important;
 }
 
 .range-hours-v7 {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 12px;
-  margin: 14px 0 0;
-  padding: 13px 14px;
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  background: var(--soft);
+  margin: 14px 0 0 !important;
+  padding: 13px 14px !important;
+  border: 1px solid var(--facility-line) !important;
+  border-radius: 16px !important;
+  background: var(--facility-surface) !important;
 }
-.range-hours-v7 > span {
-  width: 42px;
-  height: 42px;
-  display: grid;
-  place-items: center;
-  border-radius: 12px;
-  background: var(--color-brand-soft);
-  color: var(--color-brand-dark);
-}
-.range-hours-v7 strong { display: block; font-size: 14px; }
-.range-hours-v7 small { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; }
-.range-hours-v7 .course-text-link { font-size: 12px; white-space: nowrap; }
-.range-profile-screen-v7 .course-facts-v6 { margin-top: 18px !important; }
 
-.range-rate-list-v7 {
-  margin-top: 12px;
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  background: var(--surface);
-  overflow: hidden;
+.range-hours-v7 > span,
+.range-loyalty-v7 > span {
+  background: var(--facility-orange-tint) !important;
+  color: var(--facility-orange-ink) !important;
 }
-.range-rate-row-v7 {
-  width: 100%;
-  min-height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 10px 14px;
-  border: 0;
-  border-bottom: 1px solid var(--line);
-  background: transparent;
-  color: var(--color-ink);
-  text-align: left;
-}
-.range-rate-row-v7:last-child { border-bottom: 0; }
-button.range-rate-row-v7:active { background: var(--color-surface-muted); }
-.range-rate-row-v7 span { display: flex; flex-direction: column; min-width: 0; }
-.range-rate-row-v7 strong { font-size: 14px; font-weight: 600; }
-.range-rate-row-v7 small { margin-top: 2px; color: var(--muted); font-size: 12px; }
-.range-rate-row-v7 b { font-size: 17px; font-weight: 700; letter-spacing: -.02em; white-space: nowrap; }
 
-.range-note-v7 { margin: 10px 2px 0; color: var(--muted); font-size: 12px; line-height: 1.45; }
-.range-legal-v7 { margin-top: 18px; font-size: 11px; }
-.range-section-sub-v7 { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
+.range-hours-v7 strong,
+.range-loyalty-v7 strong {
+  color: var(--facility-ink) !important;
+  font: 700 14px "DM Sans", sans-serif !important;
+}
 
-.range-pass-card-v7 {
-  margin-top: 29px;
-  padding: 18px 16px;
-  border: 1px solid var(--color-brand-soft-strong);
-  border-radius: 18px;
-  background: var(--color-brand-soft);
+.range-hours-v7 small,
+.range-loyalty-v7 small {
+  color: var(--facility-muted) !important;
+  font: 400 12.5px "DM Sans", sans-serif !important;
 }
-.range-pass-card-v7 .eyebrow { color: var(--color-brand-dark); font-size: 10px; letter-spacing: .12em; }
-.range-pass-card-v7 h3 { margin: 6px 0 8px; font-size: 28px; line-height: 1; letter-spacing: -.035em; }
-.range-pass-card-v7 h3 small { color: var(--muted); font-size: 13px; font-weight: 500; letter-spacing: 0; }
-.range-pass-card-v7 p { margin: 0; color: var(--color-ink-soft); font-size: 13px; line-height: 1.45; }
-.range-pass-includes-v7 {
-  display: flex;
-  align-items: flex-start;
-  gap: 6px;
-  margin-top: 10px !important;
-  padding-top: 10px;
-  border-top: 1px dashed var(--color-brand-soft-strong);
-  color: var(--color-ink) !important;
-  font-weight: 500;
-}
-.range-pass-includes-v7 svg { margin-top: 2px; color: var(--color-brand-dark); }
 
-.range-pass-grid-v7 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
-.range-pass-grid-v7 > div {
-  position: relative;
-  min-height: 82px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 4px;
-  padding: 12px 14px;
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  background: var(--surface);
+.range-note-v7,
+.range-section-sub-v7 {
+  color: var(--facility-muted) !important;
 }
-.range-pass-grid-v7 small { color: var(--muted); font-size: 12px; font-weight: 500; }
-.range-pass-grid-v7 strong { font-size: 20px; letter-spacing: -.03em; }
-.range-pass-grid-v7 em {
-  align-self: flex-start;
-  padding: 2px 8px;
-  border-radius: var(--radius-pill);
-  background: var(--color-success-soft);
-  color: var(--color-success);
-  font-size: 11px;
-  font-style: normal;
-  font-weight: 600;
-}
-.range-pass-grid-v7 .ace { border-color: var(--color-border-strong); }
 
 .range-loyalty-v7 {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 12px;
-  margin-top: 29px;
-  padding: 14px;
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  background: var(--soft);
+  margin-top: 26px !important;
+  border-color: var(--facility-line) !important;
+  background: var(--facility-surface) !important;
 }
-.range-loyalty-v7 > span {
-  width: 38px;
-  height: 38px;
-  display: grid;
-  place-items: center;
-  border-radius: 11px;
-  background: var(--color-brand-soft);
-  color: var(--color-brand-dark);
+
+@media (max-width: 520px) {
+  .booking-discover-screen .course-card,
+  .booking-discover-screen .range-card,
+  .results-screen .course-card,
+  .range-discover-screen .range-card {
+    border-radius: 16px !important;
+  }
+
+  .course-title-row h1 {
+    font-size: 27px !important;
+  }
+
+  .course-intro-v6 h2 {
+    font-size: 27px !important;
+  }
+
+  .course-card-title-row h3,
+  .range-card-title-row h3 {
+    font-size: 19px !important;
+  }
 }
-.range-loyalty-v7 strong { display: block; font-size: 14px; }
-.range-loyalty-v7 small { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; line-height: 1.45; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
