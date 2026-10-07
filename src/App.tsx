@@ -356,6 +356,7 @@ type CourseFlowScreen =
   | "bookingDetail"
   | "rangeDiscover"
   | "rangeProfile"
+  | "hamoniRangeProfile"
   | "rangeSelect"
   | "rangeCheckout"
   | "rangeConfirmation"
@@ -372,6 +373,7 @@ type CourseFlowScreen =
 type PaymentState = "methods" | "processing" | "failed" | "offline" | "expired"
 type BookingStep = "select" | "review" | "payment"
 type BookingCourse = { name: string; image: string; price: number }
+type RangeVenue = "delhi" | "hamoni"
 
 const delhiCourse: BookingCourse = { name: "Delhi Golf Club", image: photos.course, price: 2500 }
 const qutubCourse: BookingCourse = { name: "Qutub Golf Course", image: photos.green, price: 1800 }
@@ -528,7 +530,7 @@ function DiscoverCourses({
   return (
     <main className="screen booking-discover-screen">
       <SectionHeading title="Book Again" />
-      <BookAgainCourseCard onOpen={() => go("course")} onBook={() => openBooking(delhiCourse)} />
+      <RangeCard hamoni onOpen={() => go("hamoniRangeProfile")} onBook={() => openRangeBooking("hamoni")} />
       <SectionHeading title="Near you" />
       <div className="near-you-course-list">
         <CourseCard onOpen={() => go("course")} onBook={() => openBooking(delhiCourse)} />
@@ -864,6 +866,7 @@ function BookingFlowModal({
   )
 }
 function RangeBookingFlowModal({
+  hamoni = false,
   step,
   setStep,
   date,
@@ -875,6 +878,7 @@ function RangeBookingFlowModal({
   close,
   complete,
 }: {
+  hamoni?: boolean
   step: BookingStep
   setStep: (step: BookingStep) => void
   date: string
@@ -900,7 +904,10 @@ function RangeBookingFlowModal({
     }
   })
   const selectedDate = dates.find((item) => item.key === date)
-  const total = 900 + bucketCount * 350
+  const entryFee = hamoni ? 500 : 900
+  const ballPrice = hamoni ? 150 : 350
+  const total = entryFee + bucketCount * ballPrice
+  const venueName = hamoni ? "Hamoni Golf Camp" : "Delhi Golf Club Range"
   const paymentLabel = paymentMethod === "Net banking" ? "Net banking" : paymentMethod
 
   useEffect(() => {
@@ -910,7 +917,7 @@ function RangeBookingFlowModal({
   }, [step, complete])
 
   return (
-    <main className="booking-flow-page" aria-label="Book Delhi Golf Club Range">
+    <main className="booking-flow-page" aria-label={`Book ${venueName}`}>
       <header className="booking-page-topbar">
         <button type="button" className="app-topbar-back" onClick={close} aria-label="Go back">
           <Icon name="chevron" size={21} />
@@ -924,7 +931,7 @@ function RangeBookingFlowModal({
           <span className="booking-modern-hero-shade" />
           <div className="booking-modern-hero-copy">
             <span className="eyebrow light">{step === "payment" ? "CONFIRMING BOOKING" : "YOUR SESSION"}</span>
-            <strong>Delhi Golf Club Range</strong>
+            <strong>{venueName}</strong>
             {selectedDate && <span>{selectedDate.label}{bucketCount ? ` · ${bucketCount} ${bucketCount === 1 ? "bucket" : "buckets"}` : ""}</span>}
           </div>
         </section>
@@ -945,13 +952,13 @@ function RangeBookingFlowModal({
             </section>
 
             <section className="booking-modern-section range-bucket-section">
-              <div className="booking-modern-section-heading"><h2>Ball buckets</h2><span>₹350 each</span></div>
+              <div className="booking-modern-section-heading"><h2>Ball buckets</h2><span>₹{ballPrice} each</span></div>
               <div className="range-bucket-input">
                 <button type="button" onClick={() => setBucketCount(Math.max(0, bucketCount - 1))} disabled={bucketCount === 0} aria-label="Remove bucket">−</button>
                 <label><strong>{bucketCount}</strong><span>{bucketCount === 1 ? "bucket" : "buckets"}</span></label>
                 <button type="button" onClick={() => setBucketCount(bucketCount + 1)} aria-label="Add bucket">+</button>
               </div>
-              <small className="range-bucket-hint">Add as many practice ball buckets as you need.</small>
+              <small className="range-bucket-hint">{hamoni ? "1 bag = 50 Srixon balls. Entry fee is ₹500 per person." : "Add as many practice ball buckets as you need."}</small>
             </section>
           </div>
         ) : (
@@ -1105,24 +1112,27 @@ type RangeAvailabilityState = "ready" | "loading" | "empty" | "offline"
 
 function RangeCard({
   qutub = false,
+  hamoni = false,
   onOpen,
   onBook,
 }: {
   qutub?: boolean
+  hamoni?: boolean
   onOpen: () => void
   onBook: () => void
 }) {
   const [saved, setSaved] = useState(false)
-  const name = qutub ? "Qutub Practice Centre" : "Delhi Golf Club Range"
+  const name = hamoni ? "Hamoni Golf Camp" : qutub ? "Qutub Practice Centre" : "Delhi Golf Club Range"
   const image = qutub ? photos.green : photos.golfer
-  const rating = qutub ? "4.4" : "4.6"
-  const distance = qutub ? "Mehrauli · 5.7 km" : "Lodhi Road · 2.8 km"
+  const rating = hamoni ? "4.2" : qutub ? "4.4" : "4.6"
+  const distance = hamoni ? "Sector 23A, Gurugram" : qutub ? "Mehrauli · 5.7 km" : "Lodhi Road · 2.8 km"
+  const status = hamoni ? "105 bays" : qutub ? "Launch monitors" : "Open now"
   return (
     <article className="range-card">
       <button className="range-card-main" onClick={onOpen}>
         <div className="range-card-image">
           <img src={image} alt={name} />
-          <span className="range-status-pill">{qutub ? "Launch monitors" : "Open now"}</span>
+          <span className="range-status-pill">{status}</span>
           <span className="range-rating-pill"><Icon name="star" size={13} /> {rating}</span>
         </div>
         <div className="range-card-copy">
@@ -1131,22 +1141,19 @@ function RangeCard({
               <h3>{name}</h3>
               <p><Icon name="pin" size={14} /> {distance}</p>
             </div>
-            <button
-              type="button"
-              className={`range-save-button ${saved ? "saved" : ""}`}
-              onClick={(event) => { event.stopPropagation(); setSaved(!saved) }}
-              aria-label={saved ? "Remove saved range" : "Save range"}
-            >
+            <button type="button" className={`range-save-button ${saved ? "saved" : ""}`} onClick={(event) => { event.stopPropagation(); setSaved(!saved) }} aria-label={saved ? "Remove saved range" : "Save range"}>
               <Icon name="heart" size={18} />
             </button>
           </div>
           <div className="range-card-meta">
-            {qutub ? (
+            {hamoni ? (
+              <span className="availability-copy">Entry ₹500 · 50 Srixon balls ₹150</span>
+            ) : qutub ? (
               <span className="availability-copy">7 bays available</span>
             ) : (
               <span className="range-live-status"><i /> Open · 42 of 60 bays occupied</span>
             )}
-            <strong>from ₹900 <small>/ 60 min</small></strong>
+            <strong>{hamoni ? "from ₹150" : "from ₹900"} <small>{hamoni ? "/ 50 balls" : "/ 60 min"}</small></strong>
           </div>
         </div>
       </button>
@@ -1157,7 +1164,6 @@ function RangeCard({
     </article>
   )
 }
-
 function RangeDiscoverScreen({
   go,
   openSearch,
@@ -1167,46 +1173,56 @@ function RangeDiscoverScreen({
   go: (screen: CourseFlowScreen) => void
   openSearch: () => void
   setMode: (mode: "courses" | "ranges" | "coaches") => void
-  openRangeBooking: () => void
+  openRangeBooking: (range?: RangeVenue) => void
 }) {
   return (
     <main className="screen booking-discover-screen range-discover-screen">
       <SectionHeading title="Book Again" />
-      <RangeCard onOpen={() => go("rangeProfile")} onBook={openRangeBooking} />
+      <RangeCard hamoni onOpen={() => go("hamoniRangeProfile")} onBook={() => openRangeBooking("hamoni")} />
       <SectionHeading title="Near you" />
       <div className="near-you-range-list">
-        <RangeCard onOpen={() => go("rangeProfile")} />
+        <RangeCard hamoni onOpen={() => go("hamoniRangeProfile")} onBook={() => openRangeBooking("hamoni")} />
+        <RangeCard onOpen={() => go("rangeProfile")} onBook={openRangeBooking} />
         <RangeCard qutub onOpen={() => go("rangeProfile")} onBook={openRangeBooking} />
       </div>
     </main>
   )
 }
-
-function RangeProfileScreen({ go, openRangeBooking }: { go: (screen: CourseFlowScreen) => void; openRangeBooking: () => void }) {
+function RangeProfileScreen({ go, openRangeBooking, hamoni = false }: { go: (screen: CourseFlowScreen) => void; openRangeBooking: (range?: RangeVenue) => void; hamoni?: boolean }) {
+  const name = hamoni ? "Hamoni Golf Camp" : "Delhi Golf Club Range"
+  const rating = hamoni ? "4.2 (228)" : "4.6 (184)"
+  const address = hamoni ? "CK Farm, Carterpuri, Sector 23A, Gurugram" : "Lodhi Road, Delhi · 2.8 km"
+  const facts = hamoni ? [["105","Bays"],["9","Target greens"],["4","Practice greens"],["19","Bunkers"]] : [["60","Bays"],["Mixed","Covered / open"],["Yes","Floodlit"],["TrackMan","Launch monitors"]]
   return (
     <main className="course-profile-screen range-profile-screen">
-      <div className="course-profile-hero"><img src={photos.golfer} alt="Delhi Golf Club Range" /><button onClick={() => go("rangeDiscover")}><Icon name="chevron" /></button><button data-prototype="Range saved" data-prototype-body="Delhi Golf Club Range has been saved to your favourites."><Icon name="heart" /></button><span>1 / 4</span></div>
+      <div className="course-profile-hero"><img src={photos.golfer} alt={name} /><button onClick={() => go("rangeDiscover")}><Icon name="chevron" /></button><button data-prototype="Range saved" data-prototype-body={`${name} has been saved to your favourites.`}><Icon name="heart" /></button><span>1 / 4</span></div>
       <div className="course-profile-content">
-        <span className="featured-tag inline-badge">Open now · until 9:00 PM</span>
-        <div className="course-title-row"><h1>Delhi Golf Club Range</h1><span className="rating"><Icon name="star" size={14} /> 4.6 (184)</span></div>
-        <p className="course-address"><Icon name="pin" size={15} /> Lodhi Road, Delhi · 2.8 km</p>
+        <span className="featured-tag inline-badge">{hamoni ? "Open Tue–Sun · 6:00 AM–10:00 PM" : "Open now · until 9:00 PM"}</span>
+        <div className="course-title-row"><h1>{name}</h1><span className="rating"><Icon name="star" size={14} /> {rating}</span></div>
+        <p className="course-address"><Icon name="pin" size={15} /> {address}</p>
         <div className="course-facts range-facts">
-          {[["60","Bays"],["Mixed","Covered / open"],["Yes","Floodlit"],["TrackMan","Launch monitors"]].map(([value,label]) => <div key={label}><strong>{value}</strong><span>{label}</span></div>)}
+          {facts.map(([value,label]) => <div key={label}><strong>{value}</strong><span>{label}</span></div>)}
         </div>
-        <div className="profile-section-heading"><h2>Packages</h2><button data-prototype="Range packages" data-prototype-body="View all range membership and bucket packages.">View all</button></div>
-        <div className="range-package-grid"><button data-prototype="Unlimited Balls" data-prototype-body="Monthly unlimited range access for ₹2,999. Purchase flow is simulated."><small>MONTHLY</small><strong>Unlimited Balls</strong><span>Practice any day</span><b>₹2,999</b></button><button data-prototype="10 Bucket Pack" data-prototype-body="Ten range visits for ₹2,975. Purchase flow is simulated."><em>Save 15%</em><small>10 VISITS</small><strong>10 Bucket Pack</strong><span>Valid for 90 days</span><b>₹2,975</b></button></div>
+        <div className="profile-section-heading"><h2>{hamoni ? "Range access" : "Packages"}</h2><button data-prototype="Range packages" data-prototype-body="View all range membership and bucket packages.">View all</button></div>
+        {hamoni ? (
+          <div className="range-package-grid">
+            <button data-prototype="Range access" data-prototype-body="₹500 entry per person. Rates are exclusive of GST."><small>ENTRY</small><strong>Range access</strong><span>Per person</span><b>₹500</b></button>
+            <button data-prototype="50 Srixon balls" data-prototype-body="One bag contains 50 Srixon balls. Rates are exclusive of GST."><small>1 BAG</small><strong>50 Srixon balls</strong><span>Per bag</span><b>₹150</b></button>
+          </div>
+        ) : (
+          <div className="range-package-grid"><button data-prototype="Unlimited Balls" data-prototype-body="Monthly unlimited range access for ₹2,999. Purchase flow is simulated."><small>MONTHLY</small><strong>Unlimited Balls</strong><span>Practice any day</span><b>₹2,999</b></button><button data-prototype="10 Bucket Pack" data-prototype-body="Ten range visits for ₹2,975. Purchase flow is simulated."><em>Save 15%</em><small>10 VISITS</small><strong>10 Bucket Pack</strong><span>Valid for 90 days</span><b>₹2,975</b></button></div>
+        )}
         <h2>Add a coach to your session</h2>
         <button className="lesson-cross-sell" onClick={() => go("coachProfile")}><Avatar initials="SM" /><span><strong>Savdeep Mehta</strong><small>PGA Professional · 12 yrs · 4.9</small></span><Icon name="chevron" /></button>
         <div className="profile-section-heading"><h2>Reviews</h2><button data-prototype="Range reviews" data-prototype-body="184 range reviews would open here.">See all 184</button></div>
         <div className="profile-review"><span>★★★★★</span><p>“Plenty of space, good mats, and launch monitors were easy to reserve.”</p><small>Ankit R. · 6 days ago</small></div>
         <h2>Map & directions</h2>
-        <button className="directions-card" data-prototype="Directions" data-prototype-body="Maps and directions are simulated here."><span><Icon name="map" size={24} /></span><div><strong>Delhi Golf Club Range</strong><small>Lodhi Road · 2.8 km</small></div><Icon name="directions" /></button>
+        <button className="directions-card" data-prototype="Directions" data-prototype-body="Maps and directions are simulated here."><span><Icon name="map" size={24} /></span><div><strong>{name}</strong><small>{address}</small></div><Icon name="directions" /></button>
       </div>
-      <div className="booking-sticky-bar"><span><small>From</small><strong>₹900</strong></span><button className="primary-button" onClick={openRangeBooking}>Book a bay</button></div>
+      <div className="booking-sticky-bar"><span><small>{hamoni ? "Entry" : "From"}</small><strong>₹{hamoni ? "500" : "900"}</strong></span><button className="primary-button" onClick={() => openRangeBooking(hamoni ? "hamoni" : "delhi")}>Book a bay</button></div>
     </main>
   )
 }
-
 function RangeSelectScreen({
   go,
   time,
@@ -1871,7 +1887,10 @@ function CourseBookingPrototype({
     setScreen(next)
     if (next === "discover") setMode("courses")
   }
-  const openRangeBooking = () => {
+  const [rangeBookingVenue, setRangeBookingVenue] = useState<RangeVenue>("delhi")
+
+  const openRangeBooking = (range: RangeVenue = "delhi") => {
+    setRangeBookingVenue(range)
     setRangeBookingDate("")
     setRangeBucketCount(0)
     setRangePaymentMethod("UPI")
@@ -1903,6 +1922,7 @@ function CourseBookingPrototype({
       {screen === "bookingDetail" && <BookingDetailScreen go={go} />}
       {screen === "rangeDiscover" && <RangeDiscoverScreen go={go} openSearch={() => setSearchOpen(true)} setMode={setMode} openRangeBooking={openRangeBooking} />}
       {screen === "rangeProfile" && <RangeProfileScreen go={go} openRangeBooking={openRangeBooking} />}
+      {screen === "hamoniRangeProfile" && <RangeProfileScreen go={go} openRangeBooking={openRangeBooking} hamoni />}
       {screen === "rangeSelect" && <RangeSelectScreen go={go} time={rangeTime} setTime={setRangeTime} duration={rangeDuration} setDuration={setRangeDuration} bayType={rangeBayType} setBayType={setRangeBayType} bucket={rangeBucket} setBucket={setRangeBucket} state={rangeState} setState={setRangeState} />}
       {screen === "rangeCheckout" && <RangeCheckoutScreen go={go} time={rangeTime} duration={rangeDuration} bayType={rangeBayType} bucket={rangeBucket} setBucket={setRangeBucket} credits={rangeCredits} setCredits={setRangeCredits} holdSeconds={holdSeconds} openPayment={() => { setPaymentTarget("range"); setPaymentState(holdSeconds === 0 ? "expired" : "methods"); setPaymentOpen(true) }} />}
       {screen === "rangeConfirmation" && <RangeConfirmationScreen go={go} date={rangeBookingDate} bucketCount={rangeBucketCount} />}
@@ -1916,7 +1936,7 @@ function CourseBookingPrototype({
       {screen === "coachBookingPending" && <CoachBookingDetailScreen go={go} status="Pending" />}
       {screen === "coachBookingConfirmed" && <CoachBookingDetailScreen go={go} status="Confirmed" />}
       {screen === "coachDeclined" && <CoachDeclinedScreen go={go} />}
-      {rangeBookingOpen && <RangeBookingFlowModal step={rangeBookingStep} setStep={setRangeBookingStep} date={rangeBookingDate} setDate={setRangeBookingDate} bucketCount={rangeBucketCount} setBucketCount={setRangeBucketCount} paymentMethod={rangePaymentMethod} setPaymentMethod={setRangePaymentMethod} close={() => setRangeBookingOpen(false)} complete={() => { setRangeBookingOpen(false); setScreen("rangeConfirmation") }} />}
+      {rangeBookingOpen && <RangeBookingFlowModal hamoni={rangeBookingVenue === "hamoni"} step={rangeBookingStep} setStep={setRangeBookingStep} date={rangeBookingDate} setDate={setRangeBookingDate} bucketCount={rangeBucketCount} setBucketCount={setRangeBucketCount} paymentMethod={rangePaymentMethod} setPaymentMethod={setRangePaymentMethod} close={() => setRangeBookingOpen(false)} complete={() => { setRangeBookingOpen(false); setScreen("rangeConfirmation") }} />}
       {bookingOpen && <BookingFlowModal course={bookingCourse} step={bookingStep} setStep={setBookingStep} date={courseDate} setDate={setCourseDate} time={selectedSlot} setTime={setSelectedSlot} caddyMode={courseCaddyMode} setCaddyMode={setCourseCaddyMode} cartCount={courseCartCount} setCartCount={setCourseCartCount} paymentMethod={coursePaymentMethod} setPaymentMethod={setCoursePaymentMethod} close={() => setBookingOpen(false)} pay={() => setBookingStep("payment")} />}
       {filtersOpen && <FiltersSheet close={() => { setFiltersOpen(false); setResultsState("ready"); go("results") }} />}
       {searchOpen && <SearchExperience denied={locationDenied} setDenied={setLocationDenied} primerSeen={locationPrimerSeen} setPrimerSeen={setLocationPrimerSeen} close={() => setSearchOpen(false)} go={go} />}
