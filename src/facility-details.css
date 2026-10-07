@@ -1070,3 +1070,29 @@
   aspect-ratio:1 / 1!important;
   border:6px solid #FF6A00!important;
 }
+
+/* Facility location marker */
+.range-template-detail .facility-location-stat{
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:7px!important;
+  color:#12201A!important;
+}
+.range-template-detail .facility-location-stat > strong{
+  font:600 13.5px/1.2 "DM Sans",sans-serif!important;
+}
+.range-template-detail .facility-location-icon{
+  width:28px!important;
+  height:28px!important;
+  flex:0 0 28px!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:9px!important;
+  background:#FFF1E6!important;
+  color:#FF6A00!important;
+}
+.range-template-detail .facility-location-icon .icon{
+  width:15px!important;
+  height:15px!important;
+  stroke:#FF6A00!important;
+}
