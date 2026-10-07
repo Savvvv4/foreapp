@@ -1212,7 +1212,9 @@ function RangeProfileScreen({ go, openRangeBooking, hamoni = false }: { go: (scr
   const facts = hamoni ? [["105", "Bays"], ["9", "Target greens"], ["4", "Practice greens"], ["19", "Bunkers"]] : [["60", "Bays"], ["Mixed", "Covered / open"], ["Yes", "Floodlit"], ["TrackMan", "Launch monitors"]]
   const rates = hamoni ? [["Entry fee", "per person", "₹500"], ["Bag of 50 Srixon balls", "per bag", "₹150"], ["Club rental", "per club", "₹200"]] : [["60-minute bay", "per session", "₹900"], ["90-minute bay", "per session", "₹1,250"], ["Launch monitor", "per session", "₹1,200"]]
   const passes = [["1 month", "₹12,000", "Monthly access"], ["3 months", "₹24,000", "Save 33% · Most popular"], ["6 months", "₹50,000", "Save 31%"], ["1 year", "₹80,000", "Save 44% · Best value"]]
+  const [selectedPassIndex, setSelectedPassIndex] = useState(1)
   const amenities = hamoni ? ["Grass bays", "Covered bays", "Floodlights", "Launch monitors", "Pro shop", "Parking"] : ["Covered bays", "Floodlights", "Launch monitors", "Club rental", "Parking"]
+  const selectedPass = passes[selectedPassIndex]
   const book = () => openRangeBooking(hamoni ? "hamoni" : "delhi")
   return (
     <main className="course-profile-screen range-profile-screen range-template-detail">
@@ -1230,7 +1232,7 @@ function RangeProfileScreen({ go, openRangeBooking, hamoni = false }: { go: (scr
       <div className="facility-template-content">
         <header className="facility-template-heading">
           <h1>{name}</h1>
-          <div className="facility-template-stat"><span><Icon name="star" size={15} /><strong>{rating}</strong> ({reviewCount} reviews)</span><span><Icon name="pin" size={15} /> {area}</span></div>
+          <div className="facility-template-stat"><span><Icon name="star" size={15} /><strong>{rating}</strong> ({reviewCount} reviews)</span><span className="facility-location-stat"><span className="facility-location-icon"><Icon name="pin" size={15} /></span><strong>{area}</strong></span></div>
         </header>
         <section className="facility-template-section"><h2>At a glance</h2><table className="facility-score"><tbody><tr><th>Open</th><td>{hamoni ? "Tue – Sun, 6 AM – 10 PM" : "Daily, 6 AM – 9 PM"}</td></tr>{facts.map(([label, value]) => <tr key={label}><th>{label}</th><td>{value}</td></tr>)}</tbody></table></section>
         <section className="facility-template-section"><h2>Rates</h2><div className="facility-rate-list">{rates.map(([label, sub, price]) => <div className="facility-rate" key={label}><span><b>{label}</b> <small>{sub}</small></span><strong>{price}</strong></div>)}</div><p className="facility-points"><Icon name="star" size={15} /> Earn {hamoni ? 150 : 100} points on every booking</p></section>
@@ -1238,13 +1240,13 @@ function RangeProfileScreen({ go, openRangeBooking, hamoni = false }: { go: (scr
           const selected = index === 1
           const badge = index === 1 ? "Most popular" : index === 3 ? "Best value" : ""
           const saving = index === 1 ? "Save 33%" : index === 2 ? "Save 31%" : index === 3 ? "Save 44%" : ""
-          return <button type="button" role="radio" aria-checked={selected} className={`facility-pass ${selected ? "selected" : ""}`} key={label} onClick={() => {}}>
+          return <button type="button" role="radio" aria-checked={selected} className={`facility-pass ${selected ? "selected" : ""}`} key={label} onClick={() => setSelectedPassIndex(index)}>
             {badge && <span className="facility-pass-badge">{badge}</span>}
             <span className="facility-pass-radio" aria-hidden="true" />
             <span className="facility-pass-copy"><b>{label}</b><small>{note}</small></span>
             <span className="facility-pass-price"><strong>{price}</strong>{saving && <small>{saving}</small>}</span>
           </button>
-        })}</div><button type="button" className="primary-button facility-pass-button" onClick={() => {}}>Continue with 3 months · ₹24,000</button></section>}
+        })}</div><button type="button" className="primary-button facility-pass-button" onClick={() => emitPrototypeEvent("Select facility pass", `Selected ${selectedPass[0]} pass at ${name} for ${selectedPass[1]}.`)}>Continue with ${selectedPass[0]} · ${selectedPass[1]}</button></section>}
         <section className="facility-template-section"><h2>On site</h2><div className="facility-amenities">{amenities.map((item) => <span key={item}><Icon name="check" size={15} />{item}</span>)}</div></section>
         <section className="facility-template-section"><h2>Coaching here</h2><button className="facility-coach-card" onClick={() => go("coachProfile")}><Avatar initials="SM" /><span><b>Savdeep Mehta</b><small>PGA Professional · 12 yrs · 4.9</small></span><Icon name="chevron" /></button></section>
         <section className="facility-template-section"><h2>Getting there</h2><div className="facility-map-placeholder" /><button className="facility-directions" data-prototype="Directions" data-prototype-body="Maps and directions are simulated here."><span><b>{name}</b><small>{address}</small></span><strong>Directions</strong></button></section>
