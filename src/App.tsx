@@ -1904,20 +1904,20 @@ function CourseBookingPrototype({
     setScreen(next)
     if (next === "discover") {
       setMode("courses")
-      onModuleStateChange(false, "Courses")
+      onModuleStateChange(false, "Courses", next)
       return
     }
     if (next === "hamoniRangeProfile" || next.startsWith("range")) {
       setMode("ranges")
-      onModuleStateChange(true, "Facilities")
+      onModuleStateChange(true, "Facilities", next)
       return
     }
     if (next.startsWith("coach")) {
       setMode("coaches")
-      onModuleStateChange(true, "Coaches")
+      onModuleStateChange(true, "Coaches", next)
       return
     }
-    onModuleStateChange(true, "Courses")
+    onModuleStateChange(true, "Courses", next)
   }
   const [rangeBookingVenue, setRangeBookingVenue] = useState<RangeVenue>("delhi")
 
