@@ -1129,36 +1129,27 @@ function RangeCard({
   const [saved, setSaved] = useState(false)
   const name = hamoni ? "Hamoni Golf Camp" : qutub ? "Qutub Practice Centre" : "Delhi Golf Club Range"
   const image = qutub ? photos.green : photos.golfer
-  const rating = hamoni ? "4.2" : qutub ? "4.4" : "4.6"
-  const distance = hamoni ? "Sector 23A, Gurugram" : qutub ? "Mehrauli · 5.7 km" : "Lodhi Road · 2.8 km"
-  const status = hamoni ? "105 bays" : qutub ? "Launch monitors" : "Open now"
+  const rating = hamoni ? "4.8" : qutub ? "4.4" : "4.6"
+  const distance = hamoni ? "Sector 23A, Gurugram · 4.1 km" : qutub ? "Mehrauli · 5.7 km" : "Lodhi Road · 2.8 km"
+  const deal = hamoni ? "Special offer" : qutub ? "" : "Open now"
+  const price = hamoni ? "₹500" : "₹900"
+  const unit = hamoni ? "/ person" : "/ 60 min"
   return (
-    <article className="range-card">
+    <article className={`range-card facility-template-card${hamoni ? " featured" : ""}`}>
       <button className="range-card-main" onClick={onOpen}>
         <div className="range-card-image">
           <img src={image} alt={name} />
-          <span className="range-status-pill">{status}</span>
+          {hamoni && <span className="range-featured-pill">Featured</span>}
           <span className="range-rating-pill"><Icon name="star" size={13} /> {rating}</span>
         </div>
         <div className="range-card-copy">
           <div className="range-card-title-row">
-            <div>
-              <h3>{name}</h3>
-              <p><Icon name="pin" size={14} /> {distance}</p>
-            </div>
-            <button type="button" className={`range-save-button ${saved ? "saved" : ""}`} onClick={(event) => { event.stopPropagation(); setSaved(!saved) }} aria-label={saved ? "Remove saved range" : "Save range"}>
-              <Icon name="heart" size={18} />
-            </button>
+            <div><h3>{name}</h3><p className="range-location"><Icon name="pin" size={14} /> {distance}</p></div>
+            <button type="button" className={`range-save-button ${saved ? "saved" : ""}`} onClick={(event) => { event.stopPropagation(); setSaved(!saved) }} aria-label={saved ? "Remove saved facility" : "Save facility"} aria-pressed={saved}><Icon name="heart" size={18} /></button>
           </div>
           <div className="range-card-meta">
-            {hamoni ? (
-              <span className="availability-copy">Open Tue–Sun · 6 AM–10 PM</span>
-            ) : qutub ? (
-              <span className="availability-copy">7 bays available</span>
-            ) : (
-              <span className="range-live-status"><i /> Open · 42 of 60 bays occupied</span>
-            )}
-            <strong>{hamoni ? "From ₹500" : "from ₹900"} <small>{hamoni ? "/ person" : "/ 60 min"}</small></strong>
+            <span className={`range-deal-pill${deal ? "" : " muted"}`}>{deal || "Available to book"}</span>
+            <span className="range-price-copy">From <strong>{price}</strong> <small>{unit}</small></span>
           </div>
         </div>
       </button>
@@ -1195,139 +1186,38 @@ function RangeDiscoverScreen({
 }
 function RangeProfileScreen({ go, openRangeBooking, hamoni = false }: { go: (screen: CourseFlowScreen) => void; openRangeBooking: (range?: RangeVenue) => void; hamoni?: boolean }) {
   const [saved, setSaved] = useState(false)
-
-  useEffect(() => {
-    document.body.classList.add("course-detail-open")
-    return () => document.body.classList.remove("course-detail-open")
-  }, [])
-
   const name = hamoni ? "Hamoni Golf Camp" : "Delhi Golf Club Range"
-  const rating = hamoni ? "4.2" : "4.6"
+  const rating = hamoni ? "4.8" : "4.6"
   const reviewCount = hamoni ? 228 : 184
-  const address = hamoni ? "CK Farm, Carterpuri, Sector 23A, Gurugram" : "Lodhi Road, Delhi · 2.8 km"
-  const area = hamoni ? "Sector 23A, Gurugram" : "Lodhi Road · 2.8 km"
+  const area = hamoni ? "Sector 23A, Gurugram" : "Lodhi Road, Delhi"
+  const address = hamoni ? "CK Farm, Carterpuri, Sector 23A, Gurugram" : "Lodhi Road, Delhi"
   const facts = hamoni ? [["105", "Bays"], ["9", "Target greens"], ["4", "Practice greens"], ["19", "Bunkers"]] : [["60", "Bays"], ["Mixed", "Covered / open"], ["Yes", "Floodlit"], ["TrackMan", "Launch monitors"]]
-  const accessRates = hamoni
-    ? [["Entry fee", "Per person", "₹500"], ["Bag of 50 Srixon balls", "Per bag", "₹150"], ["Club rental", "Per club", "₹200"]]
-    : [["Unlimited Balls", "Monthly · practice any day", "₹2,999"], ["10 Bucket Pack", "10 visits · valid 90 days · save 15%", "₹2,975"]]
-  const masterpass = [["1 month", "₹12,000", false], ["3 months", "₹24,000", false], ["6 months", "₹50,000", true], ["1 year", "₹80,000", true]] as const
-
+  const rates = hamoni ? [["Entry fee", "per person", "₹500"], ["Bag of 50 Srixon balls", "per bag", "₹150"], ["Club rental", "per club", "₹200"]] : [["60-minute bay", "per session", "₹900"], ["90-minute bay", "per session", "₹1,250"], ["Launch monitor", "per session", "₹1,200"]]
+  const passes = [["1 month", "₹12,000", "Monthly access"], ["3 months", "₹24,000", "Save 33% · Most popular"], ["6 months", "₹50,000", "Save 31%"], ["1 year", "₹80,000", "Save 44% · Best value"]]
+  const amenities = hamoni ? ["Grass bays", "Covered bays", "Floodlights", "Launch monitors", "Pro shop", "Parking"] : ["Covered bays", "Floodlights", "Launch monitors", "Club rental", "Parking"]
+  const book = () => openRangeBooking(hamoni ? "hamoni" : "delhi")
   return (
-    <main className="course-profile-screen course-profile-screen-v6 range-profile-screen range-profile-screen-v7">
-      <section className="course-profile-hero course-profile-hero-v6">
+    <main className="course-profile-screen range-profile-screen range-template-detail">
+      <section className="facility-template-hero">
         <img src={photos.golfer} alt={name} />
-        <span className="course-hero-gradient" />
-        <button type="button" className="course-hero-control course-hero-back" onClick={() => go("rangeDiscover")} aria-label="Go back"><Icon name="chevron" size={20} /></button>
-        <button type="button" className={`course-hero-control course-hero-save ${saved ? "saved" : ""}`} onClick={() => setSaved((value) => !value)} aria-label={saved ? "Remove range from saved" : "Save range"} aria-pressed={saved}><Icon name="heart" size={20} /></button>
-        <div className="course-hero-copy course-hero-copy-v6">
-          <span className="eyebrow light">{hamoni ? "GURUGRAM · DRIVING RANGE" : "DELHI · DRIVING RANGE"}</span>
-          <h1>{name}</h1>
-          <div className="course-hero-meta-v6">
-            <span><Icon name="star" size={14} /> <strong>{rating}</strong> <em>{reviewCount} reviews</em></span>
-            <span><Icon name="pin" size={14} /> {area}</span>
-          </div>
-        </div>
+        <span className="facility-template-hero-gradient" />
+        <button type="button" className="facility-hero-button facility-hero-back" onClick={() => go("rangeDiscover")} aria-label="Go back"><Icon name="chevron" size={20} /></button>
+        <button type="button" className={`facility-hero-button facility-hero-save ${saved ? "saved" : ""}`} onClick={() => setSaved((value) => !value)} aria-label={saved ? "Remove facility from saved" : "Save facility"} aria-pressed={saved}><Icon name="heart" size={20} /></button>
       </section>
-
-      <div className="course-profile-content course-profile-content-v6">
-        <section className="range-hours-v7">
-          <span><Icon name="clock" size={20} /></span>
-          <div>
-            <strong>{hamoni ? "Open Tuesday to Sunday" : "Open now"}</strong>
-            <small>{hamoni ? "6:00 AM – 10:00 PM" : "Until 9:00 PM"}</small>
-          </div>
-          <button type="button" className="course-text-link" onClick={() => openRangeBooking(hamoni ? "hamoni" : "delhi")}>Book a bay <Icon name="arrow" size={14} /></button>
-        </section>
-
-        <section className="course-facts course-facts-v6 range-facts">
-          {facts.map(([value, label]) => <div key={label}><strong>{value}</strong><span>{label}</span></div>)}
-        </section>
-
-        <section className="course-section-v6">
-          <div className="course-section-heading-v6"><h2>{hamoni ? "Range access" : "Packages"}</h2></div>
-          <div className="range-rate-list-v7">
-            {accessRates.map(([title, sub, price]) => hamoni ? (
-              <div key={title} className="range-rate-row-v7"><span><strong>{title}</strong><small>{sub}</small></span><b>{price}</b></div>
-            ) : (
-              <button key={title} type="button" className="range-rate-row-v7" data-prototype={title} data-prototype-body={`${title} for ${price}. Purchase flow is simulated.`}><span><strong>{title}</strong><small>{sub}</small></span><b>{price}</b></button>
-            ))}
-          </div>
-          {hamoni && <p className="range-note-v7">Club rental can’t be exchanged. A broken club is charged at ₹1,000 + GST.</p>}
-        </section>
-
-        {hamoni && (
-          <>
-            <section className="range-pass-card-v7">
-              <div>
-                <span className="eyebrow">DAY PASS</span>
-                <h3>₹1,000 <small>/ person</small></h3>
-              </div>
-              <p>For top 5 amateurs, IGU-ranked juniors, and all current pros on PGTI and WGAI.</p>
-              <p className="range-pass-includes-v7"><Icon name="check" size={14} /> Unlimited ball rentals, grass bays, and Ace Pen access</p>
-            </section>
-
-            <section className="course-section-v6">
-              <div className="course-section-heading-v6"><h2>HGC Masterpass</h2></div>
-              <p className="range-section-sub-v7">Unlimited ball rentals and access to grass bays.</p>
-              <div className="range-pass-grid-v7">
-                {masterpass.map(([label, price, ace]) => (
-                  <div key={label} className={ace ? "ace" : ""}><small>{label}</small><strong>{price}</strong>{ace && <em>+ Ace Pen</em>}</div>
-                ))}
-              </div>
-              <p className="range-note-v7">Ace Pen access is included with 6-month and 1-year passes.</p>
-            </section>
-
-            <section className="range-loyalty-v7">
-              <span><Icon name="star" size={18} /></span>
-              <div>
-                <strong>Loyalty programme</strong>
-                <small>Earn points on every Hamoni app or HGC Card purchase. Redeem them for range time, passes, lessons, or Pro Shop buys.</small>
-              </div>
-            </section>
-            <p className="range-note-v7 range-legal-v7">All rates exclude GST. Passes are valid from the date of purchase, non-transferable, and for individual use only.</p>
-          </>
-        )}
-
-        <section className="course-section-v6">
-          <div className="course-section-heading-v6">
-            <h2>Coaching here</h2>
-            <button type="button" className="course-text-link" onClick={() => go("coachDiscover")}>Browse coaches <Icon name="arrow" size={14} /></button>
-          </div>
-          <button className="lesson-cross-sell" onClick={() => go("coachProfile")}><Avatar initials="SM" /><span><strong>Savdeep Mehta</strong><small>PGA Professional · 12 yrs · 4.9</small></span><Icon name="chevron" /></button>
-        </section>
-
-        <section className="course-location-feature course-location-feature-v6">
-          <div>
-            <span className="eyebrow">LOCATION</span>
-            <h2>{hamoni ? "Sector 23A, Gurugram" : "Lodhi Road, Delhi"}</h2>
-            <p>{address}</p>
-          </div>
-          <button className="directions-card course-directions-card" data-prototype="Directions" data-prototype-body="Maps and directions are simulated here.">
-            <span><Icon name="map" size={22} /></span>
-            <div><strong>{name}</strong><small>Get directions</small></div>
-            <Icon name="directions" />
-          </button>
-        </section>
-
-        <section className="course-reviews-v6">
-          <div className="course-section-title-v6">
-            <div><span className="eyebrow">REVIEWS</span><h2>{rating} from {reviewCount} golfers</h2></div>
-            <span className="course-stars-v6">★★★★★</span>
-          </div>
-          <blockquote>“Plenty of space, good mats, and launch monitors were easy to reserve.”</blockquote>
-          <small>Ankit R. · 6 days ago</small>
-          <button className="course-text-link" data-prototype="Range reviews" data-prototype-body={`${reviewCount} range reviews would open here.`}>Read all reviews <Icon name="arrow" size={14} /></button>
-        </section>
+      <div className="facility-template-content">
+        <header className="facility-template-heading">
+          <h1>{name}</h1>
+          <div className="facility-template-stat"><span><Icon name="star" size={15} /><strong>{rating}</strong> ({reviewCount} reviews)</span><span><Icon name="pin" size={15} /> {area}</span></div>
+        </header>
+        <section className="facility-template-section"><h2>At a glance</h2><table className="facility-score"><tbody><tr><th>Open</th><td>{hamoni ? "Tue – Sun, 6 AM – 10 PM" : "Daily, 6 AM – 9 PM"}</td></tr>{facts.map(([label, value]) => <tr key={label}><th>{label}</th><td>{value}</td></tr>)}</tbody></table></section>
+        <section className="facility-template-section"><h2>Rates</h2><div className="facility-rate-list">{rates.map(([label, sub, price]) => <div className="facility-rate" key={label}><span><b>{label}</b> <small>{sub}</small></span><strong>{price}</strong></div>)}</div><p className="facility-points"><Icon name="star" size={15} /> Earn {hamoni ? 150 : 100} points on every booking</p></section>
+        {hamoni && <section className="facility-template-section"><h2>Passes</h2><p className="facility-section-sub">Unlimited ball rentals and access to grass bays.</p><div className="facility-pass-list">{passes.map(([label, price, note], index) => <button type="button" className={`facility-pass ${index === 1 ? "selected" : ""}`} key={label} onClick={() => {}}><span><b>{label}</b><small>{note}</small></span><strong>{price}</strong></button>)}</div><button type="button" className="primary-button facility-pass-button" onClick={() => {}}>Continue with 3 months · ₹24,000</button></section>}
+        <section className="facility-template-section"><h2>On site</h2><div className="facility-amenities">{amenities.map((item) => <span key={item}><Icon name="check" size={15} />{item}</span>)}</div></section>
+        <section className="facility-template-section"><h2>Coaching here</h2><button className="facility-coach-card" onClick={() => go("coachProfile")}><Avatar initials="SM" /><span><b>Savdeep Mehta</b><small>PGA Professional · 12 yrs · 4.9</small></span><Icon name="chevron" /></button></section>
+        <section className="facility-template-section"><h2>Getting there</h2><div className="facility-map-placeholder" /><button className="facility-directions" data-prototype="Directions" data-prototype-body="Maps and directions are simulated here."><span><b>{name}</b><small>{address}</small></span><strong>Directions</strong></button></section>
+        <section className="facility-template-section facility-reviews"><h2><Icon name="star" size={18} /> {rating} from {reviewCount} golfers</h2><blockquote>“Plenty of space, good mats, and launch monitors were easy to reserve.”</blockquote><small>Ankit R. · 6 days ago</small></section>
       </div>
-
-      <div className="course-floating-book-v6 facility-action-bar-v7">
-        <button type="button" className="secondary-button" onClick={() => go("coachDiscover")}>
-          <Icon name="users" size={17} /> Coaches
-        </button>
-        <button type="button" className="primary-button" onClick={() => openRangeBooking(hamoni ? "hamoni" : "delhi")}>
-          Book a bay <Icon name="arrow" size={16} />
-        </button>
-      </div>
+      <div className="facility-template-action"><button type="button" className="primary-button" onClick={book}>Book a bay <Icon name="arrow" size={16} /></button></div>
     </main>
   )
 }

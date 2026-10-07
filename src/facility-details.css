@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Sans:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 /* Facility discovery + details visual system.
    Source: supplied "Facility card and details template".
@@ -28,13 +28,13 @@
 }
 
 .app-topbar.app-topbar-discovery > * {
-  font-family: "DM Sans", system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
 }
 
 .app-topbar.app-topbar-discovery .app-topbar-title,
 .app-topbar.app-topbar-discovery h1,
 .app-topbar.app-topbar-discovery h2 {
-  font-family: "Bricolage Grotesque", "DM Sans", system-ui, sans-serif !important;
+  font-family: "Inter", "Inter", system-ui, sans-serif !important;
   font-size: 17px !important;
   font-weight: 800 !important;
   letter-spacing: -.02em !important;
@@ -65,7 +65,7 @@
   border-radius: 20px !important;
   background: var(--facility-surface) !important;
   color: var(--facility-ink) !important;
-  font: 800 17px "Bricolage Grotesque", "DM Sans", sans-serif !important;
+  font: 800 17px "Inter", "Inter", sans-serif !important;
 }
 
 .app-topbar-discovery [role="menu"] {
@@ -86,7 +86,7 @@
   background: transparent !important;
   color: var(--facility-ink) !important;
   text-align: left !important;
-  font: 500 14px "DM Sans", sans-serif !important;
+  font: 500 14px "Inter", sans-serif !important;
 }
 
 .app-topbar-discovery [role="menuitemradio"][aria-checked="true"] {
@@ -102,7 +102,7 @@
 .coach-discovery-standalone {
   background: var(--facility-bg) !important;
   color: var(--facility-ink) !important;
-  font-family: "DM Sans", system-ui, sans-serif !important;
+  font-family: "Inter", system-ui, sans-serif !important;
 }
 
 .booking-discover-screen .section-heading,
@@ -115,7 +115,7 @@
 .results-screen .section-heading h2,
 .range-discover-screen .section-heading h2 {
   color: var(--facility-ink) !important;
-  font: 800 20px/1.2 "Bricolage Grotesque", "DM Sans", sans-serif !important;
+  font: 800 20px/1.2 "Inter", "Inter", sans-serif !important;
   letter-spacing: -.02em !important;
 }
 
@@ -185,7 +185,7 @@
 .course-featured-pill,
 .range-featured-pill {
   z-index: 3 !important;
-  font: 700 12px "DM Sans", sans-serif !important;
+  font: 700 12px "Inter", sans-serif !important;
   border-radius: 99px !important;
 }
 
@@ -242,7 +242,7 @@
 .range-card-title-row h3 {
   margin: 0 !important;
   color: var(--facility-ink) !important;
-  font: 800 20px/1.2 "Bricolage Grotesque", "DM Sans", sans-serif !important;
+  font: 800 20px/1.2 "Inter", "Inter", sans-serif !important;
   letter-spacing: -.02em !important;
 }
 
@@ -253,7 +253,7 @@
   gap: 5px !important;
   margin: 4px 0 0 !important;
   color: var(--facility-muted) !important;
-  font: 400 13.5px/1.4 "DM Sans", sans-serif !important;
+  font: 400 13.5px/1.4 "Inter", sans-serif !important;
 }
 
 .course-location .icon,
@@ -291,14 +291,14 @@
   min-height: 30px !important;
   margin-top: 12px !important;
   color: var(--facility-muted) !important;
-  font: 400 12.5px "DM Sans", sans-serif !important;
+  font: 400 12.5px "Inter", sans-serif !important;
 }
 
 .course-card-meta strong,
 .range-card-meta strong {
   margin-left: auto !important;
   color: var(--facility-ink) !important;
-  font: 800 19px "Bricolage Grotesque", "DM Sans", sans-serif !important;
+  font: 800 19px "Inter", "Inter", sans-serif !important;
   letter-spacing: -.02em !important;
   white-space: nowrap !important;
 }
@@ -306,7 +306,7 @@
 .course-card-meta strong small,
 .range-card-meta strong small {
   color: var(--facility-muted) !important;
-  font: 400 12.5px "DM Sans", sans-serif !important;
+  font: 400 12.5px "Inter", sans-serif !important;
 }
 
 .course-card-actions,
@@ -325,7 +325,7 @@
   border-radius: 10px !important;
   background: var(--facility-surface) !important;
   color: var(--facility-ink) !important;
-  font: 700 15px "DM Sans", sans-serif !important;
+  font: 700 15px "Inter", sans-serif !important;
 }
 
 .course-book-button,
@@ -336,7 +336,7 @@
   border-radius: 10px !important;
   background: var(--facility-orange) !important;
   color: #fff !important;
-  font: 700 15px "DM Sans", sans-serif !important;
+  font: 700 15px "Inter", sans-serif !important;
 }
 
 .course-book-button .icon,
@@ -372,7 +372,7 @@
   padding-bottom: 94px !important;
   background: var(--facility-bg) !important;
   color: var(--facility-ink) !important;
-  font-family: "DM Sans", system-ui, sans-serif !important;
+  font-family: "Inter", system-ui, sans-serif !important;
 }
 
 .course-profile-hero {
@@ -443,7 +443,7 @@
 .course-title-row h1 {
   margin: 0 !important;
   color: var(--facility-ink) !important;
-  font: 800 28px/1.1 "Bricolage Grotesque", "DM Sans", sans-serif !important;
+  font: 800 28px/1.1 "Inter", "Inter", sans-serif !important;
   letter-spacing: -.02em !important;
 }
 
@@ -454,14 +454,14 @@
   gap: 5px !important;
   margin: 8px 0 0 !important;
   color: var(--facility-muted) !important;
-  font: 400 14px/1.4 "DM Sans", sans-serif !important;
+  font: 400 14px/1.4 "Inter", sans-serif !important;
 }
 
 .course-profile-content > h2,
 .profile-section-heading h2,
 .course-section-title-v6 h2 {
   color: var(--facility-ink) !important;
-  font-family: "Bricolage Grotesque", "DM Sans", sans-serif !important;
+  font-family: "Inter", "Inter", sans-serif !important;
 }
 
 .course-facts,
@@ -493,14 +493,14 @@
 .course-facts strong,
 .course-facts-v6 strong {
   color: var(--facility-ink) !important;
-  font: 800 20px/1 "Bricolage Grotesque", "DM Sans", sans-serif !important;
+  font: 800 20px/1 "Inter", "Inter", sans-serif !important;
 }
 
 .course-facts span,
 .course-facts-v6 span {
   margin-top: 5px !important;
   color: var(--facility-muted) !important;
-  font: 400 12px/1.2 "DM Sans", sans-serif !important;
+  font: 400 12px/1.2 "Inter", sans-serif !important;
 }
 
 /* Editorial sections replace stacked generic cards */
@@ -511,7 +511,7 @@
 .course-intro-v6 .eyebrow,
 .course-section-title-v6 .eyebrow {
   color: var(--facility-muted) !important;
-  font: 700 10px "DM Sans", sans-serif !important;
+  font: 700 10px "Inter", sans-serif !important;
   letter-spacing: .12em !important;
 }
 
@@ -519,7 +519,7 @@
   max-width: 600px !important;
   margin: 7px 0 10px !important;
   color: var(--facility-ink) !important;
-  font: 800 27px/1.08 "Bricolage Grotesque", "DM Sans", sans-serif !important;
+  font: 800 27px/1.08 "Inter", "Inter", sans-serif !important;
   letter-spacing: -.035em !important;
 }
 
@@ -527,7 +527,7 @@
   max-width: 600px !important;
   margin: 0 !important;
   color: var(--facility-muted) !important;
-  font: 400 14px/1.5 "DM Sans", sans-serif !important;
+  font: 400 14px/1.5 "Inter", sans-serif !important;
 }
 
 /* Existing sections */
@@ -538,7 +538,7 @@
 .profile-section-heading h2,
 .course-profile-content > h2 {
   margin: 0 0 10px !important;
-  font: 800 20px/1.2 "Bricolage Grotesque", "DM Sans", sans-serif !important;
+  font: 800 20px/1.2 "Inter", "Inter", sans-serif !important;
   letter-spacing: -.02em !important;
 }
 
@@ -553,7 +553,7 @@
   align-items: center !important;
   gap: 8px !important;
   color: var(--facility-muted) !important;
-  font: 400 14px/1.35 "DM Sans", sans-serif !important;
+  font: 400 14px/1.35 "Inter", sans-serif !important;
 }
 
 .amenity-grid .icon {
@@ -578,17 +578,17 @@
 
 .range-rate-row-v7 strong {
   color: var(--facility-ink) !important;
-  font: 700 14px "DM Sans", sans-serif !important;
+  font: 700 14px "Inter", sans-serif !important;
 }
 
 .range-rate-row-v7 small {
   color: var(--facility-muted) !important;
-  font: 400 12.5px "DM Sans", sans-serif !important;
+  font: 400 12.5px "Inter", sans-serif !important;
 }
 
 .range-rate-row-v7 b {
   color: var(--facility-ink) !important;
-  font: 800 18px "Bricolage Grotesque", "DM Sans", sans-serif !important;
+  font: 800 18px "Inter", "Inter", sans-serif !important;
 }
 
 .range-pass-card-v7 {
@@ -606,13 +606,13 @@
 .range-pass-card-v7 h3 {
   margin: 6px 0 8px !important;
   color: var(--facility-ink) !important;
-  font: 800 28px/1 "Bricolage Grotesque", sans-serif !important;
+  font: 800 28px/1 "Inter", sans-serif !important;
   letter-spacing: -.035em !important;
 }
 
 .range-pass-card-v7 p {
   color: var(--facility-muted) !important;
-  font: 400 13px/1.45 "DM Sans", sans-serif !important;
+  font: 400 13px/1.45 "Inter", sans-serif !important;
 }
 
 .range-pass-includes-v7 {
@@ -638,7 +638,7 @@
 
 .range-pass-grid-v7 strong {
   color: var(--facility-ink) !important;
-  font: 800 20px "Bricolage Grotesque", sans-serif !important;
+  font: 800 20px "Inter", sans-serif !important;
 }
 
 .range-pass-grid-v7 em {
@@ -657,7 +657,7 @@
 .course-location-feature-v4 h2,
 .course-reviews-v6 h2 {
   color: var(--facility-ink) !important;
-  font: 800 20px/1.2 "Bricolage Grotesque", "DM Sans", sans-serif !important;
+  font: 800 20px/1.2 "Inter", "Inter", sans-serif !important;
   letter-spacing: -.02em !important;
 }
 
@@ -682,13 +682,13 @@
 .course-reviews-v6 blockquote {
   margin: 18px 0 6px !important;
   color: var(--facility-ink) !important;
-  font: 600 18px/1.35 "Bricolage Grotesque", "DM Sans", sans-serif !important;
+  font: 600 18px/1.35 "Inter", "Inter", sans-serif !important;
   letter-spacing: -.01em !important;
 }
 
 .course-reviews-v6 > small {
   color: var(--facility-muted) !important;
-  font: 400 12.5px "DM Sans", sans-serif !important;
+  font: 400 12.5px "Inter", sans-serif !important;
 }
 
 /* Sticky single primary action: orange, full-width */
@@ -705,7 +705,7 @@
 .facility-action-bar-v7 .secondary-button {
   min-height: 48px !important;
   border-radius: 10px !important;
-  font: 700 15px "DM Sans", sans-serif !important;
+  font: 700 15px "Inter", sans-serif !important;
 }
 
 .course-floating-book-v6 .primary-button,
@@ -750,13 +750,13 @@
 .range-hours-v7 strong,
 .range-loyalty-v7 strong {
   color: var(--facility-ink) !important;
-  font: 700 14px "DM Sans", sans-serif !important;
+  font: 700 14px "Inter", sans-serif !important;
 }
 
 .range-hours-v7 small,
 .range-loyalty-v7 small {
   color: var(--facility-muted) !important;
-  font: 400 12.5px "DM Sans", sans-serif !important;
+  font: 400 12.5px "Inter", sans-serif !important;
 }
 
 .range-note-v7,
@@ -798,3 +798,28 @@
     transition: none !important;
   }
 }
+
+/* Exact template structure, translated to Fore's Inter system. */
+.range-template-detail,.range-template-detail *{font-family:"Inter",system-ui,sans-serif!important}
+.range-template-detail{background:#F3F4F1!important;color:#12201A!important;padding-bottom:78px!important}
+.range-template-detail .facility-template-hero{height:230px!important;position:relative!important;overflow:hidden!important;background:#294d2d!important}
+.range-template-detail .facility-template-hero img{width:100%!important;height:100%!important;object-fit:cover!important}
+.range-template-detail .facility-template-hero-gradient{position:absolute!important;inset:0!important;background:linear-gradient(180deg,rgba(18,32,26,.05),transparent 48%,rgba(18,32,26,.34))!important}
+.range-template-detail .facility-hero-button{position:absolute!important;top:14px!important;width:40px!important;height:40px!important;border:0!important;border-radius:50%!important;background:#fff!important;color:#12201A!important;display:grid!important;place-items:center!important;z-index:3!important}
+.range-template-detail .facility-hero-back{left:14px!important}.range-template-detail .facility-hero-save{right:14px!important}.range-template-detail .facility-hero-save.saved{color:#FF6A00!important}
+.range-template-detail .facility-template-content{padding:16px 16px 28px!important;background:#F3F4F1!important}
+.range-template-detail .facility-template-heading h1{margin:0!important;font-size:28px!important;line-height:1.1!important;letter-spacing:-.035em!important;font-weight:700!important}
+.range-template-detail .facility-template-stat{display:flex!important;gap:6px 14px!important;flex-wrap:wrap!important;margin-top:8px!important;color:#5E6B64!important;font-size:14px!important}
+.range-template-detail .facility-template-stat span{display:flex!important;align-items:center!important;gap:5px!important}.range-template-detail .facility-template-stat svg{color:#FF6A00!important}
+.range-template-detail .facility-template-section{padding:26px 0 0!important}.range-template-detail .facility-template-section h2{margin:0 0 10px!important;font-size:20px!important;line-height:1.2!important;font-weight:700!important;letter-spacing:-.025em!important}
+.range-template-detail .facility-score{width:100%!important;border-collapse:collapse!important}.range-template-detail .facility-score th{font-weight:400!important;color:#5E6B64!important;text-align:left!important;padding:11px 0!important;border-top:1px solid #E3E6E1!important;font-size:14px!important}.range-template-detail .facility-score td{text-align:right!important;font-weight:700!important;font-size:16px!important;padding:11px 0!important;border-top:1px solid #E3E6E1!important}.range-template-detail .facility-score tr:last-child th,.range-template-detail .facility-score tr:last-child td{border-bottom:1px solid #E3E6E1!important}
+.range-template-detail .facility-rate{display:flex!important;align-items:baseline!important;gap:8px!important;padding:9px 0!important}.range-template-detail .facility-rate span{display:flex!important;gap:5px!important;align-items:baseline!important}.range-template-detail .facility-rate small{color:#5E6B64!important;font-size:12.5px!important}.range-template-detail .facility-rate:after{content:""!important;order:2!important;flex:1!important;border-bottom:1.5px dotted #E3E6E1!important;align-self:flex-end!important;margin-bottom:5px!important}.range-template-detail .facility-rate strong{order:3!important;font-size:17px!important}
+.range-template-detail .facility-points{display:flex!important;gap:8px!important;align-items:center!important;color:#B84A00!important;font-size:14px!important}.range-template-detail .facility-section-sub{margin:-4px 0 12px!important;color:#5E6B64!important;font-size:14px!important}
+.range-template-detail .facility-pass-list{display:grid!important;gap:10px!important}.range-template-detail .facility-pass{width:100%!important;display:flex!important;align-items:center!important;gap:12px!important;text-align:left!important;padding:14px!important;border:1.5px solid #E3E6E1!important;border-radius:14px!important;background:#fff!important}.range-template-detail .facility-pass.selected{border-color:#FF6A00!important;background:#FFF1E6!important}.range-template-detail .facility-pass span{flex:1!important}.range-template-detail .facility-pass b,.range-template-detail .facility-pass small{display:block!important}.range-template-detail .facility-pass small{margin-top:3px!important;color:#5E6B64!important;font-size:12.5px!important}.range-template-detail .facility-pass strong{font-size:18px!important}.range-template-detail .facility-pass-button{width:100%!important;margin-top:14px!important;min-height:48px!important;border-radius:10px!important;background:#FF6A00!important;color:#fff!important;border:1.5px solid #FF6A00!important}
+.range-template-detail .facility-amenities{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px 14px!important;font-size:14px!important}.range-template-detail .facility-amenities span{display:flex!important;align-items:center!important;gap:8px!important;color:#5E6B64!important}.range-template-detail .facility-amenities svg{color:#1C7A4F!important}
+.range-template-detail .facility-coach-card{width:100%!important;display:flex!important;align-items:center!important;gap:12px!important;padding:12px!important;border:1px solid #E3E6E1!important;border-radius:12px!important;background:#fff!important;text-align:left!important}.range-template-detail .facility-coach-card>span:nth-child(2){flex:1!important}.range-template-detail .facility-coach-card b,.range-template-detail .facility-coach-card small{display:block!important}.range-template-detail .facility-coach-card small{color:#5E6B64!important;margin-top:3px!important}
+.range-template-detail .facility-map-placeholder{height:100px!important;border-radius:12px 12px 0 0!important;background:repeating-linear-gradient(35deg,#F3F4F1 0 16px,#E3E6E1 16px 17px)!important}.range-template-detail .facility-directions{width:100%!important;display:flex!important;align-items:center!important;gap:10px!important;padding:12px!important;border:1px solid #E3E6E1!important;border-top:0!important;border-radius:0 0 12px 12px!important;background:#fff!important;text-align:left!important}.range-template-detail .facility-directions span{flex:1!important}.range-template-detail .facility-directions b,.range-template-detail .facility-directions small{display:block!important}.range-template-detail .facility-directions small{color:#5E6B64!important;margin-top:3px!important}.range-template-detail .facility-directions strong{color:#B84A00!important;font-size:14px!important}
+.range-template-detail .facility-reviews{border-top:1px solid #E3E6E1!important;margin-top:26px!important;padding-top:26px!important}.range-template-detail .facility-reviews h2{display:flex!important;align-items:center!important;gap:5px!important}.range-template-detail .facility-reviews h2 svg{color:#FF6A00!important;fill:#FF6A00!important}.range-template-detail .facility-reviews blockquote{margin:18px 0 6px!important;font-size:18px!important;line-height:1.35!important;font-weight:600!important;letter-spacing:-.015em!important}.range-template-detail .facility-reviews>small{color:#5E6B64!important;font-size:12.5px!important}
+.range-template-detail .facility-template-action{position:fixed!important;left:0!important;right:0!important;bottom:0!important;z-index:40!important;padding:10px 16px 14px!important;border-top:1px solid #E3E6E1!important;background:#fff!important}.range-template-detail .facility-template-action .primary-button{width:100%!important;min-height:48px!important;border-radius:10px!important;background:#FF6A00!important;color:#fff!important;border:1.5px solid #FF6A00!important}
+.facility-template-card,.facility-template-card *{font-family:"Inter",system-ui,sans-serif!important}.facility-template-card .range-card-image{aspect-ratio:16/9!important;height:auto!important}.facility-template-card .range-card-copy{padding:14px!important}.facility-template-card .range-card-title-row h3{font-size:20px!important;line-height:1.2!important;font-weight:700!important;letter-spacing:-.025em!important}.facility-template-card .range-location{color:#5E6B64!important;font-size:13.5px!important}.facility-template-card .range-card-meta{min-height:30px!important;margin-top:12px!important}.facility-template-card .range-deal-pill{white-space:nowrap!important;color:#1C7A4F!important;background:#E4F3EA!important;padding:5px 11px!important;border-radius:99px!important;font-size:12.5px!important;font-weight:700!important}.facility-template-card .range-deal-pill.muted{color:#12201A!important;background:#F3F4F1!important}.facility-template-card .range-price-copy{margin-left:auto!important;color:#5E6B64!important;font-size:12.5px!important;white-space:nowrap!important}.facility-template-card .range-price-copy strong{color:#12201A!important;font-size:19px!important;font-weight:700!important}.facility-template-card .range-price-copy small{font-size:12.5px!important}.facility-template-card .range-card-actions{grid-template-columns:1fr 1.4fr!important;gap:10px!important;padding:0 14px 14px!important}.facility-template-card .range-details-button,.facility-template-card .range-book-button{min-height:48px!important;border-radius:10px!important;font-size:15px!important;font-weight:700!important}.facility-template-card .range-details-button{background:#fff!important;border:1.5px solid #E3E6E1!important;color:#12201A!important}.facility-template-card .range-book-button{background:#FF6A00!important;border:1.5px solid #FF6A00!important;color:#fff!important}.facility-template-card .range-featured-pill{left:12px!important;top:12px!important;background:#FF6A00!important;color:#fff!important;padding:5px 10px!important;border-radius:99px!important;font-size:12px!important;font-weight:700!important;z-index:3!important}.facility-template-card .range-rating-pill{right:12px!important;top:12px!important;background:#fff!important;color:#12201A!important;padding:5px 10px!important;border-radius:99px!important}
+@media(max-width:520px){.range-template-detail .facility-template-content{padding-left:16px!important;padding-right:16px!important}.range-template-detail .facility-template-heading h1{font-size:27px!important}}
