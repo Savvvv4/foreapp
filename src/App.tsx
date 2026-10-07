@@ -2634,16 +2634,16 @@ function App(){
   const [facilityDetailOpen, setFacilityDetailOpen] = useState(false)
   const [overlay, setOverlay] = useState<"student" | "assign" | null>(null)
   const [discoverSearchRequest, setDiscoverSearchRequest] = useState(0)
-  const [sharedFacility, setSharedFacility] = useState<"hamoni" | null>(null)
+  const [sharedFacility, setSharedFacility] = useState<"hamoni" | "range" | null>(null)
   const [prototypeAction, setPrototypeAction] = useState<PrototypeAction | null>(null)
   useEffect(() => {
     const facility = new URLSearchParams(window.location.search).get("facility")
-    if (facility === "hamoni") {
+    if (facility === "hamoni" || facility === "range") {
       setPrimaryTab("discover")
       setDiscoverSection("Facilities")
       setDiscoverChildOpen(true)
       setFacilityDetailOpen(true)
-      setSharedFacility("hamoni")
+      setSharedFacility(facility)
     }
   }, [])
   useEffect(() => { const handler = (event: Event) => { const detail = (event as CustomEvent<{title?: string; body?: string}>).detail; if (detail?.title) setPrototypeAction({ title: detail.title, body: detail.body ?? "This interaction is simulated in the prototype." }) }; window.addEventListener("fore:prototype-action", handler); return () => window.removeEventListener("fore:prototype-action", handler) }, [])
@@ -2736,7 +2736,7 @@ function App(){
                   key={discoverSection}
                   initialSection={discoverSection}
                   searchRequest={discoverSearchRequest}
-                  initialScreen={sharedFacility === "hamoni" ? "hamoniRangeProfile" : undefined}
+                  initialScreen={sharedFacility === "hamoni" ? "hamoniRangeProfile" : sharedFacility === "range" ? "rangeProfile" : undefined}
                   onModuleStateChange={(_active, section, screen) => {
                     if (section) setDiscoverSection(section)
                     setFacilityDetailOpen(screen === "hamoniRangeProfile" || screen === "rangeProfile")
