@@ -1,0 +1,19 @@
+{
+  "name": "Fore | Golf, Connected",
+  "short_name": "Fore",
+  "description": "Discover golf courses, book facilities, find coaches, and improve your game with Fore.",
+  "start_url": "/",
+  "scope": "/",
+  "id": "/",
+  "display": "standalone",
+  "background_color": "#FF6A00",
+  "theme_color": "#FF6A00",
+  "icons": [
+    {
+      "src": "/fore-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
