@@ -300,12 +300,14 @@ function Discover({
   onModuleStateChange,
   initialSection,
   searchRequest,
+  initialScreen,
 }: {
   onModuleStateChange: (active: boolean, section?: DiscoverSection, screen?: CourseFlowScreen) => void
   initialSection: DiscoverSection
   searchRequest: number
+  initialScreen?: CourseFlowScreen
 }) {
-  return <CourseBookingPrototype onModuleStateChange={onModuleStateChange} initialSection={initialSection} searchRequest={searchRequest} />
+  return <CourseBookingPrototype onModuleStateChange={onModuleStateChange} initialSection={initialSection} searchRequest={searchRequest} initialScreen={initialScreen} />
 }
 
 function DiscoverHome({
@@ -1223,9 +1225,14 @@ function RangeProfileScreen({ go, openRangeBooking, hamoni = false }: { go: (scr
         <span className="facility-template-hero-gradient" />
         <button type="button" className="facility-hero-button facility-hero-back" onClick={() => go("rangeDiscover")} aria-label="Go back"><Icon name="chevron" size={20} /></button>
         <button type="button" className="facility-hero-button facility-hero-share" onClick={() => {
-          const shareData = { title: name, text: `Check out ${name} on Fore`, url: window.location.href }
+          const facilityUrl = new URL(window.location.href)
+          facilityUrl.searchParams.set("facility", hamoni ? "hamoni" : "range")
+          const shareData = { title: name, text: `Check out ${name} on Fore`, url: facilityUrl.toString() }
           if (navigator.share) navigator.share(shareData).catch(() => undefined)
-          else emitPrototypeEvent("Share facility", `${name} can be shared from here.`)
+          else {
+            navigator.clipboard?.writeText(shareData.url).catch(() => undefined)
+            emitPrototypeEvent("Facility link copied", `The direct link to ${name} was copied to your clipboard.`)
+          }
         }} aria-label={`Share ${name}`}><Icon name="share" size={19} /></button>
         <button type="button" className={`facility-hero-button facility-hero-save ${saved ? "saved" : ""}`} onClick={() => setSaved((value) => !value)} aria-label={saved ? "Remove facility from saved" : "Save facility"} aria-pressed={saved}><Icon name="heart" size={20} /></button>
       </section>
@@ -1841,14 +1848,17 @@ function CourseBookingPrototype({
   onModuleStateChange,
   initialSection,
   searchRequest,
+  initialScreen: requestedInitialScreen,
 }: {
   onModuleStateChange: (active: boolean, section?: DiscoverSection) => void
   initialSection: DiscoverSection
   searchRequest: number
+  initialScreen?: CourseFlowScreen
 }) {
   const initialScreen: CourseFlowScreen =
-    initialSection === "Facilities" ? "rangeDiscover" :
-    initialSection === "Coaches" ? "coachDiscover" : "discover"
+    requestedInitialScreen ??
+    (initialSection === "Facilities" ? "rangeDiscover" :
+    initialSection === "Coaches" ? "coachDiscover" : "discover")
   const initialMode = initialSection === "Facilities" ? "ranges" : initialSection === "Coaches" ? "coaches" : "courses"
   const [screen, setScreen] = useState<CourseFlowScreen>(initialScreen)
   const [mode, setMode] = useState<"courses" | "ranges" | "coaches">(initialMode)
