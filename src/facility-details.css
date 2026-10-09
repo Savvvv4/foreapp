@@ -1723,3 +1723,54 @@ body,
 .facility-template-content .facility-rate{min-height:54px!important;padding:12px 14px!important}
 .facility-template-content .facility-points,.facility-template-content .facility-section-sub{display:none!important}
 .facility-template-content .facility-pass{min-height:78px!important;padding:12px!important}
+
+
+/* Consistent, compact guidance accordions on all facility detail screens. */
+.facility-accordion{
+  border:1px solid #E6E3DE;
+  border-radius:12px;
+  background:#fff;
+  padding:0 14px;
+}
+.facility-accordion details+details{border-top:1px solid #ECE9E4}
+.facility-accordion summary{
+  list-style:none;
+  cursor:pointer;
+  padding:14px 20px 14px 0;
+  position:relative;
+  color:#26352D;
+  font-size:14px;
+  font-weight:600;
+}
+.facility-accordion summary::-webkit-details-marker{display:none}
+.facility-accordion summary:after{
+  content:"+";
+  position:absolute;
+  right:0;
+  top:12px;
+  color:#68766B;
+  font-size:18px;
+  font-weight:400;
+}
+.facility-accordion details[open] summary:after{content:"−"}
+.facility-accordion p{
+  margin:0;
+  padding:0 0 14px;
+  color:#5E6B64;
+  font-size:13px;
+  line-height:1.55;
+}
+.facility-template-content .facility-pass-list{gap:10px}
+.facility-template-content .facility-pass:not(button){
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  min-height:72px;
+  border:1px solid #E6E3DE;
+  border-radius:12px;
+  background:#fff;
+}
+.facility-template-content .facility-pass:not(button) .facility-pass-copy{flex:1}
+.facility-template-content .facility-pass:not(button) .facility-pass-copy b{font-size:13px;line-height:1.35}
+.facility-template-content .facility-pass:not(button) .facility-pass-price{white-space:nowrap}
