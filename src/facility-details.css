@@ -1375,3 +1375,60 @@ body,
   stroke:#fff!important;
   stroke-width:2.2!important;
 }
+
+
+/* Course detail layout fixes: preserve the facility template's label/value alignment. */
+.course-template-detail .facility-score tr{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+  align-items:center!important;
+}
+.course-template-detail .facility-score td{
+  grid-column:1!important;
+  grid-row:1!important;
+  text-align:left!important;
+  padding:12px 10px 12px 0!important;
+  font-weight:500!important;
+  color:#5E6B64!important;
+}
+.course-template-detail .facility-score th{
+  grid-column:2!important;
+  grid-row:1!important;
+  text-align:right!important;
+  padding:12px 0 12px 10px!important;
+  color:#12201A!important;
+  font-weight:800!important;
+}
+.course-template-detail .facility-map-graphic{
+  position:relative!important;
+  display:block!important;
+  width:100%!important;
+  height:150px!important;
+  overflow:hidden!important;
+  border:1px solid #E3E6E1!important;
+  border-radius:12px 12px 0 0!important;
+  background:#EAF0E7!important;
+}
+.course-template-detail .facility-map-road{
+  position:absolute!important;
+  display:block!important;
+  height:10px!important;
+  border:2px solid #fff!important;
+  border-radius:999px!important;
+  background:#D7DED3!important;
+}
+.course-template-detail .facility-map-road-a{width:130%;left:-10%;top:44%;transform:rotate(-17deg)!important}
+.course-template-detail .facility-map-road-b{width:100%;left:25%;top:24%;transform:rotate(54deg)!important}
+.course-template-detail .facility-map-road-c{width:100%;left:-25%;top:78%;transform:rotate(20deg)!important}
+.course-template-detail .facility-map-park{position:absolute!important;display:block!important;background:#C9DFC4!important;border-radius:30% 55% 35% 45%!important}
+.course-template-detail .facility-map-park-a{width:100px;height:58px;left:8%;top:12%}
+.course-template-detail .facility-map-park-b{width:120px;height:70px;right:7%;bottom:5%}
+.course-template-detail .facility-map-label{position:absolute!important;z-index:2!important;color:#5E6B64!important;font-size:10px!important;font-weight:700!important}
+.course-template-detail .facility-map-label-a{left:12px;bottom:12px}
+.course-template-detail .facility-map-label-b{right:12px;top:12px}
+.course-template-detail .facility-map-marker{position:absolute!important;z-index:3!important;left:50%!important;top:48%!important;display:grid!important;place-items:center!important;width:34px!important;height:34px!important;border:3px solid #fff!important;border-radius:50% 50% 50% 4px!important;background:#FF6A00!important;color:#fff!important;box-shadow:0 2px 8px #12201A30!important;transform:translate(-50%,-50%) rotate(-45deg)!important}
+.course-template-detail .facility-map-marker .icon{transform:rotate(45deg)!important}
+.course-template-detail .facility-directions{position:relative!important;margin-top:0!important;border-top:0!important;border-radius:0 0 12px 12px!important}
+.course-template-detail .facility-directions .facility-directions-icon{display:none!important}
+.course-template-detail .facility-template-heading .facility-template-stat{align-items:flex-start!important}
+.course-template-detail .facility-template-stat .facility-location-icon{display:inline-flex!important;align-items:center!important}
