@@ -701,7 +701,7 @@ function VenueDetailsScreen({ venueKey, go, openBooking, openRangeBooking }: { v
         <nav className="venue-v8-tabs" aria-label="Venue details sections">{sections.map(([id, label]) => <button key={id} type="button" onClick={() => scrollTo("venue-v8-" + id)}>{label}</button>)}</nav>
         <div className="venue-v8-content">
           <section id="venue-v8-overview" className="venue-v8-section venue-v8-anchor">
-            <div className="venue-v8-stats">{(facility ? info.facts.slice(0, 3) : info.facts.slice(0, 3)).map(([label, value]) => <div className="venue-v8-stat" key={label}><b>{value}</b><span>{label}</span></div>)}</div>
+            <div className="venue-v8-stats">{info.facts.filter(([label]) => !/18-hole option|typical round|setting/i.test(label)).slice(0, 3).map(([label, value]) => <div className="venue-v8-stat" key={label}><b>{value}</b><span>{label}</span></div>)}</div>
             <div className="venue-v8-section">
               <h2>About</h2><p className="venue-v8-note">{info.description}</p>
             </div>
