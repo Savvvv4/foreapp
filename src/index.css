@@ -2858,21 +2858,23 @@ small { line-height:1.45; }
 
 /* Near You: full-width stacked course cards. */
 .near-you-course-list{
-  display:block;
+  display:grid;
+  gap:16px;
 }
-.near-you-course-list .course-card{
+.near-you-course-list > .venue-card{
   width:100%;
-  margin-bottom:14px;
+  margin:0;
 }
 
 
 /* Range discovery mirrors course discovery. */
 .near-you-range-list{
-  display:block;
+  display:grid;
+  gap:16px;
 }
-.near-you-range-list .range-card{
+.near-you-range-list > .venue-card{
   width:100%;
-  margin-bottom:14px;
+  margin:0;
 }
 
 /* Range booking flow. */
