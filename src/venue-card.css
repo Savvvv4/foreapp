@@ -29,7 +29,7 @@
 .venue-card__price-detail{display:flex;align-items:baseline;gap:5px;min-width:0}
 .venue-card__footer .venue-card__price strong{flex:0 0 auto;font-size:20px;line-height:24px;white-space:nowrap}
 .venue-card__footer .venue-card__price small{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.venue-card__footer>.venue-card__primary{height:48px;min-width:150px;flex:0 0 auto;white-space:nowrap}
+.venue-card__footer>.venue-card__primary{height:48px;min-width:150px;flex:0 0 auto;padding:0 12px;border-radius:10px;font:600 14px/20px Inter,sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;cursor:pointer}
 .venue-card__actions button{height:48px;min-width:0;border-radius:10px;padding:0 12px;font:600 14px/20px Inter,sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
 .venue-card__secondary{background:#fff;border:1px solid #d8d0ca;color:#302923}.venue-card__primary{background:var(--color-brand-500,#ff6e00);border:1px solid var(--color-brand-500,#ff6e00);color:#fff}.venue-card__primary:disabled{background:#ded8d2;border-color:#ded8d2;color:#655d56;cursor:not-allowed}.venue-card__primary svg{width:16px;height:16px}
 .venue-card button:focus-visible{outline:3px solid #302219;outline-offset:2px}.venue-card button:active:not(:disabled){transform:scale(.99)}
