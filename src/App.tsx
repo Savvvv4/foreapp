@@ -545,6 +545,7 @@ function OfficialDdaCourseProfileScreen({ venue, go }: { venue: "dwarka" | "bhal
             ).map(([label, price]) => <div className="facility-rate" key={label}><span><b>{label}</b></span><strong>{price}</strong></div>)}
           </div>
         </section>
+        {dwarka && <section className="facility-template-section"><h2>Playing rights</h2><div className="facility-pass-list">{[["3-year playing rights · government", "₹1,20,000"], ["3-year playing rights · non-government", "₹3,60,000"], ["5-year playing rights · government", "₹1,80,000"], ["5-year playing rights · non-government", "₹5,40,000"]].map(([label, price], index) => <div className="facility-pass" key={label}><span className="facility-pass-copy"><b>{label}</b></span><span className="facility-pass-price"><strong>{price}</strong></span></div>)}</div></section>}
         <section className="facility-template-section">
           <h2>Course amenities</h2>
           <div className="facility-amenities">
@@ -1196,6 +1197,7 @@ function RangeProfileScreen({ go, openRangeBooking, hamoni = false, bhalswa = fa
         })}</div><button type="button" className="primary-button facility-pass-button" onClick={() => emitPrototypeEvent("Select facility pass", `Selected ${selectedPass[0]} pass at ${name} for ${selectedPass[1]}.`)}>{`Continue with ${selectedPass[0]} · ${selectedPass[1]}`}</button></section>}
         <section className="facility-template-section"><h2>On site</h2><div className="facility-amenities">{amenities.map((item) => <span key={item}><Icon name="check" size={15} />{item}</span>)}</div></section>
         {!bhalswa && <section className="facility-template-section"><h2>Coaching here</h2><button className="facility-coach-card" onClick={() => go("coachProfile")}><Avatar initials="RM" /><span><b>Rohan Malhotra</b><small>PGA Professional · 12 yrs · 4.9</small></span><Icon name="chevron" /></button></section>}
+        <section className="facility-template-section"><h2>Good to know</h2><div className="facility-accordion"><details><summary>Opening hours</summary><p>{bhalswa ? "Daily, 6 AM – 6 PM" : hamoni ? "Tuesday – Sunday, 6 AM – 10 PM" : "Daily, 6 AM – 9 PM"}</p></details><details><summary>What to bring</summary><p>Comfortable golf or sports clothing, suitable shoes and your clubs if you have them.</p></details><details><summary>Before you visit</summary><p>Choose your session or tee time and arrive a little before your booking.</p></details></div></section>
         <section className="facility-template-section"><h2>Getting there</h2><div className="facility-map-graphic" role="img" aria-label={`Map showing the location of ${name}`}>
           <span className="facility-map-road facility-map-road-a" aria-hidden="true" />
           <span className="facility-map-road facility-map-road-b" aria-hidden="true" />
