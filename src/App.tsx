@@ -553,24 +553,29 @@ function DiscoverCourses({
 
 
 function OfficialCourseListingCard({ venue, featured = false, onOpen, onBook }: { venue: "dwarka" | "bhalswa"; featured?: boolean; onOpen: () => void; onBook: () => void }) {
+  const [saved, setSaved] = useState(false)
   const dwarka = venue === "dwarka"
   const name = dwarka ? "DDA Dwarka Golf Course" : "DDA Lake View Golf Course"
   const subtitle = dwarka ? "Sector 24, Dwarka, New Delhi" : "Bhalswa Lake, Mukundpur, North Delhi"
   const price = dwarka ? "₹660" : "₹440"
+  const rating = dwarka ? "4.8" : "4.0"
   return <article className="course-card official-dda-course-card">
     <button className="course-card-main" type="button" onClick={onOpen}>
       <div className="course-card-image">
         <img src={dwarka ? photos.course : photos.green} alt={name} />
         {featured && <span className="course-featured-pill"><Icon name="star" size={12} /> Featured</span>}
-        <span className="course-rating-pill course-operational-pill">Operational · Pay & play</span>
+        <span className="course-rating-pill"><Icon name="star" size={13} /> {rating}</span>
       </div>
       <div className="course-card-copy">
         <div className="course-card-title-row">
           <div><h3>{name}</h3><p className="course-location"><Icon name="pin" size={14} /> {subtitle}</p></div>
+          <button type="button" className={`course-save-button ${saved ? "saved" : ""}`} onClick={(event) => { event.stopPropagation(); setSaved((value) => !value) }} aria-label={saved ? "Remove saved course" : "Save course"} aria-pressed={saved}>
+            <Icon name="heart" size={18} />
+          </button>
         </div>
         <div className="course-card-meta">
-          <span>{dwarka ? "Pay & play · 9-hole rates" : "Public course · 9 holes"}</span>
-          <strong>From {price}</strong>
+          <span>{dwarka ? "18 holes" : "9 holes · driving range"}</span>
+          <strong>From {price} <small>/ 9 holes</small></strong>
         </div>
       </div>
     </button>
