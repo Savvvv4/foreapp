@@ -39,14 +39,13 @@ function Arrow() {
 export default function VenueCard(props: VenueCardProps) {
   const {
     venueType, name, image, featured = false, rating, reviewCount, locality, city,
-    distanceKm, tags = [], price, priceUnit, availability, onFavoriteChange, onOpen, onBook,
+    distanceKm, price, priceUnit, availability, onFavoriteChange, onOpen, onBook,
     variant = "default",
   } = props
   const [internalSaved, setInternalSaved] = useState(props.saved ?? false)
   const saved = props.saved ?? internalSaved
   const soldOut = availability?.status === "sold-out"
   const location = [locality, city].filter(Boolean).join(", ")
-  const visibleTags = tags.slice(0, 3)
   const handleFavorite = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation()
     const next = !saved
@@ -69,8 +68,7 @@ export default function VenueCard(props: VenueCardProps) {
             <Heart filled={saved} />
           </button>
         </div>
-        <p className="venue-card__location"><Pin /><span>{location || "Location unavailable"}{typeof distanceKm === "number" ? ` · ${distanceKm.toFixed(1)} km` : ""}</span></p>
-        {variant !== "compact" && visibleTags.length > 0 && <div className="venue-card__tags">{visibleTags.map((tag) => <span key={tag.label} className={`venue-card__tag venue-card__tag--${tag.tone ?? "default"}`}>{tag.label}</span>)}</div>}
+        <p className="venue-card__location"><Pin /><span>{location || "Location unavailable"}{typeof distanceKm === "number" ? ` · ${distanceKm.toFixed(1)} km away` : ""}</span></p>
         <div className="venue-card__footer">
           <div className="venue-card__price">
             <span>From</span>
