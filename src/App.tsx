@@ -517,6 +517,38 @@ function BookAgainCourseCard({
   )
 }
 
+function DiscoverCourses({
+  go,
+  openFilters,
+  openSearch,
+  openBooking,
+  openRangeBooking,
+  mode,
+  setMode,
+}: {
+  go: (screen: CourseFlowScreen) => void
+  openFilters: () => void
+  openSearch: () => void
+  openBooking: (course: BookingCourse, slot?: string) => void
+  openRangeBooking: (range?: RangeVenue) => void
+  mode: "courses" | "ranges" | "coaches"
+  setMode: (mode: "courses" | "ranges" | "coaches") => void
+}) {
+  return (
+    <main className="screen booking-discover-screen">
+      <SectionHeading title="Book Again" />
+      <SectionHeading title="Near you" />
+      <div className="near-you-course-list">
+        <CourseCard onOpen={() => go("course")} onBook={() => openBooking(delhiCourse)} />
+        <CourseCard qutub onOpen={() => go("course")} onBook={() => openBooking(qutubCourse)} />
+        <OfficialCourseListingCard venue="dwarka" onOpen={() => go("dwarkaCourseProfile")} />
+        <OfficialCourseListingCard venue="bhalswa" onOpen={() => go("bhalswaCourseProfile")} />
+      </div>
+    </main>
+  )
+}
+
+
 function OfficialCourseListingCard({ venue, onOpen }: { venue: "dwarka" | "bhalswa"; onOpen: () => void }) {
   const dwarka = venue === "dwarka"
   const name = dwarka ? "DDA Dwarka Golf Course" : "DDA Lake View Golf Course"
