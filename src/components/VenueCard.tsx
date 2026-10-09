@@ -39,7 +39,7 @@ function Arrow() {
 export default function VenueCard(props: VenueCardProps) {
   const {
     venueType, name, image, featured = false, rating, reviewCount, locality, city,
-    distanceKm, price, priceUnit, availability, onFavoriteChange, onOpen, onBook,
+    distanceKm, tags = [], price, priceUnit, availability, onFavoriteChange, onOpen, onBook,
     variant = "default",
   } = props
   const [internalSaved, setInternalSaved] = useState(props.saved ?? false)
@@ -58,16 +58,19 @@ export default function VenueCard(props: VenueCardProps) {
       <div className="venue-card__image" aria-hidden="true">
         {image ? <img src={image} alt="" loading="lazy" /> : <span className="venue-card__placeholder"><span>FORE</span><small>{venueType === "course" ? "GOLF COURSE" : "PRACTICE FACILITY"}</small></span>}
         <span className="venue-card__scrim" />
-        {featured && <span className="venue-card__featured"><Star /> Featured</span>}
-        {typeof rating === "number" && <span className="venue-card__rating"><Star /> {rating.toFixed(1)}{typeof reviewCount === "number" ? ` (${reviewCount})` : ""}</span>}
+      </div>
+      <div className="venue-card__top">
+        {featured ? <span className="venue-card__featured"><Star /> Featured</span> : <span />}
+        <button className={`venue-card__favorite${saved ? " is-saved" : ""}`} type="button" onClick={handleFavorite} aria-label={saved ? "Remove from favorites" : "Add to favorites"} aria-pressed={saved}>
+          <Heart filled={saved} />
+        </button>
       </div>
       <div className="venue-card__body">
-        <div className="venue-card__title-row">
-          <h3 title={name}>{name}</h3>
-          <button className={`venue-card__favorite${saved ? " is-saved" : ""}`} type="button" onClick={handleFavorite} aria-label={saved ? "Remove from favorites" : "Add to favorites"} aria-pressed={saved}>
-            <Heart filled={saved} />
-          </button>
+        <div className="venue-card__meta">
+          {typeof rating === "number" && <span className="venue-card__rating"><Star /> {rating.toFixed(1)}{typeof reviewCount === "number" ? ` (${reviewCount})` : ""}</span>}
+          {tags.length > 0 && <span className="venue-card__tag">{tags[0].label}</span>}
         </div>
+        <h3 className="venue-card__title" title={name}>{name}</h3>
         <p className="venue-card__location"><Pin /><span>{location || "Location unavailable"}{typeof distanceKm === "number" ? ` · ${distanceKm.toFixed(1)} km away` : ""}</span></p>
         <div className="venue-card__footer">
           <div className="venue-card__price">
