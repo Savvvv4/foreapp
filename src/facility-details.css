@@ -1584,3 +1584,102 @@ body,
   text-decoration:none!important;
   white-space:nowrap!important;
 }
+
+
+/* Unified course and facility detail template v8. Scoped to prevent legacy profile styles leaking in. */
+.venue-details-v8{position:relative!important;min-height:100%!important;padding:0 0 calc(84px + env(safe-area-inset-bottom))!important;background:#F4F2EE!important;color:#17181A!important;font-family:"Inter",sans-serif!important;overflow:visible!important}
+.venue-details-v8 .venue-v8-hero{height:290px!important;min-height:290px!important;position:relative!important;flex:none!important;overflow:hidden!important;cursor:pointer!important;background:#71885a!important}
+.venue-details-v8 .venue-v8-hero>img{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important}
+.venue-details-v8 .venue-v8-hero-shade{position:absolute!important;inset:0!important;background:linear-gradient(180deg,rgba(0,0,0,.4),transparent 38%,rgba(0,0,0,.25))!important;pointer-events:none!important}
+.venue-details-v8 .venue-v8-icon{width:40px!important;height:40px!important;display:grid!important;place-items:center!important;padding:0!important;border:0!important;border-radius:50%!important;background:#fff!important;color:#17181A!important;box-shadow:0 1px 4px #0003!important}
+.venue-details-v8 .venue-v8-back{position:absolute!important;z-index:5!important;top:16px!important;left:16px!important;transform:rotate(180deg)!important}
+.venue-details-v8 .venue-v8-actions{position:absolute!important;z-index:5!important;top:16px!important;right:16px!important;display:flex!important;gap:12px!important}
+.venue-details-v8 .venue-v8-icon.is-saved{color:#E05600!important}
+.venue-details-v8 .venue-v8-dots{position:absolute!important;bottom:40px!important;left:0!important;right:0!important;display:flex!important;justify-content:center!important;gap:6px!important}
+.venue-details-v8 .venue-v8-dots i{display:block!important;width:6px!important;height:6px!important;border-radius:99px!important;background:#ffffff8c!important}
+.venue-details-v8 .venue-v8-dots i.active{width:18px!important;border-radius:3px!important;background:#fff!important}
+.venue-details-v8 .venue-v8-sheet{position:relative!important;margin-top:-24px!important;border-radius:24px 24px 0 0!important;background:#F4F2EE!important;z-index:2!important}
+.venue-details-v8 .venue-v8-heading{padding:22px 20px 16px!important}
+.venue-details-v8 .venue-v8-heading h1{margin:0!important;color:#17181A!important;font:800 25px/31px "Inter",sans-serif!important;letter-spacing:-.01em!important}
+.venue-details-v8 .venue-v8-meta{display:flex!important;flex-direction:column!important;gap:6px!important;margin-top:8px!important;color:#5B6068!important;font-size:14px!important}
+.venue-details-v8 .venue-v8-meta>span{display:flex!important;align-items:center!important;gap:6px!important}
+.venue-details-v8 .venue-v8-meta svg,.venue-details-v8 .venue-v8-rating svg{color:#E05600!important;fill:#E05600!important}
+.venue-details-v8 .venue-v8-meta b{color:#17181A!important}
+.venue-details-v8 .venue-v8-tabs{position:sticky!important;top:0!important;z-index:8!important;display:flex!important;overflow-x:auto!important;background:#F4F2EE!important;border-bottom:1px solid #E6E3DE!important;padding:0 8px!important;scrollbar-width:none!important}
+.venue-details-v8 .venue-v8-tabs::-webkit-scrollbar{display:none!important}
+.venue-details-v8 .venue-v8-tabs button{flex:1 0 auto!important;min-height:48px!important;padding:0 10px!important;border:0!important;border-bottom:3px solid transparent!important;background:none!important;color:#5B6068!important;font:600 13px "Inter",sans-serif!important;white-space:nowrap!important}
+.venue-details-v8 .venue-v8-tabs button:focus-visible{outline:2px solid #E05600!important;outline-offset:-3px!important}
+.venue-details-v8 .venue-v8-content{display:flex!important;flex-direction:column!important;gap:32px!important;padding:22px 20px 28px!important}
+.venue-details-v8 .venue-v8-section{display:flex!important;flex-direction:column!important;gap:14px!important;min-width:0!important}
+.venue-details-v8 .venue-v8-section h2{margin:0!important;color:#17181A!important;font:700 18px/24px "Inter",sans-serif!important}
+.venue-details-v8 .venue-v8-note{margin:0!important;color:#5B6068!important;font-size:14px!important;line-height:21px!important}
+.venue-details-v8 .venue-v8-stats{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;padding:16px 0!important;border:1px solid #E6E3DE!important;border-radius:16px!important;background:#fff!important}
+.venue-details-v8 .venue-v8-stat{display:flex!important;min-width:0!important;flex-direction:column!important;align-items:center!important;gap:2px!important;padding:0 6px!important;text-align:center!important}
+.venue-details-v8 .venue-v8-stat+.venue-v8-stat{border-left:1px solid #E6E3DE!important}
+.venue-details-v8 .venue-v8-stat b{font-size:17px!important;line-height:24px!important;font-weight:800!important;overflow-wrap:anywhere!important}
+.venue-details-v8 .venue-v8-stat span{color:#5B6068!important;font-size:12px!important}
+.venue-details-v8 .venue-v8-card{border:1px solid #E6E3DE!important;border-radius:16px!important;background:#fff!important;overflow:hidden!important}
+.venue-details-v8 .venue-v8-kv{padding:4px 16px!important}
+.venue-details-v8 .venue-v8-kv>div,.venue-details-v8 .venue-v8-rates>div{display:flex!important;justify-content:space-between!important;gap:12px!important;padding:13px 0!important;border-top:1px solid #EEEBE6!important;font-size:14px!important}
+.venue-details-v8 .venue-v8-kv>div:first-child,.venue-details-v8 .venue-v8-rates>div:first-child{border-top:0!important}
+.venue-details-v8 .venue-v8-kv span,.venue-details-v8 .venue-v8-rates span{color:#5B6068!important}
+.venue-details-v8 .venue-v8-kv b,.venue-details-v8 .venue-v8-rates>div>b{text-align:right!important;color:#17181A!important}
+.venue-details-v8 .venue-v8-rates{padding:4px 16px!important}
+.venue-details-v8 .venue-v8-rates>div{align-items:baseline!important}
+.venue-details-v8 .venue-v8-rates span{display:flex!important;flex-direction:column!important;gap:4px!important;min-width:0!important}
+.venue-details-v8 .venue-v8-rates small{color:#5B6068!important;font-size:12px!important}
+.venue-details-v8 .venue-v8-rates>div>b{flex:none!important;font-size:16px!important;font-weight:800!important;white-space:nowrap!important}
+.venue-details-v8 .venue-v8-amenities{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px 12px!important;padding:16px!important}
+.venue-details-v8 .venue-v8-amenities>span{display:flex!important;align-items:center!important;gap:10px!important;color:#3E4247!important;font-size:13px!important;font-weight:600!important}
+.venue-details-v8 .venue-v8-amenities i{width:24px!important;height:24px!important;flex:none!important;display:grid!important;place-items:center!important;border-radius:50%!important;background:#E3EFDF!important;color:#14683A!important}
+.venue-details-v8 .venue-v8-disclaimer{font-size:12px!important}
+.venue-details-v8 .venue-v8-pass-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
+.venue-details-v8 .venue-v8-pass{position:relative!important;display:flex!important;min-width:0!important;min-height:140px!important;flex-direction:column!important;align-items:flex-start!important;gap:3px!important;padding:14px!important;border:2px solid transparent!important;border-radius:18px!important;text-align:left!important}
+.venue-details-v8 .venue-v8-pass:nth-child(1){background:#F1EFEA!important}.venue-details-v8 .venue-v8-pass:nth-child(2){background:#E8F0E3!important}.venue-details-v8 .venue-v8-pass:nth-child(3){background:#DAE9D4!important}.venue-details-v8 .venue-v8-pass:nth-child(4){background:#CBE0C3!important}
+.venue-details-v8 .venue-v8-pass.selected{border-color:#E05600!important;box-shadow:0 0 0 4px #e0560026!important}
+.venue-details-v8 .venue-v8-pass-tag{height:20px!important;margin-bottom:6px!important;color:#14683A!important;font-size:9px!important;font-weight:800!important;letter-spacing:.05em!important}
+.venue-details-v8 .venue-v8-pass:nth-child(2) .venue-v8-pass-tag{color:#E05600!important}
+.venue-details-v8 .venue-v8-pass-name{color:#3E4247!important;font-size:13px!important}
+.venue-details-v8 .venue-v8-pass strong{font-size:20px!important;line-height:28px!important;font-weight:800!important}
+.venue-details-v8 .venue-v8-pass small{color:#4a5148!important;font-size:11px!important;line-height:1.35!important}
+.venue-details-v8 .venue-v8-check{position:absolute!important;right:12px!important;bottom:12px!important;width:22px!important;height:22px!important;display:grid!important;place-items:center!important;border:2px solid #A9B8A3!important;border-radius:50%!important;background:#fff!important;color:transparent!important}
+.venue-details-v8 .venue-v8-pass.selected .venue-v8-check{border-color:#E05600!important;background:#E05600!important;color:#fff!important}
+.venue-details-v8 .venue-v8-coaches{display:flex!important;flex-direction:column!important;gap:12px!important}
+.venue-details-v8 .venue-v8-coach{display:flex!important;gap:14px!important;padding:12px!important}
+.venue-details-v8 .venue-v8-avatar{width:80px!important;min-height:120px!important;flex:none!important;display:grid!important;place-items:center!important;border-radius:12px!important;background:linear-gradient(145deg,#9bbb66,#3b5a2c)!important;color:#fff!important;font-size:24px!important;font-weight:800!important}
+.venue-details-v8 .venue-v8-avatar-1{background:linear-gradient(145deg,#b4c985,#5e7f43)!important}.venue-details-v8 .venue-v8-avatar-2{background:linear-gradient(145deg,#c9d3df,#6e8f4a)!important}
+.venue-details-v8 .venue-v8-coach-copy{flex:1!important;min-width:0!important;display:flex!important;flex-direction:column!important;gap:4px!important}
+.venue-details-v8 .venue-v8-coach-copy>b{font-size:15px!important;line-height:21px!important}
+.venue-details-v8 .venue-v8-coach-copy>small{color:#5B6068!important;font-size:11px!important;line-height:16px!important}
+.venue-details-v8 .venue-v8-coach-copy>span{display:flex!important;align-items:center!important;gap:4px!important;font-size:12px!important;font-weight:700!important}
+.venue-details-v8 .venue-v8-coach-copy>span svg{color:#E05600!important;fill:#E05600!important}
+.venue-details-v8 .venue-v8-coach-footer{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;margin-top:auto!important;padding-top:8px!important}
+.venue-details-v8 .venue-v8-coach-footer>b{font-size:14px!important}
+.venue-details-v8 .venue-v8-coach-footer>b small{display:block!important;color:#5B6068!important;font-size:10px!important;font-weight:500!important}
+.venue-details-v8 .venue-v8-coach-footer button{min-height:36px!important;padding:0 10px!important;border:1.5px solid #E05600!important;border-radius:10px!important;background:#fff!important;color:#B84600!important;font-size:11px!important;font-weight:700!important}
+.venue-details-v8 .venue-v8-more{display:flex!important;align-items:center!important;gap:8px!important;margin:0!important;padding:8px 0!important;border:0!important;background:none!important;color:#B84600!important;font-size:13px!important;font-weight:700!important}
+.venue-details-v8 .venue-v8-rating{display:flex!important;align-items:center!important;gap:6px!important;font-size:16px!important;font-weight:700!important}
+.venue-details-v8 .venue-v8-review{display:flex!important;flex-direction:column!important;gap:8px!important;padding:16px!important}
+.venue-details-v8 .venue-v8-review p{margin:0!important;color:#17181A!important;font-size:14px!important;line-height:22px!important}
+.venue-details-v8 .venue-v8-review span{color:#5B6068!important;font-size:11px!important}
+.venue-details-v8 .venue-v8-accordion>div+div{border-top:1px solid #EEEBE6!important}
+.venue-details-v8 .venue-v8-accordion button{width:100%!important;min-height:54px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;padding:0!important;border:0!important;background:none!important;color:#17181A!important;font-size:14px!important;font-weight:700!important;text-align:left!important}
+.venue-details-v8 .venue-v8-accordion button[aria-expanded="true"] svg{transform:rotate(90deg)!important}
+.venue-details-v8 .venue-v8-accordion p{margin:0!important;padding:0 0 16px!important;color:#5B6068!important;font-size:13px!important;line-height:20px!important}
+.venue-details-v8 .venue-v8-map{position:relative!important;height:140px!important;overflow:hidden!important;border:1px solid #E6E3DE!important;border-radius:16px 16px 0 0!important;background:#E9EEE6!important}
+.venue-details-v8 .venue-v8-map-park{position:absolute!important;display:block!important;background:#CFE3CC!important;border-radius:40%!important}
+.venue-details-v8 .venue-v8-map-park.a{width:100px!important;height:48px!important;left:18px!important;top:18px!important}.venue-details-v8 .venue-v8-map-park.b{width:115px!important;height:58px!important;right:12px!important;bottom:12px!important}
+.venue-details-v8 .venue-v8-map-road{position:absolute!important;display:block!important;width:130%!important;height:8px!important;border:2px solid #fff!important;border-radius:99px!important;background:#D7DED3!important}
+.venue-details-v8 .venue-v8-map-road.a{left:-10%!important;top:45%!important;transform:rotate(-17deg)!important}.venue-details-v8 .venue-v8-map-road.b{left:20%!important;top:26%!important;transform:rotate(48deg)!important}
+.venue-details-v8 .venue-v8-map-label{position:absolute!important;left:12px!important;bottom:10px!important;color:#68746C!important;font-size:10px!important;font-weight:700!important}
+.venue-details-v8 .venue-v8-map-marker{position:absolute!important;left:50%!important;top:50%!important;width:38px!important;height:38px!important;display:grid!important;place-items:center!important;transform:translate(-50%,-50%)!important;border:4px solid #fff!important;border-radius:50%!important;background:#E05600!important;color:#fff!important;box-shadow:0 6px 16px #0002!important}
+.venue-details-v8 .venue-v8-map-marker .icon{stroke:#fff!important}
+.venue-details-v8 .venue-v8-address{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;padding:12px 14px!important;border:1px solid #E6E3DE!important;border-top:0!important;border-radius:0 0 16px 16px!important;background:#fff!important;color:#5B6068!important;font-size:12px!important;line-height:18px!important}
+.venue-details-v8 .venue-v8-address button{display:flex!important;align-items:center!important;gap:5px!important;flex:none!important;padding:0!important;border:0!important;background:none!important;color:#B84600!important;font-size:13px!important;font-weight:700!important}
+.venue-details-v8 .venue-v8-cta{position:sticky!important;bottom:0!important;z-index:12!important;display:flex!important;align-items:center!important;gap:16px!important;margin-top:-84px!important;padding:12px 20px calc(18px + env(safe-area-inset-bottom))!important;border-top:1px solid #E6E3DE!important;background:#fff!important}
+.venue-details-v8 .venue-v8-cta>div{display:flex!important;min-width:0!important;flex-direction:column!important}
+.venue-details-v8 .venue-v8-cta small{color:#5B6068!important;font-size:12px!important}
+.venue-details-v8 .venue-v8-cta b{font-size:19px!important;line-height:24px!important;font-weight:800!important}
+.venue-details-v8 .venue-v8-cta>button{display:flex!important;flex:1!important;align-items:center!important;justify-content:center!important;gap:8px!important;min-width:0!important;height:52px!important;padding:0 10px!important;border:0!important;border-radius:14px!important;background:#E05600!important;color:#fff!important;font-size:14px!important;font-weight:700!important;white-space:nowrap!important}
+.venue-details-v8 .venue-v8-anchor{scroll-margin-top:58px!important}
+@media(max-width:520px){.venue-details-v8 .venue-v8-hero{height:290px!important;min-height:290px!important}.venue-details-v8 .venue-v8-heading{padding-inline:20px!important}.venue-details-v8 .venue-v8-content{padding-inline:20px!important}.venue-details-v8 .venue-v8-tabs button{padding-inline:9px!important;font-size:12px!important}.venue-details-v8 .venue-v8-cta{padding-inline:14px!important;gap:10px!important}.venue-details-v8 .venue-v8-cta b{font-size:16px!important}.venue-details-v8 .venue-v8-cta>button{font-size:13px!important}.venue-details-v8 .venue-v8-stat b{font-size:15px!important}}
