@@ -55,13 +55,13 @@ export default function VenueCard(props: VenueCardProps) {
   }
 
   return (
-    <article className={`venue-card venue-card--${variant} venue-card--${venueType}`} onClick={onOpen}>
-      <button className="venue-card__image" type="button" onClick={(event) => { event.stopPropagation(); onOpen() }} aria-label={`View ${name} details`}>
+    <article className={`venue-card venue-card--${variant} venue-card--${venueType}`} role="button" tabIndex={0} aria-label={name} onClick={onOpen} onKeyDown={(event: React.KeyboardEvent<HTMLElement>) => { if (event.target !== event.currentTarget) return; if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onOpen() } }}>
+      <div className="venue-card__image" aria-hidden="true">
         {image ? <img src={image} alt="" loading="lazy" /> : <span className="venue-card__placeholder"><span>FORE</span><small>{venueType === "course" ? "GOLF COURSE" : "PRACTICE FACILITY"}</small></span>}
         <span className="venue-card__scrim" />
         {featured && <span className="venue-card__featured"><Star /> Featured</span>}
         {typeof rating === "number" && <span className="venue-card__rating"><Star /> {rating.toFixed(1)}{typeof reviewCount === "number" ? ` (${reviewCount})` : ""}</span>}
-      </button>
+      </div>
       <div className="venue-card__body">
         <div className="venue-card__title-row">
           <h3 title={name}>{name}</h3>
