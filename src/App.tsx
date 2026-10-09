@@ -467,8 +467,8 @@ function CourseCard({
             </button>
           </div>
           <div className="course-card-meta">
-            <span>{qutub ? "From ₹1,800" : "From ₹2,500"}</span>
-            <strong>{qutub ? "₹1,800" : "₹2,500"} <small>/ round</small></strong>
+            <span>{qutub ? "Public · 9 holes" : "Championship · 18 holes"}</span>
+            <strong>From {qutub ? "₹1,800" : "₹2,500"}</strong>
           </div>
         </div>
       </button>
@@ -537,11 +537,14 @@ function DiscoverCourses({
   return (
     <main className="screen booking-discover-screen">
       <SectionHeading title="Book Again" />
+      <div className="book-again-course-list">
+        <OfficialCourseListingCard venue="dwarka" featured onOpen={() => go("dwarkaCourseProfile")} />
+      </div>
       <SectionHeading title="Near you" />
       <div className="near-you-course-list">
         <CourseCard onOpen={() => go("course")} onBook={() => openBooking(delhiCourse)} />
         <CourseCard qutub onOpen={() => go("course")} onBook={() => openBooking(qutubCourse)} />
-        <OfficialCourseListingCard venue="dwarka" onOpen={() => go("dwarkaCourseProfile")} />
+        <OfficialCourseListingCard venue="dwarka" featured onOpen={() => go("dwarkaCourseProfile")} />
         <OfficialCourseListingCard venue="bhalswa" onOpen={() => go("bhalswaCourseProfile")} />
       </div>
     </main>
@@ -549,19 +552,32 @@ function DiscoverCourses({
 }
 
 
-function OfficialCourseListingCard({ venue, onOpen }: { venue: "dwarka" | "bhalswa"; onOpen: () => void }) {
+function OfficialCourseListingCard({ venue, featured = false, onOpen }: { venue: "dwarka" | "bhalswa"; featured?: boolean; onOpen: () => void }) {
   const dwarka = venue === "dwarka"
   const name = dwarka ? "DDA Dwarka Golf Course" : "DDA Lake View Golf Course"
   const subtitle = dwarka ? "Sector 24, Dwarka, New Delhi" : "Bhalswa Lake, Mukundpur, North Delhi"
-  const status = "Operational · Pay & play"
   const price = dwarka ? "₹660" : "₹440"
   return <article className="course-card official-dda-course-card">
     <button className="course-card-main" type="button" onClick={onOpen}>
-      <div className="course-card-image"><img src={dwarka ? photos.course : photos.green} alt={name} /><span className="course-status-pill">{status}</span></div>
-      <div className="course-card-copy"><div className="course-card-title-row"><div><h3>{name}</h3><p className="range-location"><Icon name="pin" size={14} /> {subtitle}</p></div></div>
-      <div className="course-card-meta"><span>{dwarka ? "18 holes · driving range" : "9 holes · 220-yard driving range"}</span><strong>{price} <small>/ 9 holes · weekday</small></strong></div></div>
+      <div className="course-card-image">
+        <img src={dwarka ? photos.course : photos.green} alt={name} />
+        {featured && <span className="course-featured-pill"><Icon name="star" size={12} /> Featured</span>}
+        <span className="course-rating-pill course-operational-pill">Operational · Pay & play</span>
+      </div>
+      <div className="course-card-copy">
+        <div className="course-card-title-row">
+          <div><h3>{name}</h3><p className="course-location"><Icon name="pin" size={14} /> {subtitle}</p></div>
+        </div>
+        <div className="course-card-meta">
+          <span>{dwarka ? "Pay & play · 9-hole rates" : "Public course · 9 holes"}</span>
+          <strong>From {price}</strong>
+        </div>
+      </div>
     </button>
-    <div className="course-card-actions"><button type="button" className="course-details-button" onClick={onOpen}>View details</button><button type="button" className="course-book-button" onClick={onOpen}>{dwarka ? "View course & rates" : "View rates"} <Icon name="arrow" size={15} /></button></div>
+    <div className="course-card-actions">
+      <button type="button" className="course-details-button" onClick={onOpen}>View details</button>
+      <button type="button" className="course-book-button" onClick={onOpen}>Book tee time <Icon name="arrow" size={15} /></button>
+    </div>
   </article>
 }
 
