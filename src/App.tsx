@@ -677,7 +677,7 @@ function VenueDetailsScreen({ venueKey, go, openBooking, openRangeBooking }: { v
   }
   const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" })
   const sections = [["overview", "Overview"], ["pricing", "Pricing"], ["coaches", "Coaches"], ["reviews", "Reviews & info"]]
-  const goodToKnow: Array<[string, string]> = [["Opening hours", info.hours.map(([day, time]) => day + ": " + time).join(" · ")]]
+  const goodToKnow: Array<[string, string]> = [["Opening hours", info.hours.map(([day, time]) => day + ": " + time).join(" · ")], ...info.policies]
   return (
     <main className="course-profile-screen venue-details-v8">
       <section className="venue-v8-hero" onClick={() => setGalleryIndex((i) => (i + 1) % images.length)}>
@@ -709,8 +709,8 @@ function VenueDetailsScreen({ venueKey, go, openBooking, openRangeBooking }: { v
             <div className="venue-v8-section"><h2>{facility ? "On site" : "Course amenities"}</h2><div className="venue-v8-card venue-v8-amenities">{info.amenities.map((item) => <span key={item}><i><Icon name="check" size={13} /></i>{item}</span>)}</div></div>
           </section>
           <section id="venue-v8-pricing" className="venue-v8-section venue-v8-anchor">
-            <div className="venue-v8-section"><h2>{facility ? "Rates" : "Green fees"}</h2><div className="venue-v8-card venue-v8-rates">{info.rates.map(([label, sub, price]) => <div key={label + sub}><span>{label}<small>{sub}</small></span><b>{price}</b></div>)}</div></div>
-            {venueKey === "hamoni" && info.passes.length > 0 && <div className="venue-v8-section"><h2>Passes</h2><div className="venue-v8-pass-grid">{info.passes.map(([label, price, note], i) => <button type="button" key={label} className={"venue-v8-pass " + (selectedPass === i ? "selected" : "")} onClick={() => setSelectedPass(selectedPass === i ? null : i)} aria-pressed={selectedPass === i}><span className="venue-v8-pass-tag">{i === 1 ? "POPULAR" : i === info.passes.length - 1 ? "BEST VALUE" : ""}</span><b className="venue-v8-pass-name">{label}</b><strong>{price}</strong><small>{note}</small><span className="venue-v8-check"><Icon name="check" size={12} /></span></button>)}</div></div>}
+            <div className="venue-v8-section"><h2>{facility ? "Rates" : "Green fees"}</h2><div className="venue-v8-card venue-v8-rates">{info.rates.filter(([label]) => !label.includes("13 holes") && !label.includes("18 holes") && !label.includes("18-hole option")).slice(0, 6).map(([label, sub, price]) => <div key={label + sub}><span>{label}<small>{sub.replace(" · GST included", "").replace(" · incl. GST", "").replace(" · incl. taxes", "").replace(" · before GST", "").replace(" · Price", "")}</small></span><b>{price}</b></div>)}</div></div>
+            {info.passes.length > 0 && <div className="venue-v8-section"><h2>{venueKey === "dwarka" ? "Playing rights" : venueKey === "hamoni" ? "Passes" : "Passes & packages"}</h2><div className="venue-v8-pass-grid">{info.passes.map(([label, price, note], i) => <button type="button" key={label} className={"venue-v8-pass " + (selectedPass === i ? "selected" : "")} onClick={() => setSelectedPass(selectedPass === i ? null : i)} aria-pressed={selectedPass === i}><span className="venue-v8-pass-tag">{i === 1 ? "POPULAR" : i === info.passes.length - 1 ? "BEST VALUE" : ""}</span><b className="venue-v8-pass-name">{label}</b><strong>{price}</strong><small>{note}</small><span className="venue-v8-check"><Icon name="check" size={12} /></span></button>)}</div></div>}
           </section>
           <section id="venue-v8-coaches" className="venue-v8-section venue-v8-anchor">
             <h2>Coaches</h2><div className="venue-v8-coaches">{info.coaches.map(([name, credential, rating, focus], i) => <article className="venue-v8-card venue-v8-coach" key={name}><div className={"venue-v8-avatar venue-v8-avatar-" + (i % 3)}>{name.split(" ").map((part) => part[0]).join("")}</div><div className="venue-v8-coach-copy"><b>{name}</b><small>{credential}</small><span><Icon name="star" size={12} />{rating}</span><small>{focus}</small><div className="venue-v8-coach-footer"><b>₹{i === 0 ? "1,500" : "1,200"}<small>per 30 min</small></b><button type="button" onClick={() => go("coachDiscover")}>Book lesson</button></div></div></article>)}</div><button type="button" className="venue-v8-more" onClick={() => go("coachDiscover")}>See all coaches <Icon name="arrow" size={15} /></button>
@@ -722,7 +722,7 @@ function VenueDetailsScreen({ venueKey, go, openBooking, openRangeBooking }: { v
           </section>
         </div>
       </div>
-      <div className="venue-v8-cta"><div><small>{selectedPass !== null ? info.passes[selectedPass][0] : facility ? "Entry, per person" : "18 holes, weekday"}</small><b>{selectedPass !== null ? info.passes[selectedPass][1] : "from " + venue.price}</b></div><button type="button" onClick={book}>{selectedPass !== null ? "Buy pass" : facility ? "Book a bay" : "Book a tee time"} <Icon name="arrow" size={16} /></button></div>
+      <div className="venue-v8-cta"><div><small>{selectedPass !== null && info.passes[selectedPass] ? info.passes[selectedPass][0] : facility ? "Entry, per person" : "Green fee"}</small><b>{selectedPass !== null && info.passes[selectedPass] ? info.passes[selectedPass][1] : "from " + venue.price}</b></div><button type="button" onClick={book}>{selectedPass !== null ? "Buy pass" : facility ? "Book a bay" : "Book a tee time"} <Icon name="arrow" size={16} /></button></div>
     </main>
   )
 }
