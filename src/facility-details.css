@@ -1432,3 +1432,155 @@ body,
 .course-template-detail .facility-directions .facility-directions-icon{display:none!important}
 .course-template-detail .facility-template-heading .facility-template-stat{align-items:flex-start!important}
 .course-template-detail .facility-template-stat .facility-location-icon{display:inline-flex!important;align-items:center!important}
+
+
+/* DDA course detail pages: keep content aligned with the standard course template. */
+.dda-course-detail .facility-template-section{
+  margin-top:26px!important;
+}
+.dda-course-detail .facility-template-heading{
+  padding-bottom:2px!important;
+}
+.dda-course-detail .facility-template-stat{
+  align-items:center!important;
+}
+.dda-course-detail .facility-template-stat > span{
+  display:flex!important;
+  align-items:center!important;
+  gap:8px!important;
+}
+.dda-course-detail .dda-course-status{
+  margin:18px 0 0!important;
+  padding:13px 14px!important;
+  border:1px solid #F1D7B7!important;
+  border-radius:12px!important;
+  background:#FFF8EF!important;
+  color:#704719!important;
+}
+.dda-course-detail .dda-course-status > span{
+  display:flex!important;
+  align-items:center!important;
+  gap:8px!important;
+  font-size:14px!important;
+  line-height:1.35!important;
+  font-weight:700!important;
+}
+.dda-course-detail .dda-course-status p{
+  margin:6px 0 0!important;
+  color:#795D3B!important;
+  font-size:13px!important;
+  line-height:1.45!important;
+}
+.dda-course-detail .dda-pricing-table-wrap{
+  width:100%!important;
+  overflow-x:auto!important;
+  border:1px solid #E3E6E1!important;
+  border-radius:12px!important;
+  background:#fff!important;
+}
+.dda-course-detail .dda-pricing-table{
+  width:100%!important;
+  min-width:300px!important;
+  border-collapse:collapse!important;
+  table-layout:auto!important;
+}
+.dda-course-detail .dda-pricing-table th,
+.dda-course-detail .dda-pricing-table td{
+  padding:13px 10px!important;
+  border-bottom:1px solid #E9ECE8!important;
+  color:#12201A!important;
+  text-align:right!important;
+  vertical-align:middle!important;
+  font-family:var(--font-sans)!important;
+  font-size:13px!important;
+  line-height:1.35!important;
+  white-space:nowrap!important;
+}
+.dda-course-detail .dda-pricing-table thead th{
+  background:#F5F7F3!important;
+  color:#5E6B64!important;
+  font-size:11px!important;
+  font-weight:700!important;
+}
+.dda-course-detail .dda-pricing-table th:first-child{
+  text-align:left!important;
+}
+.dda-course-detail .dda-pricing-table tbody th{
+  font-weight:600!important;
+  white-space:normal!important;
+}
+.dda-course-detail .dda-pricing-table tbody tr:last-child th,
+.dda-course-detail .dda-pricing-table tbody tr:last-child td{
+  border-bottom:0!important;
+}
+.dda-course-detail .dda-lakeview-table{
+  min-width:480px!important;
+}
+.dda-course-detail .dda-lakeview-table thead tr:first-child th{
+  text-align:center!important;
+}
+.dda-course-detail .dda-lakeview-table thead tr:first-child th:first-child{
+  text-align:left!important;
+}
+.dda-course-detail .dda-pricing-note{
+  margin:9px 0 0!important;
+  color:#6C7971!important;
+  font-size:12px!important;
+  line-height:1.45!important;
+}
+.dda-course-detail .dda-simple-rates .facility-rate{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:16px!important;
+  padding:13px 0!important;
+  border-bottom:1px solid #E3E6E1!important;
+}
+.dda-course-detail .dda-simple-rates .facility-rate:last-child{
+  border-bottom:0!important;
+}
+.dda-course-detail .dda-simple-rates .facility-rate > span{
+  min-width:0!important;
+  display:block!important;
+}
+.dda-course-detail .dda-simple-rates .facility-rate b{
+  display:block!important;
+  color:#293C31!important;
+  font-size:14px!important;
+  line-height:1.4!important;
+  font-weight:500!important;
+}
+.dda-course-detail .dda-simple-rates .facility-rate > strong{
+  flex:0 0 auto!important;
+  color:#12201A!important;
+  font-size:15px!important;
+  font-weight:700!important;
+  white-space:nowrap!important;
+}
+.dda-course-detail .dda-contact-row{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  padding:14px 0 0!important;
+}
+.dda-course-detail .dda-contact-row > span{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:3px!important;
+}
+.dda-course-detail .dda-contact-row b{
+  color:#293C31!important;
+  font-size:13px!important;
+}
+.dda-course-detail .dda-contact-row small{
+  color:#6C7971!important;
+  font-size:11px!important;
+}
+.dda-course-detail .dda-contact-row a{
+  color:#D95C00!important;
+  font-size:14px!important;
+  font-weight:700!important;
+  text-decoration:none!important;
+  white-space:nowrap!important;
+}
