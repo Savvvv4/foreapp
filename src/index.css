@@ -4403,3 +4403,34 @@ body.course-detail-open .phone-shell{padding-top:0!important}
   flex:none!important;
   object-fit:contain!important;
 }
+
+
+/* Unified course-card badges and discovery spacing */
+.course-featured-pill{
+  position:absolute;
+  top:13px;
+  left:13px;
+  z-index:2;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  min-height:28px;
+  padding:6px 10px;
+  border-radius:999px;
+  background:#f47735;
+  color:#fff;
+  font-size:10px;
+  font-weight:800;
+  box-shadow:0 3px 12px rgba(0,0,0,.16);
+}
+.course-featured-pill .icon{color:#fff}
+.course-operational-pill{
+  left:auto;
+  right:13px;
+  max-width:calc(100% - 36px);
+  white-space:nowrap;
+}
+.official-dda-course-card .course-card-image{height:190px}
+.official-dda-course-card .course-card-meta>strong{font-size:14px}
+.book-again-course-list{margin-bottom:20px}
+.book-again-course-list .course-card{margin-bottom:0}
