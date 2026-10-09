@@ -574,7 +574,7 @@ function OfficialCourseListingCard({ venue, featured = false, onOpen, onBook }: 
           </button>
         </div>
         <div className="course-card-meta">
-          <span>{dwarka ? "18 holes" : "9 holes · driving range"}</span>
+          <span>{dwarka ? "" : "9 holes · driving range"}</span>
           <strong>From {price} <small>/ 9 holes</small></strong>
         </div>
       </div>
