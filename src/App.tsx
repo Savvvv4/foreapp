@@ -466,14 +466,14 @@ function DiscoverCourses({
     <main className="screen booking-discover-screen">
       <SectionHeading title="Book Again" />
       <div className="book-again-course-list">
-        <VenueCard {...mapVenueCardData("dwarka", () => go("dwarkaCourseProfile"), () => openBooking({ name: "DDA Dwarka Golf Course", image: photos.course, price: 660 }), true)} />
+        <VenueCard variant="default" {...mapVenueCardData("dwarka", () => go("dwarkaCourseProfile"), () => openBooking({ name: "DDA Dwarka Golf Course", image: photos.course, price: 660 }), true)} />
       </div>
       <SectionHeading title="Near you" />
       <div className="near-you-course-list">
-        <VenueCard {...mapVenueCardData("dgc", () => go("course"), () => openBooking(delhiCourse))} />
-        <VenueCard {...mapVenueCardData("qutub-course", () => go("course"), () => openBooking(qutubCourse))} />
-        <VenueCard {...mapVenueCardData("dwarka", () => go("dwarkaCourseProfile"), () => openBooking({ name: "DDA Dwarka Golf Course", image: photos.course, price: 660 }), true)} />
-        <VenueCard {...mapVenueCardData("lakeview-course", () => go("bhalswaCourseProfile"), () => openBooking({ name: "DDA Lake View Golf Course", image: photos.green, price: 440 }))} />
+        <VenueCard variant="default" {...mapVenueCardData("dgc", () => go("course"), () => openBooking(delhiCourse))} />
+        <VenueCard variant="default" {...mapVenueCardData("qutub-course", () => go("course"), () => openBooking(qutubCourse))} />
+        <VenueCard variant="default" {...mapVenueCardData("dwarka", () => go("dwarkaCourseProfile"), () => openBooking({ name: "DDA Dwarka Golf Course", image: photos.course, price: 660 }), true)} />
+        <VenueCard variant="default" {...mapVenueCardData("lakeview-course", () => go("bhalswaCourseProfile"), () => openBooking({ name: "DDA Lake View Golf Course", image: photos.green, price: 440 }))} />
       </div>
     </main>
   )
@@ -1048,13 +1048,13 @@ function RangeDiscoverScreen({
   return (
     <main className="screen booking-discover-screen range-discover-screen">
       <SectionHeading title="Book Again" />
-      <VenueCard {...mapVenueCardData("hamoni", () => go("hamoniRangeProfile"), () => openRangeBooking("hamoni"), true)} />
+      <VenueCard variant="default" {...mapVenueCardData("hamoni", () => go("hamoniRangeProfile"), () => openRangeBooking("hamoni"), true)} />
       <SectionHeading title="Near you" />
       <div className="near-you-range-list">
-        <VenueCard {...mapVenueCardData("hamoni", () => go("hamoniRangeProfile"), () => openRangeBooking("hamoni"), true)} />
-        <VenueCard {...mapVenueCardData("dgc-range", () => go("rangeProfile"), openRangeBooking)} />
-        <VenueCard {...mapVenueCardData("qutub-practice", () => go("rangeProfile"), openRangeBooking)} />
-        <VenueCard {...mapVenueCardData("lakeview-practice", () => go("bhalswaRangeProfile"), () => emitPrototypeEvent("Contact Lake View Golf Course", "Call reception on 8800639123 (10 AM–5 PM) to confirm range availability and booking procedures."))} />
+        <VenueCard variant="default" {...mapVenueCardData("hamoni", () => go("hamoniRangeProfile"), () => openRangeBooking("hamoni"), true)} />
+        <VenueCard variant="default" {...mapVenueCardData("dgc-range", () => go("rangeProfile"), openRangeBooking)} />
+        <VenueCard variant="default" {...mapVenueCardData("qutub-practice", () => go("rangeProfile"), openRangeBooking)} />
+        <VenueCard variant="default" {...mapVenueCardData("lakeview-practice", () => go("bhalswaRangeProfile"), () => emitPrototypeEvent("Contact Lake View Golf Course", "Call reception on 8800639123 (10 AM–5 PM) to confirm range availability and booking procedures."))} />
       </div>
     </main>
   )
