@@ -599,12 +599,6 @@ function OfficialDdaCourseProfileScreen({ venue, go }: { venue: "dwarka" | "bhal
           </div>
         </section>}
         <section className="facility-template-section">
-          <h2>Green fees</h2>
-          <div className="dda-pricing-table-wrap"><table className="dda-pricing-table"><thead><tr><th>Round</th><th>Weekday</th><th>Weekend</th></tr></thead><tbody>
-            <tr><th>18 holes</th><td>₹2,500</td><td>₹2,500</td></tr>
-          </tbody></table></div>
-        </section>
-        <section className="facility-template-section">
           <h2>Course amenities</h2>
           <div className="facility-amenities">
             {(dwarka ? ["Driving range", "Golf academy", "Clubhouse", "Caddies available", "Golf carts", "Pay & play"] : ["Driving range", "Practice green", "Chipping area", "Clubhouse", "Caddies available", "Golf carts"]).map((item) => <span key={item}><Icon name="check" size={15} />{item}</span>)}
@@ -662,6 +656,12 @@ function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScree
             <tr><td>Length</td><th>6,935 yards</th></tr>
             <tr><td>Typical pace</td><th>4 hours</th></tr>
           </tbody></table>
+        </section>
+        <section className="facility-template-section">
+          <h2>Green fees</h2>
+          <div className="dda-pricing-table-wrap"><table className="dda-pricing-table"><thead><tr><th>Round</th><th>Weekday</th><th>Weekend</th></tr></thead><tbody>
+            <tr><th>18 holes</th><td>₹2,500</td><td>₹2,500</td></tr>
+          </tbody></table></div>
         </section>
         <section className="facility-template-section">
           <h2>Course amenities</h2>
