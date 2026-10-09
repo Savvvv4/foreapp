@@ -1186,7 +1186,7 @@ function RangeProfileScreen({ go, openRangeBooking, hamoni = false, bhalswa = fa
           <h1>{name}</h1>
           <div className="facility-template-stat"><span><Icon name="star" size={15} /><strong>{rating}</strong> ({reviewCount} reviews)</span><span className="facility-location-stat"><span className="facility-location-icon"><Icon name="pin" size={15} /></span><strong>{area}</strong></span></div>
         </header>
-        <section className="facility-template-section"><h2>At a glance</h2><table className="facility-score"><tbody>{!bhalswa && <tr><td>Open</td><th>{hamoni ? "Tue – Sun, 6 AM – 10 PM" : "Daily, 6 AM – 9 PM"}</th></tr>}{facts.map(([label, value]) => <tr key={label}><td>{label}</td><th>{value}</th></tr>)}</tbody></table>{bhalswa && }</section>
+        <section className="facility-template-section"><h2>At a glance</h2><table className="facility-score"><tbody>{!bhalswa && <tr><td>Open</td><th>{hamoni ? "Tue – Sun, 6 AM – 10 PM" : "Daily, 6 AM – 9 PM"}</th></tr>}{facts.map(([label, value]) => <tr key={label}><td>{label}</td><th>{value}</th></tr>)}</tbody></table></section>
         <section className="facility-template-section"><h2>Rates</h2><div className="facility-rate-list">{rates.filter(([label]) => !/18 holes|13 holes/i.test(label)).slice(0, 5).map(([label, sub, price]) => <div className="facility-rate" key={label}><span><b>{label.replace(/\s*\([^)]*\)/g, "")}</b></span><strong>{price}</strong></div>)}</div></section>
         {hamoni && <section className="facility-template-section"><h2>Passes</h2><div className="facility-pass-list" role="radiogroup" aria-label="Choose a pass">{passes.map(([label, price, note], index) => {
           const selected = index === selectedPassIndex
