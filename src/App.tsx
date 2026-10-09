@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState } from "react"
+import VenueCard, { type VenueCardProps } from "./components/VenueCard"
+import "./venue-card.css"
 
 type Role = "golfer" | "coach"
 type GolferTab = "home" | "discover" | "play" | "improve" | "profile"
@@ -427,94 +429,20 @@ function ConfirmedBadge() {
   )
 }
 
-function CourseCard({
-  qutub = false,
-  compact = false,
-  onOpen,
-  onBook,
-}: {
-  qutub?: boolean
-  compact?: boolean
-  onOpen: () => void
-  onBook: () => void
-}) {
-  const [saved, setSaved] = useState(false)
-  const name = qutub ? "Qutub Golf Course" : "Delhi Golf Club"
-  const image = qutub ? photos.green : photos.course
-  const rating = qutub ? "4.4" : "4.7"
-  const distance = qutub ? "Mehrauli · 5.4 km" : "Lodhi Road · 2.1 km"
-  return (
-    <article className="course-card">
-      <button className="course-card-main" onClick={onOpen}>
-        <div className="course-card-image">
-          <img src={image} alt={`${name} fairway`} />
-          <span className="course-status-pill">{qutub ? "Public · 9 holes" : "Championship · 18 holes"}</span>
-          <span className="course-rating-pill"><Icon name="star" size={13} /> {rating}</span>
-        </div>
-        <div className="course-card-copy">
-          <div className="course-card-title-row">
-            <div>
-              <h3>{name}</h3>
-              <p className="course-location"><Icon name="pin" size={14} /> {distance}</p>
-            </div>
-            <button
-              type="button"
-              className={`course-save-button ${saved ? "saved" : ""}`}
-              onClick={(event) => { event.stopPropagation(); setSaved(!saved) }}
-              aria-label={saved ? "Remove saved course" : "Save course"}
-            >
-              <Icon name="heart" size={18} />
-            </button>
-          </div>
-          <div className="course-card-meta">
-            <span>{qutub ? "Public · 9 holes" : "Championship · 18 holes"}</span>
-            <strong>From {qutub ? "₹1,800" : "₹2,500"}</strong>
-          </div>
-        </div>
-      </button>
-      <div className="course-card-actions">
-        <button type="button" className="course-details-button" onClick={onOpen}>View details</button>
-        <button type="button" className="course-book-button" onClick={onBook}>Book tee time <Icon name="arrow" size={15} /></button>
-      </div>
-    </article>
-  )
-}
 
-function BookAgainCourseCard({
-  onOpen,
-  onBook,
-}: {
-  onOpen: () => void
-  onBook: () => void
-}) {
-  return (
-    <article className="course-card book-again-card">
-      <button className="course-card-main" onClick={onOpen}>
-        <div className="course-card-image">
-          <img src={photos.course} alt="Delhi Golf Club fairway" />
-          <span className="course-status-pill">Championship · 18 holes</span>
-          <span className="course-rating-pill"><Icon name="star" size={13} /> 4.7</span>
-        </div>
-        <div className="course-card-copy">
-          <div className="course-card-title-row">
-            <div>
-              <h3>Delhi Golf Club</h3>
-              <p className="course-location"><Icon name="pin" size={14} /> Lodhi Road · 2.1 km</p>
-            </div>
-            <span className="course-save-button" aria-hidden="true"><Icon name="heart" size={18} /></span>
-          </div>
-          <div className="course-card-meta">
-            <span>Last played 18 Aug · 4 players</span>
-            <strong>₹2,500 <small>/ round</small></strong>
-          </div>
-        </div>
-      </button>
-      <div className="course-card-actions">
-        <button type="button" className="course-details-button" onClick={onOpen}>View details</button>
-        <button type="button" className="course-book-button" onClick={onBook}>Book again <Icon name="arrow" size={15} /></button>
-      </div>
-    </article>
-  )
+type VenueKey = "dgc" | "qutub-course" | "dwarka" | "lakeview-course" | "hamoni" | "dgc-range" | "qutub-practice" | "lakeview-practice"
+function mapVenueCardData(key: VenueKey, onOpen: () => void, onBook: () => void, featured = false): VenueCardProps {
+  const venues: Record<VenueKey, Omit<VenueCardProps, "onOpen" | "onBook" | "featured">> = {
+    dgc: { venueType: "course", name: "Delhi Golf Club", image: photos.course, rating: 4.7, locality: "Lodhi Road", city: "New Delhi", distanceKm: 2.1, tags: [{ label: "18 holes" }, { label: "Championship" }], price: "₹2,500", priceUnit: "/ round" },
+    "qutub-course": { venueType: "course", name: "Qutub Golf Course", image: photos.green, rating: 4.4, locality: "Mehrauli", city: "New Delhi", distanceKm: 5.4, tags: [{ label: "9 holes" }, { label: "Public" }], price: "₹1,800", priceUnit: "/ round" },
+    dwarka: { venueType: "course", name: "DDA Dwarka Golf Course", image: photos.course, rating: 4.8, locality: "Sector 24, Dwarka", city: "New Delhi", tags: [{ label: "9 holes" }, { label: "Special offer", tone: "offer" }], price: "₹660", priceUnit: "/ 9 holes" },
+    "lakeview-course": { venueType: "course", name: "DDA Lake View Golf Course", image: photos.green, rating: 4.0, locality: "Bhalswa Lake", city: "North Delhi", tags: [{ label: "9 holes" }, { label: "Driving range" }], price: "₹440", priceUnit: "/ 9 holes" },
+    hamoni: { venueType: "practice", name: "Hamoni Golf Camp", image: photos.golfer, rating: 4.8, locality: "Sector 23A", city: "Gurugram", distanceKm: 4.1, tags: [{ label: "Driving range" }, { label: "Floodlit" }, { label: "Special offer", tone: "offer" }], price: "₹500", priceUnit: "/ person" },
+    "dgc-range": { venueType: "practice", name: "Delhi Golf Club Range", image: photos.golfer, rating: 4.6, locality: "Lodhi Road", city: "New Delhi", distanceKm: 2.8, tags: [{ label: "Driving range" }, { label: "Open now", tone: "positive" }], price: "₹900", priceUnit: "/ 60 min" },
+    "qutub-practice": { venueType: "practice", name: "Qutub Practice Centre", image: photos.green, rating: 4.4, locality: "Mehrauli", city: "New Delhi", distanceKm: 5.7, tags: [{ label: "Driving range" }, { label: "Short game area" }], price: "₹900", priceUnit: "/ 60 min" },
+    "lakeview-practice": { venueType: "practice", name: "DDA Lake View Golf Course", image: photos.green, rating: 4.0, locality: "Bhalswa Lake", city: "North Delhi", tags: [{ label: "Driving range" }, { label: "Pay & play" }], price: "₹82.50", priceUnit: "/ 50 balls" },
+  }
+  return { ...venues[key], featured, onOpen, onBook }
 }
 
 function DiscoverCourses({
@@ -538,53 +466,19 @@ function DiscoverCourses({
     <main className="screen booking-discover-screen">
       <SectionHeading title="Book Again" />
       <div className="book-again-course-list">
-        <OfficialCourseListingCard venue="dwarka" featured onOpen={() => go("dwarkaCourseProfile")} onBook={() => openBooking({ name: "DDA Dwarka Golf Course", image: photos.course, price: 660 })} />
+        <VenueCard {...mapVenueCardData("dwarka", () => go("dwarkaCourseProfile"), () => openBooking({ name: "DDA Dwarka Golf Course", image: photos.course, price: 660 }), true)} />
       </div>
       <SectionHeading title="Near you" />
       <div className="near-you-course-list">
-        <CourseCard onOpen={() => go("course")} onBook={() => openBooking(delhiCourse)} />
-        <CourseCard qutub onOpen={() => go("course")} onBook={() => openBooking(qutubCourse)} />
+        <VenueCard {...mapVenueCardData("dgc", () => go("course"), () => openBooking(delhiCourse))} />
+        <VenueCard {...mapVenueCardData("qutub-course", () => go("course"), () => openBooking(qutubCourse))} />
         <OfficialCourseListingCard venue="dwarka" featured onOpen={() => go("dwarkaCourseProfile")} onBook={() => openBooking({ name: "DDA Dwarka Golf Course", image: photos.course, price: 660 })} />
-        <OfficialCourseListingCard venue="bhalswa" onOpen={() => go("bhalswaCourseProfile")} onBook={() => openBooking({ name: "DDA Lake View Golf Course", image: photos.green, price: 440 })} />
+        <VenueCard {...mapVenueCardData("lakeview-course", () => go("bhalswaCourseProfile"), () => openBooking({ name: "DDA Lake View Golf Course", image: photos.green, price: 440 }))} />
       </div>
     </main>
   )
 }
 
-
-function OfficialCourseListingCard({ venue, featured = false, onOpen, onBook }: { venue: "dwarka" | "bhalswa"; featured?: boolean; onOpen: () => void; onBook: () => void }) {
-  const [saved, setSaved] = useState(false)
-  const dwarka = venue === "dwarka"
-  const name = dwarka ? "DDA Dwarka Golf Course" : "DDA Lake View Golf Course"
-  const subtitle = dwarka ? "Sector 24, Dwarka, New Delhi" : "Bhalswa Lake, Mukundpur, North Delhi"
-  const price = dwarka ? "₹660" : "₹440"
-  const rating = dwarka ? "4.8" : "4.0"
-  return <article className="course-card official-dda-course-card">
-    <div className="course-card-main" role="button" tabIndex={0} onClick={onOpen} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onOpen() } }}>
-      <div className="course-card-image">
-        <img src={dwarka ? photos.course : photos.green} alt={name} />
-        {featured && <span className="course-featured-pill"><Icon name="star" size={12} /> Featured</span>}
-        <span className="course-rating-pill"><Icon name="star" size={13} /> {rating}</span>
-      </div>
-      <div className="course-card-copy">
-        <div className="course-card-title-row">
-          <div><h3>{name}</h3><p className="course-location"><Icon name="pin" size={14} /> {subtitle}</p></div>
-          <button type="button" className={`course-save-button ${saved ? "saved" : ""}`} onClick={(event) => { event.stopPropagation(); setSaved((value) => !value) }} aria-label={saved ? "Remove saved course" : "Save course"} aria-pressed={saved}>
-            <Icon name="heart" size={18} />
-          </button>
-        </div>
-        <div className="course-card-meta">
-          <span>{dwarka ? "" : "9 holes · driving range"}</span>
-          <strong>From {price} <small>/ 9 holes</small></strong>
-        </div>
-      </div>
-    </div>
-    <div className="course-card-actions">
-      <button type="button" className="course-details-button" onClick={onOpen}>View details</button>
-      <button type="button" className="course-book-button" onClick={onBook}>Book tee time <Icon name="arrow" size={15} /></button>
-    </div>
-  </article>
-}
 
 function OfficialDdaCourseProfileScreen({ venue, go }: { venue: "dwarka" | "bhalswa"; go: (screen: CourseFlowScreen) => void }) {
   const dwarka = venue === "dwarka"
@@ -1140,71 +1034,6 @@ function BookingDetailScreen({ go }: { go: (screen: CourseFlowScreen) => void })
 
 type RangeAvailabilityState = "ready" | "loading" | "empty" | "offline"
 
-function RangeCard({
-  qutub = false,
-  hamoni = false,
-  bhalswa = false,
-  onOpen,
-  onBook,
-}: {
-  qutub?: boolean
-  hamoni?: boolean
-  bhalswa?: boolean
-  onOpen: () => void
-  onBook: () => void
-}) {
-  const [saved, setSaved] = useState(false)
-  const name = bhalswa ? "DDA Lake View Golf Course" : hamoni ? "Hamoni Golf Camp" : qutub ? "Qutub Practice Centre" : "Delhi Golf Club Range"
-  const image = qutub || bhalswa ? photos.green : photos.golfer
-  const rating = hamoni ? "4.8" : qutub ? "4.4" : bhalswa ? "4.0" : "4.6"
-  const distance = bhalswa ? "Bhalswa Lake, North Delhi" : hamoni ? "Sector 23A, Gurugram · 4.1 km" : qutub ? "Mehrauli · 5.7 km" : "Lodhi Road · 2.8 km"
-  const deal = bhalswa ? "DDA · Pay & play" : hamoni ? "Special offer" : qutub ? "" : "Open now"
-  const price = bhalswa ? "₹82.50" : hamoni ? "₹500" : "₹900"
-  const unit = bhalswa ? "/ 50 balls" : hamoni ? "/ person" : "/ 60 min"
-
-  return (
-    <article className={`range-card facility-template-card${hamoni ? " featured" : ""}`}>
-      <div
-        className="range-card-main"
-        role="button"
-        tabIndex={0}
-        onClick={onOpen}
-        onKeyDown={(event) => {
-          if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault()
-            onOpen()
-          }
-        }}
-        aria-label={`Open ${name} details`}
-      >
-        <div className="range-card-image">
-          <img src={image} alt={name} />
-          {hamoni && <span className="range-featured-pill"><Icon name="star" size={12} /> Featured</span>}
-          <span className="range-rating-pill"><Icon name="star" size={13} /> {rating}</span>
-        </div>
-        <div className="range-card-copy">
-          <div className="range-card-title-row">
-            <div>
-              <h3>{name}</h3>
-              <p className="range-location"><Icon name="pin" size={14} /> {distance}</p>
-            </div>
-            <button type="button" className={`range-save-button ${saved ? "saved" : ""}`} onClick={(event) => { event.stopPropagation(); setSaved((value) => !value) }} aria-label={saved ? "Remove saved facility" : "Save facility"} aria-pressed={saved}>
-              <Icon name="heart" size={18} />
-            </button>
-          </div>
-          <div className="range-card-meta">
-            <span className={`range-deal-pill${deal ? "" : " muted"}`}>{deal || "Available to book"}</span>
-            <span className="range-price-copy">From <strong>{price}</strong> <small>{unit}</small></span>
-          </div>
-        </div>
-      </div>
-      <div className="range-card-actions">
-        <button type="button" className="range-details-button" onClick={onOpen}>View details</button>
-        <button type="button" className="range-book-button" onClick={onBook}>{bhalswa ? "Contact range" : "Book a bay"} <Icon name="arrow" size={15} /></button>
-      </div>
-    </article>
-  )
-}
 function RangeDiscoverScreen({
   go,
   openSearch,
@@ -1219,13 +1048,13 @@ function RangeDiscoverScreen({
   return (
     <main className="screen booking-discover-screen range-discover-screen">
       <SectionHeading title="Book Again" />
-      <RangeCard hamoni onOpen={() => go("hamoniRangeProfile")} onBook={() => openRangeBooking("hamoni")} />
+      <VenueCard {...mapVenueCardData("hamoni", () => go("hamoniRangeProfile"), () => openRangeBooking("hamoni"), true)} />
       <SectionHeading title="Near you" />
       <div className="near-you-range-list">
         <RangeCard hamoni onOpen={() => go("hamoniRangeProfile")} onBook={() => openRangeBooking("hamoni")} />
-        <RangeCard onOpen={() => go("rangeProfile")} onBook={openRangeBooking} />
-        <RangeCard qutub onOpen={() => go("rangeProfile")} onBook={openRangeBooking} />
-        <RangeCard bhalswa onOpen={() => go("bhalswaRangeProfile")} onBook={() => emitPrototypeEvent("Contact Lake View Golf Course", "Call reception on 8800639123 (10 AM–5 PM) to confirm range availability and booking procedures.")} />
+        <VenueCard {...mapVenueCardData("dgc-range", () => go("rangeProfile"), openRangeBooking)} />
+        <VenueCard {...mapVenueCardData("qutub-practice", () => go("rangeProfile"), openRangeBooking)} />
+        <VenueCard {...mapVenueCardData("lakeview-practice", () => go("bhalswaRangeProfile"), () => emitPrototypeEvent("Contact Lake View Golf Course", "Call reception on 8800639123 (10 AM–5 PM) to confirm range availability and booking procedures."))} />
       </div>
     </main>
   )
