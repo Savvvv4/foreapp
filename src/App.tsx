@@ -534,7 +534,6 @@ function DiscoverCourses({
   return (
     <main className="screen booking-discover-screen">
       <SectionHeading title="Book Again" />
-      <RangeCard hamoni onOpen={() => go("hamoniRangeProfile")} onBook={() => openRangeBooking("hamoni")} />
       <SectionHeading title="Near you" />
       <div className="near-you-course-list">
         <CourseCard onOpen={() => go("course")} onBook={() => openBooking(delhiCourse)} />
@@ -617,116 +616,79 @@ function ResultsScreen({
 
 function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScreen) => void; openBooking: (course: BookingCourse, slot?: string) => void }) {
   const [saved, setSaved] = useState(false)
-
-  useEffect(() => {
-    document.body.classList.add("course-detail-open")
-    return () => document.body.classList.remove("course-detail-open")
-  }, [])
-
   const quickTimes = ["6:10 AM", "6:40 AM", "7:20 AM"]
 
   return (
-    <main className="course-profile-screen course-profile-screen-v6">
-      <section className="course-profile-hero course-profile-hero-v6">
+    <main className="course-profile-screen course-template-detail">
+      <section className="facility-template-hero">
         <img src={photos.course} alt="Delhi Golf Club fairway" />
-        <span className="course-hero-gradient" />
-        <button type="button" className="course-hero-control course-hero-back" onClick={() => go("discover")} aria-label="Go back"><Icon name="chevron" size={20} /></button>
-        <button type="button" className={`course-hero-control course-hero-save ${saved ? "saved" : ""}`} onClick={() => setSaved((value) => !value)} aria-label={saved ? "Remove course from saved" : "Save course"} aria-pressed={saved}><Icon name="heart" size={20} /></button>
-        <div className="course-hero-copy course-hero-copy-v6">
-          <span className="eyebrow light">DELHI · 18 HOLES</span>
-          <h1>Delhi Golf Club</h1>
-          <div className="course-hero-meta-v6">
-            <span><Icon name="star" size={14} /> <strong>4.7</strong> <em>312 reviews</em></span>
-            <span><Icon name="pin" size={14} /> Lodhi Road · 2.1 km</span>
-          </div>
-        </div>
+        <span className="facility-template-hero-gradient" />
+        <button type="button" className="facility-hero-button facility-hero-back" onClick={() => go("discover")} aria-label="Go back"><Icon name="chevron" size={20} /></button>
+        <button type="button" className={`facility-hero-button facility-hero-save ${saved ? "saved" : ""}`} onClick={() => setSaved((value) => !value)} aria-label={saved ? "Remove course from saved" : "Save course"} aria-pressed={saved}><Icon name="heart" size={20} /></button>
+        <div className="course-template-hero-label"><span className="eyebrow light">DELHI · 18 HOLES</span></div>
       </section>
-
-      <div className="course-profile-content course-profile-content-v6">
-        <section className="course-book-card-v6">
-          <div className="course-book-heading-v6">
-            <div>
-              <span className="eyebrow">TEE TIMES</span>
-              <h2>Next available</h2>
-              <p>Sat, 22 Aug</p>
-            </div>
-            <strong>From ₹2,500</strong>
+      <div className="facility-template-content">
+        <header className="facility-template-heading">
+          <h1>Delhi Golf Club</h1>
+          <div className="facility-template-stat">
+            <span><Icon name="star" size={15} /><strong>4.7</strong> (312 reviews)</span>
+            <span><span className="facility-location-icon"><Icon name="pin" size={15} /></span><strong>Lodhi Road, Delhi · 2.1 km</strong></span>
           </div>
-          <div className="course-quick-times-v6">
-            {quickTimes.map((slot) => (
-              <button key={slot} type="button" onClick={() => openBooking(delhiCourse, slot)}>
-                <strong>{slot}</strong>
-                <span>₹2,500</span>
-              </button>
-            ))}
+        </header>
+        <section className="facility-template-section">
+          <h2>Next available tee times</h2>
+          <div className="course-template-tee-times">
+            {quickTimes.map((slot) => <button type="button" key={slot} onClick={() => openBooking(delhiCourse, slot)}><span><strong>{slot}</strong><small>Sat, 22 Aug</small></span><b>₹2,500</b><Icon name="chevron" size={17} /></button>)}
           </div>
-          <button type="button" className="course-see-times-v6" onClick={() => openBooking(delhiCourse)}>
-            See all tee times <Icon name="arrow" size={14} />
-          </button>
+          <button type="button" className="course-template-all-times" onClick={() => openBooking(delhiCourse)}>See all tee times <Icon name="arrow" size={15} /></button>
         </section>
-
-        <section className="course-intro-v6">
-          <span className="eyebrow">ABOUT THE COURSE</span>
-          <h2>A Delhi classic, built for strategic golf.</h2>
-          <p>Tree-lined fairways, strategic bunkering and fast greens reward accuracy and thoughtful approach play.</p>
+        <section className="facility-template-section">
+          <h2>About the course</h2>
+          <p className="course-template-description">A Delhi classic, built for strategic golf. Tree-lined fairways, strategic bunkering and fast greens reward accuracy and thoughtful approach play.</p>
         </section>
-
-        <section className="course-facts course-facts-v6">
-          <div><strong>18</strong><span>Holes</span></div>
-          <div><strong>72</strong><span>Par</span></div>
-          <div><strong>6,935</strong><span>Yards</span></div>
-          <div><strong>4 hr</strong><span>Typical pace</span></div>
+        <section className="facility-template-section">
+          <h2>At a glance</h2>
+          <table className="facility-score"><tbody>
+            <tr><td>Holes</td><th>18</th></tr>
+            <tr><td>Par</td><th>72</th></tr>
+            <tr><td>Length</td><th>6,935 yards</th></tr>
+            <tr><td>Typical pace</td><th>4 hours</th></tr>
+          </tbody></table>
         </section>
-
-        <section className="course-section-v6">
-          <div className="course-section-heading-v6">
-            <h2>Good to know</h2>
-          </div>
-          <div className="course-essentials course-essentials-v6">
-            <span><Icon name="check" size={14} /> Caddies available</span>
-            <span><Icon name="check" size={14} /> Walking available</span>
-            <span><Icon name="check" size={14} /> Driving range</span>
-            <span><Icon name="check" size={14} /> Golf carts</span>
-            <span><Icon name="check" size={14} /> Club rental</span>
-            <span><Icon name="check" size={14} /> Restaurant</span>
+        <section className="facility-template-section">
+          <h2>Course amenities</h2>
+          <div className="facility-amenities">
+            {["Caddies available", "Walking available", "Driving range", "Golf carts", "Club rental", "Restaurant"].map((item) => <span key={item}><Icon name="check" size={15} />{item}</span>)}
           </div>
         </section>
-
-        <section className="course-location-feature course-location-feature-v6">
-          <div>
-            <span className="eyebrow">LOCATION</span>
-            <h2>Lodhi Road, Delhi</h2>
-            <p>2.1 km away · About 18 min drive</p>
+        <section className="facility-template-section">
+          <h2>Getting there</h2>
+          <div className="facility-map-graphic" role="img" aria-label="Map showing the location of Delhi Golf Club">
+            <span className="facility-map-road facility-map-road-a" aria-hidden="true" />
+            <span className="facility-map-road facility-map-road-b" aria-hidden="true" />
+            <span className="facility-map-road facility-map-road-c" aria-hidden="true" />
+            <span className="facility-map-park facility-map-park-a" aria-hidden="true" />
+            <span className="facility-map-park facility-map-park-b" aria-hidden="true" />
+            <span className="facility-map-label facility-map-label-a" aria-hidden="true">Lodhi Road</span>
+            <span className="facility-map-label facility-map-label-b" aria-hidden="true">Golf area</span>
+            <span className="facility-map-marker" aria-hidden="true"><Icon name="pin" size={18} /></span>
           </div>
-          <button className="directions-card course-directions-card" data-prototype="Directions" data-prototype-body="Maps and turn-by-turn directions are simulated here.">
-            <span><Icon name="map" size={22} /></span>
-            <div><strong>Delhi Golf Club</strong><small>Get directions</small></div>
-            <Icon name="directions" />
-          </button>
+          <button className="facility-directions" data-prototype="Directions" data-prototype-body="Maps and directions are simulated here."><span><b>Delhi Golf Club</b><small>Lodhi Road, Delhi</small></span><strong>Directions</strong></button>
         </section>
-
-        <section className="course-reviews-v6">
-          <div className="course-section-title-v6">
-            <div><span className="eyebrow">REVIEWS</span><h2>4.7 from 312 golfers</h2></div>
-            <span className="course-stars-v6">★★★★★</span>
-          </div>
+        <section className="facility-template-section facility-reviews">
+          <h2><Icon name="star" size={18} /> 4.7 from 312 golfers</h2>
           <blockquote>“Beautiful course, smooth check-in, and excellent caddies.”</blockquote>
           <small>Rohit S. · Played 2 weeks ago</small>
-          <button className="course-text-link" data-prototype="Course reviews" data-prototype-body="312 course reviews would open here.">Read all reviews <Icon name="arrow" size={14} /></button>
+          <button className="course-template-all-times" data-prototype="Course reviews" data-prototype-body="312 course reviews would open here.">Read all reviews <Icon name="arrow" size={14} /></button>
         </section>
       </div>
-
-      <div className="course-floating-book-v6 facility-action-bar-v7">
-        <button type="button" className="secondary-button" onClick={() => go("coachDiscover")}>
-          <Icon name="users" size={17} /> Coaches
-        </button>
-        <button type="button" className="primary-button" onClick={() => openBooking(delhiCourse)}>
-          Book tee time <Icon name="arrow" size={16} />
-        </button>
+      <div className="facility-template-action">
+        <button type="button" className="primary-button" onClick={() => openBooking(delhiCourse)}>Book tee time <Icon name="arrow" size={16} /></button>
       </div>
     </main>
   )
 }
+
 function BookingFlowModal({
   course, step, setStep, date, setDate, time, setTime, caddyMode, setCaddyMode,
   cartCount, setCartCount, paymentMethod, setPaymentMethod, close, pay,
