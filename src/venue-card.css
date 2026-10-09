@@ -22,10 +22,8 @@
 .venue-card__tags{display:flex;align-items:center;gap:6px;overflow:hidden;white-space:nowrap;min-width:0}
 .venue-card__tag{max-width:33.333%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:4px 8px;border-radius:6px;background:#eceae6;color:#403a35;font-size:12px;line-height:16px}
 .venue-card__tag--offer,.venue-card__tag--positive{background:#e8f5ec;color:#17663c}
-.venue-card__price-row{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;min-width:0;padding-top:4px}
 .venue-card__price{display:flex;align-items:baseline;gap:5px;flex-wrap:wrap;min-width:0}.venue-card__price>span{width:100%;color:#625b55;font-size:12px;line-height:16px}.venue-card__price strong{font-size:20px;line-height:24px;font-weight:700;white-space:nowrap}.venue-card__price small{font-size:12px;line-height:16px;color:#625b55}
 .venue-card__availability{display:flex;align-items:center;gap:6px;font-size:12px;line-height:16px;color:#17663c;text-align:right}.venue-card__availability i{width:7px;height:7px;border-radius:50%;background:#21834e;flex:0 0 7px}.venue-card__availability--limited{color:#8a4a0a}.venue-card__availability--limited i{background:#d48a22}.venue-card__availability--sold-out{color:#625b55}.venue-card__availability--sold-out i{background:#827a73}
-.venue-card__actions{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:12px;margin-top:4px}
 .venue-card__footer{display:flex;align-items:center;justify-content:space-between;gap:16px;min-width:0;padding-top:4px}
 .venue-card__footer .venue-card__price{display:block;flex:1 1 auto;min-width:0}
 .venue-card__footer .venue-card__price>span{display:block;width:auto;color:#625b55;font-size:12px;line-height:16px}
@@ -33,11 +31,10 @@
 .venue-card__footer .venue-card__price strong{flex:0 0 auto;font-size:20px;line-height:24px;white-space:nowrap}
 .venue-card__footer .venue-card__price small{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .venue-card__footer>.venue-card__primary{height:48px;min-width:150px;flex:0 0 auto;padding:0 12px;border-radius:10px;font:600 14px/20px Inter,sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;cursor:pointer}
-.venue-card__actions button{height:48px;min-width:0;border-radius:10px;padding:0 12px;font:600 14px/20px Inter,sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
-.venue-card__secondary{background:#fff;border:1px solid #d8d0ca;color:#302923}.venue-card__primary{background:var(--color-brand-500,#ff6e00);border:1px solid var(--color-brand-500,#ff6e00);color:#fff}.venue-card__primary:disabled{background:#ded8d2;border-color:#ded8d2;color:#655d56;cursor:not-allowed}.venue-card__primary svg{width:16px;height:16px}
+.venue-card__primary{background:var(--color-brand-500,#ff6e00);border:1px solid var(--color-brand-500,#ff6e00);color:#fff}.venue-card__primary:disabled{background:#ded8d2;border-color:#ded8d2;color:#655d56;cursor:not-allowed}.venue-card__primary svg{width:16px;height:16px}
 .venue-card button:focus-visible{outline:3px solid #302219;outline-offset:2px}.venue-card button:active:not(:disabled){transform:scale(.99)}
-.venue-card--compact{display:grid;grid-template-columns:120px minmax(0,1fr);gap:0}.venue-card--compact .venue-card__image{height:100%;min-height:150px;aspect-ratio:auto;border-radius:15px 0 0 15px}.venue-card--compact .venue-card__featured{display:none}.venue-card--compact .venue-card__body{padding:12px;gap:6px}.venue-card--compact .venue-card__title-row h3{font-size:16px;line-height:22px}.venue-card--compact .venue-card__favorite{width:40px;height:40px;min-width:40px}.venue-card--compact .venue-card__price strong{font-size:18px}.venue-card--compact .venue-card__actions{grid-template-columns:1fr;margin-top:0}.venue-card--compact .venue-card__secondary{display:none}.venue-card--carousel{height:100%}
-@media(max-width:390px){.venue-card__body{padding:12px}.venue-card__actions{gap:8px}.venue-card__actions button{padding:0 8px;font-size:13px}.venue-card__price strong{font-size:19px}.venue-card__availability{max-width:48%;font-size:11px}}
+.venue-card--carousel{height:100%}
+@media(max-width:390px){.venue-card__body{padding:12px}.venue-card__footer{gap:12px}.venue-card__footer>.venue-card__primary{min-width:150px;padding:0 10px}.venue-card__price strong{font-size:20px}}
 @media(prefers-color-scheme:dark){.venue-card{background:var(--surface,#fff);color:var(--ink,#26211d)}}
 
 .venue-card-preview{max-width:1200px;margin:0 auto;padding:24px;color:var(--ink,#26211d)}.venue-card-preview>h1{font-size:28px;line-height:34px}.venue-card-preview>p{color:var(--muted,#625b55)}.venue-card-preview__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.venue-card-preview__grid section{min-width:0}.venue-card-preview__grid h2{font-size:16px;line-height:22px;margin:0 0 10px}@media(max-width:700px){.venue-card-preview__grid{grid-template-columns:minmax(0,1fr)}}
