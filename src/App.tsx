@@ -355,6 +355,7 @@ type CourseFlowScreen =
   | "discover"
   | "results"
   | "course"
+  | "venueDetails"
   | "dwarkaCourseProfile"
   | "bhalswaCourseProfile"
   | "confirmation"
@@ -451,6 +452,7 @@ function DiscoverCourses({
   openSearch,
   openBooking,
   openRangeBooking,
+  openVenueDetails,
   mode,
   setMode,
 }: {
@@ -459,6 +461,7 @@ function DiscoverCourses({
   openSearch: () => void
   openBooking: (course: BookingCourse, slot?: string) => void
   openRangeBooking: (range?: RangeVenue) => void
+  openVenueDetails: (key: VenueKey) => void
   mode: "courses" | "ranges" | "coaches"
   setMode: (mode: "courses" | "ranges" | "coaches") => void
 }) {
@@ -466,14 +469,14 @@ function DiscoverCourses({
     <main className="screen booking-discover-screen">
       <SectionHeading title="Book Again" />
       <div className="book-again-course-list">
-        <VenueCard variant="default" {...mapVenueCardData("dwarka", () => go("dwarkaCourseProfile"), () => openBooking({ name: "DDA Dwarka Golf Course", image: photos.course, price: 660 }), true)} />
+        <VenueCard variant="default" {...mapVenueCardData("dwarka", () => openVenueDetails("dwarka"), () => openBooking({ name: "DDA Dwarka Golf Course", image: photos.course, price: 660 }), true)} />
       </div>
       <SectionHeading title="Near you" />
       <div className="near-you-course-list">
-        <VenueCard variant="default" {...mapVenueCardData("dgc", () => go("course"), () => openBooking(delhiCourse))} />
-        <VenueCard variant="default" {...mapVenueCardData("qutub-course", () => go("course"), () => openBooking(qutubCourse))} />
+        <VenueCard variant="default" {...mapVenueCardData("dgc", () => openVenueDetails("dgc"), () => openBooking(delhiCourse))} />
+        <VenueCard variant="default" {...mapVenueCardData("qutub-course", () => openVenueDetails("qutub-course"), () => openBooking(qutubCourse))} />
         <VenueCard variant="default" {...mapVenueCardData("dwarka", () => go("dwarkaCourseProfile"), () => openBooking({ name: "DDA Dwarka Golf Course", image: photos.course, price: 660 }), true)} />
-        <VenueCard variant="default" {...mapVenueCardData("lakeview-course", () => go("bhalswaCourseProfile"), () => openBooking({ name: "DDA Lake View Golf Course", image: photos.green, price: 440 }))} />
+        <VenueCard variant="default" {...mapVenueCardData("lakeview-course", () => openVenueDetails("lakeview-course"), () => openBooking({ name: "DDA Lake View Golf Course", image: photos.green, price: 440 }))} />
       </div>
     </main>
   )
@@ -643,6 +646,50 @@ function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScree
     </main>
   )
 }
+
+
+type VenueDetailInfo = {
+ address:string; description:string; facts:Array<[string,string]>; rates:Array<[string,string,string]>;
+ passes:Array<[string,string,string]>; passNote:string; amenities:string[]; hours:Array<[string,string]>;
+ policies:Array<[string,string]>; reviews:Array<[string,string]>; coaches:Array<[string,string,string,string]>;
+}
+const venueDetailInfo:Record<VenueKey,VenueDetailInfo> = {
+ dgc:{address:"Delhi Golf Club, Lodhi Road, New Delhi",description:"A historic Delhi golf destination with tree-lined fairways, strategic bunkering and a classic parkland feel. The Lodhi Course is the main 18-hole layout; the club also has the 9-hole Peacock Course and a practice driving range.",facts:[["Holes","18-hole Lodhi Course"],["Par","72"],["Typical round","Around 4 hours"],["Setting","Tree-lined parkland"]],rates:[["18 holes","Weekday · sample price","₹2,500"],["18 holes","Weekend · sample price","₹2,500"],["Caddie","Per round · sample price","₹500"],["Golf cart","Per round · sample price","₹800"],["Club rental","Per set · sample price","₹1,000"]],passes:[["5 rounds","₹11,250","Sample bundle · save 10%"],["10 rounds","₹21,000","Sample bundle · save 16%"]],passNote:"Illustrative bundles. Confirm eligibility and current rates with the club.",amenities:["Practice driving range","Pro shop","Caddies","Golf carts","Dining","Changing rooms","Fitness facilities","Clubhouse"],hours:[["Course","Tee times vary by day"],["Practice range","Confirm current hours with the club"]],policies:[["Dress code","Golf attire and appropriate golf shoes are recommended. Confirm club-specific rules."],["Cancellation","Sample policy: changes depend on the tee-time provider and club terms."],["What to bring","Golf shoes, collared golf shirt and personal clubs if preferred."]],reviews:[["Rohit S.","Beautiful course, smooth check-in and excellent caddies."],["Meera K.","A memorable round in the middle of Delhi."],["Arjun M.","A classic course; confirm booking details ahead of time."]],coaches:[["Rohan Malhotra","PGA Professional · 12 years","4.9","Course strategy · Short game"],["Ananya Sethi","Golf coach · 8 years","4.8","Putting · Beginners"]]},
+ "qutub-course":{address:"Qutab Golf Course, Press Enclave Road, New Delhi 110017",description:"Delhi's first public golf course opened with nine holes in 2000 and expanded to 18 holes in 2002. It has a night-lit, double-decker driving range.",facts:[["Holes","18"],["Par","70"],["Length","6,184 yards"],["Course area","107 acres"]],rates:[["9 holes · Indian citizen","Weekday · incl. GST","₹1,100"],["9 holes · Indian citizen","Weekend / holiday · incl. GST","₹2,200"],["18 holes · Indian citizen","Weekday · incl. GST","₹1,980"],["18 holes · Indian citizen","Weekend / holiday · incl. GST","₹3,960"],["Golf cart","9 / 18 holes","₹440 / ₹880"],["Caddie","9 / 18 holes","₹300 / ₹500"]],passes:[["Monthly pay & play","₹25,960","Published monthly total incl. GST"],["Student concession","50% concession","Up to age 18, subject to eligibility"]],passNote:"Published fees can change. Confirm the current fee category and tee-time availability with Qutab Golf Course.",amenities:["18-hole course","Driving range","Night-lit bays","Putting area","Pro shop","Simulator room","Cafeteria","Clubhouse"],hours:[["Course","Tee-off times vary; check current notices"],["Driving range","Summer 6 AM–1 AM · Winter 6:30 AM–1 AM"],["Weekly closure","Driving range closed Wednesday"]],policies:[["Dress code","Proper golf attire and golf/sports shoes are required."],["Cancellation","Check the terms of the official booking channel."],["What to bring","Golf shoes, appropriate clothing and booking confirmation."]],reviews:[["Ankit R.","A public course with a championship feel and useful practice range."],["Meera S.","The night-lit range is convenient for evening practice."],["Vikram T.","Check current tee-off notices before travelling."]],coaches:[["Arjun Khanna","Coach profile · sample","4.9","Course management · Scoring"],["Neha Bedi","Coach profile · sample","4.8","Short game · Putting"]]},
+ dwarka:{address:"Sector 24, Dwarka, New Delhi 110075",description:"An expansive DDA golf facility in Sector 24, Dwarka, with an 18-hole layout, driving range and golf training facilities. Pay-and-play options sit alongside membership offerings.",facts:[["Holes","18"],["Par","72"],["Length","7,377 yards"],["Practice","Driving range and golf academy"]],rates:[["9 holes","Weekday · prototype rate","₹660"],["9 holes","Weekend · prototype rate","₹1,320"],["13 holes","Weekday · prototype rate","₹900"],["18 holes","Weekday · prototype rate","₹1,080"],["18 holes","Weekend · prototype rate","₹2,160"]],passes:[["5 rounds","₹4,950","Illustrative bundle"],["10 rounds","₹9,000","Illustrative bundle"]],passNote:"Pass options are illustrative; verify eligibility and rates before purchase.",amenities:["Driving range","Golf academy","Clubhouse","Caddies","Golf carts","Pay & play","Parking"],hours:[["Course","Confirm tee-off schedule before visiting"],["Last tee-off","Varies by season and availability"]],policies:[["Dress code","Golf attire and golf shoes are recommended; confirm current DDA rules."],["Cancellation","Sample policy: changes depend on selected tee-time terms."],["What to bring","Booking confirmation, golf shoes and appropriate golf attire."]],reviews:[["Rohit S.","Good value for a practice or casual round in Dwarka."],["Karan P.","A spacious layout; check tee-time details before leaving."],["Ananya D.","Useful to have course play and practice facilities together."]],coaches:[["Kabir Mehra","Golf coach · sample","4.8","Beginners · Course basics"]]},
+ "lakeview-course":{address:"Near Bhalswa Lake, Outer Ring Road, Mukundpur, New Delhi 110042",description:"A public pay-and-play course beside Bhalswa Lake with a driving range, practice green, chipping area and clubhouse. Confirm the current course and range schedule before travelling.",facts:[["Holes","9"],["Course area","79 acres"],["Practice","Driving range, putting and chipping"],["Clubhouse","Hall, terrace and lawns"]],rates:[["9 holes · non-government","Weekday","₹440"],["9 holes · non-government","Weekend / holiday","₹825"],["18 holes · non-government","Weekday","₹770"],["18 holes · non-government","Weekend / holiday","₹1,540"],["Driving range entry","Indian golfer","₹82.50"],["50-ball bucket","Range","₹82.50"],["Coaching","30 minutes","₹650"]],passes:[["5 visits","₹390","Illustrative range bundle"],["10 visits","₹750","Illustrative range bundle"]],passNote:"Passes are sample prototype offers. Confirm current fees with reception.",amenities:["9-hole course","Driving range","Putting green","Chipping area","Practice bunker","Clubhouse","Parking"],hours:[["Course","Confirm current operating hours"],["Driving range","Call reception for same-day availability"]],policies:[["Dress code","Golf or sports clothing and golf shoes are recommended."],["Cancellation","Confirm current refund and cancellation terms with reception."],["What to bring","Golf shoes, water and booking confirmation."]],reviews:[["Vikram T.","A practical option for a short round and range session."],["Meera S.","Useful practice areas for working on the short game."],["Rohan K.","Call ahead to confirm operating hours and availability."]],coaches:[["Rohan Malhotra","Golf coach · sample","4.7","Swing basics · Short game"]]},
+ hamoni:{address:"CK Farm, Carterpuri, Sector 23A, Gurugram",description:"An open-air golf practice venue with grass and covered bays, floodlights, launch monitors and options for regular practice. Entry, ball buckets and club rental are priced separately.",facts:[["Bays","105"],["Target greens","9"],["Practice greens","4"],["Bunkers","19"]],rates:[["Entry fee","Per person","₹500"],["Bag of 50 Srixon balls","Per bag","₹150"],["Club rental","Per club","₹200"],["Coach session","30 minutes · sample price","₹1,500"]],passes:[["1 month","₹12,000","Pay monthly"],["3 months","₹24,000","Sample pass · most popular"],["6 months","₹50,000","Sample pass · save 31%"],["1 year","₹80,000","Sample pass · best value"]],passNote:"Pass pricing and benefits should be confirmed with Hamoni before purchase.",amenities:["Grass bays","Covered bays","Floodlights","Launch monitors","Pro shop","Parking","Coaching","Practice greens"],hours:[["Monday","Closed"],["Tuesday–Sunday","6 AM–10 PM"]],policies:[["Cancellation","Sample policy: reschedule before your slot; confirm terms at checkout."],["What is included","Entry covers access; balls and club rental are charged separately in this prototype."],["What to bring","Golf shoes or trainers and your clubs, if you have them."]],reviews:[["Ankit R.","Plenty of space, good mats and launch monitors were easy to reserve."],["Meera S.","Floodlit evenings are convenient for practice."],["Vikram T.","Clean bays and a useful setup for regular range sessions."]],coaches:[["Rohan Malhotra","PGA Professional · 12 years","4.9","Swing basics · Short game"],["Ananya Sethi","Junior & beginner coach · 8 years","4.8","Grip · Stance · Kids programs"]]},
+ "dgc-range":{address:"Delhi Golf Club, Lodhi Road, New Delhi",description:"A practice option associated with Delhi Golf Club. Range sessions are represented as bookable in this prototype; confirm access rules and availability with the club.",facts:[["Bays","60 · sample estimate"],["Bay type","Covered and open · sample"],["Floodlit","Yes · sample"],["Technology","Launch monitor · sample"]],rates:[["60-minute bay","Per session · sample price","₹900"],["90-minute bay","Per session · sample price","₹1,250"],["Launch monitor","Per session · sample price","₹1,200"],["Club rental","Per club · sample price","₹200"]],passes:[["5 sessions","₹4,000","Sample bundle"],["10 sessions","₹7,500","Sample bundle"]],passNote:"Illustrative prices and packages, not a verified Delhi Golf Club rate card.",amenities:["Practice bays","Club rental","Coaching","Parking","Pro shop access"],hours:[["Opening hours","Confirm directly with Delhi Golf Club"],["Access","Club access rules may apply"]],policies:[["Access","Check whether your booking includes range access."],["Cancellation","Sample policy: reschedule based on the slot terms."],["What to bring","Golf clubs, golf shoes and booking confirmation."]],reviews:[["Rohit S.","Convenient for a focused session before a round."],["Karan P.","Confirm access and bay type when booking."],["Ananya D.","A useful option for short practice sessions."]],coaches:[["Rohan Malhotra","PGA Professional · sample","4.9","Swing basics · Short game"]]},
+ "qutub-practice":{address:"Qutab Golf Course, Press Enclave Road, New Delhi 110017",description:"A double-decker, night-lit driving range with 28 bays across two levels, a putting area, pro shop, simulator room and cafeteria. The range is closed on Wednesdays.",facts:[["Bays","28 · two levels"],["Length","250 yards"],["Lighting","Night-lit"],["Weekly closure","Wednesday"]],rates:[["Range entry","Non-member · incl. GST","₹165"],["Range entry","Foreigner / NRI · incl. GST","₹330"],["Bucket of 50 balls","Incl. GST","₹110"],["Simulator","1 hour · one person","₹1,000"],["Coaching","Depends on coach category","₹350–₹1,400"]],passes:[["Monthly pay & play","₹25,960","Published monthly total incl. GST"],["5 range visits","₹825","Illustrative bundle"]],passNote:"Published entry and bucket rates are from DDA's driving-range information; visit bundles are sample offers.",amenities:["28 driving bays","Night-lit range","Putting area","Pro shop","Simulator room","Cafeteria","Coaching"],hours:[["Summer (Mar–Nov)","6 AM–1 AM"],["Winter (Dec–Feb)","6:30 AM–1 AM"],["Weekly closure","Wednesday"]],policies:[["Range rules","Follow the range's published safety rules and staff instructions."],["Cancellation","Check terms of the selected booking or simulator session."],["What to bring","Clubs and golf shoes; confirm rentals in advance."]],reviews:[["Ankit R.","The night-lit range makes after-work practice possible."],["Meera S.","Useful mix of bays, simulator and putting area."],["Vikram T.","Remember that the range is closed on Wednesdays."]],coaches:[["Arjun Khanna","Coach profile · sample","4.9","Driving · Launch monitor"],["Neha Bedi","Coach profile · sample","4.8","Short game · Beginners"]]},
+ "lakeview-practice":{address:"Near Bhalswa Lake, Outer Ring Road, Mukundpur, New Delhi 110042",description:"Practice facilities associated with DDA Lake View Golf Course. Range access and same-day availability should be confirmed with reception before travelling.",facts:[["Course","9 holes"],["Range entry","₹82.50"],["Ball bucket","50 balls"],["Practice areas","Putting and chipping"]],rates:[["Driving range entry · Indian","Per visit · GST included","₹82.50"],["Driving range entry · Foreigner / NRI","Per visit · GST included","₹165"],["Bucket of 50 balls","GST included","₹82.50"],["Golf cart · 9 holes","Per round","₹440"],["Caddie · 9 holes","Per round","₹330"],["Coaching","30 minutes","₹650"]],passes:[["5 buckets","₹390","Illustrative bundle"],["10 buckets","₹750","Illustrative bundle"]],passNote:"Pass options are illustrative. Confirm current fees with reception.",amenities:["Driving range","9-hole course","Putting green","Chipping area","Practice bunker","Clubhouse","Parking"],hours:[["Opening hours","Confirm current hours with reception"],["Same-day access","Call ahead to confirm"]],policies:[["Availability","Range operations and same-day access may vary; contact reception before travelling."],["Cancellation","Confirm current refund and cancellation terms with reception."],["What to bring","Golf shoes, water and booking confirmation."]],reviews:[["Vikram T.","A practical place for range practice and a short round."],["Meera S.","Call ahead to confirm the range is operating."],["Rohan K.","The short-game areas are useful for focused practice."]],coaches:[["Rohan Malhotra","Golf coach · sample","4.7","Swing basics · Short game"]]}
+}
+function VenueDetailsScreen({venueKey,go,openBooking,openRangeBooking}:{venueKey:VenueKey;go:(screen:CourseFlowScreen)=>void;openBooking:(course:BookingCourse,slot?:string)=>void;openRangeBooking:(range?:RangeVenue)=>void}) {
+ const venue=mapVenueCardData(venueKey,()=>{},()=>{}), info=venueDetailInfo[venueKey]
+ const [saved,setSaved]=useState(false),[galleryIndex,setGalleryIndex]=useState(0),[selectedPass,setSelectedPass]=useState<number|null>(null),[expandedInfo,setExpandedInfo]=useState<number|null>(0)
+ const images=[venue.image||photos.course,venue.venueType==="course"?photos.green:photos.course,venue.image||photos.course], facility=venue.venueType==="practice"
+ const book=()=>{if(facility)openRangeBooking(venueKey==="hamoni"?"hamoni":venueKey==="lakeview-practice"?"bhalswa":"delhi");else openBooking({name:venue.name,image:venue.image||photos.course,price:venueKey==="qutub-course"?1980:venueKey==="dwarka"?1080:venueKey==="lakeview-course"?440:2500})}
+ const scrollTo=(id:string)=>document.getElementById(id)?.scrollIntoView({behavior:"smooth",block:"start"})
+ const reviews=venueKey==="dgc"?312:venueKey==="qutub-course"?184:venueKey==="dwarka"?128:venueKey==="lakeview-course"?96:venueKey==="hamoni"?228:venueKey==="qutub-practice"?142:venueKey==="lakeview-practice"?96:184
+ return <main className="course-profile-screen course-template-detail range-template-detail venue-details-screen">
+  <section className="facility-template-hero venue-detail-hero" onClick={()=>setGalleryIndex(i=>(i+1)%images.length)}>
+   <img src={images[galleryIndex]} alt={venue.name+" grounds"}/><span className="facility-template-hero-gradient"/>
+   <button type="button" className="facility-hero-button facility-hero-back" onClick={e=>{e.stopPropagation();go(facility?"rangeDiscover":"discover")}} aria-label="Go back"><Icon name="chevron" size={20}/></button>
+   <div className="venue-detail-hero-actions"><button type="button" className="facility-hero-button" onClick={e=>{e.stopPropagation();const url=window.location.href;if(navigator.share)navigator.share({title:venue.name,text:"View "+venue.name+" on Fore",url}).catch(()=>undefined);else{navigator.clipboard?.writeText(url).catch(()=>undefined);emitPrototypeEvent("Link copied","The link to "+venue.name+" was copied.")}}} aria-label={"Share "+venue.name}><Icon name="share" size={18}/></button><button type="button" className={"facility-hero-button facility-hero-save "+(saved?"saved":"")} onClick={e=>{e.stopPropagation();setSaved(v=>!v)}} aria-label={saved?"Remove from saved":"Save venue"} aria-pressed={saved}><Icon name="heart" size={20}/></button></div>
+   <div className="venue-detail-hero-copy"><span className="eyebrow light">{facility?"PRACTICE FACILITY":"GOLF COURSE"} · {venue.locality.toUpperCase()}</span><h1>{venue.name}</h1><div><span><Icon name="star" size={14}/> {venue.rating} ({reviews} reviews)</span><span><Icon name="pin" size={14}/> {venue.distanceKm?venue.distanceKm.toFixed(1)+" km away":"Delhi NCR"}</span></div></div>
+   <div className="venue-detail-dots" aria-hidden="true">{images.map((_,i)=><i key={i} className={galleryIndex===i?"active":""}/>)}</div>
+  </section>
+  <div className="facility-template-content venue-detail-content">
+   <div className="venue-detail-tabs" role="navigation" aria-label="Venue details sections">{[["overview","Overview"],["pricing","Pricing"],["coaches","Coaches"],["reviews","Reviews & info"]].map(([id,label])=><button key={id} type="button" onClick={()=>scrollTo("venue-detail-"+id)}>{label}</button>)}</div>
+   <header className="facility-template-heading"><h1>{venue.name}</h1><div className="facility-template-stat"><span><Icon name="star" size={15}/><strong>{venue.rating}</strong> ({reviews} reviews)</span><span className="facility-location-stat"><span className="facility-location-icon"><Icon name="pin" size={15}/></span><strong>{venue.locality}{venue.city?", "+venue.city:""}</strong></span></div></header>
+   <div id="venue-detail-overview" className="venue-detail-anchor"><section className="facility-template-section venue-detail-intro"><h2>About {facility?"the facility":"the course"}</h2><p>{info.description}</p></section><section className="facility-template-section"><h2>At a glance</h2><table className="facility-score"><tbody>{info.facts.map(([label,value])=><tr key={label}><th>{label}</th><td>{value}</td></tr>)}</tbody></table></section><section className="facility-template-section"><h2>{facility?"On-site facilities":"Course amenities"}</h2><div className="facility-amenities">{info.amenities.map(item=><span key={item}><Icon name="check" size={15}/>{item}</span>)}</div></section></div>
+   <div id="venue-detail-pricing" className="venue-detail-anchor"><section className="facility-template-section"><h2>{facility?"Rates":"Green fees"}</h2><div className="facility-rate-list">{info.rates.map(([label,sub,price])=><div className="facility-rate" key={label+sub}><span><b>{label}</b><small>{sub}</small></span><strong>{price}</strong></div>)}</div><p className="facility-section-sub">Sample rates are marked where official pricing could not be verified. Confirm current fees before booking.</p></section><section className="facility-template-section"><h2>{facility?"Practice passes":"Multi-round passes"}</h2><p className="facility-section-sub">{info.passNote}</p><div className="facility-pass-list" role="radiogroup" aria-label="Choose a pass">{info.passes.map(([label,price,note],i)=><button type="button" role="radio" aria-checked={selectedPass===i} className={"facility-pass "+(selectedPass===i?"selected":"")} key={label} onClick={()=>setSelectedPass(selectedPass===i?null:i)}><span className="facility-pass-radio" aria-hidden="true"/><span className="facility-pass-copy"><b>{label}</b><small>{note}</small></span><span className="facility-pass-price"><strong>{price}</strong></span></button>)}</div>{selectedPass!==null&&<button type="button" className="primary-button facility-pass-button" onClick={()=>emitPrototypeEvent("Pass selected",info.passes[selectedPass][0]+" selected for "+venue.name+". Confirm details with the venue before purchase.")}>Continue with {info.passes[selectedPass][0]}</button>}</section></div>
+   <div id="venue-detail-coaches" className="venue-detail-anchor"><section className="facility-template-section"><h2>Coaches at this venue</h2><div className="venue-detail-coaches">{info.coaches.map(([name,credential,rating,focus])=><article className="facility-coach-card" key={name}><Avatar initials={name.split(" ").map(p=>p[0]).join("")}/><span><b>{name}</b><small>{credential} · {rating}</small><small>{focus}</small></span><Icon name="chevron" size={18}/></article>)}</div><button type="button" className="course-template-all-times venue-detail-see-coaches" onClick={()=>go("coachDiscover")}>Explore coaches <Icon name="arrow" size={15}/></button></section></div>
+   <div id="venue-detail-reviews" className="venue-detail-anchor"><section className="facility-template-section facility-reviews"><h2><Icon name="star" size={18}/> {venue.rating} from golfers</h2>{info.reviews.map(([author,quote])=><blockquote key={author}>“{quote}”<small>{author} · Sample review</small></blockquote>)}</section><section className="facility-template-section"><h2>Good to know</h2><div className="venue-detail-accordion">{[["Opening hours",info.hours.map(([day,time])=>day+": "+time).join(" · ")],...info.policies].map(([title,body],i)=><div key={title}><button type="button" aria-expanded={expandedInfo===i} onClick={()=>setExpandedInfo(expandedInfo===i?null:i)}>{title}<Icon name="chevron" size={16}/></button>{expandedInfo===i&&<p>{body}</p>}</div>)}</div></section><section className="facility-template-section venue-detail-getting-there"><h2>Getting there</h2><div className="facility-map-graphic" role="img" aria-label={"Map graphic showing "+venue.name}><span className="facility-map-road facility-map-road-a"/><span className="facility-map-road facility-map-road-b"/><span className="facility-map-road facility-map-road-c"/><span className="facility-map-park facility-map-park-a"/><span className="facility-map-park facility-map-park-b"/><span className="facility-map-label facility-map-label-a">{venue.locality}</span><span className="facility-map-label facility-map-label-b">Golf</span><span className="facility-map-marker"><Icon name="pin" size={18}/></span></div><button className="facility-directions" type="button" onClick={()=>emitPrototypeEvent("Directions","Open directions to "+venue.name+": "+info.address)}><span><b>{venue.name}</b><small>{info.address}</small></span><strong>Directions</strong></button></section></div>
+  </div>
+  <div className="facility-template-action venue-detail-sticky-cta"><div><small>{selectedPass!==null?info.passes[selectedPass][0]:"Starting price"}</small><b>{selectedPass!==null?info.passes[selectedPass][1]:venue.price}</b></div><button type="button" className="primary-button" onClick={book}>{selectedPass!==null?"Select pass":facility?"Book a bay":"Book tee time"} <Icon name="arrow" size={16}/></button></div>
+ </main>
+}
+
 
 function BookingFlowModal({
   course, step, setStep, date, setDate, time, setTime, caddyMode, setCaddyMode,
@@ -1039,22 +1086,24 @@ function RangeDiscoverScreen({
   openSearch,
   setMode,
   openRangeBooking,
+  openVenueDetails,
 }: {
   go: (screen: CourseFlowScreen) => void
   openSearch: () => void
   setMode: (mode: "courses" | "ranges" | "coaches") => void
   openRangeBooking: (range?: RangeVenue) => void
+  openVenueDetails: (key: VenueKey) => void
 }) {
   return (
     <main className="screen booking-discover-screen range-discover-screen">
       <SectionHeading title="Book Again" />
-      <VenueCard variant="default" {...mapVenueCardData("hamoni", () => go("hamoniRangeProfile"), () => openRangeBooking("hamoni"), true)} />
+      <VenueCard variant="default" {...mapVenueCardData("hamoni", () => openVenueDetails("hamoni"), () => openRangeBooking("hamoni"), true)} />
       <SectionHeading title="Near you" />
       <div className="near-you-range-list">
         <VenueCard variant="default" {...mapVenueCardData("hamoni", () => go("hamoniRangeProfile"), () => openRangeBooking("hamoni"), true)} />
-        <VenueCard variant="default" {...mapVenueCardData("dgc-range", () => go("rangeProfile"), openRangeBooking)} />
-        <VenueCard variant="default" {...mapVenueCardData("qutub-practice", () => go("rangeProfile"), openRangeBooking)} />
-        <VenueCard variant="default" {...mapVenueCardData("lakeview-practice", () => go("bhalswaRangeProfile"), () => emitPrototypeEvent("Contact Lake View Golf Course", "Call reception on 8800639123 (10 AM–5 PM) to confirm range availability and booking procedures."))} />
+        <VenueCard variant="default" {...mapVenueCardData("dgc-range", () => openVenueDetails("dgc-range"), openRangeBooking)} />
+        <VenueCard variant="default" {...mapVenueCardData("qutub-practice", () => openVenueDetails("qutub-practice"), openRangeBooking)} />
+        <VenueCard variant="default" {...mapVenueCardData("lakeview-practice", () => openVenueDetails("lakeview-practice"), () => emitPrototypeEvent("Contact Lake View Golf Course", "Call reception on 8800639123 (10 AM–5 PM) to confirm range availability and booking procedures."))} />
       </div>
     </main>
   )
@@ -1725,6 +1774,7 @@ function CourseBookingPrototype({
     initialSection === "Coaches" ? "coachDiscover" : "discover")
   const initialMode = initialSection === "Facilities" ? "ranges" : initialSection === "Coaches" ? "coaches" : "courses"
   const [screen, setScreen] = useState<CourseFlowScreen>(initialScreen)
+  const [selectedVenueKey, setSelectedVenueKey] = useState<VenueKey>("dgc")
   const [mode, setMode] = useState<"courses" | "ranges" | "coaches">(initialMode)
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
@@ -1787,7 +1837,7 @@ function CourseBookingPrototype({
 
   useEffect(() => {
     const active = screen !== "discover" || bookingOpen || filtersOpen || searchOpen || paymentOpen
-    const section: DiscoverSection = screen === "hamoniRangeProfile" || screen.startsWith("range") ? "Facilities" : screen.startsWith("coach") ? "Coaches" : "Courses"
+    const section: DiscoverSection = screen === "venueDetails" ? (["hamoni","dgc-range","qutub-practice","lakeview-practice"].includes(selectedVenueKey) ? "Facilities" : "Courses") : screen === "hamoniRangeProfile" || screen.startsWith("range") ? "Facilities" : screen.startsWith("coach") ? "Coaches" : "Courses"
     onModuleStateChange(active, section, screen)
   }, [screen, bookingOpen, filtersOpen, searchOpen, paymentOpen, onModuleStateChange])
 
@@ -1811,6 +1861,8 @@ function CourseBookingPrototype({
     onModuleStateChange(true, "Courses", next)
   }
   const [rangeBookingVenue, setRangeBookingVenue] = useState<RangeVenue>("delhi")
+
+  const openVenueDetails = (key: VenueKey) => { setSelectedVenueKey(key); setMode(["hamoni","dgc-range","qutub-practice","lakeview-practice"].includes(key) ? "ranges" : "courses"); setScreen("venueDetails"); onModuleStateChange(true, ["hamoni","dgc-range","qutub-practice","lakeview-practice"].includes(key) ? "Facilities" : "Courses", "venueDetails") }
 
   const openRangeBooking = (range: RangeVenue = "delhi") => {
     setRangeBookingVenue(range)
@@ -1837,13 +1889,14 @@ function CourseBookingPrototype({
 
   return (
     <>
-      {screen === "discover" && <DiscoverCourses go={go} openFilters={() => setFiltersOpen(true)} openSearch={() => setSearchOpen(true)} openBooking={openBooking} openRangeBooking={openRangeBooking} mode={mode} setMode={setMode} />}
+      {screen === "discover" && <DiscoverCourses go={go} openFilters={() => setFiltersOpen(true)} openSearch={() => setSearchOpen(true)} openBooking={openBooking} openRangeBooking={openRangeBooking} openVenueDetails={openVenueDetails} mode={mode} setMode={setMode} />}
       {screen === "results" && <ResultsScreen go={go} openFilters={() => setFiltersOpen(true)} state={resultsState} setState={setResultsState} openBooking={openBooking} />}
       {screen === "course" && <CourseProfileScreen go={go} openBooking={openBooking} />}
+      {screen === "venueDetails" && <VenueDetailsScreen venueKey={selectedVenueKey} go={go} openBooking={openBooking} openRangeBooking={openRangeBooking} />}
       {screen === "confirmation" && <ConfirmationScreen go={go} course={bookingCourse} date={courseDate} time={selectedSlot} caddy={courseCaddySummary} cartCount={courseCartCount} total={bookingCourse.price + courseCaddyCost + courseCartCount * 800} />}
       {screen === "bookings" && <MyBookingsScreen go={go} />}
       {screen === "bookingDetail" && <BookingDetailScreen go={go} />}
-      {screen === "rangeDiscover" && <RangeDiscoverScreen go={go} openSearch={() => setSearchOpen(true)} setMode={setMode} openRangeBooking={openRangeBooking} />}
+      {screen === "rangeDiscover" && <RangeDiscoverScreen go={go} openSearch={() => setSearchOpen(true)} setMode={setMode} openRangeBooking={openRangeBooking} openVenueDetails={openVenueDetails} />}
       {screen === "rangeProfile" && <RangeProfileScreen go={go} openRangeBooking={openRangeBooking} />}
       {screen === "hamoniRangeProfile" && <RangeProfileScreen go={go} openRangeBooking={openRangeBooking} hamoni />}
       {screen === "bhalswaRangeProfile" && <RangeProfileScreen go={go} openRangeBooking={openRangeBooking} bhalswa />}
