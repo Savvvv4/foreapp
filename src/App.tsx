@@ -2697,7 +2697,7 @@ function App(){
                   initialScreen={sharedFacility === "hamoni" ? "hamoniRangeProfile" : sharedFacility === "range" ? "rangeProfile" : undefined}
                   onModuleStateChange={(_active, section, screen) => {
                     if (section) setDiscoverSection(section)
-                    setFacilityDetailOpen(screen === "hamoniRangeProfile" || screen === "rangeProfile")
+                    setFacilityDetailOpen(screen === "venueDetails" || screen === "hamoniRangeProfile" || screen === "rangeProfile")
                     setDiscoverChildOpen(true)
                   }}
                 />
