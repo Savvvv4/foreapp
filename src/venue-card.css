@@ -1,5 +1,23 @@
 
 /* Unified course and practice-facility cards */
+
+/* Compatibility guard for previews still serving the previous VenueCard markup.
+   Hide the retired secondary CTA and align the remaining price/CTA in one row. */
+.venue-card:has(.venue-card__price-row) .venue-card__body{display:grid;grid-template-columns:minmax(0,1fr) auto;align-content:start;column-gap:16px;row-gap:8px}
+.venue-card:has(.venue-card__price-row) .venue-card__title-row,
+.venue-card:has(.venue-card__price-row) .venue-card__location,
+.venue-card:has(.venue-card__price-row) .venue-card__tags{grid-column:1/-1}
+.venue-card:has(.venue-card__price-row) .venue-card__price-row{display:contents}
+.venue-card:has(.venue-card__price-row) .venue-card__price{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:16px 24px;align-items:baseline;column-gap:5px;min-width:0;grid-column:1;grid-row:auto}
+.venue-card:has(.venue-card__price-row) .venue-card__price>span{grid-column:1/-1;grid-row:1;width:auto}
+.venue-card:has(.venue-card__price-row) .venue-card__price strong{grid-column:1;grid-row:2;white-space:nowrap;font-size:20px;line-height:24px}
+.venue-card:has(.venue-card__price-row) .venue-card__price small{grid-column:2;grid-row:2;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.venue-card:has(.venue-card__price-row) .venue-card__availability{display:none}
+.venue-card:has(.venue-card__price-row) .venue-card__actions{display:contents}
+.venue-card:has(.venue-card__price-row) .venue-card__secondary{display:none!important}
+.venue-card:has(.venue-card__price-row) .venue-card__actions>.venue-card__primary{grid-column:2;grid-row:auto;align-self:end;height:48px;min-width:150px;white-space:nowrap}
+@media(max-width:390px){.venue-card:has(.venue-card__price-row) .venue-card__body{column-gap:12px}.venue-card:has(.venue-card__price-row) .venue-card__actions>.venue-card__primary{min-width:150px;padding:0 10px}}
+
 .venue-card{min-width:0;overflow:hidden;background:var(--surface,#fff);border:1px solid var(--line,#eee6df);border-radius:16px;box-shadow:var(--shadow-soft,0 8px 28px rgba(66,40,20,.07));color:var(--ink,#26211d);display:flex;flex-direction:column;cursor:pointer;transition:box-shadow 125ms ease,transform 125ms ease}
 .venue-card:hover{transform:translateY(-2px);box-shadow:0 5px 18px rgba(66,40,20,.09)}
 .venue-card:active{transform:scale(.98);box-shadow:0 2px 8px rgba(66,40,20,.06)}
