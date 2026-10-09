@@ -56,7 +56,7 @@ export default function VenueCard(props: VenueCardProps) {
 
   return (
     <article className={`venue-card venue-card--${variant} venue-card--${venueType}`} onClick={onOpen}>
-      <button className="venue-card__image" type="button" onClick={onOpen} aria-label={`View ${name} details`}>
+      <button className="venue-card__image" type="button" onClick={(event) => { event.stopPropagation(); onOpen() }} aria-label={`View ${name} details`}>
         {image ? <img src={image} alt="" loading="lazy" /> : <span className="venue-card__placeholder"><span>FORE</span><small>{venueType === "course" ? "GOLF COURSE" : "PRACTICE FACILITY"}</small></span>}
         <span className="venue-card__scrim" />
         {featured && <span className="venue-card__featured"><Star /> Featured</span>}
