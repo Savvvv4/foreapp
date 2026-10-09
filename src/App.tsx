@@ -538,21 +538,21 @@ function DiscoverCourses({
     <main className="screen booking-discover-screen">
       <SectionHeading title="Book Again" />
       <div className="book-again-course-list">
-        <OfficialCourseListingCard venue="dwarka" featured onOpen={() => go("dwarkaCourseProfile")} />
+        <OfficialCourseListingCard venue="dwarka" featured onOpen={() => go("dwarkaCourseProfile")} onBook={() => openBooking({ name: "DDA Dwarka Golf Course", image: photos.course, price: 660 })} />
       </div>
       <SectionHeading title="Near you" />
       <div className="near-you-course-list">
         <CourseCard onOpen={() => go("course")} onBook={() => openBooking(delhiCourse)} />
         <CourseCard qutub onOpen={() => go("course")} onBook={() => openBooking(qutubCourse)} />
         <OfficialCourseListingCard venue="dwarka" featured onOpen={() => go("dwarkaCourseProfile")} />
-        <OfficialCourseListingCard venue="bhalswa" onOpen={() => go("bhalswaCourseProfile")} />
+        <OfficialCourseListingCard venue="bhalswa" onOpen={() => go("bhalswaCourseProfile")} onBook={() => openBooking({ name: "DDA Lake View Golf Course", image: photos.green, price: 440 })} />
       </div>
     </main>
   )
 }
 
 
-function OfficialCourseListingCard({ venue, featured = false, onOpen }: { venue: "dwarka" | "bhalswa"; featured?: boolean; onOpen: () => void }) {
+function OfficialCourseListingCard({ venue, featured = false, onOpen, onBook }: { venue: "dwarka" | "bhalswa"; featured?: boolean; onOpen: () => void; onBook: () => void }) {
   const dwarka = venue === "dwarka"
   const name = dwarka ? "DDA Dwarka Golf Course" : "DDA Lake View Golf Course"
   const subtitle = dwarka ? "Sector 24, Dwarka, New Delhi" : "Bhalswa Lake, Mukundpur, North Delhi"
@@ -576,7 +576,7 @@ function OfficialCourseListingCard({ venue, featured = false, onOpen }: { venue:
     </button>
     <div className="course-card-actions">
       <button type="button" className="course-details-button" onClick={onOpen}>View details</button>
-      <button type="button" className="course-book-button" onClick={onOpen}>Book tee time <Icon name="arrow" size={15} /></button>
+      <button type="button" className="course-book-button" onClick={onBook}>Book tee time <Icon name="arrow" size={15} /></button>
     </div>
   </article>
 }
