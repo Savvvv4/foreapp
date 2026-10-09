@@ -23,6 +23,13 @@
 .venue-card__price{display:flex;align-items:baseline;gap:5px;flex-wrap:wrap;min-width:0}.venue-card__price>span{width:100%;color:#625b55;font-size:12px;line-height:16px}.venue-card__price strong{font-size:20px;line-height:24px;font-weight:700;white-space:nowrap}.venue-card__price small{font-size:12px;line-height:16px;color:#625b55}
 .venue-card__availability{display:flex;align-items:center;gap:6px;font-size:12px;line-height:16px;color:#17663c;text-align:right}.venue-card__availability i{width:7px;height:7px;border-radius:50%;background:#21834e;flex:0 0 7px}.venue-card__availability--limited{color:#8a4a0a}.venue-card__availability--limited i{background:#d48a22}.venue-card__availability--sold-out{color:#625b55}.venue-card__availability--sold-out i{background:#827a73}
 .venue-card__actions{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:12px;margin-top:4px}
+.venue-card__footer{display:flex;align-items:center;justify-content:space-between;gap:16px;min-width:0;padding-top:4px}
+.venue-card__footer .venue-card__price{display:block;flex:1 1 auto;min-width:0}
+.venue-card__footer .venue-card__price>span{display:block;width:auto;color:#625b55;font-size:12px;line-height:16px}
+.venue-card__price-detail{display:flex;align-items:baseline;gap:5px;min-width:0}
+.venue-card__footer .venue-card__price strong{flex:0 0 auto;font-size:20px;line-height:24px;white-space:nowrap}
+.venue-card__footer .venue-card__price small{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.venue-card__footer>.venue-card__primary{height:48px;min-width:150px;flex:0 0 auto;white-space:nowrap}
 .venue-card__actions button{height:48px;min-width:0;border-radius:10px;padding:0 12px;font:600 14px/20px Inter,sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
 .venue-card__secondary{background:#fff;border:1px solid #d8d0ca;color:#302923}.venue-card__primary{background:var(--color-brand-500,#ff6e00);border:1px solid var(--color-brand-500,#ff6e00);color:#fff}.venue-card__primary:disabled{background:#ded8d2;border-color:#ded8d2;color:#655d56;cursor:not-allowed}.venue-card__primary svg{width:16px;height:16px}
 .venue-card button:focus-visible{outline:3px solid #302219;outline-offset:2px}.venue-card button:active:not(:disabled){transform:scale(.99)}
