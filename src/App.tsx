@@ -553,7 +553,16 @@ function OfficialDdaCourseProfileScreen({ venue, go }: { venue: "dwarka" | "bhal
     ["9 holes · foreigner · weekend/holiday", "₹1,540", "GST included"],
     ["18 holes (repeat 9) · non-government · weekday", "₹770", "GST included"],
     ["18 holes (repeat 9) · non-government · weekend/holiday", "₹1,540", "GST included"],
+    ["18 holes (repeat 9) · foreigner · weekday", "₹1,650", "GST included"],
+    ["18 holes (repeat 9) · foreigner · weekend/holiday", "₹2,640", "GST included"],
+    ["18 holes (repeat 9) · government category · weekday", "₹465", "GST included"],
+    ["18 holes (repeat 9) · government category · weekend/holiday", "₹925", "GST included"],
+    ["Student under 18 · 9 holes · weekday", "₹220", "10 AM–4 PM · GST included"],
+    ["Student under 18 · 9 holes · weekend/holiday", "₹415", "10 AM–4 PM · GST included"],
+    ["Student under 18 · 18 holes · weekday", "₹385", "10 AM–4 PM · GST included"],
+    ["Student under 18 · 18 holes · weekend/holiday", "₹770", "10 AM–4 PM · GST included"],
     ["Driving range entry · Indian", "₹82.50", "GST included"],
+    ["Driving range entry · foreigner/NRI", "₹165", "GST included"],
     ["Bucket of 50 balls", "₹82.50", "GST included"],
     ["Coaching · 30 minutes", "₹650", "DDA listed coach rate"],
   ]
@@ -1266,7 +1275,7 @@ function RangeProfileScreen({ go, openRangeBooking, hamoni = false, bhalswa = fa
           <h1>{name}</h1>
           <div className="facility-template-stat"><span><Icon name="star" size={15} /><strong>{rating}</strong> ({reviewCount} reviews)</span><span className="facility-location-stat"><span className="facility-location-icon"><Icon name="pin" size={15} /></span><strong>{area}</strong></span></div>
         </header>
-        <section className="facility-template-section"><h2>At a glance</h2><table className="facility-score"><tbody><tr><td>Open</td><th>{hamoni ? "Tue – Sun, 6 AM – 10 PM" : "Daily, 6 AM – 9 PM"}</th></tr>{facts.map(([label, value]) => <tr key={label}><td>{label}</td><th>{value}</th></tr>)}</tbody></table></section>
+        <section className="facility-template-section"><h2>At a glance</h2><table className="facility-score"><tbody>{!bhalswa && <tr><td>Open</td><th>{hamoni ? "Tue – Sun, 6 AM – 10 PM" : "Daily, 6 AM – 9 PM"}</th></tr>}{facts.map(([label, value]) => <tr key={label}><td>{label}</td><th>{value}</th></tr>)}</tbody></table>{bhalswa && <p className="facility-section-sub">Contact reception for current operating hours and same-day range availability.</p>}</section>
         <section className="facility-template-section"><h2>Rates</h2><div className="facility-rate-list">{rates.map(([label, sub, price]) => <div className="facility-rate" key={label}><span><b>{label}</b> <small>{sub}</small></span><strong>{price}</strong></div>)}</div><p className="facility-points"><Icon name="star" size={15} /> Earn {hamoni ? 150 : 100} points on every booking</p></section>
         {hamoni && <section className="facility-template-section"><h2>Passes</h2><p className="facility-section-sub">Unlimited ball rentals and access to grass bays.</p><div className="facility-pass-list" role="radiogroup" aria-label="Choose a pass">{passes.map(([label, price, note], index) => {
           const selected = index === selectedPassIndex
@@ -1280,7 +1289,7 @@ function RangeProfileScreen({ go, openRangeBooking, hamoni = false, bhalswa = fa
           </button>
         })}</div><button type="button" className="primary-button facility-pass-button" onClick={() => emitPrototypeEvent("Select facility pass", `Selected ${selectedPass[0]} pass at ${name} for ${selectedPass[1]}.`)}>{`Continue with ${selectedPass[0]} · ${selectedPass[1]}`}</button></section>}
         <section className="facility-template-section"><h2>On site</h2><div className="facility-amenities">{amenities.map((item) => <span key={item}><Icon name="check" size={15} />{item}</span>)}</div></section>
-        <section className="facility-template-section"><h2>Coaching here</h2><button className="facility-coach-card" onClick={() => go("coachProfile")}><Avatar initials="RM" /><span><b>Rohan Malhotra</b><small>PGA Professional · 12 yrs · 4.9</small></span><Icon name="chevron" /></button></section>
+        {!bhalswa && <section className="facility-template-section"><h2>Coaching here</h2><button className="facility-coach-card" onClick={() => go("coachProfile")}><Avatar initials="RM" /><span><b>Rohan Malhotra</b><small>PGA Professional · 12 yrs · 4.9</small></span><Icon name="chevron" /></button></section>}
         <section className="facility-template-section"><h2>Getting there</h2><div className="facility-map-graphic" role="img" aria-label={`Map showing the location of ${name}`}>
           <span className="facility-map-road facility-map-road-a" aria-hidden="true" />
           <span className="facility-map-road facility-map-road-b" aria-hidden="true" />
@@ -1291,9 +1300,9 @@ function RangeProfileScreen({ go, openRangeBooking, hamoni = false, bhalswa = fa
           <span className="facility-map-label facility-map-label-b" aria-hidden="true">Golf area</span>
           <span className="facility-map-marker" aria-hidden="true"><Icon name="pin" size={18} /></span>
         </div><button className="facility-directions" data-prototype="Directions" data-prototype-body="Maps and directions are simulated here."><span><b>{name}</b><small>{address}</small></span><strong>Directions</strong></button></section>
-        <section className="facility-template-section facility-reviews"><h2><Icon name="star" size={18} /> {rating} from {reviewCount} golfers</h2><blockquote>“Plenty of space, good mats, and launch monitors were easy to reserve.”</blockquote><small>Ankit R. · 6 days ago</small></section>
+        {!bhalswa && <section className="facility-template-section facility-reviews"><h2><Icon name="star" size={18} /> {rating} from {reviewCount} golfers</h2><blockquote>“Plenty of space, good mats, and launch monitors were easy to reserve.”</blockquote><small>Ankit R. · 6 days ago</small></section>}
       </div>
-      <div className="facility-template-action"><button type="button" className="primary-button" onClick={book}>Book a bay <Icon name="arrow" size={16} /></button></div>
+      <div className="facility-template-action"><button type="button" className="primary-button" onClick={book}>{bhalswa ? "Contact range" : "Book a bay"} <Icon name="arrow" size={16} /></button></div>
     </main>
   )
 }
