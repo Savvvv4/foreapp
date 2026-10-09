@@ -1,20 +1,53 @@
+# Public crawling policy for Fore
 User-agent: *
 Allow: /
 
-# AI and LLM crawlers
+# OpenAI search and browsing agents
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
 User-agent: GPTBot
 Allow: /
 
-User-agent: ChatGPT-User
-Allow: /
-
+# Anthropic
 User-agent: ClaudeBot
 Allow: /
-
-User-agent: PerplexityBot
+User-agent: Claude-Web
+Allow: /
+User-agent: anthropic-ai
 Allow: /
 
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+User-agent: Perplexity-User
+Allow: /
+
+# Major search engines
+User-agent: Googlebot
+Allow: /
 User-agent: Google-Extended
+Allow: /
+User-agent: Bingbot
+Allow: /
+User-agent: Applebot
+Allow: /
+User-agent: DuckAssistBot
+Allow: /
+
+# Other AI and web discovery crawlers
+User-agent: Meta-ExternalAgent
+Allow: /
+User-agent: Amazonbot
+Allow: /
+User-agent: Bytespider
+Allow: /
+User-agent: cohere-ai
+Allow: /
+User-agent: YouBot
+Allow: /
+User-agent: Diffbot
 Allow: /
 
 Sitemap: https://foreapp.vercel.app/sitemap.xml
