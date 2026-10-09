@@ -560,7 +560,7 @@ function OfficialCourseListingCard({ venue, featured = false, onOpen, onBook }: 
   const price = dwarka ? "₹660" : "₹440"
   const rating = dwarka ? "4.8" : "4.0"
   return <article className="course-card official-dda-course-card">
-    <button className="course-card-main" type="button" onClick={onOpen}>
+    <div className="course-card-main" role="button" tabIndex={0} onClick={onOpen} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onOpen() } }}>
       <div className="course-card-image">
         <img src={dwarka ? photos.course : photos.green} alt={name} />
         {featured && <span className="course-featured-pill"><Icon name="star" size={12} /> Featured</span>}
@@ -578,7 +578,7 @@ function OfficialCourseListingCard({ venue, featured = false, onOpen, onBook }: 
           <strong>From {price} <small>/ 9 holes</small></strong>
         </div>
       </div>
-    </button>
+    </div>
     <div className="course-card-actions">
       <button type="button" className="course-details-button" onClick={onOpen}>View details</button>
       <button type="button" className="course-book-button" onClick={onBook}>Book tee time <Icon name="arrow" size={15} /></button>
