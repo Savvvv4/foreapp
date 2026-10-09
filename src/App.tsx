@@ -353,12 +353,15 @@ type CourseFlowScreen =
   | "discover"
   | "results"
   | "course"
+  | "dwarkaCourseProfile"
+  | "bhalswaCourseProfile"
   | "confirmation"
   | "bookings"
   | "bookingDetail"
   | "rangeDiscover"
   | "rangeProfile"
   | "hamoniRangeProfile"
+  | "bhalswaRangeProfile"
   | "rangeSelect"
   | "rangeCheckout"
   | "rangeConfirmation"
@@ -375,7 +378,7 @@ type CourseFlowScreen =
 type PaymentState = "methods" | "processing" | "failed" | "offline" | "expired"
 type BookingStep = "select" | "review" | "payment"
 type BookingCourse = { name: string; image: string; price: number }
-type RangeVenue = "delhi" | "hamoni"
+type RangeVenue = "delhi" | "hamoni" | "bhalswa"
 
 const delhiCourse: BookingCourse = { name: "Delhi Golf Club", image: photos.course, price: 2500 }
 const qutubCourse: BookingCourse = { name: "Qutub Golf Course", image: photos.green, price: 1800 }
@@ -514,6 +517,61 @@ function BookAgainCourseCard({
   )
 }
 
+function OfficialCourseListingCard({ venue, onOpen }: { venue: "dwarka" | "bhalswa"; onOpen: () => void }) {
+  const dwarka = venue === "dwarka"
+  const name = dwarka ? "DDA Dwarka Golf Course" : "DDA Lake View Golf Course"
+  const subtitle = dwarka ? "Sector 24, Dwarka, New Delhi" : "Bhalswa Lake, Mukundpur, North Delhi"
+  const status = dwarka ? "Opening status to confirm" : "Operational · Pay & play"
+  const price = dwarka ? "₹660" : "₹440"
+  return <article className="course-card official-dda-course-card">
+    <button className="course-card-main" type="button" onClick={onOpen}>
+      <div className="course-card-image"><img src={dwarka ? photos.course : photos.green} alt={name} /><span className="course-status-pill">{status}</span></div>
+      <div className="course-card-copy"><div className="course-card-title-row"><div><h3>{name}</h3><p className="range-location"><Icon name="pin" size={14} /> {subtitle}</p></div></div>
+      <div className="course-card-meta"><span>{dwarka ? "18 holes · driving range" : "9 holes · 220-yard driving range"}</span><strong>{price} <small>/ 9 holes · weekday</small></strong></div></div>
+    </button>
+    <div className="course-card-actions"><button type="button" className="course-details-button" onClick={onOpen}>View details</button><button type="button" className="course-book-button" onClick={onOpen}>{dwarka ? "View status & rates" : "View rates"} <Icon name="arrow" size={15} /></button></div>
+  </article>
+}
+
+function OfficialDdaCourseProfileScreen({ venue, go }: { venue: "dwarka" | "bhalswa"; go: (screen: CourseFlowScreen) => void }) {
+  const dwarka = venue === "dwarka"
+  const name = dwarka ? "DDA Dwarka Golf Course" : "DDA Lake View Golf Course"
+  const address = dwarka ? "Golf Course Road, Sector 24, Dwarka, New Delhi 110075" : "Near Bhalswa Lake, Outer Ring Road, Mukundpur, New Delhi 110042"
+  const rates = dwarka ? [
+    ["9 holes · weekday", "₹660", "Published DDA rate; confirm GST"],
+    ["9 holes · weekend/holiday", "₹1,320", "Published DDA rate; confirm GST"],
+    ["13 holes · weekday", "₹900", "Published DDA rate; confirm GST"],
+    ["13 holes · weekend/holiday", "₹1,800", "Published DDA rate; confirm GST"],
+    ["18 holes · weekday", "₹1,080", "Published DDA rate; confirm GST"],
+    ["18 holes · weekend/holiday", "₹2,160", "Published DDA rate; confirm GST"],
+  ] : [
+    ["9 holes · government category · weekday", "₹265", "GST included"],
+    ["9 holes · government category · weekend/holiday", "₹500", "GST included"],
+    ["9 holes · non-government · weekday", "₹440", "GST included"],
+    ["9 holes · non-government · weekend/holiday", "₹825", "GST included"],
+    ["9 holes · foreigner · weekday", "₹880", "GST included"],
+    ["9 holes · foreigner · weekend/holiday", "₹1,540", "GST included"],
+    ["18 holes (repeat 9) · non-government · weekday", "₹770", "GST included"],
+    ["18 holes (repeat 9) · non-government · weekend/holiday", "₹1,540", "GST included"],
+    ["Driving range entry · Indian", "₹82.50", "GST included"],
+    ["Bucket of 50 balls", "₹82.50", "GST included"],
+    ["Coaching · 30 minutes", "₹650", "DDA listed coach rate"],
+  ]
+  const facts = dwarka ? [["Planned course", "18 holes"], ["Additional facilities", "Driving range; 6-hole chip & putt course"], ["Current booking status", "Not enabled pending DDA confirmation"]] : [["Course", "9 holes"], ["Driving range", "220 yards · 10 bays"], ["Practice areas", "Putting green, chipping area and bunker"], ["Clubhouse", "Hall, open terrace and lawns"], ["Area", "79 acres"]]
+  return <main className="course-profile-screen course-template-detail">
+    <section className="facility-template-hero"><img src={dwarka ? photos.course : photos.green} alt={name} /><span className="facility-template-hero-gradient" /><button type="button" className="facility-hero-button facility-hero-back" onClick={() => go("discover")} aria-label="Go back"><Icon name="chevron" size={20} /></button><div className="course-template-hero-label"><span className="eyebrow light">{dwarka ? "DDA · DWARKA SECTOR 24" : "DDA · BHALSWA LAKE"}</span></div></section>
+    <div className="facility-template-content">
+      <header className="facility-template-heading"><h1>{name}</h1><div className="facility-template-stat"><span><span className="facility-location-icon"><Icon name="pin" size={15} /></span><strong>{dwarka ? "Sector 24, Dwarka" : "Mukundpur, North Delhi"}</strong></span></div></header>
+      {dwarka && <section className="facility-template-section"><h2>Opening status</h2><p className="course-template-description">DDA’s golf-course page still describes the facility as under construction, while DDA has also published playing-rights notices and green-fee rates. These rates are for reference only. Fore booking is disabled until DDA confirms public playing availability.</p></section>}
+      <section className="facility-template-section"><h2>At a glance</h2><table className="facility-score"><tbody>{facts.map(([label, value]) => <tr key={label}><td>{label}</td><th>{value}</th></tr>)}</tbody></table></section>
+      <section className="facility-template-section"><h2>{dwarka ? "Published green fees" : "Green fees & practice rates"}</h2><div className="facility-rate-list">{rates.map(([label, price, note]) => <div className="facility-rate" key={label}><span><b>{label}</b><small>{note}</small></span><strong>{price}</strong></div>)}</div><p className="facility-section-sub">{dwarka ? "Source: DDA Sports Wing circular dated 30 September 2025. Confirm final payable amount and current availability directly with DDA." : "Rates are taken from DDA’s Lake View Golf Course page. Government-category rates differ from non-government rates."}</p></section>
+      <section className="facility-template-section"><h2>Getting there</h2><div className="facility-map-graphic" role="img" aria-label={"Map showing the location of " + name}><span className="facility-map-road facility-map-road-a" aria-hidden="true" /><span className="facility-map-road facility-map-road-b" aria-hidden="true" /><span className="facility-map-road facility-map-road-c" aria-hidden="true" /><span className="facility-map-park facility-map-park-a" aria-hidden="true" /><span className="facility-map-park facility-map-park-b" aria-hidden="true" /><span className="facility-map-label facility-map-label-a" aria-hidden="true">{dwarka ? "Sector 24" : "Bhalswa Lake"}</span><span className="facility-map-label facility-map-label-b" aria-hidden="true">{dwarka ? "Dwarka" : "Outer Ring Road"}</span><span className="facility-map-marker" aria-hidden="true"><Icon name="pin" size={18} /></span></div><button className="facility-directions" data-prototype="Directions" data-prototype-body={address}><span><b>{name}</b><small>{address}</small></span><strong>Directions</strong></button></section>
+      {!dwarka && <section className="facility-template-section"><h2>Practice facility</h2><p className="course-template-description">The DDA complex also operates a driving range. Open the Facilities listing for range details.</p><button className="course-template-all-times" onClick={() => go("bhalswaRangeProfile")}>View practice facility <Icon name="arrow" size={15} /></button></section>}
+    </div>
+    <div className="facility-template-action"><button type="button" className="primary-button" onClick={() => dwarka ? emitPrototypeEvent("DDA Dwarka booking unavailable", "DDA’s current public status is conflicting. Contact DDA before planning a round.") : emitPrototypeEvent("Contact Lake View Golf Course", "Call reception on 8800639123 (10 AM–5 PM) to confirm tee times and playing category.")}>{dwarka ? "Booking not yet verified" : "Contact to confirm tee time"} <Icon name="arrow" size={16} /></button></div>
+  </main>
+}
+
 function DiscoverCourses({
   go,
   openFilters,
@@ -538,6 +596,8 @@ function DiscoverCourses({
       <div className="near-you-course-list">
         <CourseCard onOpen={() => go("course")} onBook={() => openBooking(delhiCourse)} />
         <CourseCard qutub onOpen={() => go("course")} onBook={() => openBooking(qutubCourse)} />
+        <OfficialCourseListingCard venue="dwarka" onOpen={() => go("dwarkaCourseProfile")} />
+        <OfficialCourseListingCard venue="bhalswa" onOpen={() => go("bhalswaCourseProfile")} />
       </div>
     </main>
   )
@@ -1082,22 +1142,24 @@ type RangeAvailabilityState = "ready" | "loading" | "empty" | "offline"
 function RangeCard({
   qutub = false,
   hamoni = false,
+  bhalswa = false,
   onOpen,
   onBook,
 }: {
   qutub?: boolean
   hamoni?: boolean
+  bhalswa?: boolean
   onOpen: () => void
   onBook: () => void
 }) {
   const [saved, setSaved] = useState(false)
-  const name = hamoni ? "Hamoni Golf Camp" : qutub ? "Qutub Practice Centre" : "Delhi Golf Club Range"
-  const image = qutub ? photos.green : photos.golfer
-  const rating = hamoni ? "4.8" : qutub ? "4.4" : "4.6"
-  const distance = hamoni ? "Sector 23A, Gurugram · 4.1 km" : qutub ? "Mehrauli · 5.7 km" : "Lodhi Road · 2.8 km"
-  const deal = hamoni ? "Special offer" : qutub ? "" : "Open now"
-  const price = hamoni ? "₹500" : "₹900"
-  const unit = hamoni ? "/ person" : "/ 60 min"
+  const name = bhalswa ? "DDA Lake View Golf Course" : hamoni ? "Hamoni Golf Camp" : qutub ? "Qutub Practice Centre" : "Delhi Golf Club Range"
+  const image = qutub || bhalswa ? photos.green : photos.golfer
+  const rating = hamoni ? "4.8" : qutub ? "4.4" : bhalswa ? "4.0" : "4.6"
+  const distance = bhalswa ? "Bhalswa Lake, North Delhi" : hamoni ? "Sector 23A, Gurugram · 4.1 km" : qutub ? "Mehrauli · 5.7 km" : "Lodhi Road · 2.8 km"
+  const deal = bhalswa ? "DDA · Pay & play" : hamoni ? "Special offer" : qutub ? "" : "Open now"
+  const price = bhalswa ? "₹82.50" : hamoni ? "₹500" : "₹900"
+  const unit = bhalswa ? "/ 50 balls" : hamoni ? "/ person" : "/ 60 min"
 
   return (
     <article className={`range-card facility-template-card${hamoni ? " featured" : ""}`}>
@@ -1137,7 +1199,7 @@ function RangeCard({
       </div>
       <div className="range-card-actions">
         <button type="button" className="range-details-button" onClick={onOpen}>View details</button>
-        <button type="button" className="range-book-button" onClick={onBook}>Book a bay <Icon name="arrow" size={15} /></button>
+        <button type="button" className="range-book-button" onClick={onBook}>{bhalswa ? "Contact range" : "Book a bay"} <Icon name="arrow" size={15} /></button>
       </div>
     </article>
   )
@@ -1162,24 +1224,25 @@ function RangeDiscoverScreen({
         <RangeCard hamoni onOpen={() => go("hamoniRangeProfile")} onBook={() => openRangeBooking("hamoni")} />
         <RangeCard onOpen={() => go("rangeProfile")} onBook={openRangeBooking} />
         <RangeCard qutub onOpen={() => go("rangeProfile")} onBook={openRangeBooking} />
+        <RangeCard bhalswa onOpen={() => go("bhalswaRangeProfile")} onBook={() => emitPrototypeEvent("Contact Lake View Golf Course", "Call reception on 8800639123 (10 AM–5 PM) to confirm range availability and booking procedures.")} />
       </div>
     </main>
   )
 }
-function RangeProfileScreen({ go, openRangeBooking, hamoni = false }: { go: (screen: CourseFlowScreen) => void; openRangeBooking: (range?: RangeVenue) => void; hamoni?: boolean }) {
+function RangeProfileScreen({ go, openRangeBooking, hamoni = false, bhalswa = false }: { go: (screen: CourseFlowScreen) => void; openRangeBooking: (range?: RangeVenue) => void; hamoni?: boolean; bhalswa?: boolean }) {
   const [saved, setSaved] = useState(false)
-  const name = hamoni ? "Hamoni Golf Camp" : "Delhi Golf Club Range"
-  const rating = hamoni ? "4.8" : "4.6"
-  const reviewCount = hamoni ? 228 : 184
-  const area = hamoni ? "Sector 23A, Gurugram" : "Lodhi Road, Delhi"
-  const address = hamoni ? "CK Farm, Carterpuri, Sector 23A, Gurugram" : "Lodhi Road, Delhi"
-  const facts = hamoni ? [["Bays", "105"], ["Target greens", "9"], ["Practice greens", "4"], ["Bunkers", "19"]] : [["Bays", "60"], ["Covered / open", "Mixed"], ["Floodlit", "Yes"], ["Launch monitors", "TrackMan"]]
-  const rates = hamoni ? [["Entry fee", "per person", "₹500"], ["Bag of 50 Srixon balls", "per bag", "₹150"], ["Club rental", "per club", "₹200"]] : [["60-minute bay", "per session", "₹900"], ["90-minute bay", "per session", "₹1,250"], ["Launch monitor", "per session", "₹1,200"]]
+  const name = bhalswa ? "DDA Lake View Golf Course" : hamoni ? "Hamoni Golf Camp" : "Delhi Golf Club Range"
+  const rating = hamoni ? "4.8" : bhalswa ? "4.0" : "4.6"
+  const reviewCount = hamoni ? 228 : bhalswa ? 0 : 184
+  const area = bhalswa ? "Bhalswa Lake, North Delhi" : hamoni ? "Sector 23A, Gurugram" : "Lodhi Road, Delhi"
+  const address = bhalswa ? "DDA Lake View Golf Course, near Bhalswa Lake, Outer Ring Road, Mukundpur, New Delhi 110042" : hamoni ? "CK Farm, Carterpuri, Sector 23A, Gurugram" : "Lodhi Road, Delhi"
+  const facts = bhalswa ? [["Driving bays", "10"], ["Driving range", "220 yards"], ["Course", "9 holes"], ["Practice areas", "Putting, chipping & bunker"]] : hamoni ? [["Bays", "105"], ["Target greens", "9"], ["Practice greens", "4"], ["Bunkers", "19"]] : [["Bays", "60"], ["Covered / open", "Mixed"], ["Floodlit", "Yes"], ["Launch monitors", "TrackMan"]]
+  const rates = bhalswa ? [["Driving range entry (Indian)", "per visit · GST included", "₹82.50"], ["Bucket of 50 balls", "GST included", "₹82.50"], ["9 holes · non-government", "weekday · GST included", "₹440"], ["9 holes · non-government", "weekend/holiday · GST included", "₹825"], ["18 holes · repeat 9 · non-government", "weekday · GST included", "₹770"], ["18 holes · repeat 9 · non-government", "weekend/holiday · GST included", "₹1,540"], ["9 holes · government category", "weekday / weekend", "₹265 / ₹500"], ["Coaching", "30 minutes", "₹650"]] : hamoni ? [["Entry fee", "per person", "₹500"], ["Bag of 50 Srixon balls", "per bag", "₹150"], ["Club rental", "per club", "₹200"]] : [["60-minute bay", "per session", "₹900"], ["90-minute bay", "per session", "₹1,250"], ["Launch monitor", "per session", "₹1,200"]]
   const passes = [["1 month", "₹12,000", "Monthly access"], ["3 months", "₹24,000", "Save 33% · Most popular"], ["6 months", "₹50,000", "Save 31%"], ["1 year", "₹80,000", "Save 44% · Best value"]]
   const [selectedPassIndex, setSelectedPassIndex] = useState(1)
-  const amenities = hamoni ? ["Grass bays", "Covered bays", "Floodlights", "Launch monitors", "Pro shop", "Parking"] : ["Covered bays", "Floodlights", "Launch monitors", "Club rental", "Parking"]
+  const amenities = bhalswa ? ["9-hole course", "Driving range", "Putting green", "Chipping area", "Practice bunker", "Clubhouse", "Parking"] : hamoni ? ["Grass bays", "Covered bays", "Floodlights", "Launch monitors", "Pro shop", "Parking"] : ["Covered bays", "Floodlights", "Launch monitors", "Club rental", "Parking"]
   const selectedPass = passes[selectedPassIndex]
-  const book = () => openRangeBooking(hamoni ? "hamoni" : "delhi")
+  const book = () => bhalswa ? emitPrototypeEvent("Contact Lake View Golf Course", "Call reception on 8800639123 (10 AM–5 PM) to confirm range availability and booking.") : openRangeBooking(hamoni ? "hamoni" : "delhi")
   return (
     <main className="course-profile-screen range-profile-screen range-template-detail">
       <section className="facility-template-hero">
@@ -1953,6 +2016,9 @@ function CourseBookingPrototype({
       {screen === "rangeDiscover" && <RangeDiscoverScreen go={go} openSearch={() => setSearchOpen(true)} setMode={setMode} openRangeBooking={openRangeBooking} />}
       {screen === "rangeProfile" && <RangeProfileScreen go={go} openRangeBooking={openRangeBooking} />}
       {screen === "hamoniRangeProfile" && <RangeProfileScreen go={go} openRangeBooking={openRangeBooking} hamoni />}
+      {screen === "bhalswaRangeProfile" && <RangeProfileScreen go={go} openRangeBooking={openRangeBooking} bhalswa />}
+      {screen === "dwarkaCourseProfile" && <OfficialDdaCourseProfileScreen venue="dwarka" go={go} />}
+      {screen === "bhalswaCourseProfile" && <OfficialDdaCourseProfileScreen venue="bhalswa" go={go} />}
       {screen === "rangeSelect" && <RangeSelectScreen go={go} time={rangeTime} setTime={setRangeTime} duration={rangeDuration} setDuration={setRangeDuration} bayType={rangeBayType} setBayType={setRangeBayType} bucket={rangeBucket} setBucket={setRangeBucket} state={rangeState} setState={setRangeState} />}
       {screen === "rangeCheckout" && <RangeCheckoutScreen go={go} time={rangeTime} duration={rangeDuration} bayType={rangeBayType} bucket={rangeBucket} setBucket={setRangeBucket} credits={rangeCredits} setCredits={setRangeCredits} holdSeconds={holdSeconds} openPayment={() => { setPaymentTarget("range"); setPaymentState(holdSeconds === 0 ? "expired" : "methods"); setPaymentOpen(true) }} />}
       {screen === "rangeConfirmation" && <RangeConfirmationScreen go={go} date={rangeBookingDate} bucketCount={rangeBucketCount} />}
