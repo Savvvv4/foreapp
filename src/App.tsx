@@ -672,7 +672,7 @@ function VenueDetailsScreen({ venueKey, go, openBooking, openRangeBooking }: { v
   const [saved, setSaved] = useState(false)
   const [galleryIndex, setGalleryIndex] = useState(0)
   const [selectedPass, setSelectedPass] = useState<number | null>(null)
-  const [expandedInfo, setExpandedInfo] = useState<number | null>(0)
+  const [expandedInfo, setExpandedInfo] = useState<number | null>(null)
   const facility = venue.venueType === "practice"
   const images = [venue.image || photos.course, facility ? photos.course : photos.green, venue.image || photos.course]
   const reviews = venueKey === "dgc" ? 312 : venueKey === "qutub-course" ? 184 : venueKey === "dwarka" ? 128 : venueKey === "lakeview-course" ? 96 : venueKey === "hamoni" ? 228 : venueKey === "qutub-practice" ? 142 : venueKey === "lakeview-practice" ? 96 : 184
@@ -682,7 +682,7 @@ function VenueDetailsScreen({ venueKey, go, openBooking, openRangeBooking }: { v
   }
   const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" })
   const sections = [["overview", "Overview"], ["pricing", "Pricing"], ["coaches", "Coaches"], ["reviews", "Reviews & info"]]
-  const goodToKnow: Array<[string, string]> = [["Opening hours", info.hours.map(([day, time]) => day + ": " + time).join(" · ")], ...info.policies]
+  const goodToKnow: Array<[string, string]> = [["Opening hours", info.hours.map(([day, time]) => day + ": " + time).join(" · ")]]
   return (
     <main className="course-profile-screen venue-details-v8">
       <section className="venue-v8-hero" onClick={() => setGalleryIndex((i) => (i + 1) % images.length)}>
@@ -715,7 +715,7 @@ function VenueDetailsScreen({ venueKey, go, openBooking, openRangeBooking }: { v
           </section>
           <section id="venue-v8-pricing" className="venue-v8-section venue-v8-anchor">
             <div className="venue-v8-section"><h2>{facility ? "Rates" : "Green fees"}</h2><div className="venue-v8-card venue-v8-rates">{info.rates.map(([label, sub, price]) => <div key={label + sub}><span>{label}<small>{sub}</small></span><b>{price}</b></div>)}</div></div>
-            <div className="venue-v8-section"><h2>{facility ? "Passes" : "Multi-round passes"}</h2><div className="venue-v8-pass-grid">{info.passes.map(([label, price, note], i) => <button type="button" key={label} className={"venue-v8-pass " + (selectedPass === i ? "selected" : "")} onClick={() => setSelectedPass(selectedPass === i ? null : i)} aria-pressed={selectedPass === i}><span className="venue-v8-pass-tag">{i === 1 ? "POPULAR" : i === info.passes.length - 1 ? "BEST VALUE" : ""}</span><b className="venue-v8-pass-name">{label}</b><strong>{price}</strong><small>{note}</small><span className="venue-v8-check"><Icon name="check" size={12} /></span></button>)}</div></div>
+            {info.passes.length > 0 && <div className="venue-v8-section"><h2>{facility ? "Passes" : "Multi-round passes"}</h2><div className="venue-v8-pass-grid">{info.passes.map(([label, price, note], i) => <button type="button" key={label} className={"venue-v8-pass " + (selectedPass === i ? "selected" : "")} onClick={() => setSelectedPass(selectedPass === i ? null : i)} aria-pressed={selectedPass === i}><span className="venue-v8-pass-tag">{i === 1 ? "POPULAR" : i === info.passes.length - 1 ? "BEST VALUE" : ""}</span><b className="venue-v8-pass-name">{label}</b><strong>{price}</strong><small>{note}</small><span className="venue-v8-check"><Icon name="check" size={12} /></span></button>)}</div></div>}
           </section>
           <section id="venue-v8-coaches" className="venue-v8-section venue-v8-anchor">
             <h2>Coaches</h2><div className="venue-v8-coaches">{info.coaches.map(([name, credential, rating, focus], i) => <article className="venue-v8-card venue-v8-coach" key={name}><div className={"venue-v8-avatar venue-v8-avatar-" + (i % 3)}>{name.split(" ").map((part) => part[0]).join("")}</div><div className="venue-v8-coach-copy"><b>{name}</b><small>{credential}</small><span><Icon name="star" size={12} />{rating}</span><small>{focus}</small><div className="venue-v8-coach-footer"><b>₹{i === 0 ? "1,500" : "1,200"}<small>per 30 min</small></b><button type="button" onClick={() => go("coachDiscover")}>Book lesson</button></div></div></article>)}</div><button type="button" className="venue-v8-more" onClick={() => go("coachDiscover")}>See all coaches <Icon name="arrow" size={15} /></button>
