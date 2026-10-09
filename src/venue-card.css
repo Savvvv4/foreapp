@@ -1,23 +1,4 @@
-
 /* Unified course and practice-facility cards */
-
-/* Compatibility guard for previews still serving the previous VenueCard markup.
-   Hide the retired secondary CTA and align the remaining price/CTA in one row. */
-.venue-card:has(.venue-card__price-row) .venue-card__body{display:grid;grid-template-columns:minmax(0,1fr) auto;align-content:start;column-gap:16px;row-gap:8px}
-.venue-card:has(.venue-card__price-row) .venue-card__title-row,
-.venue-card:has(.venue-card__price-row) .venue-card__location,
-.venue-card:has(.venue-card__price-row) .venue-card__tags{grid-column:1/-1}
-.venue-card:has(.venue-card__price-row) .venue-card__price-row{display:contents}
-.venue-card:has(.venue-card__price-row) .venue-card__price{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:16px 24px;align-items:baseline;column-gap:5px;min-width:0;grid-column:1;grid-row:auto}
-.venue-card:has(.venue-card__price-row) .venue-card__price>span{grid-column:1/-1;grid-row:1;width:auto}
-.venue-card:has(.venue-card__price-row) .venue-card__price strong{grid-column:1;grid-row:2;white-space:nowrap;font-size:20px;line-height:24px}
-.venue-card:has(.venue-card__price-row) .venue-card__price small{grid-column:2;grid-row:2;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.venue-card:has(.venue-card__price-row) .venue-card__availability{display:none}
-.venue-card:has(.venue-card__price-row) .venue-card__actions{display:contents}
-.venue-card:has(.venue-card__price-row) .venue-card__secondary{display:none!important}
-.venue-card:has(.venue-card__price-row) .venue-card__actions>.venue-card__primary{grid-column:2;grid-row:auto;align-self:end;height:48px;min-width:150px;white-space:nowrap}
-@media(max-width:390px){.venue-card:has(.venue-card__price-row) .venue-card__body{column-gap:12px}.venue-card:has(.venue-card__price-row) .venue-card__actions>.venue-card__primary{min-width:150px;padding:0 10px}}
-
 .venue-card{min-width:0;overflow:hidden;background:var(--surface,#fff);border:1px solid var(--line,#eee6df);border-radius:16px;box-shadow:var(--shadow-soft,0 8px 28px rgba(66,40,20,.07));color:var(--ink,#26211d);display:flex;flex-direction:column;cursor:pointer;transition:box-shadow 125ms ease,transform 125ms ease}
 .venue-card:hover{transform:translateY(-2px);box-shadow:0 5px 18px rgba(66,40,20,.09)}
 .venue-card:active{transform:scale(.98);box-shadow:0 2px 8px rgba(66,40,20,.06)}
@@ -30,29 +11,29 @@
 .venue-card__scrim{position:absolute;inset:0 0 60%;background:linear-gradient(to bottom,rgba(0,0,0,.35),transparent);pointer-events:none}
 .venue-card__featured,.venue-card__rating{position:absolute;top:12px;display:inline-flex;align-items:center;gap:5px;min-height:28px;padding:5px 9px;border-radius:999px;font-size:12px;line-height:16px;font-weight:700;box-shadow:0 2px 8px #00000012}
 .venue-card__featured{left:12px;background:var(--color-brand-500,#ff6e00);color:#fff}.venue-card__rating{right:12px;background:#fff;color:#26211d}.venue-card__featured svg,.venue-card__rating svg{width:13px;height:13px}
-.venue-card__body{padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0}
-.venue-card__title-row{display:flex;align-items:center;gap:12px;min-width:0}
-.venue-card__title-row h3{font-size:18px;line-height:24px;font-weight:600;margin:0;min-width:0;flex:1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
-.venue-card__favorite{width:44px;height:44px;min-width:44px;display:grid;place-items:center;border:1px solid #d8d0ca;border-radius:50%;background:#fff;color:#625952;cursor:pointer}
-.venue-card__favorite svg{width:19px;height:19px}.venue-card__favorite.is-saved{color:var(--color-brand-500,#ff6e00);border-color:var(--color-brand-500,#ff6e00);background:var(--color-brand-tint,#ffefea)}
-.venue-card__location{display:flex;align-items:center;gap:6px;margin:0;color:#625b55;font-size:14px;line-height:20px;min-width:0}
-.venue-card__location svg{width:16px;height:16px;flex:0 0 16px}.venue-card__location span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.venue-card__tags{display:flex;align-items:center;gap:6px;overflow:hidden;white-space:nowrap;min-width:0}
-.venue-card__tag{max-width:33.333%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:4px 8px;border-radius:6px;background:#eceae6;color:#403a35;font-size:12px;line-height:16px}
+.venue-card__body{padding:16px;display:flex;flex-direction:column;gap:0;min-width:0}
+.venue-card__title-row{display:flex;align-items:flex-start;gap:12px;min-width:0}
+.venue-card__title-row h3{font-size:20px;line-height:26px;font-weight:600;color:#26211d;margin:0;min-width:0;flex:1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis;overflow-wrap:anywhere}
+.venue-card__favorite{position:relative;width:44px;height:44px;min-width:44px;flex:0 0 44px;padding:4px;display:grid;place-items:center;border:0;border-radius:50%;background:transparent;color:#625952;cursor:pointer}
+.venue-card__favorite::before{content:"";position:absolute;inset:4px;border:1px solid #d8d0ca;border-radius:50%;background:#fff}
+.venue-card__favorite svg{position:relative;z-index:1;width:18px;height:18px}.venue-card__favorite.is-saved{color:var(--color-brand-500,#ff6e00)}
+.venue-card__favorite.is-saved::before{border-color:var(--color-brand-500,#ff6e00);background:var(--color-brand-tint,#ffefea)}
+.venue-card__location{display:flex;align-items:center;gap:6px;margin:4px 0 0;color:#625b55;font-size:14px;font-weight:400;line-height:20px;min-width:0}
+.venue-card__location svg{width:16px;height:16px;flex:0 0 16px}.venue-card__location span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.venue-card__tags{display:flex;align-items:center;gap:6px;overflow:hidden;white-space:nowrap;min-width:0;margin-top:12px}
+.venue-card__tag{max-width:33.333%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:4px 10px;border-radius:8px;background:#eceae6;color:#403a35;font-size:12px;font-weight:500;line-height:16px}
 .venue-card__tag--offer,.venue-card__tag--positive{background:#e8f5ec;color:#17663c}
-.venue-card__price{display:flex;align-items:baseline;gap:5px;flex-wrap:wrap;min-width:0}.venue-card__price>span{width:100%;color:#625b55;font-size:12px;line-height:16px}.venue-card__price strong{font-size:20px;line-height:24px;font-weight:700;white-space:nowrap}.venue-card__price small{font-size:12px;line-height:16px;color:#625b55}
-.venue-card__availability{display:flex;align-items:center;gap:6px;font-size:12px;line-height:16px;color:#17663c;text-align:right}.venue-card__availability i{width:7px;height:7px;border-radius:50%;background:#21834e;flex:0 0 7px}.venue-card__availability--limited{color:#8a4a0a}.venue-card__availability--limited i{background:#d48a22}.venue-card__availability--sold-out{color:#625b55}.venue-card__availability--sold-out i{background:#827a73}
-.venue-card__footer{display:flex;align-items:center;justify-content:space-between;gap:16px;min-width:0;padding-top:4px}
-.venue-card__footer .venue-card__price{display:block;flex:1 1 auto;min-width:0}
-.venue-card__footer .venue-card__price>span{display:block;width:auto;color:#625b55;font-size:12px;line-height:16px}
-.venue-card__price-detail{display:flex;align-items:baseline;gap:5px;min-width:0}
-.venue-card__footer .venue-card__price strong{flex:0 0 auto;font-size:20px;line-height:24px;white-space:nowrap}
-.venue-card__footer .venue-card__price small{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.venue-card__footer>.venue-card__primary{height:48px;min-width:150px;flex:0 0 auto;padding:0 12px;border-radius:10px;font:600 14px/20px Inter,sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;cursor:pointer}
+.venue-card__footer{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;min-width:0;margin-top:16px}
+.venue-card__price{display:flex;flex:1 1 auto;flex-direction:column;align-items:flex-start;gap:0;min-width:0}
+.venue-card__price>span{display:block;width:auto;color:#625b55;font-size:12px;font-weight:400;line-height:16px}
+.venue-card__price-detail{display:flex;align-items:baseline;gap:5px;min-width:0;max-width:100%}
+.venue-card__footer .venue-card__price strong{flex:0 0 auto;font-size:18px;line-height:24px;font-weight:700;white-space:nowrap}
+.venue-card__footer .venue-card__price small{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#625b55;font-size:12px;line-height:16px}
+.venue-card__footer>.venue-card__primary{height:48px;min-width:150px;flex:0 0 auto;padding:0 12px;border-radius:10px;font:600 15px/20px Inter,sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;cursor:pointer}
 .venue-card__primary{background:var(--color-brand-500,#ff6e00);border:1px solid var(--color-brand-500,#ff6e00);color:#fff}.venue-card__primary:disabled{background:#ded8d2;border-color:#ded8d2;color:#655d56;cursor:not-allowed}.venue-card__primary svg{width:16px;height:16px}
 .venue-card button:focus-visible{outline:3px solid #302219;outline-offset:2px}.venue-card button:active:not(:disabled){transform:scale(.99)}
-.venue-card--carousel{height:100%}
-@media(max-width:390px){.venue-card__body{padding:12px}.venue-card__footer{gap:12px}.venue-card__footer>.venue-card__primary{min-width:150px;padding:0 10px}.venue-card__price strong{font-size:20px}}
+.venue-card--compact .venue-card__tags{display:none}.venue-card--compact .venue-card__footer{margin-top:16px}.venue-card--carousel{height:100%}
+@media(max-width:390px){.venue-card__body{padding:16px}.venue-card__footer{gap:8px}.venue-card__footer>.venue-card__primary{min-width:0;max-width:100%;padding:0 10px;flex:0 1 auto}.venue-card__price{flex:0 1 auto}.venue-card__price-detail{gap:4px}.venue-card__footer .venue-card__price strong{font-size:18px}}
 @media(prefers-color-scheme:dark){.venue-card{background:var(--surface,#fff);color:var(--ink,#26211d)}}
 
 .venue-card-preview{max-width:1200px;margin:0 auto;padding:24px;color:var(--ink,#26211d)}.venue-card-preview>h1{font-size:28px;line-height:34px}.venue-card-preview>p{color:var(--muted,#625b55)}.venue-card-preview__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.venue-card-preview__grid section{min-width:0}.venue-card-preview__grid h2{font-size:16px;line-height:22px;margin:0 0 10px}@media(max-width:700px){.venue-card-preview__grid{grid-template-columns:minmax(0,1fr)}}
