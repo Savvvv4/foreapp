@@ -1707,3 +1707,19 @@ body,
   .venue-details-v8 .venue-v8-content{padding-bottom:calc(150px + env(safe-area-inset-bottom))!important}
   .venue-details-v8 .venue-v8-cta{width:100%!important}
 }
+
+
+/* Compact detail pages: prioritize names, prices and useful facts. */
+.venue-details-v8 .venue-v8-content{gap:24px!important;padding:18px 16px 24px!important}
+.venue-details-v8 .venue-v8-section{gap:10px!important}
+.venue-details-v8 .venue-v8-note{display:-webkit-box!important;-webkit-line-clamp:3!important;-webkit-box-orient:vertical!important;overflow:hidden!important}
+.venue-details-v8 .venue-v8-rates>div{padding:11px 0!important}
+.venue-details-v8 .venue-v8-pass{min-height:124px!important;padding:12px!important}
+.venue-details-v8 .venue-v8-coach{gap:12px!important;padding:10px!important}
+.venue-details-v8 .venue-v8-avatar{width:68px!important;min-height:104px!important}
+.venue-details-v8 .venue-v8-coach-copy>small{overflow-wrap:anywhere!important}
+.venue-details-v8 .venue-v8-accordion{border:1px solid #E6E3DE!important;border-radius:12px!important;background:#fff!important;padding:0 12px!important}
+.facility-template-content .facility-rate small{display:none!important}
+.facility-template-content .facility-rate{min-height:54px!important;padding:12px 14px!important}
+.facility-template-content .facility-points,.facility-template-content .facility-section-sub{display:none!important}
+.facility-template-content .facility-pass{min-height:78px!important;padding:12px!important}
