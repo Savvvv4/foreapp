@@ -536,49 +536,82 @@ function OfficialCourseListingCard({ venue, onOpen }: { venue: "dwarka" | "bhals
 function OfficialDdaCourseProfileScreen({ venue, go }: { venue: "dwarka" | "bhalswa"; go: (screen: CourseFlowScreen) => void }) {
   const dwarka = venue === "dwarka"
   const name = dwarka ? "DDA Dwarka Golf Course" : "DDA Lake View Golf Course"
-  const address = dwarka ? "Golf Course Road, Sector 24, Dwarka, New Delhi 110075" : "Near Bhalswa Lake, Outer Ring Road, Mukundpur, New Delhi 110042"
-  const rates = dwarka ? [
-    ["9 holes · weekday", "₹660", "Published DDA rate; confirm GST"],
-    ["9 holes · weekend/holiday", "₹1,320", "Published DDA rate; confirm GST"],
-    ["13 holes · weekday", "₹900", "Published DDA rate; confirm GST"],
-    ["13 holes · weekend/holiday", "₹1,800", "Published DDA rate; confirm GST"],
-    ["18 holes · weekday", "₹1,080", "Published DDA rate; confirm GST"],
-    ["18 holes · weekend/holiday", "₹2,160", "Published DDA rate; confirm GST"],
-  ] : [
-    ["9 holes · government category · weekday", "₹265", "GST included"],
-    ["9 holes · government category · weekend/holiday", "₹500", "GST included"],
-    ["9 holes · non-government · weekday", "₹440", "GST included"],
-    ["9 holes · non-government · weekend/holiday", "₹825", "GST included"],
-    ["9 holes · foreigner · weekday", "₹880", "GST included"],
-    ["9 holes · foreigner · weekend/holiday", "₹1,540", "GST included"],
-    ["18 holes (repeat 9) · non-government · weekday", "₹770", "GST included"],
-    ["18 holes (repeat 9) · non-government · weekend/holiday", "₹1,540", "GST included"],
-    ["18 holes (repeat 9) · foreigner · weekday", "₹1,650", "GST included"],
-    ["18 holes (repeat 9) · foreigner · weekend/holiday", "₹2,640", "GST included"],
-    ["18 holes (repeat 9) · government category · weekday", "₹465", "GST included"],
-    ["18 holes (repeat 9) · government category · weekend/holiday", "₹925", "GST included"],
-    ["Student under 18 · 9 holes · weekday", "₹220", "10 AM–4 PM · GST included"],
-    ["Student under 18 · 9 holes · weekend/holiday", "₹415", "10 AM–4 PM · GST included"],
-    ["Student under 18 · 18 holes · weekday", "₹385", "10 AM–4 PM · GST included"],
-    ["Student under 18 · 18 holes · weekend/holiday", "₹770", "10 AM–4 PM · GST included"],
-    ["Driving range entry · Indian", "₹82.50", "GST included"],
-    ["Driving range entry · foreigner/NRI", "₹165", "GST included"],
-    ["Bucket of 50 balls", "₹82.50", "GST included"],
-    ["Coaching · 30 minutes", "₹650", "DDA listed coach rate"],
+  const address = dwarka ? "Sector 24, Dwarka, New Delhi" : "Near Bhalswa Lake, Outer Ring Road, Mukundpur, New Delhi 110042"
+  const [saved, setSaved] = useState(false)
+  const dwarkaRates = [
+    ["9 holes", "₹660", "₹1,320"],
+    ["13 holes", "₹900", "₹1,800"],
+    ["18 holes", "₹1,080", "₹2,160"],
   ]
-  const facts = dwarka ? [["Planned course", "18 holes"], ["Additional facilities", "Driving range; 6-hole chip & putt course"], ["Current booking status", "Not enabled pending DDA confirmation"], ["DDA course office", "011-46035704"], ["Playing-rights enquiries", "8588823469 · 11 AM–4 PM"]] : [["Course", "9 holes"], ["Driving range", "220 yards · 10 bays"], ["Practice areas", "Putting green, chipping area and bunker"], ["Clubhouse", "Hall, open terrace and lawns"], ["Area", "79 acres"], ["Reception", "8800639123 · 10 AM–5 PM"], ["Secretary", "8800812711 · 10 AM–5 PM"]]
-  return <main className="course-profile-screen course-template-detail">
-    <section className="facility-template-hero"><img src={dwarka ? photos.course : photos.green} alt={name} /><span className="facility-template-hero-gradient" /><button type="button" className="facility-hero-button facility-hero-back" onClick={() => go("discover")} aria-label="Go back"><Icon name="chevron" size={20} /></button><div className="course-template-hero-label"><span className="eyebrow light">{dwarka ? "DDA · DWARKA SECTOR 24" : "DDA · BHALSWA LAKE"}</span></div></section>
-    <div className="facility-template-content">
-      <header className="facility-template-heading"><h1>{name}</h1><div className="facility-template-stat"><span><span className="facility-location-icon"><Icon name="pin" size={15} /></span><strong>{dwarka ? "Sector 24, Dwarka" : "Mukundpur, North Delhi"}</strong></span></div></header>
-      {dwarka && <section className="facility-template-section"><h2>Opening status</h2><p className="course-template-description">DDA’s golf-course page still describes the facility as under construction, while DDA has also published playing-rights notices and green-fee rates. These rates are for reference only. Fore booking is disabled until DDA confirms public playing availability.</p></section>}
-      <section className="facility-template-section"><h2>At a glance</h2><table className="facility-score"><tbody>{facts.map(([label, value]) => <tr key={label}><td>{label}</td><th>{value}</th></tr>)}</tbody></table></section>
-      <section className="facility-template-section"><h2>{dwarka ? "Published green fees" : "Green fees & practice rates"}</h2><div className="facility-rate-list">{rates.map(([label, price, note]) => <div className="facility-rate" key={label}><span><b>{label}</b><small>{note}</small></span><strong>{price}</strong></div>)}</div><p className="facility-section-sub">{dwarka ? "Source: DDA Sports Wing circular dated 30 September 2025. Confirm final payable amount and current availability directly with DDA." : "Rates are taken from DDA’s Lake View Golf Course page. Government-category rates differ from non-government rates."}</p></section>
-      <section className="facility-template-section"><h2>Getting there</h2><div className="facility-map-graphic" role="img" aria-label={"Map showing the location of " + name}><span className="facility-map-road facility-map-road-a" aria-hidden="true" /><span className="facility-map-road facility-map-road-b" aria-hidden="true" /><span className="facility-map-road facility-map-road-c" aria-hidden="true" /><span className="facility-map-park facility-map-park-a" aria-hidden="true" /><span className="facility-map-park facility-map-park-b" aria-hidden="true" /><span className="facility-map-label facility-map-label-a" aria-hidden="true">{dwarka ? "Sector 24" : "Bhalswa Lake"}</span><span className="facility-map-label facility-map-label-b" aria-hidden="true">{dwarka ? "Dwarka" : "Outer Ring Road"}</span><span className="facility-map-marker" aria-hidden="true"><Icon name="pin" size={18} /></span></div><button className="facility-directions" data-prototype="Directions" data-prototype-body={address}><span><b>{name}</b><small>{address}</small></span><strong>Directions</strong></button></section>
-      {!dwarka && <section className="facility-template-section"><h2>Practice facility</h2><p className="course-template-description">The DDA complex also operates a driving range. Open the Facilities listing for range details.</p><button className="course-template-all-times" onClick={() => go("bhalswaRangeProfile")}>View practice facility <Icon name="arrow" size={15} /></button></section>}
-    </div>
-    <div className="facility-template-action"><button type="button" className="primary-button" onClick={() => dwarka ? emitPrototypeEvent("DDA Dwarka booking unavailable", "DDA’s current public status is conflicting. Contact DDA before planning a round.") : emitPrototypeEvent("Contact Lake View Golf Course", "Call reception on 8800639123 (10 AM–5 PM) to confirm tee times and playing category.")}>{dwarka ? "Booking not yet verified" : "Contact to confirm tee time"} <Icon name="arrow" size={16} /></button></div>
-  </main>
+  const lakeViewRates = [
+    ["Government category", "₹265", "₹500", "₹465", "₹925"],
+    ["Non-government", "₹440", "₹825", "₹770", "₹1,540"],
+    ["Foreigner", "₹880", "₹1,540", "₹1,650", "₹2,640"],
+    ["Student under 18", "₹220", "₹415", "₹385", "₹770"],
+  ]
+  const facts = dwarka
+    ? [["Course", "18 holes planned"], ["Practice", "Driving range and 6-hole chip & putt course"], ["Status", "Construction / public access to be confirmed"]]
+    : [["Course", "9 holes"], ["Driving range", "Practice range, green and chipping area"], ["Clubhouse", "Hall, open terrace and lawns"], ["Course area", "79 acres"]]
+  return (
+    <main className="course-profile-screen course-template-detail dda-course-detail">
+      <section className="facility-template-hero">
+        <img src={dwarka ? photos.course : photos.green} alt={name} />
+        <span className="facility-template-hero-gradient" />
+        <button type="button" className="facility-hero-button facility-hero-back" onClick={() => go("discover")} aria-label="Go back"><Icon name="chevron" size={20} /></button>
+        <button type="button" className={`facility-hero-button facility-hero-save ${saved ? "saved" : ""}`} onClick={() => setSaved((value) => !value)} aria-label={saved ? "Remove course from saved" : "Save course"} aria-pressed={saved}><Icon name="heart" size={20} /></button>
+        <div className="course-template-hero-label"><span className="eyebrow light">{dwarka ? "DWARKA · SECTOR 24" : "NORTH DELHI · BHALSWA LAKE"}</span></div>
+      </section>
+      <div className="facility-template-content">
+        <header className="facility-template-heading">
+          <h1>{name}</h1>
+          <div className="facility-template-stat">
+            <span><span className="facility-location-icon"><Icon name="pin" size={15} /></span><strong>{dwarka ? "Sector 24, Dwarka" : "Mukundpur, North Delhi"}</strong></span>
+          </div>
+        </header>
+        {dwarka && <section className="dda-course-status"><span><Icon name="info" size={16} /> Public tee-time booking not available</span><p>DDA currently lists the course as under construction. Published rates are shown for reference only.</p></section>}
+        <section className="facility-template-section">
+          <h2>{dwarka ? "About the project" : "About the course"}</h2>
+          <p className="course-template-description">{dwarka ? "The planned DDA course includes an 18-hole golf course, a driving range and a 6-hole chip-and-putt course for children and new golfers." : "A public, pay-and-play 9-hole course beside Bhalswa Lake, with a driving range, practice green, chipping area and clubhouse."}</p>
+        </section>
+        <section className="facility-template-section">
+          <h2>At a glance</h2>
+          <table className="facility-score"><tbody>{facts.map(([label, value]) => <tr key={label}><td>{label}</td><th>{value}</th></tr>)}</tbody></table>
+        </section>
+        {dwarka ? (
+          <section className="facility-template-section">
+            <h2>Green fees</h2>
+            <div className="dda-pricing-table-wrap"><table className="dda-pricing-table"><thead><tr><th>Round</th><th>Weekday</th><th>Weekend</th></tr></thead><tbody>{dwarkaRates.map(([holes, weekday, weekend]) => <tr key={holes}><th>{holes}</th><td>{weekday}</td><td>{weekend}</td></tr>)}</tbody></table></div>
+            <p className="dda-pricing-note">Published DDA rates · GST treatment and current public availability should be confirmed with DDA.</p>
+          </section>
+        ) : (
+          <>
+            <section className="facility-template-section">
+              <h2>Green fees</h2>
+              <div className="dda-pricing-table-wrap"><table className="dda-pricing-table dda-lakeview-table"><thead><tr><th rowSpan={2}>Playing category</th><th colSpan={2}>9 holes</th><th colSpan={2}>18 holes</th></tr><tr><th>Weekday</th><th>Weekend</th><th>Weekday</th><th>Weekend</th></tr></thead><tbody>{lakeViewRates.map(([category, nineWeekday, nineWeekend, eighteenWeekday, eighteenWeekend]) => <tr key={category}><th>{category}</th><td>{nineWeekday}</td><td>{nineWeekend}</td><td>{eighteenWeekday}</td><td>{eighteenWeekend}</td></tr>)}</tbody></table></div>
+              <p className="dda-pricing-note">All listed green fees include GST. Student rates apply to golfers under 18, weekdays and weekends from 10 AM to 4 PM.</p>
+            </section>
+            <section className="facility-template-section">
+              <h2>Practice & rental rates</h2>
+              <div className="facility-rate-list dda-simple-rates">
+                {[["Driving range entry · Indian", "₹82.50"], ["Driving range entry · Foreigner / NRI", "₹165"], ["Bucket of 50 balls", "₹82.50"], ["Golf cart · 9 holes", "₹440"], ["Golf cart · 18 holes", "₹880"], ["Caddie · 9 holes", "₹330"], ["Caddie · 18 holes", "₹550"], ["Coaching · 30 minutes", "₹650"]].map(([label, price]) => <div className="facility-rate" key={label}><span><b>{label}</b></span><strong>{price}</strong></div>)}
+              </div>
+            </section>
+          </>
+        )}
+        <section className="facility-template-section">
+          <h2>Getting there</h2>
+          <div className="facility-map-graphic" role="img" aria-label={`Map showing the location of ${name}`}>
+            <span className="facility-map-road facility-map-road-a" aria-hidden="true" /><span className="facility-map-road facility-map-road-b" aria-hidden="true" /><span className="facility-map-road facility-map-road-c" aria-hidden="true" /><span className="facility-map-park facility-map-park-a" aria-hidden="true" /><span className="facility-map-park facility-map-park-b" aria-hidden="true" /><span className="facility-map-label facility-map-label-a" aria-hidden="true">{dwarka ? "Sector 24" : "Bhalswa Lake"}</span><span className="facility-map-label facility-map-label-b" aria-hidden="true">{dwarka ? "Dwarka" : "Outer Ring Road"}</span><span className="facility-map-marker" aria-hidden="true"><Icon name="pin" size={18} /></span>
+          </div>
+          <button className="facility-directions" data-prototype="Directions" data-prototype-body={address}><span><b>{name}</b><small>{address}</small></span><strong>Directions</strong></button>
+          {!dwarka && <div className="dda-contact-row"><span><b>Course reception</b><small>10 AM–5 PM</small></span><a href="tel:8800639123">8800639123</a></div>}
+          {dwarka && <div className="dda-contact-row"><span><b>DDA course office</b><small>Playing-rights enquiries · 11 AM–4 PM</small></span><a href="tel:8588823469">8588823469</a></div>}
+        </section>
+        {!dwarka && <section className="facility-template-section"><h2>Practice facility</h2><p className="course-template-description">The driving range is part of the same DDA complex.</p><button className="course-template-all-times" onClick={() => go("bhalswaRangeProfile")}>View practice facility <Icon name="arrow" size={15} /></button></section>}
+      </div>
+      <div className="facility-template-action"><button type="button" className="primary-button" onClick={() => dwarka ? emitPrototypeEvent("DDA Dwarka booking unavailable", "DDA currently lists Dwarka Golf Course as under construction. Confirm public access with DDA before planning a round.") : emitPrototypeEvent("Contact Lake View Golf Course", "Call reception on 8800639123 between 10 AM and 5 PM to confirm tee times.")}>{dwarka ? "Check course availability" : "Enquire about tee times"} <Icon name="arrow" size={16} /></button></div>
+    </main>
+  )
 }
 
 function DiscoverCourses({
