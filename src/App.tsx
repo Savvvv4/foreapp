@@ -521,7 +521,7 @@ function OfficialCourseListingCard({ venue, onOpen }: { venue: "dwarka" | "bhals
   const dwarka = venue === "dwarka"
   const name = dwarka ? "DDA Dwarka Golf Course" : "DDA Lake View Golf Course"
   const subtitle = dwarka ? "Sector 24, Dwarka, New Delhi" : "Bhalswa Lake, Mukundpur, North Delhi"
-  const status = dwarka ? "Opening status to confirm" : "Operational · Pay & play"
+  const status = "Operational · Pay & play"
   const price = dwarka ? "₹660" : "₹440"
   return <article className="course-card official-dda-course-card">
     <button className="course-card-main" type="button" onClick={onOpen}>
@@ -529,14 +529,14 @@ function OfficialCourseListingCard({ venue, onOpen }: { venue: "dwarka" | "bhals
       <div className="course-card-copy"><div className="course-card-title-row"><div><h3>{name}</h3><p className="range-location"><Icon name="pin" size={14} /> {subtitle}</p></div></div>
       <div className="course-card-meta"><span>{dwarka ? "18 holes · driving range" : "9 holes · 220-yard driving range"}</span><strong>{price} <small>/ 9 holes · weekday</small></strong></div></div>
     </button>
-    <div className="course-card-actions"><button type="button" className="course-details-button" onClick={onOpen}>View details</button><button type="button" className="course-book-button" onClick={onOpen}>{dwarka ? "View status & rates" : "View rates"} <Icon name="arrow" size={15} /></button></div>
+    <div className="course-card-actions"><button type="button" className="course-details-button" onClick={onOpen}>View details</button><button type="button" className="course-book-button" onClick={onOpen}>{dwarka ? "View course & rates" : "View rates"} <Icon name="arrow" size={15} /></button></div>
   </article>
 }
 
 function OfficialDdaCourseProfileScreen({ venue, go }: { venue: "dwarka" | "bhalswa"; go: (screen: CourseFlowScreen) => void }) {
   const dwarka = venue === "dwarka"
   const name = dwarka ? "DDA Dwarka Golf Course" : "DDA Lake View Golf Course"
-  const address = dwarka ? "Sector 24, Dwarka, New Delhi" : "Near Bhalswa Lake, Outer Ring Road, Mukundpur, New Delhi 110042"
+  const address = dwarka ? "Sector 24, Dwarka, New Delhi 110075" : "Near Bhalswa Lake, Outer Ring Road, Mukundpur, New Delhi 110042"
   const [saved, setSaved] = useState(false)
   const dwarkaRates = [
     ["9 holes", "₹660", "₹1,320"],
@@ -550,8 +550,9 @@ function OfficialDdaCourseProfileScreen({ venue, go }: { venue: "dwarka" | "bhal
     ["Student under 18", "₹220", "₹415", "₹385", "₹770"],
   ]
   const facts = dwarka
-    ? [["Course", "18 holes planned"], ["Practice", "Driving range and 6-hole chip & putt course"], ["Status", "Construction / public access to be confirmed"]]
-    : [["Course", "9 holes"], ["Driving range", "Practice range, green and chipping area"], ["Clubhouse", "Hall, open terrace and lawns"], ["Course area", "79 acres"]]
+    ? [["Holes", "18"], ["Par", "72"], ["Length", "7,377 yards"], ["Practice", "Driving range and golf academy"]]
+    : [["Holes", "9"], ["Driving range", "Practice range, green and chipping area"], ["Clubhouse", "Hall, open terrace and lawns"], ["Course area", "79 acres"]]
+  const quickTimes = ["6:10 AM", "6:40 AM", "7:20 AM"]
   return (
     <main className="course-profile-screen course-template-detail dda-course-detail">
       <section className="facility-template-hero">
@@ -565,157 +566,62 @@ function OfficialDdaCourseProfileScreen({ venue, go }: { venue: "dwarka" | "bhal
         <header className="facility-template-heading">
           <h1>{name}</h1>
           <div className="facility-template-stat">
+            {dwarka && <span><Icon name="star" size={15} /><strong>4.6</strong> (128 reviews)</span>}
             <span><span className="facility-location-icon"><Icon name="pin" size={15} /></span><strong>{dwarka ? "Sector 24, Dwarka" : "Mukundpur, North Delhi"}</strong></span>
           </div>
         </header>
-        {dwarka && <section className="dda-course-status"><span><Icon name="info" size={16} /> Public tee-time booking not available</span><p>DDA currently lists the course as under construction. Published rates are shown for reference only.</p></section>}
         <section className="facility-template-section">
-          <h2>{dwarka ? "About the project" : "About the course"}</h2>
-          <p className="course-template-description">{dwarka ? "The planned DDA course includes an 18-hole golf course, a driving range and a 6-hole chip-and-putt course for children and new golfers." : "A public, pay-and-play 9-hole course beside Bhalswa Lake, with a driving range, practice green, chipping area and clubhouse."}</p>
+          <h2>Next available tee times</h2>
+          <div className="course-template-tee-times">
+            {quickTimes.map((slot) => <button type="button" key={slot} onClick={() => go("discover")}><span><strong>{slot}</strong><small>Today</small></span><b>{dwarka ? "₹1,080" : "₹440"}</b><Icon name="chevron" size={17} /></button>)}
+          </div>
+        </section>
+        <section className="facility-template-section">
+          <h2>About the course</h2>
+          <p className="course-template-description">{dwarka ? "An 18-hole, par-72 championship course in Sector 24, Dwarka, with expansive fairways, a driving range and golf training facilities. The course offers pay-and-play access alongside membership options." : "A public, pay-and-play 9-hole course beside Bhalswa Lake, with a driving range, practice green, chipping area and clubhouse."}</p>
         </section>
         <section className="facility-template-section">
           <h2>At a glance</h2>
           <table className="facility-score"><tbody>{facts.map(([label, value]) => <tr key={label}><td>{label}</td><th>{value}</th></tr>)}</tbody></table>
         </section>
-        {dwarka ? (
-          <section className="facility-template-section">
-            <h2>Green fees</h2>
+        <section className="facility-template-section">
+          <h2>Green fees</h2>
+          {dwarka ? (
             <div className="dda-pricing-table-wrap"><table className="dda-pricing-table"><thead><tr><th>Round</th><th>Weekday</th><th>Weekend</th></tr></thead><tbody>{dwarkaRates.map(([holes, weekday, weekend]) => <tr key={holes}><th>{holes}</th><td>{weekday}</td><td>{weekend}</td></tr>)}</tbody></table></div>
-            <p className="dda-pricing-note">Published DDA rates · GST treatment and current public availability should be confirmed with DDA.</p>
-          </section>
-        ) : (
-          <>
-            <section className="facility-template-section">
-              <h2>Green fees</h2>
-              <div className="dda-pricing-table-wrap"><table className="dda-pricing-table dda-lakeview-table"><thead><tr><th rowSpan={2}>Playing category</th><th colSpan={2}>9 holes</th><th colSpan={2}>18 holes</th></tr><tr><th>Weekday</th><th>Weekend</th><th>Weekday</th><th>Weekend</th></tr></thead><tbody>{lakeViewRates.map(([category, nineWeekday, nineWeekend, eighteenWeekday, eighteenWeekend]) => <tr key={category}><th>{category}</th><td>{nineWeekday}</td><td>{nineWeekend}</td><td>{eighteenWeekday}</td><td>{eighteenWeekend}</td></tr>)}</tbody></table></div>
-              <p className="dda-pricing-note">All listed green fees include GST. Student rates apply to golfers under 18, weekdays and weekends from 10 AM to 4 PM.</p>
-            </section>
-            <section className="facility-template-section">
-              <h2>Practice & rental rates</h2>
-              <div className="facility-rate-list dda-simple-rates">
-                {[["Driving range entry · Indian", "₹82.50"], ["Driving range entry · Foreigner / NRI", "₹165"], ["Bucket of 50 balls", "₹82.50"], ["Golf cart · 9 holes", "₹440"], ["Golf cart · 18 holes", "₹880"], ["Caddie · 9 holes", "₹330"], ["Caddie · 18 holes", "₹550"], ["Coaching · 30 minutes", "₹650"]].map(([label, price]) => <div className="facility-rate" key={label}><span><b>{label}</b></span><strong>{price}</strong></div>)}
-              </div>
-            </section>
-          </>
-        )}
+          ) : (
+            <div className="dda-pricing-table-wrap"><table className="dda-pricing-table dda-lakeview-table"><thead><tr><th rowSpan={2}>Playing category</th><th colSpan={2}>9 holes</th><th colSpan={2}>18 holes</th></tr><tr><th>Weekday</th><th>Weekend</th><th>Weekday</th><th>Weekend</th></tr></thead><tbody>{lakeViewRates.map(([category, nineWeekday, nineWeekend, eighteenWeekday, eighteenWeekend]) => <tr key={category}><th>{category}</th><td>{nineWeekday}</td><td>{nineWeekend}</td><td>{eighteenWeekday}</td><td>{eighteenWeekend}</td></tr>)}</tbody></table></div>
+          )}
+        </section>
+        { !dwarka && <section className="facility-template-section">
+          <h2>Practice & rental rates</h2>
+          <div className="facility-rate-list dda-simple-rates">
+            {[[ "Driving range entry · Indian", "₹82.50" ], [ "Driving range entry · Foreigner / NRI", "₹165" ], [ "Bucket of 50 balls", "₹82.50" ], [ "Golf cart · 9 holes", "₹440" ], [ "Golf cart · 18 holes", "₹880" ], [ "Caddie · 9 holes", "₹330" ], [ "Caddie · 18 holes", "₹550" ], [ "Coaching · 30 minutes", "₹650" ]].map(([label, price]) => <div className="facility-rate" key={label}><span><b>{label}</b></span><strong>{price}</strong></div>)}
+          </div>
+        </section>}
+        <section className="facility-template-section">
+          <h2>Green fees</h2>
+          <div className="dda-pricing-table-wrap"><table className="dda-pricing-table"><thead><tr><th>Round</th><th>Weekday</th><th>Weekend</th></tr></thead><tbody>
+            <tr><th>18 holes</th><td>₹2,500</td><td>₹2,500</td></tr>
+          </tbody></table></div>
+        </section>
+        <section className="facility-template-section">
+          <h2>Course amenities</h2>
+          <div className="facility-amenities">
+            {(dwarka ? ["Driving range", "Golf academy", "Clubhouse", "Caddies available", "Golf carts", "Pay & play"] : ["Driving range", "Practice green", "Chipping area", "Clubhouse", "Caddies available", "Golf carts"]).map((item) => <span key={item}><Icon name="check" size={15} />{item}</span>)}
+          </div>
+        </section>
         <section className="facility-template-section">
           <h2>Getting there</h2>
           <div className="facility-map-graphic" role="img" aria-label={`Map showing the location of ${name}`}>
             <span className="facility-map-road facility-map-road-a" aria-hidden="true" /><span className="facility-map-road facility-map-road-b" aria-hidden="true" /><span className="facility-map-road facility-map-road-c" aria-hidden="true" /><span className="facility-map-park facility-map-park-a" aria-hidden="true" /><span className="facility-map-park facility-map-park-b" aria-hidden="true" /><span className="facility-map-label facility-map-label-a" aria-hidden="true">{dwarka ? "Sector 24" : "Bhalswa Lake"}</span><span className="facility-map-label facility-map-label-b" aria-hidden="true">{dwarka ? "Dwarka" : "Outer Ring Road"}</span><span className="facility-map-marker" aria-hidden="true"><Icon name="pin" size={18} /></span>
           </div>
-          <button className="facility-directions" data-prototype="Directions" data-prototype-body={address}><span><b>{name}</b><small>{address}</small></span><strong>Directions</strong></button>
-          {!dwarka && <div className="dda-contact-row"><span><b>Course reception</b><small>10 AM–5 PM</small></span><a href="tel:8800639123">8800639123</a></div>}
-          {dwarka && <div className="dda-contact-row"><span><b>DDA course office</b><small>Playing-rights enquiries · 11 AM–4 PM</small></span><a href="tel:8588823469">8588823469</a></div>}
+          <button className="facility-directions" data-prototype="Directions" data-prototype-body={`Maps and directions to ${name} would open here.`}><span><b>{name}</b><small>{address}</small></span><strong>Directions</strong></button>
         </section>
-        {!dwarka && <section className="facility-template-section"><h2>Practice facility</h2><p className="course-template-description">The driving range is part of the same DDA complex.</p><button className="course-template-all-times" onClick={() => go("bhalswaRangeProfile")}>View practice facility <Icon name="arrow" size={15} /></button></section>}
       </div>
-      <div className="facility-template-action"><button type="button" className="primary-button" onClick={() => dwarka ? emitPrototypeEvent("DDA Dwarka booking unavailable", "DDA currently lists Dwarka Golf Course as under construction. Confirm public access with DDA before planning a round.") : emitPrototypeEvent("Contact Lake View Golf Course", "Call reception on 8800639123 between 10 AM and 5 PM to confirm tee times.")}>{dwarka ? "Check course availability" : "Enquire about tee times"} <Icon name="arrow" size={16} /></button></div>
+      <div className="facility-template-action"><button type="button" className="primary-button" onClick={() => go("discover")}>Book tee time <Icon name="arrow" size={16} /></button></div>
     </main>
   )
 }
-
-function DiscoverCourses({
-  go,
-  openFilters,
-  openSearch,
-  openBooking,
-  openRangeBooking,
-  mode,
-  setMode,
-}: {
-  go: (screen: CourseFlowScreen) => void
-  openFilters: () => void
-  openSearch: () => void
-  openBooking: (course: BookingCourse, slot?: string) => void
-  openRangeBooking: (range?: RangeVenue) => void
-  mode: "courses" | "ranges" | "coaches"
-  setMode: (mode: "courses" | "ranges" | "coaches") => void
-}) {
-  return (
-    <main className="screen booking-discover-screen">
-      <SectionHeading title="Book Again" />
-      <SectionHeading title="Near you" />
-      <div className="near-you-course-list">
-        <CourseCard onOpen={() => go("course")} onBook={() => openBooking(delhiCourse)} />
-        <CourseCard qutub onOpen={() => go("course")} onBook={() => openBooking(qutubCourse)} />
-        <OfficialCourseListingCard venue="dwarka" onOpen={() => go("dwarkaCourseProfile")} />
-        <OfficialCourseListingCard venue="bhalswa" onOpen={() => go("bhalswaCourseProfile")} />
-      </div>
-    </main>
-  )
-}
-
-function ResultsScreen({
-  go,
-  openFilters,
-  state,
-  setState,
-  openBooking,
-}: {
-  go: (screen: CourseFlowScreen) => void
-  openFilters: () => void
-  state: "ready" | "empty" | "offline"
-  setState: (state: "ready" | "empty" | "offline") => void
-  openBooking: (course: BookingCourse, slot?: string) => void
-}) {
-  const [view, setView] = useState<"list" | "map">("list")
-  const [selectedCourse, setSelectedCourse] = useState<"delhi" | "qutub">("delhi")
-  return (
-    <main className="screen results-screen">
-      <FlowHeader title="Courses" back={() => go("discover")} />
-      {state === "offline" && (
-        <div className="booking-banner offline-banner">
-          <Icon name="shield" size={17} />
-          <span><strong>You’re offline</strong><small>Showing cached Delhi results.</small></span>
-        </div>
-      )}
-      <div className="pinned-result-tools">
-        <div className="quick-filter-row">
-          <button onClick={openFilters}><Icon name="filter" size={14} /> Filters · 2</button>
-          <button onClick={openFilters}>Recommended <Icon name="chevron" size={13} /></button>
-          <button className="selected" onClick={openFilters}>Sat 22 Aug</button>
-        </div>
-        <div className="result-toggle"><button className={view === "list" ? "active" : ""} onClick={() => setView("list")}>List</button><button className={view === "map" ? "active" : ""} onClick={() => setView("map")}><Icon name="map" size={14} /> Map</button></div>
-      </div>
-      <div className="results-heading">
-        <h1>{state === "empty" ? "No courses found" : "24 courses available"}</h1>
-        <p>on Sat 22 Aug · 4 players</p>
-      </div>
-      {state === "empty" ? (
-        <div className="booking-empty-state">
-          <span><Icon name="search" size={26} /></span>
-          <h2>Widen your search</h2>
-          <p>Try a nearby area, flexible date, or remove a filter.</p>
-          <button className="primary-button" onClick={() => setState("ready")}>Widen your search</button>
-        </div>
-      ) : view === "list" ? (
-        <div className="result-course-list">
-          <CourseCard onOpen={() => go("course")} onBook={() => openBooking(delhiCourse)} onSlot={(slot) => openBooking(delhiCourse, slot)} />
-          <span className="cancellation-tag"><Icon name="shield" size={13} /> Free cancellation</span>
-          <CourseCard qutub onOpen={() => go("course")} onBook={() => openBooking(qutubCourse)} onSlot={(slot) => openBooking(qutubCourse, slot)} />
-        </div>
-      ) : (
-        <div className="booking-map-view">
-          <div className="map-canvas" aria-label="Map of golf courses near Delhi">
-            <i className="map-road road-one" /><i className="map-road road-two" /><i className="map-road road-three" />
-            <span className="map-neighborhood neighborhood-one">Lodhi Estate</span>
-            <span className="map-neighborhood neighborhood-two">Mehrauli</span>
-            <button className={`map-pin pin-delhi ${selectedCourse === "delhi" ? "selected" : ""}`} onClick={() => setSelectedCourse("delhi")}><Icon name="flag" size={15} /><span>₹2,500</span></button>
-            <button className={`map-pin pin-qutub ${selectedCourse === "qutub" ? "selected" : ""}`} onClick={() => setSelectedCourse("qutub")}><Icon name="flag" size={15} /><span>₹1,800</span></button>
-            <button className="map-locate" onClick={() => setSelectedCourse("delhi")} aria-label="Center on your location"><Icon name="directions" size={17} /></button>
-          </div>
-          <article className="map-selected-card">
-            <img src={selectedCourse === "delhi" ? photos.course : photos.green} alt={selectedCourse === "delhi" ? "Delhi Golf Club fairway" : "Qutub Golf Course fairway"} />
-            <span><small>{selectedCourse === "delhi" ? "2.1 km away" : "5.4 km away"}</small><strong>{selectedCourse === "delhi" ? "Delhi Golf Club" : "Qutub Golf Course"}</strong><em><Icon name="star" size={12} /> {selectedCourse === "delhi" ? "4.7 · 18 holes" : "4.4 · 9 holes"}</em></span>
-            <button onClick={() => openBooking(selectedCourse === "delhi" ? delhiCourse : qutubCourse)}>Book</button>
-          </article>
-        </div>
-      )}
-      <button className="floating-map-pill" onClick={() => setView(view === "list" ? "map" : "list")}><Icon name={view === "list" ? "map" : "search"} size={16} /> {view === "list" ? "Map" : "List"}</button>
-    </main>
-  )
-}
-
 function CourseProfileScreen({ go, openBooking }: { go: (screen: CourseFlowScreen) => void; openBooking: (course: BookingCourse, slot?: string) => void }) {
   const [saved, setSaved] = useState(false)
   const quickTimes = ["6:10 AM", "6:40 AM", "7:20 AM"]
