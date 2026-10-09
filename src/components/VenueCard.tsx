@@ -71,26 +71,13 @@ export default function VenueCard(props: VenueCardProps) {
         </div>
         <p className="venue-card__location"><Pin /><span>{location || "Location unavailable"}{typeof distanceKm === "number" ? ` · ${distanceKm.toFixed(1)} km` : ""}</span></p>
         {variant !== "compact" && visibleTags.length > 0 && <div className="venue-card__tags">{visibleTags.map((tag) => <span key={tag.label} className={`venue-card__tag venue-card__tag--${tag.tone ?? "default"}`}>{tag.label}</span>)}</div>}
-        {variant === "compact" ? (
-          <>
-            <div className="venue-card__price-row">
-              <div className="venue-card__price"><span>From</span><strong>{price}</strong><small>{priceUnit}</small></div>
-              {availability && <div className={`venue-card__availability venue-card__availability--${availability.status ?? "available"}`}><i />{availability.label}</div>}
-            </div>
-            <div className="venue-card__actions">
-              <button className="venue-card__secondary" type="button" onClick={(event) => { event.stopPropagation(); onOpen() }}>View details</button>
-              <button className="venue-card__primary" type="button" disabled={soldOut} onClick={(event) => { event.stopPropagation(); onBook() }}>{soldOut ? "Join waitlist" : venueType === "course" ? "Book tee time" : "Book a bay"}{!soldOut && <Arrow />}</button>
-            </div>
-          </>
-        ) : (
-          <div className="venue-card__footer">
-            <div className="venue-card__price">
-              <span>From</span>
-              <div className="venue-card__price-detail"><strong>{price}</strong><small>{priceUnit}</small></div>
-            </div>
-            <button className="venue-card__primary" type="button" disabled={soldOut} onClick={(event) => { event.stopPropagation(); onBook() }}>{soldOut ? "Join waitlist" : venueType === "course" ? "Book tee time" : "Book a bay"}{!soldOut && <Arrow />}</button>
+        <div className="venue-card__footer">
+          <div className="venue-card__price">
+            <span>From</span>
+            <div className="venue-card__price-detail"><strong>{price}</strong><small>{priceUnit}</small></div>
           </div>
-        )}
+          <button className="venue-card__primary" type="button" disabled={soldOut} onClick={(event) => { event.stopPropagation(); onBook() }}>{soldOut ? "Join waitlist" : venueType === "course" ? "Book tee time" : "Book a bay"}{!soldOut && <Arrow />}</button>
+        </div>
       </div>
     </article>
   )
