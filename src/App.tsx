@@ -544,7 +544,7 @@ function DiscoverCourses({
       <div className="near-you-course-list">
         <CourseCard onOpen={() => go("course")} onBook={() => openBooking(delhiCourse)} />
         <CourseCard qutub onOpen={() => go("course")} onBook={() => openBooking(qutubCourse)} />
-        <OfficialCourseListingCard venue="dwarka" featured onOpen={() => go("dwarkaCourseProfile")} />
+        <OfficialCourseListingCard venue="dwarka" featured onOpen={() => go("dwarkaCourseProfile")} onBook={() => openBooking({ name: "DDA Dwarka Golf Course", image: photos.course, price: 660 })} />
         <OfficialCourseListingCard venue="bhalswa" onOpen={() => go("bhalswaCourseProfile")} onBook={() => openBooking({ name: "DDA Lake View Golf Course", image: photos.green, price: 440 })} />
       </div>
     </main>
