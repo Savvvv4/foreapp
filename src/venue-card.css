@@ -25,7 +25,7 @@
 .venue-card__tag--offer,.venue-card__tag--positive{background:#e8f5ec;color:#17663c}
 .venue-card__footer{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;margin-top:16px}
 .venue-card__price{display:flex;flex:1 1 auto;flex-direction:column;align-items:flex-start;gap:0;min-width:0}
-.venue-card__price>span{display:block;width:auto;margin:0;color:#625b55;font-size:12px;font-weight:400;line-height:16px}
+.venue-card .venue-card__footer .venue-card__price>span{display:block;flex:0 0 auto;width:auto;margin:0;color:#625b55;font-size:12px;font-weight:400;line-height:16px}
 .venue-card__price-detail{display:flex;align-items:baseline;gap:5px;min-width:0;max-width:100%}
 .venue-card__footer .venue-card__price strong{flex:0 0 auto;font-size:18px;line-height:24px;font-weight:700;white-space:nowrap}
 .venue-card__footer .venue-card__price small{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#625b55;font-size:12px;line-height:16px}
