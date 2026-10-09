@@ -436,13 +436,13 @@ function mapVenueCardData(key: VenueKey, onOpen: () => void, onBook: () => void,
   const venues: Record<VenueKey, Omit<VenueCardProps, "onOpen" | "onBook" | "featured">> = {
     dgc: { venueType: "course", name: "Delhi Golf Club", image: "https://upload.wikimedia.org/wikipedia/commons/9/97/Delhi_Golf_Club_2133934588_2459ee4064_o.jpg", rating: 4.7, locality: "Lodhi Road", city: "New Delhi", distanceKm: 2.1, tags: [{ label: "18 holes" }, { label: "Championship" }], price: "₹2,500", priceUnit: "/ round" },
     "qutub-course": { venueType: "course", name: "Qutub Golf Course", image: "https://www.indiagolfweekly.com/wp-content/uploads/2020/10/qgc5.jpg", rating: 4.4, locality: "Mehrauli", city: "New Delhi", distanceKm: 5.4, tags: [{ label: "18 holes" }, { label: "Public" }], price: "₹1,100", priceUnit: "/ 9 holes weekday" },
-    "karma-lakelands": { venueType: "course", name: "Karma Lakelands", image: "/Karma-Lakelands-Golf-Course-Gurgaon-2.webp", rating: 4.6, locality: "Sector 80, NH 8", city: "Gurugram", distanceKm: 25, tags: [{ label: "9-hole course" }, { label: "Eco-friendly" }], price: "₹2,400", priceUnit: "/ 9 holes weekday" },
-    dwarka: { venueType: "course", name: "DDA Dwarka Golf Course", image: "/Dwarka.jpg", rating: 4.8, locality: "Sector 24, Dwarka", distanceKm: 3.2, tags: [{ label: "9 holes" }, { label: "Special offer", tone: "offer" }], price: "₹660", priceUnit: "/ 9 holes weekday" },
-    "lakeview-course": { venueType: "course", name: "DDA Lake View Golf Course", image: "/Lakeview.jpg", rating: 4.0, locality: "Bhalswa Lake", city: "North Delhi", distanceKm: 8.4, tags: [{ label: "9 holes" }, { label: "Driving range" }], price: "₹440", priceUnit: "/ 9 holes weekday" },
-    hamoni: { venueType: "practice", name: "Hamoni Golf Camp", image: "/Harmoni.jpg", rating: 4.8, locality: "Sector 23A", city: "Gurugram", distanceKm: 4.1, tags: [{ label: "Driving range" }, { label: "Floodlit" }, { label: "Special offer", tone: "offer" }], price: "₹500", priceUnit: "/ person + GST" },
+    "karma-lakelands": { venueType: "course", name: "Karma Lakelands", image: "https://media.githubusercontent.com/media/Savvvv4/foreapp/main/public/Karma-Lakelands-Golf-Course-Gurgaon-2.webp", rating: 4.6, locality: "Sector 80, NH 8", city: "Gurugram", distanceKm: 25, tags: [{ label: "9-hole course" }, { label: "Eco-friendly" }], price: "₹2,400", priceUnit: "/ 9 holes weekday" },
+    dwarka: { venueType: "course", name: "DDA Dwarka Golf Course", image: "https://media.githubusercontent.com/media/Savvvv4/foreapp/main/public/Dwarka.jpg", rating: 4.8, locality: "Sector 24, Dwarka", distanceKm: 3.2, tags: [{ label: "9 holes" }, { label: "Special offer", tone: "offer" }], price: "₹660", priceUnit: "/ 9 holes weekday" },
+    "lakeview-course": { venueType: "course", name: "DDA Lake View Golf Course", image: "https://media.githubusercontent.com/media/Savvvv4/foreapp/main/public/Lakeview.jpg", rating: 4.0, locality: "Bhalswa Lake", city: "North Delhi", distanceKm: 8.4, tags: [{ label: "9 holes" }, { label: "Driving range" }], price: "₹440", priceUnit: "/ 9 holes weekday" },
+    hamoni: { venueType: "practice", name: "Hamoni Golf Camp", image: "https://media.githubusercontent.com/media/Savvvv4/foreapp/main/public/Harmoni.jpg", rating: 4.8, locality: "Sector 23A", city: "Gurugram", distanceKm: 4.1, tags: [{ label: "Driving range" }, { label: "Floodlit" }, { label: "Special offer", tone: "offer" }], price: "₹500", priceUnit: "/ person + GST" },
     "dgc-range": { venueType: "practice", name: "Delhi Golf Club Range", image: "https://upload.wikimedia.org/wikipedia/commons/9/97/Delhi_Golf_Club_2133934588_2459ee4064_o.jpg", rating: 4.6, locality: "Lodhi Road", city: "New Delhi", distanceKm: 2.8, tags: [{ label: "Driving range" }, { label: "Open now", tone: "positive" }], price: "₹900", priceUnit: "/ 60 min" },
     "qutub-practice": { venueType: "practice", name: "Qutub Practice Centre", image: "https://www.indiagolfweekly.com/wp-content/uploads/2020/10/qgc5.jpg", rating: 4.4, locality: "Mehrauli", city: "New Delhi", distanceKm: 5.7, tags: [{ label: "Driving range" }, { label: "Short game area" }], price: "₹900", priceUnit: "/ 60 min" },
-    "lakeview-practice": { venueType: "practice", name: "DDA Lake View Golf Course", image: "/Lakeview.jpg", rating: 4.0, locality: "Bhalswa Lake", city: "North Delhi", distanceKm: 8.4, tags: [{ label: "Driving range" }, { label: "Pay & play" }], price: "₹82.50", priceUnit: "/ 50 balls" },
+    "lakeview-practice": { venueType: "practice", name: "DDA Lake View Golf Course", image: "https://media.githubusercontent.com/media/Savvvv4/foreapp/main/public/Lakeview.jpg", rating: 4.0, locality: "Bhalswa Lake", city: "North Delhi", distanceKm: 8.4, tags: [{ label: "Driving range" }, { label: "Pay & play" }], price: "₹82.50", priceUnit: "/ 50 balls" },
   }
   return { ...venues[key], featured, onOpen, onBook }
 }
@@ -508,7 +508,7 @@ function OfficialDdaCourseProfileScreen({ venue, go }: { venue: "dwarka" | "bhal
   return (
     <main className="course-profile-screen course-template-detail dda-course-detail">
       <section className="facility-template-hero">
-        <img src={dwarka ? "/Dwarka.jpg" : "/Lakeview.jpg"} alt={name} />
+        <img src={dwarka ? "https://media.githubusercontent.com/media/Savvvv4/foreapp/main/public/Dwarka.jpg" : "https://media.githubusercontent.com/media/Savvvv4/foreapp/main/public/Lakeview.jpg"} alt={name} />
         <span className="facility-template-hero-gradient" />
         <button type="button" className="facility-hero-button facility-hero-back" onClick={() => go("discover")} aria-label="Go back"><Icon name="chevron" size={20} /></button>
         <button type="button" className={`facility-hero-button facility-hero-save ${saved ? "saved" : ""}`} onClick={() => setSaved((value) => !value)} aria-label={saved ? "Remove course from saved" : "Save course"} aria-pressed={saved}><Icon name="heart" size={20} /></button>
@@ -1162,7 +1162,7 @@ function RangeProfileScreen({ go, openRangeBooking, hamoni = false, bhalswa = fa
   return (
     <main className="course-profile-screen range-profile-screen range-template-detail">
       <section className="facility-template-hero">
-        <img src={bhalswa ? "/Lakeview.jpg" : hamoni ? "/Harmoni.jpg" : photos.golfer} alt={name} />
+        <img src={bhalswa ? "https://media.githubusercontent.com/media/Savvvv4/foreapp/main/public/Lakeview.jpg" : hamoni ? "https://media.githubusercontent.com/media/Savvvv4/foreapp/main/public/Harmoni.jpg" : photos.golfer} alt={name} />
         <span className="facility-template-hero-gradient" />
         <button type="button" className="facility-hero-button facility-hero-back" onClick={() => go("rangeDiscover")} aria-label="Go back"><Icon name="chevron" size={20} /></button>
         <button type="button" className="facility-hero-button facility-hero-share" onClick={() => {
