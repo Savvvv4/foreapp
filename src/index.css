@@ -4467,3 +4467,7 @@ body.course-detail-open .phone-shell{padding-top:0!important}
   .confirmation-screen .confirmation-summary img { width: 76px; height: 88px; }
   .confirmation-screen .confirmation-actions button { gap: 5px; padding: 9px; font-size: 10px; }
 }
+
+
+.range-discovery-intro { margin: -8px 0 16px; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.range-discover-screen .near-you-range-list { display: grid; gap: 14px; }
