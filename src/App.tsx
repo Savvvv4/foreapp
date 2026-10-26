@@ -467,6 +467,21 @@ function DiscoverCourses({
   mode: "courses" | "ranges" | "coaches"
   setMode: (mode: "courses" | "ranges" | "coaches") => void
 }) {
+  if (mode === "ranges") {
+    return (
+      <main className="screen booking-discover-screen range-discover-screen">
+        <SectionHeading title="Practice facilities" />
+        <p className="range-discovery-intro">Book a bay or a ball bucket at a practice facility.</p>
+        <div className="near-you-range-list">
+          <VenueCard variant="default" {...mapVenueCardData("hamoni", () => openVenueDetails("hamoni"), () => openRangeBooking("hamoni"), true)} />
+          <VenueCard variant="default" {...mapVenueCardData("dgc-range", () => openVenueDetails("dgc-range"), () => openRangeBooking("delhi"))} />
+          <VenueCard variant="default" venueType="practice" name="DDA Dwarka Golf Course Range" image="https://media.githubusercontent.com/media/Savvvv4/foreapp/main/public/Dwarka.jpg" rating={4.8} locality="Sector 24, Dwarka" city="New Delhi" distanceKm={3.2} tags={[{ label: "Practice Facility" }, { label: "50-ball bucket" }]} price="₹150" priceUnit="/ entry" onOpen={() => go("dwarkaRangeProfile")} onBook={() => openRangeBooking("dwarka")} />
+          <VenueCard variant="default" {...mapVenueCardData("qutub-practice", () => openVenueDetails("qutub-practice"), () => openRangeBooking("delhi"))} />
+          <VenueCard variant="default" {...mapVenueCardData("lakeview-practice", () => openVenueDetails("lakeview-practice"), () => emitPrototypeEvent("Contact Lake View Golf Course", "Call reception on 8800639123 (10 AM–5 PM) to confirm range availability and booking procedures."))} />
+        </div>
+      </main>
+    )
+  }
   return (
     <main className="screen booking-discover-screen">
       <SectionHeading title="Book Again" />
