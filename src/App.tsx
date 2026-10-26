@@ -1884,7 +1884,7 @@ function CourseBookingPrototype({
 
   useEffect(() => {
     const active = screen !== "discover" || bookingOpen || filtersOpen || searchOpen || paymentOpen
-    const section: DiscoverSection = screen === "venueDetails" ? (["hamoni","dgc-range","qutub-practice","lakeview-practice"].includes(selectedVenueKey) ? "Facilities" : "Courses") : screen === "hamoniRangeProfile" || screen.startsWith("range") ? "Facilities" : screen.startsWith("coach") ? "Coaches" : "Courses"
+    const section: DiscoverSection = screen === "venueDetails" ? (["hamoni","dgc-range","qutub-practice","lakeview-practice"].includes(selectedVenueKey) ? "Facilities" : "Courses") : screen === "hamoniRangeProfile" || screen === "dwarkaRangeProfile" || screen.startsWith("range") ? "Facilities" : screen.startsWith("coach") ? "Coaches" : "Courses"
     onModuleStateChange(active, section, screen)
   }, [screen, bookingOpen, filtersOpen, searchOpen, paymentOpen, onModuleStateChange])
 
@@ -1895,7 +1895,7 @@ function CourseBookingPrototype({
       onModuleStateChange(false, "Courses", next)
       return
     }
-    if (next === "hamoniRangeProfile" || next.startsWith("range")) {
+    if (next === "hamoniRangeProfile" || next === "dwarkaRangeProfile" || next.startsWith("range")) {
       setMode("ranges")
       onModuleStateChange(true, "Facilities", next)
       return
