@@ -369,6 +369,7 @@ type CourseFlowScreen =
   | "rangeCheckout"
   | "rangeConfirmation"
   | "rangeDetail"
+  | "dwarkaRangeProfile"
   | "coachDiscover"
   | "coachProfile"
   | "coachLesson"
@@ -381,7 +382,7 @@ type CourseFlowScreen =
 type PaymentState = "methods" | "processing" | "failed" | "offline" | "expired"
 type BookingStep = "select" | "review" | "payment"
 type BookingCourse = { name: string; image: string; price: number }
-type RangeVenue = "delhi" | "hamoni" | "bhalswa"
+type RangeVenue = "delhi" | "hamoni" | "bhalswa" | "dwarka"
 
 const delhiCourse: BookingCourse = { name: "Delhi Golf Club", image: photos.course, price: 2500 }
 const qutubCourse: BookingCourse = { name: "Qutub Golf Course", image: photos.green, price: 1800 }
@@ -874,7 +875,7 @@ function BookingFlowModal({
   )
 }
 function RangeBookingFlowModal({
-  hamoni = false,
+  venue = "delhi",
   step,
   setStep,
   date,
@@ -886,7 +887,7 @@ function RangeBookingFlowModal({
   close,
   complete,
 }: {
-  hamoni?: boolean
+  venue?: RangeVenue
   step: BookingStep
   setStep: (step: BookingStep) => void
   date: string
@@ -912,10 +913,12 @@ function RangeBookingFlowModal({
     }
   })
   const selectedDate = dates.find((item) => item.key === date)
-  const entryFee = hamoni ? 500 : 900
-  const ballPrice = hamoni ? 150 : 350
+  const hamoni = venue === "hamoni"
+  const dwarka = venue === "dwarka"
+  const entryFee = hamoni ? 500 : dwarka ? 150 : 900
+  const ballPrice = hamoni ? 150 : dwarka ? 100 : 350
   const total = entryFee + bucketCount * ballPrice
-  const venueName = hamoni ? "Hamoni Golf Camp" : "Delhi Golf Club Range"
+  const venueName = hamoni ? "Hamoni Golf Camp" : dwarka ? "DDA Dwarka Golf Course Range" : "Delhi Golf Club Range"
   const paymentLabel = paymentMethod === "Net banking" ? "Net banking" : paymentMethod
 
   useEffect(() => {
@@ -1138,36 +1141,37 @@ function RangeDiscoverScreen({
       <SectionHeading title="Near you" />
       <div className="near-you-range-list">
         <VenueCard variant="default" {...mapVenueCardData("hamoni", () => openVenueDetails("hamoni"), () => openRangeBooking("hamoni"), true)} />
-        <VenueCard variant="default" {...mapVenueCardData("dgc-range", () => openVenueDetails("dgc-range"), openRangeBooking)} />
+        <VenueCard variant="default" {...mapVenueCardData("dgc-range", () => openVenueDetails("dgc-range"), () => openRangeBooking("delhi"))} />
+        <VenueCard variant="default" venueType="practice" name="DDA Dwarka Golf Course Range" image="https://media.githubusercontent.com/media/Savvvv4/foreapp/main/public/Dwarka.jpg" rating={4.8} locality="Sector 24, Dwarka" city="New Delhi" distanceKm={3.2} tags={[{ label: "Practice Facility" }, { label: "50-ball bucket" }]} price="₹150" priceUnit="/ entry" onOpen={() => go("dwarkaRangeProfile")} onBook={() => openRangeBooking("dwarka")} />
         <VenueCard variant="default" {...mapVenueCardData("qutub-practice", () => openVenueDetails("qutub-practice"), openRangeBooking)} />
         <VenueCard variant="default" {...mapVenueCardData("lakeview-practice", () => openVenueDetails("lakeview-practice"), () => emitPrototypeEvent("Contact Lake View Golf Course", "Call reception on 8800639123 (10 AM–5 PM) to confirm range availability and booking procedures."))} />
       </div>
     </main>
   )
 }
-function RangeProfileScreen({ go, openRangeBooking, hamoni = false, bhalswa = false }: { go: (screen: CourseFlowScreen) => void; openRangeBooking: (range?: RangeVenue) => void; hamoni?: boolean; bhalswa?: boolean }) {
+function RangeProfileScreen({ go, openRangeBooking, hamoni = false, bhalswa = false, dwarka = false }: { go: (screen: CourseFlowScreen) => void; openRangeBooking: (range?: RangeVenue) => void; hamoni?: boolean; bhalswa?: boolean; dwarka?: boolean }) {
   const [saved, setSaved] = useState(false)
-  const name = bhalswa ? "DDA Lake View Golf Course" : hamoni ? "Hamoni Golf Camp" : "Delhi Golf Club Range"
-  const rating = hamoni ? "4.8" : bhalswa ? "4.0" : "4.6"
-  const reviewCount = hamoni ? 228 : bhalswa ? 0 : 184
-  const area = bhalswa ? "Bhalswa Lake, North Delhi" : hamoni ? "Sector 23A, Gurugram" : "Lodhi Road, Delhi"
-  const address = bhalswa ? "DDA Lake View Golf Course, near Bhalswa Lake, Outer Ring Road, Mukundpur, New Delhi 110042" : hamoni ? "CK Farm, Carterpuri, Sector 23A, Gurugram" : "Lodhi Road, Delhi"
-  const facts = bhalswa ? [["Driving bays", "10"], ["Practice Facility", "220 yards"], ["Course", "9 holes"], ["Practice areas", "Putting, chipping & bunker"]] : hamoni ? [["Bays", "105"], ["Target greens", "9"], ["Practice greens", "4"], ["Bunkers", "19"]] : [["Bays", "60"], ["Covered / open", "Mixed"], ["Floodlit", "Yes"], ["Launch monitors", "TrackMan"]]
-  const rates = bhalswa ? [["Practice Facility entry (Indian)", "per visit · GST included", "₹82.50"], ["Bucket of 50 balls", "GST included", "₹82.50"], ["9 holes · non-government", "weekday · GST included", "₹440"], ["9 holes · non-government", "weekend/holiday · GST included", "₹825"], ["18 holes · repeat 9 · non-government", "weekday · GST included", "₹770"], ["18 holes · repeat 9 · non-government", "weekend/holiday · GST included", "₹1,540"], ["9 holes · government category", "weekday / weekend", "₹265 / ₹500"], ["Coaching", "30 minutes", "₹650"]] : hamoni ? [["Entry fee", "per person", "₹500"], ["Bag of 50 Srixon balls", "per bag", "₹150"], ["Club rental", "per club", "₹200"]] : [["60-minute bay", "per session", "₹900"], ["90-minute bay", "per session", "₹1,250"], ["Launch monitor", "per session", "₹1,200"]]
+  const name = dwarka ? "DDA Dwarka Golf Course Range" : bhalswa ? "DDA Lake View Golf Course" : hamoni ? "Hamoni Golf Camp" : "Delhi Golf Club Range"
+  const rating = hamoni ? "4.8" : bhalswa ? "4.0" : dwarka ? "4.8" : "4.6"
+  const reviewCount = hamoni ? 228 : bhalswa ? 0 : dwarka ? 0 : 184
+  const area = dwarka ? "Sector 24, Dwarka" : bhalswa ? "Bhalswa Lake, North Delhi" : hamoni ? "Sector 23A, Gurugram" : "Lodhi Road, Delhi"
+  const address = dwarka ? "DDA Dwarka Golf Course, Sector 24, Dwarka, New Delhi 110075" : bhalswa ? "DDA Lake View Golf Course, near Bhalswa Lake, Outer Ring Road, Mukundpur, New Delhi 110042" : hamoni ? "CK Farm, Carterpuri, Sector 23A, Gurugram" : "Lodhi Road, Delhi"
+  const facts = dwarka ? [["Course", "18 holes"], ["Facility", "Practice Facility"], ["Bucket", "50 balls"], ["Location", "Sector 24, Dwarka"]] : bhalswa ? [["Driving bays", "10"], ["Practice Facility", "220 yards"], ["Course", "9 holes"], ["Practice areas", "Putting, chipping & bunker"]] : hamoni ? [["Bays", "105"], ["Target greens", "9"], ["Practice greens", "4"], ["Bunkers", "19"]] : [["Bays", "60"], ["Covered / open", "Mixed"], ["Floodlit", "Yes"], ["Launch monitors", "TrackMan"]]
+  const rates = dwarka ? [["Practice Facility entry", "per person · indicative", "₹150"], ["Bucket of 50 balls", "per bucket · indicative", "₹100"]] : bhalswa ? [["Practice Facility entry (Indian)", "per visit · GST included", "₹82.50"], ["Bucket of 50 balls", "GST included", "₹82.50"], ["9 holes · non-government", "weekday · GST included", "₹440"], ["9 holes · non-government", "weekend/holiday · GST included", "₹825"], ["18 holes · repeat 9 · non-government", "weekday · GST included", "₹770"], ["18 holes · repeat 9 · non-government", "weekend/holiday · GST included", "₹1,540"], ["9 holes · government category", "weekday / weekend", "₹265 / ₹500"], ["Coaching", "30 minutes", "₹650"]] : hamoni ? [["Entry fee", "per person", "₹500"], ["Bag of 50 Srixon balls", "per bag", "₹150"], ["Club rental", "per club", "₹200"]] : [["60-minute bay", "per session", "₹900"], ["90-minute bay", "per session", "₹1,250"], ["Launch monitor", "per session", "₹1,200"]]
   const passes = [["HGC Master Pass · 1 month", "₹12,000", ""], ["HGC Master Pass · 3 months", "₹24,000", ""], ["HGC Master Pass · 6 months", "₹50,000", ""], ["HGC Master Pass · 1 year", "₹80,000", ""]]
   const [selectedPassIndex, setSelectedPassIndex] = useState(1)
   const amenities = bhalswa ? ["9-hole course", "Practice Facility", "Putting green", "Chipping area", "Practice bunker", "Clubhouse", "Parking"] : hamoni ? ["Grass bays", "Covered bays", "Floodlights", "Launch monitors", "Pro shop", "Parking"] : ["Covered bays", "Floodlights", "Launch monitors", "Club rental", "Parking"]
   const selectedPass = passes[selectedPassIndex]
-  const book = () => bhalswa ? emitPrototypeEvent("Contact Lake View Golf Course", "Call reception on 8800639123 (10 AM–5 PM) to confirm range availability and booking.") : openRangeBooking(hamoni ? "hamoni" : "delhi")
+  const book = () => bhalswa ? emitPrototypeEvent("Contact Lake View Golf Course", "Call reception on 8800639123 (10 AM–5 PM) to confirm range availability and booking.") : openRangeBooking(dwarka ? "dwarka" : hamoni ? "hamoni" : "delhi")
   return (
     <main className="course-profile-screen range-profile-screen range-template-detail">
       <section className="facility-template-hero">
-        <img src={bhalswa ? "https://media.githubusercontent.com/media/Savvvv4/foreapp/main/public/Lakeview.jpg" : hamoni ? "https://media.githubusercontent.com/media/Savvvv4/foreapp/main/public/Harmoni.jpg" : photos.golfer} alt={name} />
+        <img src={dwarka ? "https://media.githubusercontent.com/media/Savvvv4/foreapp/main/public/Dwarka.jpg" : bhalswa ? "https://media.githubusercontent.com/media/Savvvv4/foreapp/main/public/Lakeview.jpg" : hamoni ? "https://media.githubusercontent.com/media/Savvvv4/foreapp/main/public/Harmoni.jpg" : photos.golfer} alt={name} />
         <span className="facility-template-hero-gradient" />
         <button type="button" className="facility-hero-button facility-hero-back" onClick={() => go("rangeDiscover")} aria-label="Go back"><Icon name="chevron" size={20} /></button>
         <button type="button" className="facility-hero-button facility-hero-share" onClick={() => {
           const facilityUrl = new URL(window.location.href)
-          facilityUrl.searchParams.set("facility", hamoni ? "hamoni" : "range")
+          facilityUrl.searchParams.set("facility", dwarka ? "dwarka-range" : hamoni ? "hamoni" : "range")
           const shareData = { title: name, text: `Check out ${name} on Fore`, url: facilityUrl.toString() }
           if (navigator.share) navigator.share(shareData).catch(() => undefined)
           else {
@@ -1182,7 +1186,7 @@ function RangeProfileScreen({ go, openRangeBooking, hamoni = false, bhalswa = fa
           <h1>{name}</h1>
           <div className="facility-template-stat"><span><Icon name="star" size={15} /><strong>{rating}</strong> ({reviewCount} reviews)</span><span className="facility-location-stat"><span className="facility-location-icon"><Icon name="pin" size={15} /></span><strong>{area}</strong></span></div>
         </header>
-        <section className="facility-template-section"><h2>At a glance</h2><table className="facility-score"><tbody>{!bhalswa && <tr><td>Open</td><th>{hamoni ? "Tue – Sun, 6 AM – 10 PM" : "Daily, 6 AM – 9 PM"}</th></tr>}{facts.map(([label, value]) => <tr key={label}><td>{label}</td><th>{value}</th></tr>)}</tbody></table></section>
+        <section className="facility-template-section"><h2>At a glance</h2><table className="facility-score"><tbody>{!bhalswa && <tr><td>Open</td><th>{hamoni ? "Tue – Sun, 6 AM – 10 PM" : dwarka ? "Confirm current DDA schedule" : "Daily, 6 AM – 9 PM"}</th></tr>}{facts.map(([label, value]) => <tr key={label}><td>{label}</td><th>{value}</th></tr>)}</tbody></table></section>
         <section className="facility-template-section"><h2>Rates</h2><div className="facility-rate-list">{rates.filter(([label]) => !/18 holes|13 holes/i.test(label)).slice(0, 5).map(([label, sub, price]) => <div className="facility-rate" key={label}><span><b>{label.replace(/\s*\([^)]*\)/g, "")}</b></span><strong>{price}</strong></div>)}</div></section>
         {hamoni && <section className="facility-template-section"><h2>Passes</h2><div className="facility-pass-list" role="radiogroup" aria-label="Choose a pass">{passes.map(([label, price, note], index) => {
           const selected = index === selectedPassIndex
@@ -1197,7 +1201,7 @@ function RangeProfileScreen({ go, openRangeBooking, hamoni = false, bhalswa = fa
         })}</div><button type="button" className="primary-button facility-pass-button" onClick={() => emitPrototypeEvent("Select facility pass", `Selected ${selectedPass[0]} pass at ${name} for ${selectedPass[1]}.`)}>{`Continue with ${selectedPass[0]} · ${selectedPass[1]}`}</button></section>}
         <section className="facility-template-section"><h2>On site</h2><div className="facility-amenities">{amenities.map((item) => <span key={item}><Icon name="check" size={15} />{item}</span>)}</div></section>
         {!bhalswa && <section className="facility-template-section"><h2>Coaching here</h2><button className="facility-coach-card" onClick={() => go("coachProfile")}><Avatar initials="RM" /><span><b>Rohan Malhotra</b><small>PGA Professional · 12 yrs · 4.9</small></span><Icon name="chevron" /></button></section>}
-        <section className="facility-template-section"><h2>Good to know</h2><div className="facility-accordion"><details><summary>Opening hours</summary><p>{bhalswa ? "Daily, 6 AM – 6 PM" : hamoni ? "Tuesday – Sunday, 6 AM – 10 PM" : "Daily, 6 AM – 9 PM"}</p></details><details><summary>What to bring</summary><p>Comfortable golf or sports clothing, suitable shoes and your clubs if you have them.</p></details><details><summary>Before you visit</summary><p>Choose your session or tee time and arrive a little before your booking.</p></details></div></section>
+        <section className="facility-template-section"><h2>Good to know</h2><div className="facility-accordion"><details><summary>Opening hours</summary><p>{bhalswa ? "Daily, 6 AM – 6 PM" : hamoni ? "Tuesday – Sunday, 6 AM – 10 PM" : dwarka ? "Confirm current DDA schedule before visiting" : "Daily, 6 AM – 9 PM"}</p></details><details><summary>What to bring</summary><p>Comfortable golf or sports clothing, suitable shoes and your clubs if you have them.</p></details><details><summary>Before you visit</summary><p>Choose your session or tee time and arrive a little before your booking.</p></details></div></section>
         <section className="facility-template-section"><h2>Getting there</h2><div className="facility-map-graphic" role="img" aria-label={`Map showing the location of ${name}`}>
           <span className="facility-map-road facility-map-road-a" aria-hidden="true" />
           <span className="facility-map-road facility-map-road-b" aria-hidden="true" />
@@ -1321,32 +1325,37 @@ function RangeCheckoutScreen({
   )
 }
 
-function RangeConfirmationScreen({ go, date, bucketCount }: { go: (screen: CourseFlowScreen) => void; date: string; bucketCount: number }) {
+function RangeConfirmationScreen({ go, date, bucketCount, venue = "delhi" }: { go: (screen: CourseFlowScreen) => void; date: string; bucketCount: number; venue?: RangeVenue }) {
   const [reminders, setReminders] = useState<boolean | null>(null)
+  const venueName = venue === "hamoni" ? "Hamoni Golf Camp" : venue === "dwarka" ? "DDA Dwarka Golf Course Range" : "Delhi Golf Club Range"
+  const venueImage = venue === "dwarka" ? "https://media.githubusercontent.com/media/Savvvv4/foreapp/main/public/Dwarka.jpg" : venue === "hamoni" ? "https://media.githubusercontent.com/media/Savvvv4/foreapp/main/public/Harmoni.jpg" : photos.golfer
   return (
     <main className="screen confirmation-screen range-confirmation-screen">
       <div className="success-animation"><span><Icon name="check" size={30} /></span><i /><i /></div>
-      <ConfirmedBadge /><h1>You’re booked</h1><p>Delhi Golf Club Range is expecting you.</p>
+      <ConfirmedBadge /><h1>Session confirmed</h1><p>Your practice session at {venueName} is reserved.</p>
       <span className="booking-reference">Booking reference · <b>DGCR-20931</b></span>
-      <div className="confirmation-summary"><img src={photos.golfer} alt="Delhi Golf Club Range" /><div><strong>Delhi Golf Club Range</strong><span>{date || "Today"}</span><span>{bucketCount ? `${bucketCount} ${bucketCount === 1 ? "ball bucket" : "ball buckets"} included` : "Bay reservation"}</span></div></div>
+      <div className="confirmation-summary"><img src={venueImage} alt={venueName} /><div><strong>{venueName}</strong><span>{date ? new Date(date).toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "short" }) : "Today"}</span><span>{bucketCount ? `${bucketCount} ${bucketCount === 1 ? "ball bucket" : "ball buckets"} included` : "Practice session"}</span><span>{venue === "dwarka" ? `₹${(150 + bucketCount * 100).toLocaleString("en-IN")} estimated total` : venue === "hamoni" ? `₹${(500 + bucketCount * 150).toLocaleString("en-IN")} estimated total` : `₹${(900 + bucketCount * 350).toLocaleString("en-IN")} estimated total`}</span></div></div>
       <div className="confirmation-actions"><button><Icon name="calendar" /><span>Add to calendar</span><Icon name="chevron" /></button><button><Icon name="directions" /><span>Get directions</span><Icon name="chevron" /></button></div>
       <div className="bring-card"><strong>Bay assigned on arrival</strong><span>Check in at the range desk</span></div>
       <button className="confirmation-cross-sell" onClick={() => go("coachProfile")}><span><Avatar initials="RM" /></span><div><strong>Add a coach to your session</strong><small>Rohan Malhotra · PGA Professional · 4.9</small></div><Icon name="chevron" /></button>
       {reminders === null ? <div className="notification-primer"><Icon name="bell" /><div><strong>Get reminders before your session</strong><small>Allow Fore! to send range booking updates.</small><span><button onClick={() => setReminders(true)}>Allow</button><button onClick={() => setReminders(false)}>Not now</button></span></div></div> : <p className="primer-response">{reminders ? "Reminders enabled" : "You can enable reminders later in Settings"}</p>}
-      <button className="primary-button confirmation-primary" onClick={() => go("rangeDetail")}>View booking</button>
+      <button className="primary-button confirmation-primary" onClick={() => go("rangeDetail")}>View booking details</button>
       <button className="confirmation-home-link" onClick={() => go("rangeDiscover")}>Back to Discover</button>
     </main>
   )
 }
 
-function RangeBookingDetailScreen({ go, date, bucketCount }: { go: (screen: CourseFlowScreen) => void; date: string; bucketCount: number }) {
+function RangeBookingDetailScreen({ go, date, bucketCount, venue = "delhi" }: { go: (screen: CourseFlowScreen) => void; date: string; bucketCount: number; venue?: RangeVenue }) {
   const [cancelOpen, setCancelOpen] = useState(false)
+  const venueName = venue === "dwarka" ? "DDA Dwarka Golf Course Range" : venue === "hamoni" ? "Hamoni Golf Camp" : "Delhi Golf Club Range"
+  const entryFee = venue === "dwarka" ? 150 : venue === "hamoni" ? 500 : 900
+  const ballPrice = venue === "dwarka" ? 100 : venue === "hamoni" ? 150 : 350
   return (
     <main className="screen booking-detail-screen range-detail-screen">
       <FlowHeader title="Range booking" back={() => go("rangeConfirmation")} />
-      <div className="booking-detail-status"><ConfirmedBadge /><h1>Delhi Golf Club Range</h1><p>{date || "Today"}</p></div>
-      <div className="detail-summary-card"><div><span><Icon name="calendar" /></span><p><small>SESSION</small><strong>{date || "Today"}</strong><em>Bay assigned on arrival</em></p></div><div><span><Icon name="flag" /></span><p><small>INCLUDED</small><strong>{bucketCount ? `${bucketCount} ball ${bucketCount === 1 ? "bucket" : "buckets"}` : "Bay reservation"}</strong><em>Practice balls added</em></p></div><div><span><Icon name="wallet" /></span><p><small>PAID</small><strong>₹{(900 + bucketCount * 350).toLocaleString("en-IN")}</strong><em>UPI · arjun@upi</em></p></div></div>
-      <button className="booking-map-card"><span><Icon name="map" size={25} /></span><div><strong>Delhi Golf Club Range</strong><small>Lodhi Road · 2.8 km</small></div><Icon name="directions" /></button>
+      <div className="booking-detail-status"><ConfirmedBadge /><h1>{venueName}</h1><p>{date ? new Date(date).toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "short" }) : "Today"}</p></div>
+      <div className="detail-summary-card"><div><span><Icon name="calendar" /></span><p><small>SESSION</small><strong>{date || "Today"}</strong><em>Bay assigned on arrival</em></p></div><div><span><Icon name="flag" /></span><p><small>INCLUDED</small><strong>{bucketCount ? `${bucketCount} ball ${bucketCount === 1 ? "bucket" : "buckets"}` : "Bay reservation"}</strong><em>Practice balls added</em></p></div><div><span><Icon name="wallet" /></span><p><small>PAID</small><strong>₹{(entryFee + bucketCount * ballPrice).toLocaleString("en-IN")}</strong><em>Payment method · UPI</em></p></div></div>
+      <button className="booking-map-card"><span><Icon name="map" size={25} /></span><div><strong>{venueName}</strong><small>{venue === "dwarka" ? "Sector 24, Dwarka" : venue === "hamoni" ? "Sector 23A, Gurugram" : "Lodhi Road, Delhi"}</small></div><Icon name="directions" /></button>
       <div className="booking-manage-actions"><button className="primary-button" onClick={() => go("rangeSelect")}>Change time</button><button onClick={() => setCancelOpen(true)}>Cancel booking</button></div>
       <div className="detail-links"><button data-prototype="Range receipt" data-prototype-body="Range booking receipt.">View receipt <Icon name="chevron" /></button><button data-prototype="Contact range" data-prototype-body="Contact the range for booking support.">Contact the range <Icon name="chevron" /></button></div>
       {cancelOpen && <div className="sheet-backdrop" onClick={() => setCancelOpen(false)}><div className="sheet cancel-sheet" onClick={(event) => event.stopPropagation()}><div className="sheet-handle" /><div className="sheet-title"><span><p className="eyebrow">CANCEL RANGE</p><h2>Cancel this bay?</h2></span><button onClick={() => setCancelOpen(false)}><Icon name="close" /></button></div><p>You’re eligible for a full refund to your original UPI method.</p><div className="refund-row"><span>Refund amount</span><strong>₹1,250</strong></div><button className="cancel-confirm-button" data-prototype="Range booking cancelled" data-prototype-body="Cancel this bay and refund the eligible amount.">Cancel and refund</button><button className="primary-button" onClick={() => setCancelOpen(false)}>Keep booking</button></div></div>}
@@ -1936,14 +1945,15 @@ function CourseBookingPrototype({
       {screen === "bookingDetail" && <BookingDetailScreen go={go} />}
       {screen === "rangeDiscover" && <RangeDiscoverScreen go={go} openSearch={() => setSearchOpen(true)} setMode={setMode} openRangeBooking={openRangeBooking} openVenueDetails={openVenueDetails} />}
       {screen === "rangeProfile" && <RangeProfileScreen go={go} openRangeBooking={openRangeBooking} />}
+      {screen === "dwarkaRangeProfile" && <RangeProfileScreen go={go} openRangeBooking={openRangeBooking} dwarka />}
       {screen === "hamoniRangeProfile" && <RangeProfileScreen go={go} openRangeBooking={openRangeBooking} hamoni />}
       {screen === "bhalswaRangeProfile" && <RangeProfileScreen go={go} openRangeBooking={openRangeBooking} bhalswa />}
       {screen === "dwarkaCourseProfile" && <OfficialDdaCourseProfileScreen venue="dwarka" go={go} />}
       {screen === "bhalswaCourseProfile" && <OfficialDdaCourseProfileScreen venue="bhalswa" go={go} />}
       {screen === "rangeSelect" && <RangeSelectScreen go={go} time={rangeTime} setTime={setRangeTime} duration={rangeDuration} setDuration={setRangeDuration} bayType={rangeBayType} setBayType={setRangeBayType} bucket={rangeBucket} setBucket={setRangeBucket} state={rangeState} setState={setRangeState} />}
       {screen === "rangeCheckout" && <RangeCheckoutScreen go={go} time={rangeTime} duration={rangeDuration} bayType={rangeBayType} bucket={rangeBucket} setBucket={setRangeBucket} credits={rangeCredits} setCredits={setRangeCredits} holdSeconds={holdSeconds} openPayment={() => { setPaymentTarget("range"); setPaymentState(holdSeconds === 0 ? "expired" : "methods"); setPaymentOpen(true) }} />}
-      {screen === "rangeConfirmation" && <RangeConfirmationScreen go={go} date={rangeBookingDate} bucketCount={rangeBucketCount} />}
-      {screen === "rangeDetail" && <RangeBookingDetailScreen go={go} date={rangeBookingDate} bucketCount={rangeBucketCount} />}
+      {screen === "rangeConfirmation" && <RangeConfirmationScreen go={go} date={rangeBookingDate} bucketCount={rangeBucketCount} venue={rangeBookingVenue} />}
+      {screen === "rangeDetail" && <RangeBookingDetailScreen go={go} date={rangeBookingDate} bucketCount={rangeBucketCount} venue={rangeBookingVenue} />}
       {screen === "coachDiscover" && <CoachDiscoverScreen go={go} state={coachDiscoverState} setState={setCoachDiscoverState} setMode={setMode} openSearch={() => setSearchOpen(true)} />}
       {screen === "coachProfile" && <CoachProfileScreen go={go} connectionStatus={connectionStatus} onConnect={onConnect} />}
       {screen === "coachLesson" && <CoachLessonTypeScreen go={go} lesson={coachLesson} setLesson={setCoachLesson} />}
@@ -1953,7 +1963,7 @@ function CourseBookingPrototype({
       {screen === "coachBookingPending" && <CoachBookingDetailScreen go={go} status="Pending" />}
       {screen === "coachBookingConfirmed" && <CoachBookingDetailScreen go={go} status="Confirmed" />}
       {screen === "coachDeclined" && <CoachDeclinedScreen go={go} />}
-      {rangeBookingOpen && <RangeBookingFlowModal hamoni={rangeBookingVenue === "hamoni"} step={rangeBookingStep} setStep={setRangeBookingStep} date={rangeBookingDate} setDate={setRangeBookingDate} bucketCount={rangeBucketCount} setBucketCount={setRangeBucketCount} paymentMethod={rangePaymentMethod} setPaymentMethod={setRangePaymentMethod} close={() => setRangeBookingOpen(false)} complete={() => { setRangeBookingOpen(false); setScreen("rangeConfirmation") }} />}
+      {rangeBookingOpen && <RangeBookingFlowModal venue={rangeBookingVenue} step={rangeBookingStep} setStep={setRangeBookingStep} date={rangeBookingDate} setDate={setRangeBookingDate} bucketCount={rangeBucketCount} setBucketCount={setRangeBucketCount} paymentMethod={rangePaymentMethod} setPaymentMethod={setRangePaymentMethod} close={() => setRangeBookingOpen(false)} complete={() => { setRangeBookingOpen(false); setScreen("rangeConfirmation") }} />}
       {bookingOpen && <BookingFlowModal course={bookingCourse} step={bookingStep} setStep={setBookingStep} date={courseDate} setDate={setCourseDate} time={selectedSlot} setTime={setSelectedSlot} caddyMode={courseCaddyMode} setCaddyMode={setCourseCaddyMode} cartCount={courseCartCount} setCartCount={setCourseCartCount} paymentMethod={coursePaymentMethod} setPaymentMethod={setCoursePaymentMethod} close={() => setBookingOpen(false)} pay={() => setBookingStep("payment")} />}
       {filtersOpen && <FiltersSheet close={() => { setFiltersOpen(false); setResultsState("ready"); go("results") }} />}
       {searchOpen && <SearchExperience denied={locationDenied} setDenied={setLocationDenied} primerSeen={locationPrimerSeen} setPrimerSeen={setLocationPrimerSeen} close={() => setSearchOpen(false)} go={go} />}
