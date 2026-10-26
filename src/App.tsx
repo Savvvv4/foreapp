@@ -1079,10 +1079,10 @@ function ConfirmationScreen({
     <main className="screen confirmation-screen">
       <div className="success-animation"><span><Icon name="check" size={30} /></span><i /><i /></div>
       <ConfirmedBadge />
-      <h1>You’re booked</h1>
-      <p>{course.name} is expecting you.</p>
+      <h1>Tee time confirmed</h1>
+      <p>Your round at {course.name} is reserved.</p>
       <span className="booking-reference">Booking reference · <b>DGC-48213</b></span>
-      <div className="confirmation-summary"><img src={course.image} alt={course.name} /><div><strong>{course.name}</strong><span>{date} Aug · {time}</span><span>{caddy} · {cartCount ? `${cartCount} cart${cartCount > 1 ? "s" : ""}` : "No cart"}</span><span>₹{total.toLocaleString("en-IN")} paid</span></div></div>
+      <div className="confirmation-summary"><img src={course.image} alt={course.name} /><div><strong>{course.name}</strong><span>{date || "Date selected at checkout"} · {time || "Tee time confirmed"}</span><span>{caddy} · {cartCount ? `${cartCount} cart${cartCount > 1 ? "s" : ""}` : "No cart"}</span><span>₹{total.toLocaleString("en-IN")} paid</span></div></div>
       <div className="confirmation-actions">
         <button data-prototype="Calendar event added" data-prototype-body="Add this booking to your calendar."><Icon name="calendar" /><span>Add to calendar</span><Icon name="chevron" /></button>
         <button data-prototype="Directions" data-prototype-body="View directions and travel details."><Icon name="directions" /><span>Get directions</span><Icon name="chevron" /></button>
@@ -1093,8 +1093,8 @@ function ConfirmationScreen({
       <p className="points-earned">+240 points earned <span>· </span></p>
       <button className="confirmation-cross-sell" onClick={() => go("coachProfile")}><span><Avatar initials="RM" /><Avatar initials="AR" /></span><div><strong>Add a lesson at this course</strong><small>2 coaches teach at {course.name}</small></div><Icon name="chevron" /></button>
       {reminders === null ? <div className="notification-primer"><Icon name="bell" /><div><strong>Get reminders before your tee time</strong><small>Allow Fore! to send booking updates.</small><span><button onClick={() => setReminders(true)}>Allow</button><button onClick={() => setReminders(false)}>Not now</button></span></div></div> : <p className="primer-response">{reminders ? "Reminders enabled" : "You can enable reminders later in Settings"}</p>}
-      <button className="primary-button confirmation-primary" onClick={() => go("bookingDetail")}>View booking</button>
-      <button className="confirmation-home-link" onClick={() => go("discover")}>Back to Home</button>
+      <button className="primary-button confirmation-primary" onClick={() => go("bookingDetail")}>View booking details</button>
+      <button className="confirmation-home-link" onClick={() => go("discover")}>Back to Discover</button>
     </main>
   )
 }
