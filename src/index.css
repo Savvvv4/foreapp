@@ -4436,3 +4436,34 @@ body.course-detail-open .phone-shell{padding-top:0!important}
 .official-dda-course-card .course-card-meta>strong{font-size:14px}
 .book-again-course-list{margin-bottom:20px}
 .book-again-course-list .course-card{margin-bottom:0}
+
+
+/* Booking confirmation refresh: clearer success hierarchy and scannable booking details. */
+.confirmation-screen { padding-top: 22px; }
+.confirmation-screen .success-animation { margin: 6px auto 10px; }
+.confirmation-screen > .confirmed-badge,
+.confirmation-screen > div > .confirmed-badge { margin-inline: auto; }
+.confirmation-screen > h1 { margin: 12px 0 6px; text-align: center; font-size: 29px; letter-spacing: -.045em; }
+.confirmation-screen > p:not(.confirmation-note):not(.points-earned):not(.primer-response) { text-align: center; }
+.confirmation-screen .booking-reference { display: block; width: fit-content; margin: 14px auto 20px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 999px; background: #fbf8f5; color: var(--muted); font-size: 11px; }
+.confirmation-screen .confirmation-summary { display: grid; grid-template-columns: 92px minmax(0,1fr); gap: 14px; align-items: center; padding: 14px; border: 1px solid var(--line); border-radius: 18px; background: #fff; box-shadow: 0 8px 24px rgba(45,32,20,.045); }
+.confirmation-screen .confirmation-summary img { width: 92px; height: 100px; object-fit: cover; border-radius: 12px; }
+.confirmation-screen .confirmation-summary > div { display: grid; gap: 6px; min-width: 0; }
+.confirmation-screen .confirmation-summary strong { font-size: 14px; line-height: 1.35; }
+.confirmation-screen .confirmation-summary span { color: var(--muted); font-size: 11px; line-height: 1.45; }
+.confirmation-screen .confirmation-actions { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; margin: 14px 0; }
+.confirmation-screen .confirmation-actions button { min-width: 0; min-height: 48px; display: flex; align-items: center; gap: 8px; padding: 11px; border: 1px solid var(--line); border-radius: 13px; background: #fff; text-align: left; font-size: 11px; font-weight: 650; }
+.confirmation-screen .confirmation-actions button span { flex: 1; }
+.confirmation-screen .confirmation-actions button > .icon:last-child { width: 14px; opacity: .55; }
+.confirmation-screen .bring-card { margin-top: 14px; padding: 15px; border-radius: 15px; background: var(--green-soft); }
+.confirmation-screen .bring-card strong { display: block; margin-bottom: 5px; font-size: 12px; }
+.confirmation-screen .bring-card span { color: var(--muted); font-size: 11px; line-height: 1.5; }
+.confirmation-screen .confirmation-primary { margin-top: 14px; min-height: 50px; border-radius: 14px; }
+.confirmation-screen .confirmation-home-link { display: block; margin: 10px auto 0; padding: 10px 14px; font-weight: 650; }
+.range-confirmation-screen .confirmation-summary { margin-bottom: 14px; }
+.range-confirmation-screen .confirmation-summary span:last-child { color: var(--color-brand-text); font-weight: 750; }
+@media (max-width: 380px) {
+  .confirmation-screen .confirmation-summary { grid-template-columns: 76px minmax(0,1fr); gap: 10px; padding: 11px; }
+  .confirmation-screen .confirmation-summary img { width: 76px; height: 88px; }
+  .confirmation-screen .confirmation-actions button { gap: 5px; padding: 9px; font-size: 10px; }
+}
