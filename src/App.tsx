@@ -1089,26 +1089,22 @@ function ConfirmationScreen({
   cartCount: number
   total: number
 }) {
-  const [reminders, setReminders] = useState<boolean | null>(null)
   return (
-    <main className="screen confirmation-screen">
-      <div className="success-animation"><span><Icon name="check" size={30} /></span><i /><i /></div>
-      <ConfirmedBadge />
+    <main className="screen confirmation-screen confirmation-minimal">
+      <div className="confirmation-check"><Icon name="check" size={24} /></div>
+      <p className="confirmation-eyebrow">BOOKING CONFIRMED</p>
       <h1>Tee time confirmed</h1>
-      <p>Your round at {course.name} is reserved.</p>
-      <span className="booking-reference">Booking reference · <b>DGC-48213</b></span>
-      <div className="confirmation-summary"><img src={course.image} alt={course.name} /><div><strong>{course.name}</strong><span>{date || "Date selected at checkout"} · {time || "Tee time confirmed"}</span><span>{caddy} · {cartCount ? `${cartCount} cart${cartCount > 1 ? "s" : ""}` : "No cart"}</span><span>₹{total.toLocaleString("en-IN")} paid</span></div></div>
-      <div className="confirmation-actions">
-        <button data-prototype="Calendar event added" data-prototype-body="Add this booking to your calendar."><Icon name="calendar" /><span>Add to calendar</span><Icon name="chevron" /></button>
-        <button data-prototype="Directions" data-prototype-body="View directions and travel details."><Icon name="directions" /><span>Get directions</span><Icon name="chevron" /></button>
-        <button data-prototype="Invite players" data-prototype-body="Share this booking with your playing partners."><Icon name="share" /><span>Invite players</span><Icon name="chevron" /></button>
-      </div>
-      <p className="confirmation-note"><Icon name="shield" size={14} /> Free cancellation until 24 hours before your tee time</p>
-      <div className="bring-card"><strong>What to bring</strong><span>Collared shirt · Golf shoes · Photo ID</span></div>
-      <p className="points-earned">+240 points earned <span>· </span></p>
-      <button className="confirmation-cross-sell" onClick={() => go("coachProfile")}><span><Avatar initials="RM" /><Avatar initials="AR" /></span><div><strong>Add a lesson at this course</strong><small>2 coaches teach at {course.name}</small></div><Icon name="chevron" /></button>
-      {reminders === null ? <div className="notification-primer"><Icon name="bell" /><div><strong>Get reminders before your tee time</strong><small>Allow Fore! to send booking updates.</small><span><button onClick={() => setReminders(true)}>Allow</button><button onClick={() => setReminders(false)}>Not now</button></span></div></div> : <p className="primer-response">{reminders ? "Reminders enabled" : "You can enable reminders later in Settings"}</p>}
-      <button className="primary-button confirmation-primary" onClick={() => go("bookingDetail")}>View booking details</button>
+      <p className="confirmation-subtitle">Your round is booked. See you on the course.</p>
+      <section className="confirmation-summary">
+        <img src={course.image} alt="" />
+        <div>
+          <strong>{course.name}</strong>
+          <span>{date || "Date selected"}{time ? ` · ${time}` : ""}</span>
+          {(caddy !== "Caddy not added" || cartCount > 0) && <span>{[caddy !== "Caddy not added" ? caddy : "", cartCount ? `${cartCount} golf cart${cartCount > 1 ? "s" : ""}` : ""].filter(Boolean).join(" · ")}</span>}
+          <span className="confirmation-paid">₹{total.toLocaleString("en-IN")} paid</span>
+        </div>
+      </section>
+      <button className="primary-button confirmation-primary" onClick={() => go("bookingDetail")}>View booking details <Icon name="arrow" size={16} /></button>
       <button className="confirmation-home-link" onClick={() => go("discover")}>Back to Discover</button>
     </main>
   )
@@ -1341,21 +1337,26 @@ function RangeCheckoutScreen({
 }
 
 function RangeConfirmationScreen({ go, date, bucketCount, venue = "delhi" }: { go: (screen: CourseFlowScreen) => void; date: string; bucketCount: number; venue?: RangeVenue }) {
-  const [reminders, setReminders] = useState<boolean | null>(null)
   const venueName = venue === "hamoni" ? "Hamoni Golf Camp" : venue === "dwarka" ? "DDA Dwarka Golf Course Range" : "Delhi Golf Club Range"
   const venueImage = venue === "dwarka" ? "https://media.githubusercontent.com/media/Savvvv4/foreapp/main/public/Dwarka.jpg" : venue === "hamoni" ? "https://media.githubusercontent.com/media/Savvvv4/foreapp/main/public/Harmoni.jpg" : photos.golfer
+  const total = venue === "dwarka" ? 150 + bucketCount * 100 : venue === "hamoni" ? 500 + bucketCount * 150 : 900 + bucketCount * 350
   return (
-    <main className="screen confirmation-screen range-confirmation-screen">
-      <div className="success-animation"><span><Icon name="check" size={30} /></span><i /><i /></div>
-      <ConfirmedBadge /><h1>Session confirmed</h1><p>Your practice session at {venueName} is reserved.</p>
-      <span className="booking-reference">Booking reference · <b>DGCR-20931</b></span>
-      <div className="confirmation-summary"><img src={venueImage} alt={venueName} /><div><strong>{venueName}</strong><span>{date ? new Date(date).toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "short" }) : "Today"}</span><span>{bucketCount ? `${bucketCount} ${bucketCount === 1 ? "ball bucket" : "ball buckets"} included` : "Practice session"}</span><span>{venue === "dwarka" ? `₹${(150 + bucketCount * 100).toLocaleString("en-IN")} estimated total` : venue === "hamoni" ? `₹${(500 + bucketCount * 150).toLocaleString("en-IN")} estimated total` : `₹${(900 + bucketCount * 350).toLocaleString("en-IN")} estimated total`}</span></div></div>
-      <div className="confirmation-actions"><button><Icon name="calendar" /><span>Add to calendar</span><Icon name="chevron" /></button><button><Icon name="directions" /><span>Get directions</span><Icon name="chevron" /></button></div>
-      <div className="bring-card"><strong>Bay assigned on arrival</strong><span>Check in at the range desk</span></div>
-      <button className="confirmation-cross-sell" onClick={() => go("coachProfile")}><span><Avatar initials="RM" /></span><div><strong>Add a coach to your session</strong><small>Rohan Malhotra · PGA Professional · 4.9</small></div><Icon name="chevron" /></button>
-      {reminders === null ? <div className="notification-primer"><Icon name="bell" /><div><strong>Get reminders before your session</strong><small>Allow Fore! to send range booking updates.</small><span><button onClick={() => setReminders(true)}>Allow</button><button onClick={() => setReminders(false)}>Not now</button></span></div></div> : <p className="primer-response">{reminders ? "Reminders enabled" : "You can enable reminders later in Settings"}</p>}
-      <button className="primary-button confirmation-primary" onClick={() => go("rangeDetail")}>View booking details</button>
-      <button className="confirmation-home-link" onClick={() => go("rangeDiscover")}>Back to Discover</button>
+    <main className="screen confirmation-screen confirmation-minimal range-confirmation-screen">
+      <div className="confirmation-check"><Icon name="check" size={24} /></div>
+      <p className="confirmation-eyebrow">BOOKING CONFIRMED</p>
+      <h1>Session confirmed</h1>
+      <p className="confirmation-subtitle">Your practice session is booked.</p>
+      <section className="confirmation-summary">
+        <img src={venueImage} alt="" />
+        <div>
+          <strong>{venueName}</strong>
+          <span>{date ? new Date(date).toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "short" }) : "Today"}</span>
+          <span>{bucketCount ? `${bucketCount} ${bucketCount === 1 ? "ball bucket" : "ball buckets"} included` : "Practice session"}</span>
+          <span className="confirmation-paid">₹{total.toLocaleString("en-IN")} total</span>
+        </div>
+      </section>
+      <button className="primary-button confirmation-primary" onClick={() => go("rangeDetail")}>View booking details <Icon name="arrow" size={16} /></button>
+      <button className="confirmation-home-link" onClick={() => go("rangeDiscover")}>Back to Facilities</button>
     </main>
   )
 }
@@ -1880,16 +1881,7 @@ function CourseBookingPrototype({
     return () => window.clearInterval(timer)
   }, [screen, holdSeconds])
 
-  useEffect(() => {
-    if (!bookingOpen || bookingStep !== "payment") return
-    const timer = window.setTimeout(() => {
-      setBookingOpen(false)
-      setScreen("confirmation")
-    }, 2000)
-    return () => window.clearTimeout(timer)
-  }, [bookingOpen, bookingStep])
-
-  useEffect(() => {
+    useEffect(() => {
     document.querySelector(".scroll-area")?.scrollTo({ top: 0, behavior: "smooth" })
   }, [screen])
 
@@ -1979,7 +1971,7 @@ function CourseBookingPrototype({
       {screen === "coachBookingConfirmed" && <CoachBookingDetailScreen go={go} status="Confirmed" />}
       {screen === "coachDeclined" && <CoachDeclinedScreen go={go} />}
       {rangeBookingOpen && <RangeBookingFlowModal venue={rangeBookingVenue} step={rangeBookingStep} setStep={setRangeBookingStep} date={rangeBookingDate} setDate={setRangeBookingDate} bucketCount={rangeBucketCount} setBucketCount={setRangeBucketCount} paymentMethod={rangePaymentMethod} setPaymentMethod={setRangePaymentMethod} close={() => setRangeBookingOpen(false)} complete={() => { setRangeBookingOpen(false); setScreen("rangeConfirmation") }} />}
-      {bookingOpen && <BookingFlowModal course={bookingCourse} step={bookingStep} setStep={setBookingStep} date={courseDate} setDate={setCourseDate} time={selectedSlot} setTime={setSelectedSlot} caddyMode={courseCaddyMode} setCaddyMode={setCourseCaddyMode} cartCount={courseCartCount} setCartCount={setCourseCartCount} paymentMethod={coursePaymentMethod} setPaymentMethod={setCoursePaymentMethod} close={() => setBookingOpen(false)} pay={() => setBookingStep("payment")} />}
+      {bookingOpen && <BookingFlowModal course={bookingCourse} step={bookingStep} setStep={setBookingStep} date={courseDate} setDate={setCourseDate} time={selectedSlot} setTime={setSelectedSlot} caddyMode={courseCaddyMode} setCaddyMode={setCourseCaddyMode} cartCount={courseCartCount} setCartCount={setCourseCartCount} paymentMethod={coursePaymentMethod} setPaymentMethod={setCoursePaymentMethod} close={() => setBookingOpen(false)} pay={() => { setBookingOpen(false); go("confirmation") }} />}
       {filtersOpen && <FiltersSheet close={() => { setFiltersOpen(false); setResultsState("ready"); go("results") }} />}
       {searchOpen && <SearchExperience denied={locationDenied} setDenied={setLocationDenied} primerSeen={locationPrimerSeen} setPrimerSeen={setLocationPrimerSeen} close={() => setSearchOpen(false)} go={go} />}
       {paymentOpen && <PaymentSheet state={paymentState} setState={setPaymentState} close={() => setPaymentOpen(false)} succeed={() => { setPaymentOpen(false); go(paymentTarget === "range" ? "rangeConfirmation" : "confirmation") }} recheck={() => { setPaymentOpen(false); setRangeState("ready"); go("rangeSelect") }} />}
