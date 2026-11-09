@@ -1,0 +1,14 @@
+<style>
+html,body{overscroll-behavior:none}
+body{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
+button,.chip,.opt,.row{-webkit-user-select:none;user-select:none;touch-action:manipulation}
+html.pwa,html.pwa body{background:#0D0F12}
+html.pwa #panel,html.pwa #topbar{display:none!important}
+html.pwa #stage{height:100vh;height:100dvh;padding:0}
+html.pwa #devwrap{flex:1;min-height:0;margin:0;width:100%!important;height:100%!important}
+html.pwa #device{width:100%;height:100%;padding:0;border-radius:0;box-shadow:none;transform:none!important}
+html.pwa #phone{--sab:env(safe-area-inset-bottom,0px);--bnt:10px;width:100%;height:100%;border-radius:0}
+html.pwa #island,html.pwa #homebar,html.pwa .hw{display:none}
+html.pwa #statusbar{display:block;height:env(safe-area-inset-top,0px);padding:0}
+html.pwa #statusbar>*{display:none}
+</style>
