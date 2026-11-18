@@ -2,7 +2,15 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#F5F1E8" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Fore!" />
+<link rel="manifest" href="/manifest.webmanifest" />
+<link rel="icon" href="/fore-app-icon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/fore-app-icon.svg" />
 <title>Fore! — App redesign v5 (design only)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Archivo:ital,wght@1,800&display=swap" rel="stylesheet" />
@@ -570,6 +578,36 @@ body { font-family: var(--font); background: #E9E4D9; color: #17120E; -webkit-fo
 .kbd { font-family: ui-monospace, monospace; font-size: 12.5px; background: rgba(23,18,14,.06); padding: 1px 6px; border-radius: 6px; }
 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
+
+/* Installed-app presentation */
+.studio-head,.notes{display:none!important}
+body{margin:0;background:var(--bg);overflow:hidden}
+.stage{display:block;min-height:100dvh;padding:0}
+.device{position:relative;top:auto;width:100%;height:100dvh;min-height:100svh;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
+.screen{width:100%;height:100%;border-radius:0;clip-path:none;-webkit-mask-image:none;transform:none}
+.island,.home-ind{display:none}
+.statusbar{display:none}
+.scroll.root{padding-top:env(safe-area-inset-top)}
+.apphead{padding-top:calc(10px + env(safe-area-inset-top))}
+.tabbar{bottom:calc(12px + env(safe-area-inset-bottom))}
+#screenMenu{position:absolute;inset:0;z-index:500;display:none;color:var(--text)}
+#screenMenu.open{display:block}
+#screenMenu .menu-scrim{position:absolute;inset:0;background:rgba(0,0,0,.42);backdrop-filter:blur(3px)}
+#screenMenu .menu-panel{position:absolute;top:0;right:0;bottom:0;width:min(88%,390px);background:var(--bg-elev);box-shadow:-18px 0 48px rgba(0,0,0,.2);padding:calc(22px + env(safe-area-inset-top)) 18px calc(24px + env(safe-area-inset-bottom));overflow:auto;animation:menuIn .24s var(--ease-out) both}
+@keyframes menuIn{from{transform:translateX(24px);opacity:.7}to{transform:none;opacity:1}}
+#screenMenu .menu-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+#screenMenu .menu-title{font-size:21px;font-weight:800;letter-spacing:-.03em}
+#screenMenu .menu-section{margin:18px 0 8px;font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--text-3)}
+#screenMenu .menu-row{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 12px;border:0;border-radius:13px;background:transparent;color:var(--text);font:600 15px var(--font);text-align:left;cursor:pointer}
+#screenMenu .menu-row:active{background:var(--fill)}
+#screenMenu .menu-row .menu-meta{font-size:11px;color:var(--text-3);font-weight:500}
+#screenMenu .menu-pills{display:flex;gap:7px;flex-wrap:wrap}
+#screenMenu .menu-pill{border:1px solid var(--sep);border-radius:999px;padding:8px 13px;background:var(--card);color:var(--text);font:600 13px var(--font)}
+#screenMenu .menu-pill.on{background:var(--accent);border-color:var(--accent);color:#17120E}
+.apphead .menu-trigger{width:40px;height:40px;border:0;border-radius:50%;display:grid;place-items:center;background:var(--fill);color:var(--text);cursor:pointer}
+.apphead .menu-trigger svg{width:21px;height:21px}
+@media(display-mode:standalone){.screen{padding-bottom:env(safe-area-inset-bottom)}}
+
 </style>
 </head>
 <body>
@@ -597,6 +635,7 @@ body { font-family: var(--font); background: #E9E4D9; color: #17120E; -webkit-fo
             <div id="sheetHost"></div>
             <div id="flowHost"></div>
             <div id="toastHost"></div>
+            <div id="screenMenu" aria-hidden="true"></div>
             <div class="home-ind"></div>
         </div>
     </div>
@@ -1395,7 +1434,7 @@ function pageHTML(def, isRoot) {
     const [nb, cb] = TOP_BADGES[state.role];
     const scls = ['scroll', isRoot ? 'root' : '', def.hero ? 'hero' : '', def.hideTabs ? 'notabs' : '', def.cta ? 'has-cta' : ''].join(' ');
     if (isRoot) {
-        const head = `<div class="apphead">${LOGO()}<div class="acts">${ibtn('bell', nb, 'data-sheet="notifications"')}${ibtn('chat', cb, 'data-push="messages"')}</div></div>`;
+        const head = `<div class="apphead">${LOGO()}<div class="acts"><button class="menu-trigger" aria-label="Open screen menu" data-menu-open>${P('<path d="M4 7h16M4 12h16M4 17h16"/>')}</button>${ibtn('bell', nb, 'data-sheet="notifications"')}${ibtn('chat', cb, 'data-push="messages"')}</div></div>`;
         return `<div class="${scls}">${head}<div class="content">${skeleton()}</div></div>`;
     }
     const left = `<button class="back-btn" data-back>${I.back}<span class="l">${def.backLabel}</span></button>`;
@@ -1832,7 +1871,7 @@ function otpDone() {
 }
 
 /* Studio */
-function setRole(r) {
+function menuLabel(key) { return key.replace(/_/g, ' ').replace(/([a-z])([A-Z])/g, '$1 $2').replace(/\b\w/g, c => c.toUpperCase()); }\nfunction closeScreenMenu() { const m = $('#screenMenu'); m.classList.remove('open'); m.setAttribute('aria-hidden','true'); }\nfunction openScreenMenu() {\n    const m = $('#screenMenu');\n    const routeKeys = Object.keys(ROUTES);\n    const playerTabs = TABS.player, coachTabs = TABS.coach;\n    const routeItems = routeKeys.map(k => `<button class="menu-row" data-menu-route="${k}"><span>${menuLabel(k)}</span><span class="menu-meta">Open ›</span></button>`).join('');\n    const flowItems = Object.keys(FLOWS).map(k => `<button class="menu-row" data-menu-flow="${k}"><span>${menuLabel(k)} flow</span><span class="menu-meta">Replay ›</span></button>`).join('');\n    m.innerHTML = `<div class="menu-scrim" data-menu-close></div><section class="menu-panel" role="dialog" aria-modal="true" aria-label="Screen navigation"><div class="menu-top"><div class="menu-title">Screen navigator</div><button class="icon-btn" data-menu-close aria-label="Close menu">${I.back}</button></div><div class="menu-section">View as</div><div class="menu-pills">${[['player','Player'],['parent','Parent'],['coach','Coach']].map(([k,l])=>`<button class="menu-pill ${state.role===k?'on':''}" data-menu-role="${k}">${l}</button>`).join('')}</div><div class="menu-section">Appearance</div><div class="menu-pills">${[['light','Light'],['dark','Dark']].map(([k,l])=>`<button class="menu-pill ${$('#device').dataset.theme===k?'on':''}" data-menu-theme="${k}">${l}</button>`).join('')}</div><div class="menu-section">Main screens</div>${(state.role==='coach'?coachTabs:playerTabs).map(([k,l])=>`<button class="menu-row" data-menu-tab="${k}"><span>${l}</span><span class="menu-meta">Main tab ›</span></button>`).join('')}<div class="menu-section">All screens (${routeKeys.length})</div>${routeItems}<div class="menu-section">Onboarding & demo flows</div>${flowItems}</section>`;\n    m.classList.add('open'); m.setAttribute('aria-hidden','false');\n}\n\nfunction setRole(r) {
     state.role = r;
     document.querySelectorAll('#roleSeg button').forEach((x) => x.classList.toggle('on', x.dataset.role === r));
     state.tab = r === 'coach' ? 'today' : 'summary';
@@ -1847,7 +1886,7 @@ $('#notes').addEventListener('click', (e) => {
     const f = e.target.closest('[data-runflow]'); if (f) startFlow(f.dataset.runflow);
 });
 
-/* Deep links for review: #role=coach&theme=dark&tab=earnings&push=chat:riya&flow=coach&step=2&nointro */
+if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));\n\n/* Deep links for review: #role=coach&theme=dark&tab=earnings&push=chat:riya&flow=coach&step=2&nointro */
 const q = new URLSearchParams(location.hash.slice(1));
 if (q.get('theme')) { $('#device').dataset.theme = q.get('theme'); document.querySelectorAll('#themeSeg button').forEach((x) => x.classList.toggle('on', x.dataset.theme === q.get('theme'))); }
 if (q.get('role')) { state.role = q.get('role'); document.querySelectorAll('#roleSeg button').forEach((x) => x.classList.toggle('on', x.dataset.role === state.role)); state.tab = state.role === 'coach' ? 'today' : 'summary'; }
@@ -1857,7 +1896,7 @@ renderRoot();
 if (q.get('push')) setTimeout(() => push(q.get('push')), 50);
 if (q.get('sheet')) setTimeout(() => openSheet(q.get('sheet')), 400);
 if (q.get('flow')) startFlow(q.get('flow'), +(q.get('step') || 0));
-else if (!q.has('nointro')) startFlow('intro');
+else if (!q.has('nointro') && !window.matchMedia('(display-mode: standalone)').matches) startFlow('intro');
 </script>
 </body>
 </html>
