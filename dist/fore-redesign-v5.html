@@ -1700,6 +1700,13 @@ const ACT = {
 /* Delegated interactions */
 $('#screen').addEventListener('click', (e) => {
     const t = e.target;
+    if (t.closest('[data-menu-open]')) { openScreenMenu(); return; }
+    if (t.closest('[data-menu-close]') || t.classList.contains('menu-scrim')) { closeScreenMenu(); return; }
+    const menuRoute = t.closest('[data-menu-route]'); if (menuRoute) { const route = menuRoute.dataset.menuRoute; closeScreenMenu(); push(route); return; }
+    const menuTab = t.closest('[data-menu-tab]'); if (menuTab) { const tab = menuTab.dataset.menuTab; closeScreenMenu(); if (state.stack.length) renderRoot(); selectTab(tab); return; }
+    const menuRole = t.closest('[data-menu-role]'); if (menuRole) { setRole(menuRole.dataset.menuRole); openScreenMenu(); return; }
+    const menuTheme = t.closest('[data-menu-theme]'); if (menuTheme) { $('#device').dataset.theme = menuTheme.dataset.menuTheme; openScreenMenu(); return; }
+    const menuFlow = t.closest('[data-menu-flow]'); if (menuFlow) { const name = menuFlow.dataset.menuFlow; closeScreenMenu(); startFlow(name); return; }
     const g = (sel) => t.closest(sel);
     let el;
     if ((el = g('[data-tgl]'))) { el.classList.toggle('off'); return; }
@@ -1871,16 +1878,18 @@ function otpDone() {
 }
 
 /* Studio */
-function menuLabel(key) { return key.replace(/_/g, ' ').replace(/([a-z])([A-Z])/g, '$1 $2').replace(/\b\w/g, c => c.toUpperCase()); }\nfunction closeScreenMenu() { const m = $('#screenMenu'); m.classList.remove('open'); m.setAttribute('aria-hidden','true'); }\nfunction openScreenMenu() {\n    const m = $('#screenMenu');\n    const routeKeys = Object.keys(ROUTES);\n    const playerTabs = TABS.player, coachTabs = TABS.coach;\n    const routeItems = routeKeys.map(k => `<button class="menu-row" data-menu-route="${k}"><span>${menuLabel(k)}</span><span class="menu-meta">Open ›</span></button>`).join('');\n    const flowItems = Object.keys(FLOWS).map(k => `<button class="menu-row" data-menu-flow="${k}"><span>${menuLabel(k)} flow</span><span class="menu-meta">Replay ›</span></button>`).join('');\n    m.innerHTML = `<div class="menu-scrim" data-menu-close></div><section class="menu-panel" role="dialog" aria-modal="true" aria-label="Screen navigation"><div class="menu-top"><div class="menu-title">Screen navigator</div><button class="icon-btn" data-menu-close aria-label="Close menu">${I.back}</button></div><div class="menu-section">View as</div><div class="menu-pills">${[['player','Player'],['parent','Parent'],['coach','Coach']].map(([k,l])=>`<button class="menu-pill ${state.role===k?'on':''}" data-menu-role="${k}">${l}</button>`).join('')}</div><div class="menu-section">Appearance</div><div class="menu-pills">${[['light','Light'],['dark','Dark']].map(([k,l])=>`<button class="menu-pill ${$('#device').dataset.theme===k?'on':''}" data-menu-theme="${k}">${l}</button>`).join('')}</div><div class="menu-section">Main screens</div>${(state.role==='coach'?coachTabs:playerTabs).map(([k,l])=>`<button class="menu-row" data-menu-tab="${k}"><span>${l}</span><span class="menu-meta">Main tab ›</span></button>`).join('')}<div class="menu-section">All screens (${routeKeys.length})</div>${routeItems}<div class="menu-section">Onboarding & demo flows</div>${flowItems}</section>`;\n    m.classList.add('open'); m.setAttribute('aria-hidden','false');\n}\n\nfunction setRole(r) {
+function menuLabel(key) { return key.replace(/_/g, ' ').replace(/([a-z])([A-Z])/g, '$1 $2').replace(/\b\w/g, c => c.toUpperCase()); }
+function closeScreenMenu() { const m = $('#screenMenu'); m.classList.remove('open'); m.setAttribute('aria-hidden','true'); }
+function openScreenMenu() {\n    const m = $('#screenMenu');\n    const routeKeys = Object.keys(ROUTES);\n    const playerTabs = TABS.player, coachTabs = TABS.coach;\n    const routeItems = routeKeys.map(k => `<button class="menu-row" data-menu-route="${k}"><span>${menuLabel(k)}</span><span class="menu-meta">Open ›</span></button>`).join('');\n    const flowItems = Object.keys(FLOWS).map(k => `<button class="menu-row" data-menu-flow="${k}"><span>${menuLabel(k)} flow</span><span class="menu-meta">Replay ›</span></button>`).join('');\n    m.innerHTML = `<div class="menu-scrim" data-menu-close></div><section class="menu-panel" role="dialog" aria-modal="true" aria-label="Screen navigation"><div class="menu-top"><div class="menu-title">Screen navigator</div><button class="icon-btn" data-menu-close aria-label="Close menu">${I.back}</button></div><div class="menu-section">View as</div><div class="menu-pills">${[['player','Player'],['parent','Parent'],['coach','Coach']].map(([k,l])=>`<button class="menu-pill ${state.role===k?'on':''}" data-menu-role="${k}">${l}</button>`).join('')}</div><div class="menu-section">Appearance</div><div class="menu-pills">${[['light','Light'],['dark','Dark']].map(([k,l])=>`<button class="menu-pill ${$('#device').dataset.theme===k?'on':''}" data-menu-theme="${k}">${l}</button>`).join('')}</div><div class="menu-section">Main screens</div>${(state.role==='coach'?coachTabs:playerTabs).map(([k,l])=>`<button class="menu-row" data-menu-tab="${k}"><span>${l}</span><span class="menu-meta">Main tab ›</span></button>`).join('')}<div class="menu-section">All screens (${routeKeys.length})</div>${routeItems}<div class="menu-section">Onboarding & demo flows</div>${flowItems}</section>`;\n    m.classList.add('open'); m.setAttribute('aria-hidden','false');\n}\n\nfunction setRole(r) {
     state.role = r;
     document.querySelectorAll('#roleSeg button').forEach((x) => x.classList.toggle('on', x.dataset.role === r));
     state.tab = r === 'coach' ? 'today' : 'summary';
     sheetHost.innerHTML = '';
     buildTabbar(); renderRoot();
 }
-$('#roleSeg').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) setRole(b.dataset.role); });
-$('#themeSeg').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; document.querySelectorAll('#themeSeg button').forEach((x) => x.classList.toggle('on', x === b)); $('#device').dataset.theme = b.dataset.theme; });
-$('#replayIntro').addEventListener('click', () => startFlow('intro'));
+$('#roleSeg')?.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) setRole(b.dataset.role); });
+$('#themeSeg')?.addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; document.querySelectorAll('#themeSeg button').forEach((x) => x.classList.toggle('on', x === b)); $('#device').dataset.theme = b.dataset.theme; });
+$('#replayIntro')?.addEventListener('click', () => startFlow('intro'));
 $('#notes').addEventListener('click', (e) => {
     const j = e.target.closest('[data-jump]'); if (j) { closeSheet(); if (flow) { flowHost.innerHTML = ''; flow = null; } if (state.stack.length) renderRoot('fade'); setTimeout(() => push(j.dataset.jump), 30); return; }
     const f = e.target.closest('[data-runflow]'); if (f) startFlow(f.dataset.runflow);
