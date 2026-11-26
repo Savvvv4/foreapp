@@ -51,6 +51,50 @@ function swShape(ctx,R,s){const lw=Math.max(3,Math.min(R.w,R.h)*.012),Pt=q=>[R.x
  ctx.restore()}
 function swFit(cv){const d=window.devicePixelRatio||1,w=Math.round(cv.clientWidth*d),h=Math.round(cv.clientHeight*d);if(w&&h&&(cv.width!==w||cv.height!==h)){cv.width=w;cv.height=h}}
 
+/* ---------- drawing input: tap points, two fingers, or drag; drag a point to adjust ---------- */
+const swD=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
+function swHintFor(t,n){if(t==='angle')return['Angle: tap the first end','Angle: now tap the corner','Angle: tap the other end'][n]||'';if(t==='circle')return n?'Now tap the edge':'Tap the centre, then the edge';if(t==='pen')return'Drag to draw';return n?'Now tap the other end':'Tap one end, then the other, or use two fingers'}
+class SwPen{
+ constructor(cv,h){this.cv=cv;this.h=h;this.pend=[];this.live=null;this.mode=null;this.ptrs=new Map();
+  cv.addEventListener('pointerdown',e=>this.down(e));cv.addEventListener('pointermove',e=>this.move(e));cv.addEventListener('pointerup',e=>this.up(e));cv.addEventListener('pointercancel',e=>this.up(e,1));cv.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse'&&!this.ptrs.size&&this.pend.length)this.preview(null)})}
+ k(){const r=this.cv.getBoundingClientRect();return{r,k:this.cv.width/(r.width||1)}}
+ pos(e){const{r,k}=this.k(),R=this.h.R();return[((e.clientX-r.left)*k-R.x)/R.w,((e.clientY-r.top)*k-R.y)/R.h]}
+ css(e){return[e.clientX,e.clientY]}
+ reset(){this.pend=[];this.live=null;this.mode=null;this.ptrs.clear();this.hint()}
+ hint(){this.h.hint(swHintFor(this.h.tool(),this.pend.length))}
+ near(e){const{r,k}=this.k(),R=this.h.R(),x=(e.clientX-r.left)*k,y=(e.clientY-r.top)*k,tol=22*k;
+  for(const s of this.h.shapes().slice().reverse()){const keys=s.type==='angle'?s.pts.map((_,i)=>['pts',i]):s.type==='free'?[]:[['a'],['b']];
+   for(const key of keys){const q=key[0]==='pts'?s.pts[key[1]]:s[key[0]];if(Math.hypot(R.x+q[0]*R.w-x,R.y+q[1]*R.h-y)<tol)return{s,key}}}return null}
+ shape(t,pts){const c=this.h.color();if(t==='angle')return{type:'angle',pts,color:c};return{type:t,a:pts[0],b:pts[1]||pts[0],color:c}}
+ preview(p){if(!this.pend.length){this.live=null;return}const t=this.h.tool();this.live=p?this.shape(t,this.pend.concat([p])):this.shape(t,this.pend.slice());this.live.pv=1}
+ down(e){e.preventDefault();this.h.pause(e);try{this.cv.setPointerCapture(e.pointerId)}catch(_){}
+  const p=this.pos(e),t=this.h.tool();this.ptrs.set(e.pointerId,{p,c:this.css(e),moved:false});
+  if(this.ptrs.size===2&&t!=='pen'&&t!=='angle'){const[a,b]=[...this.ptrs.values()];this.pend=[];this.mode='two';this.live=this.shape(t,[a.p,b.p]);return}
+  if(this.ptrs.size>1)return;
+  if(!this.pend.length){const hit=this.near(e);if(hit){const c=JSON.parse(JSON.stringify(hit.s));delete c.at;delete c.removedAt;delete c.id;this.h.remove(hit.s);this.mode={edit:hit.key};this.live=c;this.h.hint('Drag to adjust');return}}
+  if(t==='pen'){this.mode='free';this.live={type:'free',pts:[p],color:this.h.color()};return}
+  this.mode='tap';this.live=this.shape(t,this.pend.concat([p]))}
+ move(e){const r=this.ptrs.get(e.pointerId),p=this.pos(e);
+  if(!r){if(e.pointerType==='mouse'&&this.pend.length&&!this.mode)this.preview(p);return}
+  r.p=p;const c=this.css(e);if(Math.hypot(c[0]-r.c[0],c[1]-r.c[1])>8)r.moved=true;
+  if(this.mode==='two'){const v=[...this.ptrs.values()];if(v.length>1){this.live.a=v[0].p;this.live.b=v[1].p}return}
+  if(this.mode&&this.mode.edit){const k=this.mode.edit;if(k[0]==='pts')this.live.pts[k[1]]=p;else this.live[k[0]]=p;return}
+  if(this.mode==='free'){this.live.pts.push(p);return}
+  if(this.mode==='tap'&&r.moved){if(this.live.type==='angle')this.live.pts[this.live.pts.length-1]=p;else this.live.b=p}}
+ up(e,cancel){const r=this.ptrs.get(e.pointerId);this.ptrs.delete(e.pointerId);if(!r)return;const t=this.h.tool(),m=this.mode;
+  if(m==='two'){if(this.ptrs.size)return;const s=this.live;this.live=null;this.mode=null;if(!cancel&&swD(s.a,s.b)>.015)this.h.commit(s);this.hint();return}
+  if(m&&m.edit){const s=this.live;this.live=null;this.mode=null;this.h.commit(s);this.hint();return}
+  if(m==='free'){const s=this.live;this.live=null;this.mode=null;if(!cancel&&s.pts.length>2)this.h.commit(s);return}
+  if(m!=='tap'||cancel){this.live=null;this.mode=null;return}this.mode=null;
+  const p=r.moved?(this.live.type==='angle'?this.live.pts[this.live.pts.length-1]:this.live.b):r.p;
+  if(t==='angle'){if(r.moved&&!this.pend.length){this.pend=[this.live.pts[0],p]}else this.pend.push(p);
+   if(this.pend.length>=3){this.h.commit(this.shape('angle',this.pend.slice(0,3)));this.pend=[];this.live=null}else this.preview(null);this.hint();return}
+  if(r.moved&&!this.pend.length){const s=this.live;this.live=null;if(swD(s.a,s.b)>.015)this.h.commit(s);return}
+  if(!this.pend.length){this.pend=[p];this.preview(null);this.hint();return}
+  const s=this.shape(t,[this.pend[0],p]);this.pend=[];this.live=null;if(swD(s.a,s.b)>.008)this.h.commit(s);this.hint()}
+ draw(ctx,R){if(this.live)swShape(ctx,R,this.live);const lw=Math.max(3,Math.min(R.w,R.h)*.012);ctx.save();ctx.strokeStyle='#fff';ctx.lineWidth=2;
+  this.pend.forEach(q=>{const x=R.x+q[0]*R.w,y=R.y+q[1]*R.h;ctx.beginPath();ctx.arc(x,y,lw*2.6,0,Math.PI*2);ctx.stroke()});ctx.restore()}
+}
 /* ---------- studio: scrub, step, draw, record ---------- */
 const SW_HINT=['Angle: tap the first end','Angle: now tap the corner','Angle: tap the other end'];
 class SwStudio{
@@ -61,7 +105,7 @@ class SwStudio{
   if(!this.vid)root.querySelectorAll('.svctl [data-s],.svscrub input').forEach(x=>{x.disabled=true});
   root.addEventListener('click',e=>this.click(e));
   if(this.ui.range)this.ui.range.addEventListener('input',()=>{this.pause();this.seek(this.ui.range.value/1000*swDur(this.s))});
-  if(o.tools)this.bindDraw();else this.cv.addEventListener('click',()=>this.toggle());
+  if(o.tools)this.pen=new SwPen(this.cv,{R:()=>this.R||{x:0,y:0,w:this.cv.width,h:this.cv.height},tool:()=>this.tool,color:()=>SW_COL[this.ci],shapes:()=>this.vis(),pause:()=>this.pause(),commit:x=>this.commit(x),remove:x=>{if(this.rec)x.removedAt=this.el();else{const i=this.shapes.indexOf(x);if(i>=0)this.shapes.splice(i,1)}},hint:t=>{const h=this.ui.hint;if(!h)return;clearTimeout(this.ht);h.hidden=!t;h.textContent=t;if(t&&this.pen&&!this.pen.pend.length&&!this.pen.mode)this.ht=setTimeout(()=>{if(this.pen&&!this.pen.pend.length)h.hidden=true},2600)}});else this.cv.addEventListener('click',()=>this.toggle());
   this.paint();this.last=performance.now();const loop=n=>{if(!this.alive)return;if(!this.root.isConnected){this.destroy();return}const dt=Math.min(.1,(n-this.last)/1000);this.last=n;this.tick(dt);this.frame();requestAnimationFrame(loop)};requestAnimationFrame(loop)}
  destroy(){this.alive=false;this.pause();if(this.rec)this.stopRec(true)}
  play(){if(!this.vid)return;const d=swDur(this.s);if(d&&this.t>=d-.03)this.seek(0);this.playing=true;this.e.playbackRate=this.rate;this.e.play().catch(()=>{this.playing=false})}
@@ -74,22 +118,14 @@ class SwStudio{
  click(e){const b=e.target.closest('[data-s]');if(!b||!this.root.contains(b)||b.disabled)return;const[k,v]=b.dataset.s.split(':');
   if(k==='play')this.toggle();else if(k==='prev'){this.pause();this.seek(this.t-1/30)}else if(k==='next'){this.pause();this.seek(this.t+1/30)}
   else if(k==='rate'){this.rate=+v;if(this.vid)this.e.playbackRate=this.rate;this.root.querySelectorAll('[data-s^="rate:"]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)))}
-  else if(k==='tool'){this.tool=v;this.ang=[];this.live=null;this.paint()}else if(k==='color'){this.ci=(this.ci+1)%SW_COL.length;this.paint()}
+  else if(k==='tool'){this.tool=v;if(this.pen)this.pen.reset();this.paint()}else if(k==='color'){this.ci=(this.ci+1)%SW_COL.length;this.paint()}
   else if(k==='undo'){const x=this.vis().pop();if(x){if(this.rec)x.removedAt=this.el();else this.shapes.splice(this.shapes.indexOf(x),1)}}
   else if(k==='clear'){if(this.rec){const t=this.el();this.vis().forEach(x=>{x.removedAt=t})}else this.shapes.length=0}
   if(this.o.onChange)this.o.onChange()}
  paint(){this.root.querySelectorAll('[data-s^="tool:"]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.s==='tool:'+this.tool)));const c=this.root.querySelector('[data-s=color] i');if(c)c.style.background=SW_COL[this.ci];
-  if(this.ui.hint){this.ui.hint.hidden=this.tool!=='angle';this.ui.hint.textContent=SW_HINT[this.ang.length]}}
- pos(e){const r=this.cv.getBoundingClientRect(),R=this.R||{x:0,y:0,w:this.cv.width,h:this.cv.height},k=this.cv.width/r.width;return[((e.clientX-r.left)*k-R.x)/R.w,((e.clientY-r.top)*k-R.y)/R.h]}
- bindDraw(){const cv=this.cv;
-  cv.addEventListener('pointerdown',e=>{e.preventDefault();this.pause();const p=this.pos(e),col=SW_COL[this.ci];
-   if(this.tool==='angle'){this.ang.push(p);if(this.ang.length===3){this.commit({type:'angle',pts:this.ang.slice(),color:col});this.ang=[];this.live=null}else this.live={type:'angle',pts:this.ang.concat([p]),color:col};this.paint();return}
-   try{cv.setPointerCapture(e.pointerId)}catch(_){}this.live=this.tool==='pen'?{type:'free',pts:[p],color:col}:{type:this.tool,a:p,b:p,color:col};this.drag=true});
-  cv.addEventListener('pointermove',e=>{const p=this.pos(e);if(this.tool==='angle'&&this.ang.length){this.live={type:'angle',pts:this.ang.concat([p]),color:SW_COL[this.ci]};return}if(!this.drag||!this.live)return;if(this.live.type==='free')this.live.pts.push(p);else this.live.b=p});
-  const up=()=>{if(!this.drag)return;this.drag=false;const x=this.live;this.live=null;if(!x)return;if(x.type==='free'){if(x.pts.length>2)this.commit(x)}else if(Math.hypot(x.a[0]-x.b[0],x.a[1]-x.b[1])>.015)this.commit(x)};
-  cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up)}
+  if(this.pen)this.pen.hint()}
  commit(x){x.id='m'+(uid++);if(this.rec)x.at=this.el();this.shapes.push(x);if(this.o.onChange)this.o.onChange()}
- frame(){swFit(this.cv);const W=this.cv.width,H=this.cv.height;if(!W)return;this.R=swPaint(this.ctx,W,H,this.s);this.vis().forEach(x=>swShape(this.ctx,this.R,x));if(this.live)swShape(this.ctx,this.R,this.live);
+ frame(){swFit(this.cv);const W=this.cv.width,H=this.cv.height;if(!W)return;this.R=swPaint(this.ctx,W,H,this.s);this.vis().forEach(x=>swShape(this.ctx,this.R,x));if(this.pen)this.pen.draw(this.ctx,this.R);
   const d=swDur(this.s);if(this.ui.range&&document.activeElement!==this.ui.range)this.ui.range.value=d?Math.round(this.t/d*1000):0;if(this.ui.tl)this.ui.tl.textContent=this.vid?this.t.toFixed(2)+' s':'Still';
   if(this.ui.big)this.ui.big.hidden=this.playing||!this.vid;if(this.ui.play){const p=String(this.playing);if(this.ui.play.dataset.st!==p){this.ui.play.dataset.st=p;this.ui.play.innerHTML=ic(this.playing?'swpause':'play');this.ui.play.setAttribute('aria-label',this.playing?'Pause':'Play')}}
   if(this.rec){const t=this.el(),sm=this.rec.samples;if(t-sm[sm.length-1].at>=33)sm.push({at:t,t:this.t});if(this.o.onTick)this.o.onTick(t);if(t>=18e4&&this.o.onLimit)this.o.onLimit()}}
@@ -255,7 +291,7 @@ ACT.swDecl2=d=>{const s=swing(d.id);s.status='declined';closeSheet();const st=nv
 /* ---------- coach: studio, demo, note, preview, sent ---------- */
 const swWork=s=>{if(!s.work)s.work={shapes:[],an:null,demo:null,note:'',drill:''};return s.work};
 V.swstudio=p=>{const s=swing(p.id);swWork(s);if(s.rv&&s.status==='sent')s.rv.stage='inreview';if(S.swCam==null)S.swCam=true;const st=stud(s.student);
- return `<div class="svd">${nb(`${st.first} · ${esc(s.club)}`,`<button class="svcam" data-a="swCamT" aria-pressed="${S.swCam}">${ic('swcam')}<span>${S.swCam?'Face cam':'Cam off'}</span></button>`)}<div class="svbody" data-swm="cstudio" data-id="${s.id}">${svStage({tools:true,badge:true,pip:true})}${svCtl()}</div><div class="svfoot" id="svcf"></div></div>`};
+ return `<div class="svd">${nb(`${st.first} · ${esc(s.club)}`,`<button class="ib" data-a="swCmp" data-id="${s.id}" aria-label="Compare with another swing">${ic('grid')}</button><button class="svcam" data-a="swCamT" aria-pressed="${S.swCam}">${ic('swcam')}<span>${S.swCam?'Face cam':'Cam off'}</span></button>`)}<div class="svbody" data-swm="cstudio" data-id="${s.id}">${svStage({tools:true,badge:true,pip:true})}${svCtl()}</div><div class="svfoot" id="svcf"></div></div>`};
 ACT.swCamT=(d,el)=>{S.swCam=!S.swCam;el.setAttribute('aria-pressed',S.swCam);el.querySelector('span').textContent=S.swCam?'Face cam':'Cam off';const p=$('#svpip');if(p)p.hidden=!S.swCam};
 V.swdemo=p=>`<div class="svd">${nb('Add a demo')}<div class="pad svsub">Optional · film yourself doing the move</div><div class="svbody" data-swm="demo" data-id="${p.id}"><div class="svstage" id="svdv"></div></div><div class="svfoot" id="svdf"></div></div>`;
 V.swreply=p=>{const s=swing(p.id),w=swWork(s),st=stud(s.student),ok=!!w.an;
@@ -338,3 +374,68 @@ const _show10=show;show=function(k){_show10(k);const c=cur(),ph=$('#phone');if(!
 GUIDE.push(['swc','Coach records a swing lesson']);
 const _jump10=ACT.jump;ACT.jump=d=>{if(d.id!=='swc')return _jump10(d);closeSheet();S.role='coach';S.unread.coach=0;S.nav.coach={tab:'today',stack:[{name:'swinbox',p:{}}]};show('role');chrome()};
 swInit();show('none');
+
+/* ---------- compare: two swings, synced from any point, shared drawings ---------- */
+Object.assign(P,{swswap:'M7 7h13l-3-3M17 17H4l3 3',swcopy:'M9 9h10v10H9zM5 15V5h10',swlink:'M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1',swboth:'M3 6h8v12H3zM13 6h8v12h-8z'});
+const SW_MODEL={id:'model',student:null,url:SW_DEMO,club:'7-iron',angle:'Model swing',d:0,status:'own',drawings:[]};
+const swGet=id=>id==='model'?SW_MODEL:swing(id);
+const swCmpOpts=s=>{const w=s.student||S.who;return S.swings.filter(x=>x.student===w).concat([SW_MODEL])};
+const swCmpShapes=s=>s.id==='model'?SW_MODEL.drawings:S.role==='coach'?swWork(s).shapes:(s.drawings||(s.drawings=[]));
+ACT.swCmp=d=>{const a=swGet(d.id),o=swCmpOpts(a).filter(x=>x.id!==a.id),b=o.find(x=>x.url&&x.id!=='model')||o.find(x=>x.id!=='model')||SW_MODEL;go('swcompare',{a:a.id,b:b.id})};
+V.compare=p=>V.swcompare({a:p.id,b:(swCmpOpts(swGet(p.id)).find(x=>x.id!==p.id)||SW_MODEL).id});
+const cmpLbl=s=>s.id==='model'?['Model swing','Coach Arjun · 7-iron']:[`${s.club} · ${s.angle}`,s.status==='replied'?'Reviewed · '+dLbl(s.d):dLbl(s.d)];
+V.swcompare=p=>{const A=swGet(p.a),B=swGet(p.b);const pane=(s,k)=>{const[t,sub]=cmpLbl(s);return `<div class="cmpp" data-k="${k}"><button class="cmplbl" data-a="swCmpPick" data-k="${k}"><span><b>${esc(t)}</b><span>${esc(sub)}</span></span>${ic('chev','width="14" height="14"')}</button><div class="svstage"><canvas aria-label="${k==='0'?'Left':'Right'} swing"></canvas><span class="cmpt num">0.00 s</span></div></div>`};
+ const tb=[['line','Line','swline'],['arrow','Arrow','swarrow'],['circle','Circle','swcirc'],['angle','Angle','swangle'],['pen','Draw','swpen']];
+ return `<div class="svd">${nb('Compare swings',`<button class="ib" data-a="swCmpSwap" aria-label="Swap sides">${ic('swswap')}</button>`)}<div class="cmp" data-swm="cmp" data-x="${A.id}" data-y="${B.id}">
+ <div class="cmprow">${pane(A,'0')}${pane(B,'1')}</div>
+ <div class="svtools cmptools" role="toolbar" aria-label="Drawing tools">${tb.map(([k,l,i])=>`<button data-c="tool:${k}" aria-label="${l}" aria-pressed="${k==='line'}">${ic(i)}</button>`).join('')}<span class="svsep"></span><button data-c="color" aria-label="Change colour"><i></i></button><button data-c="both" aria-label="Draw on both swings" aria-pressed="false">${ic('swboth')}</button><button data-c="copy" aria-label="Copy drawings to the other swing">${ic('swcopy')}</button><button data-c="undo" aria-label="Undo">${ic('undo')}</button><button data-c="clear" aria-label="Clear drawings on this swing">${ic('swtrash')}</button></div>
+ <div class="cmphint" aria-live="polite"></div>
+ <div class="svctl"><button class="cmplink" data-c="link"></button><div class="svscrub"><input type="range" min="0" max="1000" value="0" aria-label="Scrub"><span class="tl num">0.00 s</span></div><div class="svrow"><div class="svgrp"><button class="svrb" data-c="prev" aria-label="Back one frame">${ic('swprev')}</button><button class="svrb pri" data-c="play" aria-label="Play">${ic('play')}</button><button class="svrb" data-c="next" aria-label="Forward one frame">${ic('swnext')}</button></div><div class="svspd" role="group" aria-label="Speed">${[['0.25','¼×'],['0.5','½×'],['1','1×']].map(([v,l])=>`<button data-c="rate:${v}" aria-pressed="${v==='0.5'}">${l}</button>`).join('')}</div></div></div></div></div>`};
+ACT.swCmpSwap=()=>{const c=cur();c.p={a:c.p.b,b:c.p.a};show('none')};
+ACT.swCmpPick=d=>{const c=cur(),here=d.k==='0'?c.p.a:c.p.b,other=d.k==='0'?c.p.b:c.p.a,o=swCmpOpts(swGet(here)).filter(x=>x.id!==other);
+ openSheet(()=>`<h2>Pick the ${d.k==='0'?'left':'right'} swing</h2><div class="list">${o.map(x=>{const[t,sub]=cmpLbl(x);return `<button class="row" data-a="swCmpSet" data-k="${d.k}" data-id="${x.id}" aria-pressed="${x.id===here}">${swThumbSm(x)}<span class="m"><span class="t" style="display:block">${esc(t)}</span><span class="small muted">${esc(sub)}</span></span>${x.id===here?ic('check','width="18" height="18" style="color:var(--flag)"'):''}</button>`}).join('')}</div>`)};
+ACT.swCmpSet=d=>{const c=cur();c.p=Object.assign({},c.p,d.k==='0'?{a:d.id}:{b:d.id});closeSheet();show('none')};
+class SwCompare{
+ constructor(root,A,B){this.root=root;this.tool='line';this.ci=0;this.both=false;this.linked=false;this.off=0;this.active=0;this.rate=.5;this.playing=false;this.alive=true;
+  this.ui={range:root.querySelector('.svscrub input'),tl:root.querySelector('.svscrub .tl'),play:root.querySelector('[data-c=play]'),link:root.querySelector('[data-c=link]'),hint:root.querySelector('.cmphint')};
+  this.P=[A,B].map((s,i)=>{const el=root.querySelector(`.cmpp[data-k="${i}"]`),cv=el.querySelector('canvas'),e=swEl(s);el.querySelector('.svstage').appendChild(e);if(swIsVid(e)){e.pause();e.playbackRate=this.rate}
+   const P2={s,el,cv,ctx:cv.getContext('2d'),e,vid:swIsVid(e),t:swIsVid(e)?e.currentTime||0:0,R:null,shapes:swCmpShapes(s),tl:el.querySelector('.cmpt')};
+   P2.pen=new SwPen(cv,{R:()=>P2.R||{x:0,y:0,w:cv.width,h:cv.height},tool:()=>this.tool,color:()=>SW_COL[this.ci],shapes:()=>P2.shapes,pause:()=>{this.pause();this.select(i)},
+    commit:x=>{x.id='m'+(uid++);P2.shapes.push(x);if(this.both){const o=this.P[1-i],c=JSON.parse(JSON.stringify(x));c.id='m'+(uid++);o.shapes.push(c)}},
+    remove:x=>{const j=P2.shapes.indexOf(x);if(j>=0)P2.shapes.splice(j,1)},hint:t=>{this.hintT=t;this.paintHint()}});return P2});
+  root.addEventListener('click',e=>this.click(e));
+  this.ui.range.addEventListener('input',()=>{this.pause();const m=this.master(),d=swDur(m.s);this.seekM(this.ui.range.value/1000*d)});
+  this.select(0);this.paint();this.last=performance.now();const loop=n=>{if(!this.alive)return;if(!this.root.isConnected){this.destroy();return}this.tick();this.frame();requestAnimationFrame(loop)};requestAnimationFrame(loop)}
+ destroy(){this.alive=false;this.P.forEach(p=>{if(p.vid)p.e.pause()})}
+ master(){return this.linked?this.P[0]:this.P[this.active]}
+ select(i){this.active=i;this.P.forEach((p,j)=>p.el.classList.toggle('on',j===i||this.linked));this.paintLink()}
+ seekP(p,t){const d=swDur(p.s);p.t=Math.max(0,d?Math.min(d,t):0);if(p.vid){try{p.e.currentTime=p.t}catch(_){}}}
+ seekM(t){if(this.linked){this.seekP(this.P[0],t);this.seekP(this.P[1],t+this.off)}else this.seekP(this.P[this.active],t)}
+ step(n){this.pause();if(this.linked)this.P.forEach(p=>this.seekP(p,p.t+n/30));else{const p=this.P[this.active];this.seekP(p,p.t+n/30)}}
+ play(){const L=this.linked?this.P:[this.P[this.active]];if(!L[0].vid)return;const m=L[0],d=swDur(m.s);if(d&&m.t>=d-.03){this.seekM(0)}
+  this.playing=true;L.forEach(p=>{if(!p.vid)return;p.e.playbackRate=this.rate;const dd=swDur(p.s);if(!dd||p.t<dd-.03)p.e.play().catch(()=>{})})}
+ pause(){this.playing=false;this.P.forEach(p=>{if(p.vid)p.e.pause()})}
+ tick(){this.P.forEach(p=>{if(p.vid)p.t=p.e.currentTime});
+  if(!this.playing)return;const m=this.master();if(m.vid&&(m.e.paused||m.e.ended)){this.pause();return}
+  if(this.linked){const b=this.P[1],tgt=this.P[0].t+this.off,d=swDur(b.s);if(b.vid){if(tgt<0||(d&&tgt>d)){if(!b.e.paused)b.e.pause();this.seekP(b,tgt)}else{if(b.e.paused)b.e.play().catch(()=>{});if(Math.abs(b.e.currentTime-tgt)>.06)this.seekP(b,tgt)}}}}
+ click(e){const b=e.target.closest('[data-c]');if(!b||!this.root.contains(b))return;const[k,v]=b.dataset.c.split(':');
+  if(k==='play')this.playing?this.pause():this.play();else if(k==='prev')this.step(-1);else if(k==='next')this.step(1);
+  else if(k==='rate'){this.rate=+v;this.P.forEach(p=>{if(p.vid)p.e.playbackRate=this.rate});this.root.querySelectorAll('[data-c^="rate:"]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)))}
+  else if(k==='link'){this.pause();if(this.linked){this.linked=false;toast('Unlinked. Move each swing on its own.')}else{this.off=this.P[1].t-this.P[0].t;this.linked=true;toast('Linked at these frames. They now play and scrub together.')}this.select(this.active)}
+  else if(k==='tool'){this.tool=v;this.P.forEach(p=>p.pen.reset());this.paint()}
+  else if(k==='color'){this.ci=(this.ci+1)%SW_COL.length;this.paint()}
+  else if(k==='both'){this.both=!this.both;this.paint();toast(this.both?'New drawings go on both swings':'Drawing on one swing at a time')}
+  else if(k==='copy'){const a=this.P[this.active],o=this.P[1-this.active];if(!a.shapes.length){toast('Nothing to copy on this swing yet');return}a.shapes.forEach(x=>{const c=JSON.parse(JSON.stringify(x));c.id='m'+(uid++);o.shapes.push(c)});toast(`Copied ${a.shapes.length} drawing${a.shapes.length===1?'':'s'} to the ${this.active?'left':'right'} swing`)}
+  else if(k==='undo'){const L=this.both?this.P:[this.P[this.active]];L.forEach(p=>p.shapes.pop())}
+  else if(k==='clear'){const L=this.both?this.P:[this.P[this.active]];L.forEach(p=>{p.shapes.length=0})}}
+ paint(){this.root.querySelectorAll('[data-c^="tool:"]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.c==='tool:'+this.tool)));const c=this.root.querySelector('[data-c=color] i');if(c)c.style.background=SW_COL[this.ci];
+  this.root.querySelector('[data-c=both]').setAttribute('aria-pressed',String(this.both));this.P.forEach(p=>p.pen.hint())}
+ paintHint(){this.ui.hint.textContent=(this.hintT||'')+(this.both?' · on both swings':'')}
+ paintLink(){const l=this.ui.link;if(!l)return;l.classList.toggle('on',this.linked);const o=this.off,s=Math.abs(o).toFixed(2);
+  l.innerHTML=this.linked?`${ic('swlink')}<span><b>Linked</b> · ${o===0?'same time':`right is ${o>0?'+':'−'}${s} s`}</span><span class="cmpun">Unlink</span>`:`${ic('swlink')}<span><b>Link at these frames</b> · tap a swing, line both up, then link</span>`}
+ frame(){this.P.forEach((p,i)=>{swFit(p.cv);const W=p.cv.width,H=p.cv.height;if(!W)return;p.R=swPaint(p.ctx,W,H,p.s);p.shapes.forEach(x=>swShape(p.ctx,p.R,x));p.pen.draw(p.ctx,p.R);p.tl.textContent=p.vid?p.t.toFixed(2)+' s':'Still'});
+  const m=this.master(),d=swDur(m.s);if(document.activeElement!==this.ui.range)this.ui.range.value=d?Math.round(m.t/d*1000):0;this.ui.tl.textContent=(this.linked?'Both ':(this.active?'Right ':'Left '))+m.t.toFixed(2)+' s';
+  const pl=String(this.playing);if(this.ui.play.dataset.st!==pl){this.ui.play.dataset.st=pl;this.ui.play.innerHTML=ic(this.playing?'swpause':'play');this.ui.play.setAttribute('aria-label',this.playing?'Pause':'Play')}}
+}
+SWMOUNT.cmp=el=>{new SwCompare(el,swGet(el.dataset.x),swGet(el.dataset.y))};
+SW_DARK.push('swcompare','compare');
