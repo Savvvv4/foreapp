@@ -533,6 +533,62 @@ button.card.rec2{display:flex}
 @media (max-width:380px){.hm .tg{grid-template-columns:repeat(2,minmax(0,1fr))}.hm .ft .btn{padding:0 14px}}
 .hm-home{border-radius:24px;background:#0E3B2C;color:#fff;padding:16px 18px;display:flex;flex-direction:column;gap:8px;width:100%;text-align:left}
 .hm-home svg{width:18px;height:18px;flex:none}
+
+/* pass 10: swing review v2 */
+#phone.swdark #statusbar{background:#0F1110;color:#fff}#phone.swdark #homebar{background:#fff}
+.svd{flex:1;min-height:0;display:flex;flex-direction:column;background:#0F1110;color:#fff}
+.svd .nb h1{color:#fff}.svd .nb .ib{color:#fff}.svd .nb .ib:active{background:#1E211F}
+.svbody{flex:1;min-height:0;display:flex;flex-direction:column}
+.svstage{position:relative;flex:1;min-height:0;margin:0 12px;border-radius:18px;overflow:hidden;background:#000}
+.svstage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}
+.svstage.rec{box-shadow:inset 0 0 0 3px #D93025}
+.svsrc{position:absolute;width:2px;height:2px;opacity:0;pointer-events:none;left:0;top:0}
+.svtools{position:absolute;left:8px;right:8px;bottom:8px;display:flex;justify-content:space-between;align-items:center;background:rgba(15,17,16,.9);border-radius:24px;padding:4px}
+.svtools button{width:38px;height:44px;border-radius:19px;display:grid;place-items:center;color:#fff}
+.svtools button svg{width:20px;height:20px}
+.svtools button[aria-pressed=true]{background:#fff;color:#0F1110}
+.svtools i{width:22px;height:22px;border-radius:50%;border:2px solid #fff;display:block;background:#FFD43B}
+.svhint{position:absolute;left:50%;transform:translateX(-50%);top:46px;height:30px;padding:0 12px;border-radius:15px;background:rgba(0,0,0,.75);font-size:13px;font-weight:600;display:flex;align-items:center;white-space:nowrap;pointer-events:none}
+.svhint[hidden],.svbadge[hidden],.svpip[hidden]{display:none}
+.svbadge{position:absolute;left:10px;top:10px;height:28px;padding:0 10px;border-radius:14px;background:rgba(0,0,0,.65);color:#fff;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;pointer-events:none}
+.svbadge.rec{background:#D93025}
+.svdot{width:9px;height:9px;border-radius:50%;background:#fff;display:inline-block;flex:none}.svdot.red{background:#D93025}
+.svpip{position:absolute;right:10px;top:10px;width:76px;height:96px;border-radius:14px;overflow:hidden;border:2px solid #fff;background:#DCCFBE;color:#17120E;display:grid;place-items:center;font-weight:700}
+.svpip video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+.svctl{padding:10px 16px 0;display:flex;flex-direction:column;gap:8px;flex:none}
+.svscrub{display:flex;align-items:center;gap:10px;font-size:12px;color:rgba(255,255,255,.75);white-space:nowrap}
+.svscrub[hidden]{display:none}
+.svscrub input{flex:1;min-width:0;accent-color:var(--flag);height:28px}
+.svrow{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.svgrp{display:flex;gap:6px}
+.svrb{width:44px;height:44px;border-radius:50%;background:#1E211F;color:#fff;display:grid;place-items:center;flex:none}
+.svrb svg{width:20px;height:20px}.svrb:disabled{opacity:.35}
+.svspd{display:flex;background:#1E211F;border-radius:22px;padding:3px}
+.svspd button{min-height:38px;padding:0 12px;border-radius:19px;color:#fff;font-size:13px;font-weight:600}
+.svspd button[aria-pressed=true]{background:#fff;color:#0F1110}
+.svfoot{flex:none;padding:12px 16px max(22px,var(--sab));display:flex;flex-direction:column;gap:8px}
+.svfoot:empty{padding:8px}
+.btn.svghost{background:#1E211F;color:#fff}
+.btn.svred{background:#D93025;color:#fff}
+.svcam{height:36px;padding:0 12px;border-radius:18px;background:#1E211F;color:#fff;font-size:13px;font-weight:600;white-space:nowrap}
+.svcam:disabled{opacity:.45}
+.svmini{height:220px;flex:none;display:flex}
+.svmini .svstage{margin:0;border-radius:16px}.svmini canvas{cursor:pointer}
+.svpane{height:360px;flex:none;display:flex;flex-direction:column}
+.svseg{background:#1E211F}.svseg button{color:rgba(255,255,255,.75)}.svseg button[aria-pressed=true]{background:#fff;color:#0F1110}
+.svpanel{flex:1;min-height:0;overflow-y:auto;background:var(--paper);color:var(--ink);border-radius:22px 22px 0 0;margin-top:12px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.svdemo,.svcamv{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}.svcamv{object-fit:cover;transform:scaleX(-1)}
+.svcover{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;text-align:center;padding:24px;color:rgba(255,255,255,.8);font-size:14px;line-height:1.45}.svcover b{color:#fff;font-size:17px}
+.svsteps{display:flex;flex-direction:column}
+.svst{display:flex;gap:12px;position:relative;padding-bottom:16px}.svst:last-child{padding-bottom:0}
+.svst:not(:last-child)::after{content:'';position:absolute;left:10px;top:24px;bottom:2px;width:2px;background:var(--line)}
+.svc{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;flex:none;background:var(--card);position:relative;z-index:1}
+.svc.done{background:var(--fair);border-color:var(--fair);color:#fff}.svc.done svg{width:13px;height:13px}.svc.now{border:3px solid var(--flag)}
+.svtx b{display:block;font-size:15px}
+.svradio{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);flex:none}.svradio.on{border:7px solid var(--flag)}
+.svok{width:28px;height:28px;border-radius:50%;background:var(--fair);color:#fff;display:grid;place-items:center;flex:none}.svok svg{width:15px;height:15px}
+.svtodo{width:28px;height:28px;border-radius:50%;border:2px dashed var(--ink3);flex:none}
+.svprice{display:flex;align-items:center;gap:8px;font-weight:700}.svprice .fld{max-width:160px}
 </style>
 <div id="stage">
   <aside id="panel" aria-label="Prototype controls"></aside>
