@@ -721,6 +721,65 @@ button.card.swtoday,button.card.swprice{display:flex;gap:12px;align-items:center
 .cmplink svg{width:18px;height:18px;flex:none;color:var(--flag)}.cmplink b{color:#fff}.cmplink>span{flex:1;min-width:0}
 .cmplink.on{background:var(--flag);color:var(--on-flag)}.cmplink.on b,.cmplink.on svg{color:var(--on-flag)}
 .cmpun{flex:none!important;height:28px;padding:0 10px;border-radius:14px;background:rgba(0,0,0,.18);font-weight:700;display:flex;align-items:center}
+/* pass 12: full-screen analyser, compare, analyse-now and share */
+#phone.swfs #statusbar{background:#000;color:#fff}
+.fs{position:relative;flex:1;min-height:0;background:#000;color:#F4F5F7;overflow:hidden;--sv2:#1A1E23;--sv3:#2A2F37;-webkit-user-select:none;user-select:none}
+.fs>.svstage{position:absolute;inset:0;margin:0;border-radius:0}
+.fs>.svstage canvas{cursor:grab}.fs.drawing>.svstage canvas{cursor:crosshair}
+.fs>.svstage.rec{box-shadow:inset 0 0 0 3px #E5483B}
+.fs .svbig{pointer-events:auto;cursor:pointer;border:0;padding:0}.fs .svbig[hidden]{pointer-events:none}
+.fstop{position:absolute;left:0;right:0;top:0;display:flex;align-items:center;gap:6px;padding:6px 8px 26px;background:linear-gradient(rgba(0,0,0,.75),rgba(0,0,0,0));z-index:3;transition:opacity .25s,transform .25s}
+.fsib{width:44px;height:44px;border-radius:22px;display:grid;place-items:center;color:#fff;flex:none;background:rgba(255,255,255,.1)}
+.fsib svg{width:21px;height:21px}.fsib[aria-pressed=true]{background:#fff;color:#0B0D0F}.fsib:disabled{opacity:.4}
+.fsti{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;padding:0 4px;gap:1px}
+.fsti b{font-size:16px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fssub{font-size:12.5px;color:rgba(255,255,255,.72);max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left;display:flex;align-items:center;gap:4px;padding:0}
+button.fssub{min-height:24px;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(255,255,255,.35)}.fssub.ok{color:#7DDBA9;font-weight:600}.fssub svg{flex:none}
+.fspill{height:40px;padding:0 14px;border-radius:20px;background:#fff;color:#0B0D0F;font-weight:700;font-size:14px;display:flex;align-items:center;gap:6px;flex:none}.fspill svg{width:17px;height:17px}
+.fs.recing .fstop [data-a=swCmp],.fs.recing .fstop [data-a=swShare],.fs.recing .fstop [data-a=back]{opacity:.35;pointer-events:none}
+.fsrail{position:absolute;right:8px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px;border-radius:24px;background:rgba(11,13,15,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:3;transition:opacity .25s,transform .25s}
+.fsrail button{width:42px;height:40px;border-radius:20px;display:grid;place-items:center;color:#fff}
+.fsrail button svg{width:20px;height:20px}.fsrail button[aria-pressed=true]{background:#fff;color:#0B0D0F}
+.fsrail i{width:22px;height:22px;border-radius:50%;border:2px solid #fff;display:block;background:#FFD43B}
+.fssep{width:22px;height:1px;background:rgba(255,255,255,.2);margin:3px 0}
+.fsbot{position:absolute;left:0;right:0;bottom:0;padding:34px 0 max(18px,var(--sab));background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.8) 42%);z-index:3;display:flex;flex-direction:column;gap:10px;transition:opacity .25s,transform .25s}
+.fsbot .svctl{padding-top:0}.fs .svscrub{color:rgba(255,255,255,.85)}
+.fs.hid .fstop{opacity:0;transform:translateY(-12px);pointer-events:none}
+.fs.hid .fsbot{opacity:0;transform:translateY(12px);pointer-events:none}
+.fs.hid .fsrail{opacity:0;transform:translate(12px,-50%);pointer-events:none}
+.fs.hid .fszoom{opacity:0;pointer-events:none}
+.fs .svhint{top:108px;z-index:4}
+.fs .svbadge.rec{left:50%;transform:translateX(-50%);top:70px;z-index:4}
+.fs .svpip{left:12px;right:auto;top:70px;z-index:4}
+.fszoom{position:absolute;right:12px;top:70px;height:32px;padding:0 10px;border-radius:16px;background:rgba(11,13,15,.72);color:#fff;font-size:13px;display:flex;align-items:center;gap:5px;z-index:4;transition:opacity .25s}.fszoom svg{width:16px;height:16px}.fszoom[hidden]{display:none}
+.fsact{display:flex;align-items:center;justify-content:center;gap:8px;padding:0 16px;flex-wrap:wrap}
+.fsbtn{height:44px;padding:0 18px;border-radius:22px;font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;color:#fff;background:rgba(255,255,255,.16)}
+.fsbtn.red{background:#E5483B}.fsbtn.pri{background:#fff;color:#0B0D0F}.fsbtn:disabled{opacity:.6}
+.fsdone{width:100%;display:flex;align-items:center;justify-content:center;gap:5px;font-size:12.5px;font-weight:600;color:#7DDBA9}
+.fshelp{width:100%;text-align:center;font-size:12px;color:rgba(255,255,255,.66)}
+/* lesson */
+.svpw{position:relative;flex:none;display:flex;flex-direction:column}
+.svexp{position:absolute;left:20px;top:8px;height:32px;padding:0 11px;border-radius:16px;background:rgba(11,13,15,.66);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:#fff;font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:5px;z-index:2}.svexp svg{width:15px;height:15px}
+.svd:has(.svseg [data-t=demo][aria-pressed=true]) .svexp{display:none}
+/* compare */
+.fcmp{display:flex;flex-direction:column}
+.fctop{display:flex;align-items:center;gap:6px;padding:6px 8px 8px;flex:none}
+.fcmp .cmprow{flex:1;min-height:0;padding:0 6px;gap:6px}
+.fcmp .cmprow.stack{flex-direction:column}
+.fcmp .cmpp{position:relative;min-height:0;min-width:0;gap:0}
+.fcmp .cmpp .svstage{flex:1;height:auto;min-height:0;border-radius:14px}
+.fcmp .cmplbl{position:absolute;left:6px;right:6px;top:6px;min-height:38px;padding:4px 10px;background:rgba(11,13,15,.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:2}
+.fcmp .cmprow.stack .cmplbl{right:auto;max-width:72%}
+.fcmp .cmptools{margin:8px 6px 0;padding:3px}.fcmp .cmptools button{width:30px;height:40px}
+.fcmp .cmphint{margin-top:6px}
+.fcmp .svctl{padding-bottom:max(18px,var(--sab))}
+.fcmp .svspd button{padding:0 9px}
+/* entry points */
+.swacts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button.card.swact{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;padding:14px}
+.swact .tile{margin-bottom:8px}.swact b{font-size:16px}
+.swlead{margin:-4px 2px 0;line-height:1.45}
+.btn.swfilm{margin-top:8px}
 </style>
 <div id="stage">
   <aside id="panel" aria-label="Prototype controls"></aside>
